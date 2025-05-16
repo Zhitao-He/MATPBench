@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals trigo. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables W X Y Z : 'rV[R]_2. Hypotheses H_wx : `|X - W| = 4; H_wz : `|Z - W| = 4; H_wxw_perp : '[X - W, Y - W] = 0; H_wzw_perp : '[Z - W, Y - W] = 0; H_angle_XYW : acos ((('[X - Y, W - Y])) / (`|X - Y| * `|W - Y|)) = 23 * PI/180. Theorem XY_length_value: `|X - Y| = 4 / tan (23 * PI / 180). Proof. by []. Qed.
+####

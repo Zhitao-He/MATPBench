@@ -1,0 +1,1 @@
+theorem value_of_x_is_21 (x : ℝ) : x = 21 := by sorry

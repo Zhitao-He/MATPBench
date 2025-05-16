@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Theorem putnam_1975_b2 : let r := 4 : R in let h := 10 : R in let s := 8 : R in let v := (volume of cube inside cylinder - formula not computed) in exists v2 : R, v2 = v ^ 2. Proof. Admitted.
+####

@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals rat. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Section RectanglesIntersection. Variable R : realType. Definition A : R * R := (0,11). Definition B : R * R := (0,0). Definition C : R * R := (3,0). Definition D : R * R := (3,11). Theorem rectangle_intersection_area : exists area : R, area > 0. Proof. Admitted. End
+####

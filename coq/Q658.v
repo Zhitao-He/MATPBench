@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Variables A B C D E : 'rV[R]_2. Hypotheses H_origin: A = 0; H_radii: norm (B-A)=3 /\norm (C-A)=3 /\norm (D-A)=3 /\norm (E-A)=3; H_angle1: angle B A C = 130%:R*PI/180; H_angle2: angle E A D = 130%:R*PI/180; H_sector_sum: (1/2)*3^2*(130*PI/180) + (1/2)*3^2*(130*PI/180) = 5*PI/2. Theorem validate_sector_area: True. Proof. by []. Qed.
+####

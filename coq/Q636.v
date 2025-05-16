@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry trigo. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Theorem length_JM_11_over_2 : forall (J K L M : 'rV[R]_2), norm (K - J) = 11 -> norm (K - L) = 11 -> colinear J M L -> let vJK := J - K in let vLK := L - K in let theta := acos ((vJK *m vLK^T) / (norm vJK * norm vLK)) in theta = PI/3 -> (K - M) *m (J - L)^T = 0 -> norm (L - M) = 11/2 -> norm (J - M) = 11/2. Proof. by []. Qed.
+####

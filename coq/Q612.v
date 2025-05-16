@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_algebra all_ssreflect. From mathcomp Require Import reals classical_sets. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Theorem triangle_y_value : forall (x y : R), let A := (0,1) in let B := (-1,0) in let C := (1,0) in let AB := 3 in let AC := 3 in let BC := 4*y - 5 in AB = AC /\0 < x < 90 -> BC = 4*y - 5 -> 4*x + 2*(180 - 4*x) = 180 -> y = 2. Proof. by []. Qed.
+####

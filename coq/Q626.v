@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables A B C D F : R^2. Variables x y : R. Hypothesis Hconvex : colinear A C F /\colinear B D F. Hypothesis Hangles : let ang1 := 4*x + 5 in let ang2 := 9*x + 20 in let ang3 := 4*y + 4 in let ang4 := y^2 - 1 in ang1 + ang2 + ang3 + ang4 = 360. Theorem solve_xy: x = 15 /\y = 11. Proof. by []. Qed.
+####

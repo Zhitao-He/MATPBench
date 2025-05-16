@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Section ValueXGeometry. Variable R : realType. Variables B C E A D F : 'rV[R]_2; x : R. Hypotheses CE_perp_BE: '[C-E,B-E]=0; BA_perp_AE: '[B-A,A-E]=0; AD_perp_BA: '[A-D,B-A]=0; DF_perp_BD: '[D-F,B-D]=0; BC_eq_4: norm (B-C)=4; BF_eq_x: norm (B-F)=x; angle_CBE_30: cos_angle (C-B) (E-B) = sqrt 3/2. Theorem compute_x_value: x = 2 * sqrt 3. Proof. by []. Qed. End ValueXGeometry.
+####

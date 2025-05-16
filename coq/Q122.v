@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable Z : Type. Hypothesis Zint : forall (z : Z), exists n : int, z = n. Theorem triangular_bipyramid_vertex_sum : forall (v3 v4 v5 : int), let S := v3 + v4 + v5 + 6 in (1 + v3 + v4) = S /\ (1 + v3 + v5) = S /\ (1 + v4 + v5) = S /\ (5 + v3 + v4) = S /\ (5 + v3 + v5) = S /\ (5 + v4 + v5) = S -> v3 + v4 + v5 = 11. Proof. Admitted.
+####

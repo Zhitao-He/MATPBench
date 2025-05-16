@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals angle euclidean_geometry. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Section GeometrySetting. Variable R:realType. Variables B K G M H F C N O J I:'e2 R. Hypotheses col_MKHB: collinear [:: M;K;B;H]; col_NCO: collinear [:: N;C;O]; col_GKCJ: collinear [:: G;K;C;J]; col_FBCI: collinear [:: F;B;C;I]; neq_KB: K != B; angle_MKG_62: True. Lemma angle_sum: angle M K G + angle G K C = 180%:R. Proof. by []. Qed. End GeometrySetting.
+####

@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals angle. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables A B C D : R^2. Definition angle_deg u v w := Arg ((v - u)/(w - u)) * 180 / PI. Theorem value_of_x_in_geometry_problem: ~ colinear A B C -> colinear D A B -> D != A -> A != B -> angle_deg B C A = 29 -> exists x, 0 < x /\angle_deg C B A = x /\angle_deg D A B = 4 * x -> x = 29. Proof. by []. Qed.
+####

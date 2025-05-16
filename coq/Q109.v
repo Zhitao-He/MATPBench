@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Theorem rectangle_hexagon_hinge_area : forall (a : R), 0 < a -> let rectangle_area := a * 36 in let hexagon_area := rectangle_area in (exists hexagon : seq (R * R), size hexagon = 6 /\ True) -> a^2 = 720. Proof. Admitted.
+####

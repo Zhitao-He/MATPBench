@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables A B C D E F O: R^2; x:R. Hypotheses Hc: on_circle O C; Hd: on_circle O D; He: on_circle O E; Hf: on_circle O F; Hcolbef: colinear [:: B; E; F]; Hneb: E <> B; Hnef: E <> F; Hangle_cde: angle_deg C D E = 9*x+26; Hangle_efb: angle_deg E F B = 35; Hangle_ebf: angle_deg E B F = 4*x. Theorem solve_x: x = 10. Proof. by []. Qed.
+####

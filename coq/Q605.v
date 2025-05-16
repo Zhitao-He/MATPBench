@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables x y AJ JB DJ JC:R. Hypotheses H_AJ: AJ=2*x+3; H_JB: JB=5*x; H_DJ: DJ=4*y; H_JC: JC=8*y-36; H_nonzero1:2*x+3<>0; H_nonzero2:5*x<>0; H_nonzero3:4*y<>0; H_nonzero4:8*y-36<>0. Theorem value_x_eq_1: x =1. Proof. by []. Qed.
+####

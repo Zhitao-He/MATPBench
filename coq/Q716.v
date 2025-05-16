@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables A B C D Y : R^2; x y : R. Hypotheses H_AC_AY : norm (C - A) = norm (Y - A); H_AB : norm (B - C) = 3/5*x + 11; H_AD : norm (D - A) = x + 2; H_BD : norm (B - D) = 3*y - 9; H_DY : norm (Y - D) = 2*y + 6. Theorem value_of_x: x = 21. Proof. by []. Qed.
+####

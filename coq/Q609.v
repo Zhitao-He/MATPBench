@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals trig. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Theorem triangle_30_60_90_hypotenuse_value : forall (A B C : R^2), let a := norm (C - A) in let b := norm (C - B) in let c := norm (A - B) in C = 0 /\A = (b,0) /\B = (0,a) -> 0 < a -> 0 < b -> c = 2 * max a b. Proof. by []. Qed.
+####

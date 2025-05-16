@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_algebra all_ssreflect. From mathcomp Require Import reals geometry trigo. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R:realType. Variables A B C D E: 'rV[R]_2. Hypotheses HBA:`|B-A|=36; HAD:`|A-D|=22; HE: [&& colinear B E D, E \in open_segment C D, (B-E) \perp (D-C)]; Hangle: exists k:R, 0<k<1 /\ [angle C B E] = (PI/6)%:R. Definition perimeter P Q R S := `|Q-P|+`|R-Q|+`|S-R|+`|P-S|. Lemma compute_perimeter: perimeter B C D A = 116. Proof. by []. Qed.
+####

@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals normedtype trigo. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables D A C B : 'rV[R]_2; y : R. Let DA := normr (A - D). Let AC := normr (C - A). Let DC := normr (C - D). Let DB := normr (B - D). Let CB := normr (B - C). Hypotheses H1: collinear D A C; H2: DA = 8; H3: AC + DA = DC; H4: '[A-D,C-D]=0; H5: DB = y; H6: CB = sqrt (DA^2+AC^2). Theorem compute_y: y = 10. Proof. by []. Qed.
+####

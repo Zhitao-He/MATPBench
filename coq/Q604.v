@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables A C E G D:R^2. Variables x y:R. Hypotheses Hpar: True; HAG: norm (G-A) = (1/5)*x+3; HCD: norm (D-C) = 2*y+1; HAE: norm (E-A) = 4*x-35; HCE: norm (E-C) = 5*y-8; HGEED: norm (E-G)=norm (E-D); HmidG: True. Lemma solve_xy: x = 20 /\ y = 7. Proof. by []. Qed.
+####

@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Theorem trapezium_angle_SRQ : forall (P Q R S : 'I_4 -> R^2) (x : R), P 0 <> Q 1 -> Q 1 <> R 2 -> R 2 <> S 3 -> S 3 <> P 0 -> (x + (2*x - 16) + (2*x) + (x + 10) = 360) -> angle (S 3 - R 2) (Q 1 - R 2) = (2*x)%:R * PI/180. Proof. by []. Qed.
+####

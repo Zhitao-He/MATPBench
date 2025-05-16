@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables A B C D F : R^2. Theorem length_DE_is_2_sqrt3: A <> B -> exists l1 l2, l1 = 12 /\l2 = 4 /\let D := ((l2/(l1+l2))*:A + (l1/(l1+l2))*:B) in (C - D) *m (B - A)^T = 0 /\norm (D - C) = 2 * sqrt 3. Proof. by []. Qed.
+####

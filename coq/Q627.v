@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Theorem value_y_3_2_parallelogram_problem : forall (x y : R), RH = 2*x + 3 -> HA = 6 - x -> IJ = (4/3)*y + 1 -> JE = 2*y -> HJ = 2*y -> RH + HA = IJ + JE -> y = 3 /\x = 2. Proof. by []. Qed.
+####

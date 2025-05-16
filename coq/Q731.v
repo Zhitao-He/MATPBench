@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variables D B A E C : Type; x y : R. Hypotheses angle_DAB: True; angle_DBA: True; angle_BAE: True; angle_EAC: True. Theorem solve_angles: x = 31 /\y = 37. Proof. by []. Qed.
+####

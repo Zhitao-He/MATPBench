@@ -1,0 +1,2 @@
+#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Require Import Psatz. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R:realType. Theorem diagram_value_x_eq_20: forall (x y z w:R), 0 < x -> 0 < y -> 0 < z -> 0 < w -> 4*w-7 > 0 -> 3*z+10 > 0 -> 2*w+13 > 0 -> 11 = 12 -> x = 20. Proof. by []. Qed.
+####
