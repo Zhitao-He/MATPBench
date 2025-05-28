@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="asset/MATP_icon.png" alt="icon" style=" height:95px;" />
+<img src="asset/MATP_icon.png" alt="icon" style=" height:105px;" />
 
 # MATP-BENCH: Can MLLM Be a Good Automated Theorem Prover for Multimodal Problems?
 
@@ -10,7 +10,7 @@
 <b><a href="https://scholar.google.com/citations?user=ULvoYXgAAAAJ&hl=zh-CN" target="_blank">Zhitao He</a><sup>1</sup> <a href="https://github.com/Zhitao-He/MMBoundary" target="_blank"> Zongwei Lyu </a><sup>1</sup> <a href="https://zhiyuan.fan/" target="_blank"> Dazhong Chen </a><sup>2</sup> <a href="https://lukahhcm.github.io/" target="_blank"> Dadi Guo </a><sup>1</sup> <a href="https://mayrfung.github.io/" target="_blank">Yi R. (May) Fung</a><sup>1</sup></b>
 
 
-<sup>1 </sup>HKUST &nbsp; <sup>2 </sup> CUHK (Shenzhen) &nbsp
+<sup>1 </sup>HKUST &nbsp; <sup>2 </sup> CUHK (Shenzhen)
 
 [![Project Page](https://img.shields.io/badge/MATP--Bench-Website-2D89EF?style=flat-square&logo=internet-explorer)](https://matpbench.github.io/)
 [![ArXiv](https://img.shields.io/badge/arXiv-2502.xxx-B31B1B.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/xxx)
