@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="asset/MATP_icon.png" alt="icon" style=" height:105px;" />
+<img src="asset/MATP_icon.png" alt="icon" style=" height:125px;" />
 
 # MATP-BENCH: Can MLLM Be a Good Automated Theorem Prover for Multimodal Problems?
 
