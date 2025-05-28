@@ -42,8 +42,36 @@ We illustrate the differences between traditional **ATP and MATP** through examp
 <img src= "asset/tab1.png" width=“90%" alt= "Benchmark Comparison"/>
 </div>
 
-MATP-BENCH is a Multimodal, Multi-level, and Multi-language benchmark designed to evaluate MLLMs as automated theorem provers. The problems in MATP-BENCH span three distinct educational stages—high school, university, and competitions—systematically covering a wide range of difficulty levels from elementary to advanced. we manually annotate the formal statements of each problem in three formal languages. Moreover, the multimodal theorems in MATP-BENCH are primarily centered around the domain of geometry, spanning plane geometry, 3D geometry, analytic geometry.
+MATP-BENCH is a Multimodal, Multi-level, and Multi-language benchmark designed to evaluate MLLMs as automated theorem provers.
 
+---
+
+## Statistics
+
+<div align="center">
+<h3> Statistics summary of MATP-BENCH </h3>
+<img src= "asset/tab2.png" width=“60%" alt= "Statistics"/>
+</div>
+
+The problems in MATP-BENCH span three distinct educational stages—high school, university, and competitions—systematically covering a wide range of difficulty levels from elementary to advanced. we manually annotate the formal statements of each problem in three formal languages. Moreover, the multimodal theorems in MATP-BENCH are primarily centered around the domain of geometry, spanning plane geometry, 3D geometry, analytic geometry.
+
+---
+
+
+## Citation
+Please consider including the following citation if you find PutnamBench useful.
+
+```bibtex
+@misc{he2025matp,
+      title={MATP-BENCH: Can MLLM Be a Good Automated Theorem Prover for Multimodal Problems?}, 
+      author={Zhitao He and Zongwei Lyu and Dazhong Chen and Dadi Guo and Yi R. Fung},
+      year={2025},
+      eprint={2502.12xxx},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2502.12xxx}, 
+}
+```
 
 
 
