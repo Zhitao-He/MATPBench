@@ -50,7 +50,7 @@ MATP-BENCH is a Multimodal, Multi-level, and Multi-language benchmark designed t
 
 <div align="center">
 <h3> Statistics summary of MATP-BENCH </h3>
-<img src= "asset/tab2.png" width= "50%" alt= "Statistics"/>
+<img src= "asset/tab2.png" width= "60%" alt= "Statistics"/>
 </div>
 
 The problems in MATP-BENCH span three distinct educational stages—high school, university, and competitions—systematically covering a wide range of difficulty levels from elementary to advanced. we manually annotate the formal statements of each problem in three formal languages. Moreover, the multimodal theorems in MATP-BENCH are primarily centered around the domain of geometry, spanning plane geometry, 3D geometry, analytic geometry.
