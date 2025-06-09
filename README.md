@@ -62,14 +62,14 @@ The problems in MATP-BENCH span three distinct educational stages—high school,
 Please consider including the following citation if you find PutnamBench useful.
 
 ```bibtex
-@misc{he2025matp,
+@misc{he2025matpbenchmllmgoodautomated,
       title={MATP-BENCH: Can MLLM Be a Good Automated Theorem Prover for Multimodal Problems?}, 
       author={Zhitao He and Zongwei Lyu and Dazhong Chen and Dadi Guo and Yi R. Fung},
       year={2025},
-      eprint={2502.12xxx},
+      eprint={2506.06034},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2502.12xxx}, 
+      url={https://arxiv.org/abs/2506.06034}, 
 }
 ```
 
