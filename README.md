@@ -13,7 +13,7 @@
 <sup>1 </sup>HKUST &nbsp; <sup>2 </sup> CUHK (Shenzhen)
 
 [![Project Page](https://img.shields.io/badge/MATP--Bench-Website-2D89EF?style=flat-square&logo=internet-explorer)](https://matpbench.github.io/)
-[![ArXiv](https://img.shields.io/badge/arXiv-2502.xxx-B31B1B.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/xxx)
+[![ArXiv](https://img.shields.io/badge/arXiv-2506.06034-B31B1B.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2506.06034)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-Hugging%20Face-blue)](https://huggingface.co/datasets/Zhitao-He/MATPBench)
 
 </div>
