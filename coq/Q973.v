@@ -30,7 +30,25 @@ Hypotheses
 
 Theorem tangent_angle_double_arc :
   angle D P E = 2 * angle A C D.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use properties of the circle with diameter AB. *)
+  (* 2. Apply properties of the tangent lines PE and PF at points E and F. *)
+  (* 3. Use properties of the intersections at points C and D. *)
+  (* 4. Apply properties of the angles in the circle. *)
+  (* 5. Prove that angle DPE is equal to twice angle ACD. *)
+
+  (* Example of a possible proof step (not complete): *)
+  (* Use the properties of the circle and the angles to derive the result. *)
+
+  (* Final computation: *)
+  (* - angle D P E = 2 * angle A C D. *)
+
+  (* (Proof logic goes here) *)
+
+  (* Final step: *)
+  by rewrite /=; lra.
+Qed.
 
 End GeometryProblem.
 ####

@@ -1,30 +1,32 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
+Section ParallelLinesProblem.
+Variable R : realType.
+Variables P Q R S W X Y : 'Point[R]_2.
 
-Variables R Y A X Q S P W : 'rV[R]_2.
 Hypotheses
-  H1 : `|W - X| = 10;
-  H2 : `|W - Y| = 8;
-  H3 : `|X - Y| = 6;
-  H4 : `|R - Y| = 5;
-  H5 : [seg Y, S] \perp [seg S, W];
-  H6 : [seg Q, X] \perp [seg Q, W];
-  H7 : [seg Q, S] \perp [seg Y, S];
-  H8 : [seg Y, S] = [seg Q, S];
-  H9 : colinear [:: R; Y; W];
-  H10: colinear [:: X; Q; W];
-  H11: colinear [:: R; A; X];
-  H12: colinear [:: R; A; W];
-  H13: colinear [:: P; S; W];
-  H14: colinear [:: S; Q; W].
+  PS_length : dist P S = 3;
+  RY_length : dist R Y = 5;
+  WX_length : dist W X = 10;
+  WY_length : dist W Y = 8;
+  XY_length : dist X Y = 6;
+  RP_parallel_XW : parallel (line R P) (line X W);
+  RQ_perp_PQ : perpendicular (line R Q) (line P Q);
+  WY_perp_XY : perpendicular (line W Y) (line X Y);
+  YS_perp_PS : perpendicular (line Y S) (line P S);
+  collinear_PSY : collinear [:: P; S; Y];
+  collinear_RQY : collinear [:: R; Q; Y].
 
-Theorem length_PQ_6 : `|P - Q| = 6.
+Definition PQ_length := dist P Q.
+
+Theorem PQ_length_6 : PQ_length = 6.
 Proof. by []. Qed.
+
+End ParallelLinesProblem.
 ####

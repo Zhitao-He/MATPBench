@@ -1,47 +1,31 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
 import Mathlib.Data.Real.Basic
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-variable [FiniteDimensional ℝ V] (h_dim_eq_2 : FiniteDimensional.finrank ℝ V = 2)
-
-namespace ProblemFormalization
-
-variable (O A B C D E : P)
-variable (r : ℝ)
-
-variable (hr_pos : 0 < r)
-
-variable (hA_on_circle : A ∈ Euclidean.Sphere O r)
-variable (hB_on_circle : B ∈ Euclidean.Sphere O r)
-variable (hC_on_circle : C ∈ Euclidean.Sphere O r)
-variable (hD_on_circle : D ∈ Euclidean.Sphere O r)
-variable (hE_on_circle : E ∈ Euclidean.Sphere O r)
-
-variable (h_E_ne_B : E ≠ B)
-variable (h_D_ne_C : D ≠ C)
-variable (h_A_ne_B : A ≠ B)
-variable (h_E_ne_D : E ≠ D)
-variable (h_A_ne_E : A ≠ E)
-variable (h_B_ne_C : B ≠ C)
-
-variable (h_EB_diameter : O = midpoint ℝ E B)
-
-variable (h_EB_parallel_DC : AffineSubspace.Parallel (affineSpan ℝ ({E, B} : Set P)) (affineSpan ℝ ({D, C} : Set P)))
-
-variable (h_AB_parallel_ED : AffineSubspace.Parallel (affineSpan ℝ ({A, B} : Set P)) (affineSpan ℝ ({E, D} : Set P)))
-
-variable (h_angle_ratio : (5 : ℝ) * (Angle.Unoriented.value (∠ A E B h_A_ne_E.symm h_E_ne_B)) =
-                            (4 : ℝ) * (Angle.Unoriented.value (∠ A B E h_A_ne_B.symm h_E_ne_B.symm)))
-
-def degreesToRadians (d : ℝ) : ℝ := d * Real.pi / 180
-
-theorem angle_BCD_is_130_degrees :
-  (Angle.Unoriented.value (∠ B C D h_B_ne_C.symm h_D_ne_C.symm)) = degreesToRadians 130 := by sorry
-
-end ProblemFormalization
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+open Real EuclideanGeometry Affine AffineSubspace 
+open scoped EuclideanGeometry 
+namespace ProblemDescription
+abbrev P := EuclideanSpace ℝ (Fin 2) 
+variable (A B C D E : P)
+variable (S : Sphere P) 
+variable (hA_on_S : A ∈ S)
+variable (hB_on_S : B ∈ S)
+variable (hC_on_S : C ∈ S)
+variable (hD_on_S : D ∈ S)
+variable (hE_on_S : E ∈ S)
+variable (hEB_diameter : S.center = midpoint ℝ E B)
+variable (hE_ne_B : E ≠ B)
+variable (hD_ne_C : D ≠ C)
+variable (h_parallel_EB_DC : line[ℝ, E, B] ∥ line[ℝ, D, C]) 
+variable (hA_ne_B : A ≠ B)
+variable (hE_ne_D : E ≠ D)
+variable (h_parallel_AB_ED : line[ℝ, A, B] ∥ line[ℝ, E, D]) 
+variable (hA_ne_E : A ≠ E)
+variable (h_angle_ratio : 5 * (∠ A E B) = 4 * (∠ A B E))
+variable (hB_ne_C : B ≠ C)
+theorem angle_BCD_is_130_degrees : (∠ B C D) * (180 / Real.pi) = 130 := by
+  sorry
+end ProblemDescription

@@ -1,20 +1,29 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
--- 定义平面欧氏空间
-abbrev EucPlane := EuclideanSpace ℝ (Fin 2)
-
--- 定义扇形面积：以 center 为圆心，point1、point2 为弧的两端
-def sectorArea (center point1 point2 : EucPlane) : ℝ :=
-  (1/2) * (dist center point1) ^ 2 * Angle.toReal (∠ point1 center point2)
-
--- 题设定理的形式化表述
-theorem area_of_sector_BAC_is_pi_div_4
-    (A B C : EucPlane)
-    (h_BC_length : dist B C = 3)
-    (h_B_is_center : dist B A = dist B C)
-    (h_CBA_angle : Angle.toReal (∠ C B A) = (10 / 180) * Real.pi)
-    (h_A_ne_B : A ≠ B)
-    (h_C_ne_B : C ≠ B) :
-    sectorArea B A C = Real.pi / 4 := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Data.Real.Pi.Bounds
+open Real EuclideanGeometry
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemFormalization
+variable (A B C W X Y : P)
+variable (x : ℝ)
+variable (hx_pos : 0 < x)
+variable (h_BC : dist B C = 3)
+variable (h_A_on_circle : dist A B = dist B C)
+variable (h_C_ne_B : C ≠ B)
+variable (h_A_ne_B : A ≠ B)
+variable (h_angle_CBA : ∠ C B A = Real.pi / 18)
+noncomputable def areaOfCircularSector (center point1 point2 : P)
+    (_ : point1 ≠ center)
+    (_ : point2 ≠ center)
+    (_ : dist point1 center = dist point2 center) : ℝ :=
+  let radius := dist point1 center
+  (1 / 2 : ℝ) * radius ^ 2 * (∠ point1 center point2)
+noncomputable def sectorAreaBAC (A B C : P)
+    (h_A_ne_B : A ≠ B) (h_C_ne_B : C ≠ B) (h_A_on_circle : dist A B = dist B C) : ℝ :=
+  areaOfCircularSector B A C h_A_ne_B h_C_ne_B (Eq.trans h_A_on_circle (dist_comm B C))
+theorem problem_to_solve : sectorAreaBAC A B C h_A_ne_B h_C_ne_B h_A_on_circle = Real.pi / 4 := by sorry
+end ProblemFormalization

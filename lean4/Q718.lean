@@ -1,42 +1,29 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Data.Real.Basic
-
-namespace AngleCircleProblem
-
--- Let P be a Euclidean plane
-variable {P : Type*} [EuclideanPlane P]
-
--- Declare the points on the diagram; V is the center.
-variable (V : P)  -- V is the center
-variable (A Q S T U : P)  -- Other points
-
--- x: unknown angle in degrees
-variable (x : ℝ)
-
--- All points are distinct as required by the setup.
-axiom h_distinct : 
-  Q ≠ U ∧ U ≠ T ∧ T ≠ S ∧ S ≠ A ∧ A ≠ Q ∧
-  V ≠ Q ∧ V ≠ U ∧ V ≠ T ∧ V ≠ S ∧ V ≠ A
-
--- Known central angles (in degrees)
-def angleUVQ : ℝ := 26    -- ∠UVQ = 26°
-def angleQVA : ℝ := 167   -- ∠QVA = 167°
-def angleSVT : ℝ := 77    -- ∠SVT = 77°
-def angleAVS : ℝ := x     -- ∠AVS = x°
-def angleTVU : ℝ := x     -- ∠TVU = x°
-
--- Angle addition formulae
-def angleUVA : ℝ := angleUVQ + angleQVA
-def angleSVU : ℝ := angleSVT + angleTVU
-def angleAVU : ℝ := angleAVS + angleSVU
-
--- The sum of the two big central angles is a full circle
-axiom h_round_angle : angleUVA + angleAVU = 360
-
--- x is positive
-axiom h_x_positive : x > 0
-
--- The expected answer
-theorem value_of_x_is_45 : x = 45 := by sorry
-
-end AngleCircleProblem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degreesToRadians (d : ℝ) : ℝ := d * (Real.pi / 180)
+theorem find_value_of_x
+  (A S T U Q V : P)
+  (x : ℝ)
+  (hAVS : EuclideanGeometry.angle A V S = degreesToRadians x)
+  (hQVA : EuclideanGeometry.angle Q V A = degreesToRadians 167)
+  (hSVT : EuclideanGeometry.angle S V T = degreesToRadians 77)
+  (hTVU : EuclideanGeometry.angle T V U = degreesToRadians x)
+  (hUVQ : EuclideanGeometry.angle U V Q = degreesToRadians 26)
+  (hA_ne_V : A ≠ V)
+  (hS_ne_V : S ≠ V)
+  (hT_ne_V : T ≠ V)
+  (hU_ne_V : U ≠ V)
+  (hQ_ne_V : Q ≠ V)
+  (hx_pos : x > 0)
+  (hx_lt_360 : x < 360)
+  (hsum :
+    EuclideanGeometry.angle A V S +
+    EuclideanGeometry.angle S V T +
+    EuclideanGeometry.angle T V U +
+    EuclideanGeometry.angle U V Q +
+    EuclideanGeometry.angle Q V A = 2 * Real.pi
+  ) : x = 45 :=
+  sorry

@@ -1,69 +1,55 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
-import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-namespace EuclideanGeometryProblem
-
-open EuclideanGeometry
-open InnerProductGeometry
-open AffineGeometry
-
--- Let P be the Euclidean plane, V its associated vector space
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-  [FiniteDimensional ℝ V] [Fact (FiniteDimensional.finrank ℝ V = 2)]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Points in the plane
-variable (A B C D E F P_ Q : P)
-
--- ABCD is a convex quadrilateral:
--- No three distinct vertices are collinear.
-variable (hABC : ¬Collinear ℝ ({A, B, C} : Set P))
-variable (hBCD : ¬Collinear ℝ ({B, C, D} : Set P))
-variable (hCDA : ¬Collinear ℝ ({C, D, A} : Set P))
-variable (hDAB : ¬Collinear ℝ ({D, A, B} : Set P))
--- Vertices are distinct
-variable (hAB : A ≠ B) (hBC : B ≠ C) (hCD : C ≠ D) (hDA : D ≠ A)
-variable (hAC : A ≠ C) (hBD : B ≠ D)
--- Diagonals separate opposite vertices (ensuring convexity and standard ordering)
-variable (h_diag_AC_sep_BD : ¬SameSide (affineSpan ℝ {A, C}) B D)
-variable (h_diag_BD_sep_AC : ¬SameSide (affineSpan ℝ {B, D}) A C)
-
--- AC bisects angle BAD.
-variable (h_angle_bisect :
-  angle B A C hAB hAC = angle D A C hDA hAC)
-variable (h_c_int1 : SameSide (affineSpan ℝ {A, B}) C D)
-variable (h_c_int2 : SameSide (affineSpan ℝ {A, D}) C B)
-
--- E ∈ BC, F ∈ CD, EF ∥ BD
-variable (hE_on_BC : E ∈ segment ℝ B C)
-variable (hF_on_CD : F ∈ segment ℝ C D)
-variable (hEF_ne : E ≠ F)
-variable (hEF_parallel_BD : (affineSpan ℝ {E, F}) ∥ (affineSpan ℝ {B, D}))
-
--- Extend FA to P, EA to Q, with A between F and P, A between E and Q
-variable (hSbtw_FAP : Sbtw ℝ F A P_)
-variable (hSbtw_EAQ : Sbtw ℝ E A Q)
-
--- P ≠ A ≠ Q, F ≠ P, E ≠ Q (implied by Sbtw)
--- Each relevant triple is non-collinear for circles
-variable (hNCL_ABP : ¬Collinear ℝ ({A, B, P_} : Set P))
-variable (hNCL_ADQ : ¬Collinear ℝ ({A, D, Q} : Set P))
-
--- The circumcircle ω₁ of triangle ABP is tangent to line AC at A
-variable (h_tangent_omega1 :
-  Sphere.tangentLineAt (circumcircle (Triangle.mk A B P_ hNCL_ABP)) A
-    (Triangle.mem_circumcircle_point₁ (Triangle.mk A B P_ hNCL_ABP)) = affineSpan ℝ {A, C})
-
--- The circumcircle ω₂ of triangle ADQ is tangent to line AC at A
-variable (h_tangent_omega2 :
-  Sphere.tangentLineAt (circumcircle (Triangle.mk A D Q hNCL_ADQ)) A
-    (Triangle.mem_circumcircle_point₁ (Triangle.mk A D Q hNCL_ADQ)) = affineSpan ℝ {A, C})
-
--- Conclusion: B, P, Q, D are concyclic
-theorem concyclic_BPQD : Concyclic ({B, P_, Q, D} : Set P) := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Geometry.Euclidean.Sphere.Basic 
+import Mathlib.Geometry.Euclidean.Sphere.Tangent 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+import Mathlib.Analysis.Convex.Side 
+import Mathlib.Geometry.Euclidean.Circumcenter 
+open Real EuclideanGeometry Affine AffineSubspace EuclideanGeometry.Sphere 
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem quadrilateral_tangent_circles_concyclic
+    (A B C D E F P Q : PPoint)
+    (O₁ O₂ : PPoint) (r₁ r₂ : ℝ)
+    (hA_ne_B : A ≠ B) (hA_ne_C : A ≠ C) (hA_ne_D : A ≠ D)
+    (hB_ne_C : B ≠ C) (hB_ne_D : B ≠ D) (hC_ne_D : C ≠ D)
+    (h_noncol_ABC : ¬Collinear ℝ ({A, B, C} : Set PPoint))
+    (h_noncol_BCD : ¬Collinear ℝ ({B, C, D} : Set PPoint))
+    (h_noncol_CDA : ¬Collinear ℝ ({C, D, A} : Set PPoint))
+    (h_noncol_DAB : ¬Collinear ℝ ({D, A, B} : Set PPoint))
+    (h_convex_AC : ¬(affineSpan ℝ ({A, C} : Set PPoint)).WSameSide B D)
+    (h_convex_BD : ¬(affineSpan ℝ ({B, D} : Set PPoint)).WSameSide A C)
+    (h_bisect : EuclideanGeometry.angle B A C = EuclideanGeometry.angle D A C)
+    (hE_on_BC : E ∈ segment ℝ B C)
+    (hF_on_CD : F ∈ segment ℝ C D)
+    (hE_ne_F : E ≠ F)
+    (hEF_parallel_BD : line[ℝ, E, F] ∥ line[ℝ, B, D])
+    (hP_extends_FA : Sbtw ℝ F A P)
+    (hQ_extends_EA : Sbtw ℝ E A Q)
+    (hABP_noncol : ¬Collinear ℝ ({A, B, P} : Set PPoint))
+    (hO₁_def : ∀ X ∈ ({A, B, P} : Set PPoint), dist X O₁ = r₁)
+    (h_omega1_tangent_AC :
+      IsTangentAt (EuclideanGeometry.Sphere.mk O₁ r₁) A (line[ℝ, A, C]))
+    (hADQ_noncol : ¬Collinear ℝ ({A, D, Q} : Set PPoint))
+    (hO₂_def : ∀ X ∈ ({A, D, Q} : Set PPoint), dist X O₂ = r₂)
+    (h_omega2_tangent_AC :
+      IsTangentAt (EuclideanGeometry.Sphere.mk O₂ r₂) A (line[ℝ, A, C])) :
+    Concyclic ({B, P, Q, D} : Set PPoint) :=
+  by
+    sorry
+lemma imo_2000_p1 (A B C P Q : PPoint) (Ω : Sphere PPoint)
+  (hA_on_Ω : A ∈ Ω) (hB_on_Ω : B ∈ Ω) (hC_on_Ω : C ∈ Ω) (hP_on_Ω : P ∈ Ω) (hQ_on_Ω : Q ∈ Ω)
+  (hAB_ne_CD : sorry) (hAC_ne_PQ : sorry) (hAD_ne_BC : sorry)
+  (hM_on_line_AB : sorry) (hN_on_line_CD : sorry)
+  (hM_midpoint_AB : sorry) (hN_midpoint_CD : sorry)
+  (hK_on_line_AC : sorry) (hL_on_line_PQ : sorry)
+  (hK_midpoint_AC : sorry) (hL_midpoint_PQ : sorry)
+  (hX_on_line_AD : sorry) (hY_on_line_BC : sorry)
+  (hX_midpoint_AD : sorry) (hY_midpoint_BC : sorry)
+  (hO_center_Ω : sorry)
+  (h_collinear_ABP : Collinear ℝ ({A, B, P} : Set PPoint))
+  (h_collinear_ADQ : Collinear ℝ ({A, D, Q} : Set PPoint))
+  (hABP_noncol : ¬ Collinear ℝ ({A, B, P} : Set PPoint))
+  (hADQ_noncol : ¬ Collinear ℝ ({A, D, Q} : Set PPoint)) :
+  (IsTangentAt (EuclideanGeometry.Sphere.mk O₁ r₁) A (line[ℝ, A, C])) ↔
+  (IsTangentAt (EuclideanGeometry.Sphere.mk O₂ r₂) A (line[ℝ, A, C])) := by
   sorry
-
-end EuclideanGeometryProblem

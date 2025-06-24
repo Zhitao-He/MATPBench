@@ -1,31 +1,31 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine
-import Mathlib.Data.Real.Pi
-
-open EuclideanGeometry
-open Real
-
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-variable [Fact (FiniteDimensional.finrank ℝ P = 2)]
-
-namespace CircleArcProblem
-
-variable {O A B C D E F : P}
-variable (hA_on_circle : dist A O = dist B O)
-variable (hB_on_circle : dist B O = dist C O)
-variable (hC_on_circle : dist C O = dist D O)
-variable (hD_on_circle : dist D O = dist E O)
-variable (hE_on_circle : dist E O = dist F O)
-variable (hF_on_circle : dist F O = dist A O)
-
-variable (h_diam_EC : midpoint ℝ E C = O)
-variable (h_diam_AB : midpoint ℝ A B = O)
-
-variable (h_oangle_BOD_eq_DOE : oangle B O D = oangle D O E)
-variable (h_oangle_DOE_eq_EOF : oangle D O E = oangle E O F)
-variable (h_oangle_EOF_eq_FOA : oangle E O F = oangle F O A)
-
-theorem measure_arc_AE_is_90_degrees : angle A O E = π / 2 := by
-  sorry
-
-end CircleArcProblem
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+theorem measure_arc_AE_eq_90_degrees
+  (O A B C D E F : P)
+  (r : ℝ)
+  (Ω : EuclideanGeometry.Sphere P)
+  (hΩ_center : Ω.center = O)
+  (hΩ_radius : Ω.radius = r)
+  (hr_pos : 0 < r)
+  (hA_on_Ω : A ∈ Ω)
+  (hB_on_Ω : B ∈ Ω)
+  (hC_on_Ω : C ∈ Ω)
+  (hD_on_Ω : D ∈ Ω)
+  (hE_on_Ω : E ∈ Ω)
+  (hF_on_Ω : F ∈ Ω)
+  (hEC_diameter : C -ᵥ O = -(E -ᵥ O))
+  (hAB_diameter : B -ᵥ O = -(A -ᵥ O))
+  (h_angle_BOD_eq_DOE : EuclideanGeometry.angle B O D = EuclideanGeometry.angle D O E)
+  (h_angle_DOE_eq_EOF : EuclideanGeometry.angle D O E = EuclideanGeometry.angle E O F)
+  (h_angle_EOF_eq_FOA : EuclideanGeometry.angle E O F = EuclideanGeometry.angle F O A)
+  (h_sbtw_BDE : Sbtw ℝ B D E)
+  (h_sbtw_DEF : Sbtw ℝ D E F)
+  (h_sbtw_EFA : Sbtw ℝ E F A) :
+  EuclideanGeometry.angle A O E = Real.pi / 2 := by sorry
+end
+end

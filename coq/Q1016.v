@@ -18,10 +18,10 @@ Variables A B C D E F G H : Point.
 Hypothesis plane_affine : affine_plane_axioms R plane Point vect.
 
 (* E is the midpoint of AD *)
-Hypothesis E_mid_AD : exists k : R, 0 < k < 1 /\ vect A E = k *: vect A D.
+Hypothesis E_mid_AD : vect A E = (vect A D) / 2.
 
 (* F is the midpoint of BC *)
-Hypothesis F_mid_BC : exists k : R, 0 < k < 1 /\ vect B F = k *: vect B C.
+Hypothesis F_mid_BC : vect B F = (vect B C) / 2.
 
 (* H is the intersection of diagonals AC and BD *)
 Hypothesis H_on_AC : exists a : R, 0 < a < 1 /\ vect A H = a *: vect A C.

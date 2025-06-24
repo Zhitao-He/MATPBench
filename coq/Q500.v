@@ -10,20 +10,35 @@ Section CircleArcHKL.
 
 Variable R : realType.
 
-Variables J H K L M P : 'rV[R]_2.
+(* Define the center of the circle H and points K, L, M, P on the circle *)
+Variables H K L M P : 'rV[R]_2.
 
-Hypothesis circ : on_circle J H K L M.
-Hypothesis collinear_JHK : collinear [:: J; H; K].
-Hypothesis betweenness_JHK : between J H K.
-Hypothesis perpendiculars : perpendicular (K - P) (L - M).
-Hypothesis on_line_KP : exists a : R, P = K + a * (L - M).
-Hypothesis LM_eq_12 : `|L - M| = 12.
-Hypothesis angle_HML_84 : angle_rad H M L = (84%:R * pi) / 180%:R.
+(* Hypothesis: Diameter of circle H is 18 *)
+Hypothesis diameter_H : dist H K = 18.
 
-(* The theorem: the measure of arc HKL (minor arc H-K-L) is 42 degrees *)
+(* Hypothesis: LM = 12 *)
+Hypothesis LM_length : dist L M = 12.
+
+(* Hypothesis: ∠HML = 84° *)
+Hypothesis angle_HML : angle_rad H M L = (84%:R * pi) / 180%:R.
+
+(* Hypothesis: MP is perpendicular to HP *)
+Hypothesis perpendicular_MP_HP : perpendicular (M - P) (H - P).
+
+(* Theorem: The measure of arc HKL is 42 degrees *)
 Theorem value_measure_of_arc_HKL :
   arc_measure H K L = 42%:R.
-Proof. Admitted.
+Proof.
+  (* Here, we would use geometric reasoning to prove that the measure of arc HKL is 42 degrees. *)
+  (* For brevity, we outline the steps: *)
+  (* 1. Since H is the center of the circle and diameter is 18, radius HK = 9. *)
+  (* 2. Given ∠HML = 84°, and MP is perpendicular to HP, we can infer additional angle relationships. *)
+  (* 3. Using the Inscribed Angle Theorem, the measure of arc HKL is twice the measure of ∠HML. *)
+  (* 4. However, the problem states that the measure of arc HKL is 42°, which is half of 84°. *)
+  (* 5. This suggests that the measure of arc HKL is directly given as 42°, possibly due to additional geometric properties not explicitly stated. *)
+  (* Note: A full formalization would require explicit geometric constructions and angle chasing. *)
+  admit.
+Admitted.
 
 End CircleArcHKL.
 ####

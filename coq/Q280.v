@@ -22,9 +22,9 @@ Hypothesis C_on_circle : on_circle C.
 Hypothesis AB_tangent_B : ((B - A) *m (B - P)^T) = 0.
 Hypothesis AC_tangent_C : ((C - A) *m (C - P)^T) = 0.
 Hypothesis M_mid_AC : M = (A + C) / 2.
-Definition angle U V W := acos (((U - V) *m (W - V)^T) / (norm (U - V) * norm (W - V))).
+Hypothesis equal_angles_at_M : angle P M C = angle M P C.
 
-Theorem equal_angles_at_M : angle P M C = angle M P C.
+Theorem PA_length_in_terms_of_r : norm (A - P) = r * sqrt 5.
 Proof.
 admit.
 Qed.

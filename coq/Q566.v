@@ -1,29 +1,29 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry angle.
+From mathcomp Require Import reals geometry angles.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section AngleGeometry.
+Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Variables A B C D E F G H I : 'vec R.
+Variables H D B F A : 'rV[R]_2.
+Variable x : R.
 
-Hypotheses
-  (HC : colinear C H I)
-  (HD : colinear D H F)
-  (HB : colinear B H E)
-  (HG : colinear B G E)
-  (HA : colinear D F A)
-  (H_perp : angle B H D = pi/2)
-  (angle_CHD : angle C H D = (38%:R * pi / 180%:R))
-  (angle_FDA : angle F D A = (52%:R * pi / 180%:R)).
+Hypothesis H_DHB : angle D H B = 38%:R.
+Hypothesis H_FDA : angle F D A = 52%:R.
+Hypothesis H_HB_perp_DB : orthogonal (H - B) (D - B).
 
-Theorem measure_angle_HDF : angle H D F = (128%:R * pi / 180%:R).
-Proof. Admitted.
-
-End AngleGeometry.
+Theorem measure_angle_HDF : angle H D F = 128%:R.
+Proof.
+  (* Using adjacent complementary angles *)
+  have H_adj_compl : angle H D F + angle F D A = 180%:R by apply: adjacent_complementary_angle.
+  rewrite H_FDA in H_adj_compl.
+  (* Solve for angle HDF *)
+  have H_eq : angle H D F = 180%:R - 52%:R by move: H_adj_compl => /eqP ->.
+  by rewrite H_eq; field.
+Qed.
 ####

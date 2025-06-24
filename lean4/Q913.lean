@@ -1,36 +1,22 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open Real
-open EuclideanGeometry
-
--- Let E2 be 2-dimensional Euclidean space
-abbrev E2 := EuclideanSpace ℝ (Fin 2)
-
-namespace TriangleValueProblem
-
-/--
-  Define the value for x using the provided expression:
-  Value(x) = 9 * sin(7π/36) / sin(29π/90)
--/
-def xValue : ℝ := 9 * sin ((7 * π) / 36) / sin ((29 * π) / 90)
-
-/--
-  For any non-collinear points A, B, C in E2 such that:
-    - dist A B = 9
-    - angle ABC = 35° = 7π/36
-    - angle BCA = 58° = 29π/90
-  the Law of Sines implies: dist A C = xValue
--/
-theorem triangle_side_ac_eq_xValue (A B C : E2)
-    (hAB : dist A B = 9)
-    (h_angle_B : (angle A B C).toReal = (7 * π) / 36)
-    (h_angle_C : (angle B C A).toReal = (29 * π) / 90)
-    (hA_ne_B : A ≠ B)
-    (hB_ne_C : B ≠ C)
-    (hC_ne_A : C ≠ A) :
-    dist A C = xValue := by
-  sorry
-
-end TriangleValueProblem
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Basic
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (A B C : P)
+variable (x : ℝ)
+variable (h_AB : dist A B = 9)
+variable (h_AC : dist A C = x)
+variable (h_angle_ACB : EuclideanGeometry.angle A C B = (29 * Real.pi / 90))
+variable (h_angle_CBA : EuclideanGeometry.angle C B A = (7 * Real.pi / 36))
+variable (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set P))
+theorem find_value_of_x
+  (A B C : P)
+  (x : ℝ)
+  (h_AB : dist A B = 9)
+  (h_AC : dist A C = x)
+  (h_angle_ACB : EuclideanGeometry.angle A C B = (29 * Real.pi / 90))
+  (h_angle_CBA : EuclideanGeometry.angle C B A = (7 * Real.pi / 36))
+  (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set P)) :
+  x = 9 * Real.sin (7 * Real.pi / 36) / Real.sin (29 * Real.pi / 90) := by sorry
+end

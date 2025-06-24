@@ -1,50 +1,32 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-noncomputable section
-
-/-!
-# Regular Pentagon and Tangent Circle Arc Problem
-
-Let `ABCDE` be a regular pentagon in the Euclidean plane.  
-Suppose a circle with center `O` and radius `r > 0` is tangent to side `DC` at point `D` and to side `AB` at point `A`, 
-with `A` and `D` lying on the circle.  
-Then the measure of the minor arc `AD` of this circle is `144` degrees, i.e. `4π / 5`.
--/
-
-open Real
-
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor ℝ P]
-
-/-- Definition of regular pentagon with specified side length. -/
-structure IsRegularPentagon (A B C D E : P) (s : ℝ) : Prop where
-  dist_AB : dist A B = s
-  dist_BC : dist B C = s
-  dist_CD : dist C D = s
-  dist_DE : dist D E = s
-  dist_EA : dist E A = s
-  angle_EAB : Point.angle E A B = 3 * π / 5
-  angle_ABC : Point.angle A B C = 3 * π / 5
-  angle_BCD : Point.angle B C D = 3 * π / 5
-  angle_CDE : Point.angle C D E = 3 * π / 5
-  angle_DEA : Point.angle D E A = 3 * π / 5
-
-variable {A B C D E O : P} {s r : ℝ} (hs : s > 0) (hr : r > 0)
-variable (hPent : IsRegularPentagon A B C D E s)
-variable (hA_on : dist A O = r)
-variable (hD_on : dist D O = r)
-/-- The center O and side/point tangency conditions: -/
-variable (hTang_DC : inner (O -ᵥ D) (C -ᵥ D) = 0)
-variable (hTang_AB : inner (O -ᵥ A) (B -ᵥ A) = 0)
-
-/--
-**Theorem:**  
-In the above configuration, the (minor) central angle `∠AOD` is `4π / 5` radians,
-i.e., the minor arc from `A` to `D` at center `O` measures `144` degrees.
--/
-theorem regularPentagonArcMeasure :
-    Point.angle A O D = 4 * π / 5 :=
-  by sorry
-
-end
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+open Affine
+open RealInnerProductSpace
+structure IsRegularPentagon (A B C D E : P) where
+  side_len : ℝ
+  h_side_len_pos : side_len > 0
+  h_dist_AB : dist A B = side_len
+  h_dist_BC : dist B C = side_len
+  h_dist_CD : dist C D = side_len
+  h_dist_DE : dist D E = side_len
+  h_dist_EA : dist E A = side_len
+  h_angle_EAB : ∠ E A B = (3 * Real.pi / 5)
+  h_angle_ABC : ∠ A B C = (3 * Real.pi / 5)
+  h_angle_BCD : ∠ B C D = (3 * Real.pi / 5)
+  h_angle_CDE : ∠ C D E = (3 * Real.pi / 5)
+  h_angle_DEA : ∠ D E A = (3 * Real.pi / 5)
+theorem regular_pentagon_arc_measure
+    (A B C D E : P)
+    (Ω : EuclideanGeometry.Sphere P)
+    (h_pentagon : IsRegularPentagon A B C D E)
+    (h_radius_pos : Ω.radius > 0)
+    (h_A_on_Ω : A ∈ Ω)
+    (h_D_on_Ω : D ∈ Ω)
+    (h_tangent_DC_at_D : inner ℝ (Ω.center -ᵥ D) (C -ᵥ D) = 0)
+    (h_tangent_AB_at_A : inner ℝ (Ω.center -ᵥ A) (B -ᵥ A) = 0)
+    : ∠ A Ω.center D = (4 * Real.pi / 5) := by sorry

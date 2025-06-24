@@ -9,14 +9,15 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
-Variables A K O C M B : R.
+Variables K O C B : R.
 
 Hypotheses
-  HAK : A < K < O < C < M < B /\C - O = 32 /\B - C = 36.
-Definition AB := B - A.
-Definition semi_area d := PI * (d / 2)^2 / 2.
-Theorem semicircle_K_area : AB = 50 -> semi_area AB = 1250 * PI.
-Proof.
-admit.
-Qed.
+  (Hdist_OC : C - O = 32)
+  (Hdist_CB : B - C = 36).
+
+Definition diameter_K := (C - O) + (B - C) + (O - K).
+Definition semi_area d := PI * (d / 2) ^+ 2 / 2.
+
+Theorem semicircle_K_area : diameter_K = 100 -> semi_area diameter_K = 1250 * PI.
+Proof. Admitted.
 ####

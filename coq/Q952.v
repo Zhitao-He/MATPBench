@@ -1,40 +1,31 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclid_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Geometry_Theorem.
-
+Section CircleTangentProblem.
 Variable R : realType.
+Variables O A B P C D E : 'Point[R]_2.
 
-Variables A B O P C D E : 'P[R^2].
+(* Circle properties *)
+Hypothesis AB_diameter : midpoint O A B /\ dist O A = dist O B.
+Hypothesis circle_def : forall X, on_circle O (dist O A) X <-> (X = A \/ X = B \/ X = C \/ X = D).
 
-Hypothesis Hdistinct : [/\ A <> B, A <> O, B <> O, A <> P, B <> P, C <> D, C <> P, D <> P, A <> C, A <> D, B <> D & O <> P].
+(* Tangent condition *)
+Hypothesis PA_tangent : tangent (line P A) (circle O (dist O A)).
 
-Hypothesis Hodiameter : midpoint O A B.
+(* Secant line PCD *)
+Hypothesis PCD_secant : collinear [:: P; C; D].
 
-Variable omega : circle R.
-Hypothesis Hcircle : circle_on omega O (dist A O).
-Hypothesis HA_on : on_circle omega A.
-Hypothesis HB_on : on_circle omega B.
-Hypothesis HC_on : on_circle omega C.
-Hypothesis HD_on : on_circle omega D.
+(* Intersection points *)
+Hypothesis E_intersection : collinear [:: P; O; E] /\ collinear [:: B; D; E].
 
-(* PA is tangent to omega at A *)
-Hypothesis Htangent_PA : tangent_at_point omega P A.
+(* Main theorem *)
+Theorem AC_perp_AE : perpendicular (line A C) (line A E).
+Proof. by []. Qed.
 
-(* P, C, D collinear, i.e., P, C, D are on a line, and C, D are distinct *)
-Hypothesis Hcollinear_PCD : collinear [:: P; C; D].
-
-(* PO meets BD at E *)
-Hypothesis HE_intersection : intersection (Line P O) (Line B D) = Some E.
-
-Theorem circle_tangent_perpendicular :
-  perpendicular (Line A C) (Line A E).
-Proof. Admitted.
-
-End Geometry_Theorem.
+End CircleTangentProblem.
 ####

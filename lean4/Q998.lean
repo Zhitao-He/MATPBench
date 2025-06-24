@@ -1,48 +1,26 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Circumcenter
-
-noncomputable section ParallelogramProblem
-
--- Let V be a 2-dimensional real inner product space, and P the corresponding affine space.
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable [Fact (FiniteDimensional.finrank ℝ V = 2)]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Points: vertices of parallelogram, other key points
-variable (A B C D E F G H O P_center : P)
-
--- Hypotheses:
-
--- ABCD is a parallelogram: AB = DC (as vectors) and not degenerate.
-variable (h_parallelogram : B -ᵥ A = C -ᵥ D)
-variable (h_noncollinear_ABC : ¬ Collinear ℝ A B C)
-
--- E ∈ (A, D), strictly between; F ∈ (C, D)
-variable (h_E_between : Sbtw ℝ A E D)
-variable (h_F_between : Sbtw ℝ C F D)
-
--- G is the intersection of lines AF and CE
-variable (h_G_on_AF : Collinear ℝ A F G)
-variable (h_G_on_CE : Collinear ℝ C E G)
-
--- O is circumcenter of triangle A E G, which are not collinear
-variable (h_AEG_noncollinear : ¬ Collinear ℝ A E G)
-variable (h_O_circumcenter : O = circumcenter ℝ A E G)
-
--- P_center is circumcenter of triangle C F G, which are not collinear
-variable (h_CFG_noncollinear : ¬ Collinear ℝ C F G)
-variable (h_P_center_circumcenter : P_center = circumcenter ℝ C F G)
-
--- H is the "other" intersection point (≠ G) of the circumcircles
-variable (h_H_on_O_circle : dist H O = dist A O)
-variable (h_H_on_P_circle : dist H P_center = dist C P_center)
-variable (h_H_ne_G : H ≠ G)
-
--- The conclusion: Angle equality
-theorem parallelogram_problem :
-    EuclideanGeometry.angle G B A = EuclideanGeometry.angle H D A := by
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+noncomputable def circumcenter (A B C : Point) : Point := sorry
+noncomputable def circumcircle (A B C : Point) : Set Point := {x | dist x (circumcenter A B C) = dist A (circumcenter A B C)}
+theorem angle_equality_of_intersecting_circles_in_parallelogram
+  (a b c d e f g h o p : Point)
+  (h_parallelogram : b -ᵥ a = c -ᵥ d)
+  (hE_on_AD : e ∈ segment ℝ a d)
+  (hF_on_CD : f ∈ segment ℝ c d)
+  (hG_on_AF : g ∈ line[ℝ, a, f])
+  (hG_on_CE : g ∈ line[ℝ, c, e])
+  (hO_circumcenter : o = circumcenter a e g)
+  (hP_circumcenter : p = circumcenter c f g)
+  (hH_on_circumcircle_AEG : h ∈ circumcircle a e g)
+  (hH_on_circumcircle_CFG : h ∈ circumcircle c f g)
+  (hH_ne_G : h ≠ g)
+  (hG_ne_B : g ≠ b) (hA_ne_B : a ≠ b)
+  (hH_ne_D : h ≠ d) (hA_ne_D : a ≠ d)
+  : EuclideanGeometry.angle g b a = EuclideanGeometry.angle h d a := by
   sorry
-
-end ParallelogramProblem

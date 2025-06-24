@@ -23,30 +23,29 @@ Hypothesis HOcirc : forall P, P \in [:: A; B; C] -> norm (P - O) = rO.
 
 (* Incenter I *)
 Variable I : 'rV[R]_2.
-Hypothesis HIncenter :
-  (incenter_spec A B C I).
+Hypothesis HIncenter : incenter_spec A B C I.
 
 (* Circle J tangent to AB at D, AC at E, tangent internally to O at F *)
 Variable J : 'rV[R]_2.
 Variable rJ : R.
 Variables D E F : 'rV[R]_2.
 
+(* Tangency at D and E *)
 Hypothesis HDtang : D \in `[AB]%eline /\ norm (D - J) = rJ.
 Hypothesis HEtang : E \in `[AC]%eline /\ norm (E - J) = rJ.
-Hypothesis HJtango : norm (F - J) = rJ /\ norm (F - O) = rO - rJ.
 
+(* Internal tangency at F *)
+Hypothesis HFtang : norm (F - J) = rJ /\ norm (F - O) = rO - rJ.
+
+(* Points D, E, F lie on their respective lines *)
 Hypothesis HDonAB : on_line D A B.
 Hypothesis HEonAC : on_line E A C.
-Hypothesis HDonO : norm (D - O) <> rO.
-Hypothesis HEonO : norm (E - O) <> rO.
-
-(* F is the internal tangency point between J and O *)
-Hypothesis HFonO : norm (F - O) = rO.
-Hypothesis HFonJ : norm (F - J) = rJ.
+Hypothesis HFonO : on_line F O.
 
 (* J is internally tangent to O at F *)
 Hypothesis HInternaltangency : [< J - O, F - O >] = rO - rJ.
 
+(* Theorem: IF bisects angle BFC *)
 Theorem incenter_tangency_bisects :
   angle B F I = angle I F C.
 Proof. Admitted.

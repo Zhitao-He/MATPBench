@@ -18,19 +18,19 @@ Hypothesis C_neq_D : C != D.
 Hypothesis D_neq_A : D != A.
 Hypothesis circleO : on_circle O A /\ on_circle O B /\ on_circle O C /\ on_circle O D.
 
-(* E is on the extension of AD beyond D *)
-Hypothesis E_on_ext_AD : colinear A D E /\ (vector_eq D A \/ vector_eq D E) -> False.
-
-Hypothesis ABC_convex : negb (colinear A B C).
-Hypothesis CDE_convex : negb (colinear C D E).
+(* E is on the extension of AD beyond D, meaning D is between A and E *)
+Hypothesis E_on_ext_AD : exists t : R, t > 0 /\ E = D + t *: (D - A).
 
 (* Oriented angle ABC is 60 degrees *)
 Hypothesis angle_ABC_60 :
-  (0 <= angle B A C < 180)%R /\ angle B A C = 60.
+  (0 <= angle B A C < 180)%R /\ angle B A C = 60%:R.
 
 Theorem circle_angle_chord_external :
-  angle C D E = 60.
-Proof. Admitted.
+  angle C D E = 60%:R.
+Proof. 
+  (* Here, we would insert the actual proof, which would involve using the given hypotheses and geometric properties of circles and angles to derive the angle measure. *)
+  (* For the sake of this example, the proof is omitted. *)
+  Admitted.
 
 End Circle_Angle_Theorem.
 ####

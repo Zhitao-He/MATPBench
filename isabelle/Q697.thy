@@ -1,45 +1,41 @@
-theory GeometryProblem imports
-  Complex_Main
-  "HOL-Library.Multiset"
+theory Geometry_Problem
+  imports Complex_Main 
 begin
-
-(* 定义角度公理和并行线公理 *)
-definition angle :: "real ⇒ real"
-  where "angle x = x"
-
-(* 角度相加性质 *)
-lemma angle_addition:
-  "angle(∠HPM + ∠MPR) = angle(∠HPR)"
-  by (simp add: angle_def)
-
-(* 平行线等价角性质 *)
-lemma parallel_angles:
-  assumes "CM ∥ RP" "CR ∥ MP" 
-  shows "∠MPR = ∠PCR" "∠PRC = ∠MCP"
-  using assms by auto
-
-(* 平角性质 *)
-lemma flat_angle:
-  "∠HPR = 180"
-  by auto
-
-(* 给定角度值 *)
-lemma given_angles:
-  "∠HPM = 4*y"
-  "∠MPR = 68"
-  "∠PRC = x"
-  "∠SCR = 5*z+2"
-  by auto
-
-(* 利用题目中的关系求解 y *)
-theorem find_y:
-  assumes "CM ∥ RP" "CR ∥ MP"
-  shows "y = 28"
+typedecl point 
+typedecl line  
+consts
+  H :: point
+  P :: point
+  M :: point
+  R :: point
+  C :: point
+  S :: point
+  L :: point
+  E :: point
+  N :: point
+  G :: point
+  I :: point
+  D :: point
+consts
+  x :: real
+  y :: real
+  z :: real
+consts mk_line :: "point => point => line"
+consts parallel :: "line => line => bool" (infix "∥" 50)
+consts angle :: "point => point => point => real"
+axiom angle_HPM_def: "angle H P M = 4 * y"
+axiom angle_MPR_def: "angle M P R = 68"
+axiom angle_PRC_def: "angle P R C = x"
+axiom angle_SCR_def: "angle S C R = 5 * z + 2" 
+axiom HPR_is_straight_angle: "angle H P R = 180"
+axiom HPM_MPR_angles_add_to_HPR: "angle H P M + angle M P R = angle H P R"
+axiom CM_is_parallel_to_RP: "mk_line C M ∥ mk_line R P"
+axiom CR_is_parallel_to_MP: "mk_line C R ∥ mk_line M P"
+theorem y_value_is_28: "y = 28"
 proof -
-  have "∠HPR = ∠HPM + ∠MPR" using angle_addition by simp
-  then have "180 = 4*y + 68" using flat_angle given_angles by simp
-  then have "4*y = 112" by simp
-  thus "y = 28" by simp
+  have "4 * y + 68 = 180"
+    by (simp add: HPM_MPR_angles_add_to_HPR angle_HPM_def angle_MPR_def HPR_is_straight_angle)
+  then show ?thesis
+    by simp
 qed
-
 end

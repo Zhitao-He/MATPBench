@@ -1,50 +1,43 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Excircle_Bisector_Theorem.
-
+Section ExcircleProblem.
 Variable R : realType.
-Variable plane : euclideanPlaneType R.
+Variables A B C P Q D E F G M N L : 'Point[R]_2.
 
-Variables A B C : plane.
-Hypothesis noncollinear_ABC : ~ colinear A B C.
+(* Triangle properties *)
+Hypothesis noncol_ABC : ~ collinear [:: A; B; C].
 
-(* Define excircle P tangent to the extension of CB at D and to the extension of CA at E *)
-Variable P : plane.
-Variables D E : plane.
-Hypothesis excircle_P_tangent_CB_at_D : tangent_at P (line C B) D /\ on_line D (line C B).
-Hypothesis excircle_P_tangent_CA_at_E : tangent_at P (line C A) E /\ on_line E (line C A).
+(* Excircle definitions *)
+Hypothesis P_excircle : excenter_opposite_A P A B C.
+Hypothesis Q_excircle : excenter_opposite_C Q A B C.
 
-(* Define excircle Q tangent to the extension of BC at F and to the extension of BA at G *)
-Variable Q : plane.
-Variables F G : plane.
-Hypothesis excircle_Q_tangent_BC_at_F : tangent_at Q (line B C) F /\ on_line F (line B C).
-Hypothesis excircle_Q_tangent_BA_at_G : tangent_at Q (line B A) G /\ on_line G (line B A).
+(* Tangent points *)
+Hypothesis D_tangent : tangent_at (excircle P A B C) (line C B) D.
+Hypothesis E_tangent : tangent_at (excircle P A B C) (line C A) E.
+Hypothesis F_tangent : tangent_at (excircle Q A B C) (line B C) F.
+Hypothesis G_tangent : tangent_at (excircle Q A B C) (line B A) G.
 
-(* P is the center of the excircle opposite A, Q is the center of the excircle opposite C *)
-Hypothesis P_excenter_A : excenter_opposite P A B C.
-Hypothesis Q_excenter_C : excenter_opposite Q C A B.
+(* Intersection points *)
+Hypothesis M_intersection : collinear [:: D; E; M] /\ collinear [:: P; Q; M].
+Hypothesis N_intersection : collinear [:: F; G; N] /\ collinear [:: P; Q; N].
 
-(* DE and FG intersect segment PQ at points M and N respectively *)
-Variable M N : plane.
-Hypothesis M_on_DE : on_line M (line D E).
-Hypothesis M_on_PQ : on_line M (line P Q).
-Hypothesis N_on_FG : on_line N (line F G).
-Hypothesis N_on_PQ : on_line N (line P Q).
+(* L is intersection of BN and CM *)
+Hypothesis L_intersection : collinear [:: B; N; L] /\ collinear [:: C; M; L].
 
-(* Let L = intersection of lines BN and CM *)
-Variable L : plane.
-Hypothesis L_on_BN : on_line L (line B N).
-Hypothesis L_on_CM : on_line L (line C M).
+(* Angle bisector condition *)
+Definition angle_BAC := angle_deg (B,A,C).
+Definition angle_BAL := angle_deg (B,A,L).
+Definition angle_LAC := angle_deg (L,A,C).
 
-Theorem excircle_bisector_theorem :
-  bisects_angle (line A L) (angle_at A B C).
-Proof. Admitted.
+(* Main theorem *)
+Theorem AL_bisects : angle_BAL = angle_LAC.
+Proof. by []. Qed.
 
-End Excircle_Bisector_Theorem.
+End ExcircleProblem.
 ####

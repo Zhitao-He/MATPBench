@@ -1,49 +1,25 @@
 theory GeometryProblem
-imports Complex_Main "HOL-Analysis.Euclidean_Space"
+imports "HOL-Analysis.Complex_Main"
 begin
-
-(* 定义平面上的点 *)
-type_synonym point = "real × real"
-
-(* 定义圆 *)
-definition circle :: "point ⇒ real ⇒ point set" where
-  "circle center radius = {p. dist p center = radius}"
-
-(* 定义角度 (以度数表示) *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A O B = (
-    let
-      vec1 = (fst A - fst O, snd A - snd O);
-      vec2 = (fst B - fst O, snd B - snd O);
-      cos_angle = ((fst vec1) * (fst vec2) + (snd vec1) * (snd vec2)) / 
-                  (sqrt((fst vec1)^2 + (snd vec1)^2) * sqrt((fst vec2)^2 + (snd vec2)^2))
-    in
-      arccos cos_angle * (180 / pi)
-  )"
-
-(* 定义垂直关系 *)
-definition perpendicular :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "perpendicular A B C D = (
-    let
-      vec1 = (fst B - fst A, snd B - snd A);
-      vec2 = (fst D - fst C, snd D - snd C)
-    in
-      (fst vec1) * (fst vec2) + (snd vec1) * (snd vec2) = 0
-  )"
-
-(* 定义弧的度数 *)
-definition measure_of_arc :: "point ⇒ point ⇒ point ⇒ real" where
-  "measure_of_arc A O B = (
-    if angle A O B ≤ 180 then angle A O B
-    else 360 - angle A O B
-  )"
-
-(* 问题的形式化陈述 *)
-theorem find_measure_of_arc_OAE:
-  fixes O F E C B A :: point
-  assumes "angle F O E = 45"
-  assumes "perpendicular C O A O"  
-  assumes "perpendicular E O B O"
-  shows "measure_of_arc O A E = 270"
-
+definition O_cplx :: complex where "O_cplx = 0"
+axiomatization A_cplx B_cplx C_cplx E_cplx F_cplx :: complex and r_cplx :: real where
+  r_cplx_pos: "r_cplx > 0" and
+  on_circle_A: "abs (A_cplx - O_cplx) = r_cplx" and
+  on_circle_B: "abs (B_cplx - O_cplx) = r_cplx" and
+  on_circle_C: "abs (C_cplx - O_cplx) = r_cplx" and
+  on_circle_E: "abs (E_cplx - O_cplx) = r_cplx" and
+  on_circle_F: "abs (F_cplx - O_cplx) = r_cplx"
+definition ccw_angle_rad :: "complex \<Rightarrow> complex \<Rightarrow> real" where
+  "ccw_angle_rad u v = (let angle = arg (v / u) in if angle < 0 then angle + 2*pi else angle)"
+definition ccw_angle_deg :: "complex \<Rightarrow> complex \<Rightarrow> real" where
+  "ccw_angle_deg u v = (ccw_angle_rad u v * (180 / pi))"
+axiomatization where
+  angle_FOE_is_45: "ccw_angle_deg (F_cplx - O_cplx) (E_cplx - O_cplx) = 45" and
+  angle_COA_is_90: "ccw_angle_deg (C_cplx - O_cplx) (A_cplx - O_cplx) = 90" and
+  angle_EOB_is_90: "ccw_angle_deg (E_cplx - O_cplx) (B_cplx - O_cplx) = 90" and
+  E_O_C_collinear_opposite: "(C_cplx - O_cplx) = - (E_cplx - O_cplx)"
+definition MeasureOfArc_OAE :: real where
+  "MeasureOfArc_OAE = ccw_angle_deg (E_cplx - O_cplx) (A_cplx - O_cplx)"
+lemma problem_statement_to_prove:
+  "MeasureOfArc_OAE = 270"
 end

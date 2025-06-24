@@ -1,25 +1,26 @@
-theory ParallelSegments
-imports 
-  Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem
+  imports "HOL-Analysis.Euclidean_Space"
+          "HOL-Analysis.Affine_Sets" 
+          "HOL-Analysis.Multivariate_Collinear" 
 begin
-
-text ‹Proof that $\overline{BC}$ is parallel to the segment through $A$, and $AB = BC$.
-      The number of degrees represented by $x$ is 28.›
-
-(* Define the geometric setting in Euclidean space *)
-locale geometric_problem =
-  fixes A B C :: "real^2"
-  assumes distinct: "A ≠ B" "B ≠ C" "A ≠ C"
-  and parallel: "∃l. (∀u v. u ∈ l ∧ v ∈ l ⟶ (u - v) parallel (B - C)) ∧ A ∈ l"
-  and distance_eq: "dist A B = dist B C"
-
-(* Define the angle x in degrees *)
-definition x :: real where
-  "x = 28"
-
-(* Theorem stating that x equals 28 degrees *)
-theorem angle_value: "x = 28"
-  unfolding x_def by simp
-
+definition degrees_of_radians :: "real \<Rightarrow> real" where
+  "degrees_of_radians rad = rad * (180 / pi)"
+definition radians_of_degrees :: "real \<Rightarrow> real" where
+  "radians_of_degrees deg = deg * (pi / 180)"
+theorem geometric_problem_statement:
+  fixes A B C D E :: "real^2" 
+  fixes x :: real 
+  assumes
+    line_L1_properties: "D \<noteq> A \<and> E \<noteq> A \<and> D \<noteq> E \<and> collinear {D, A, E} \<and> angle (D - A) (E - A) = pi" and
+    line_L2_properties: "B \<noteq> C" and
+    L1_parallel_L2: "affine_parallel (line D E) (line B C)" and
+    triangle_ABC: "A \<noteq> B \<and> A \<noteq> C \<and> \<not> collinear {A, B, C}" and
+    B_not_on_L1: "\<not> collinear {D, A, B}" and
+    C_not_on_L1: "\<not> collinear {D, A, C}" and
+    AB_eq_BC: "dist A B = dist B C" and
+    angle_DAB: "angle (D - A) (B - A) = radians_of_degrees 124" and
+    angle_EAC: "angle (E - A) (C - A) = radians_of_degrees x" and
+    ordered_angles_at_A: "angle (D - A) (B - A) + angle (B - A) (C - A) + angle (C - A) (E - A) = pi" and
+    x_is_valid_angle: "x > 0 \<and> x < 180"
+  shows "x = 28" 
 end

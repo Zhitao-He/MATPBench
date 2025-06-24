@@ -1,37 +1,16 @@
-theory HalfCone
-  imports 
-    Complex_Main 
-    "HOL-Analysis.Analysis"
+theory Half_Cone_Volume_Problem
+  imports Complex_Main 
 begin
-
-definition half_cone_base_radius :: "real" where
-  "half_cone_base_radius = 3"
-
-definition half_cone_height :: "real" where
-  "half_cone_height = 9"
-
-definition volume_half_cone :: "real ⇒ real ⇒ real" where
-  "volume_half_cone r h = (1/2) * (1/3) * pi * (r^2) * h"
-
-theorem half_cone_volume_value:
-  "volume_half_cone half_cone_base_radius half_cone_height ≈ 1045"
-proof -
-  have "volume_half_cone half_cone_base_radius half_cone_height = 
-        (1/2) * (1/3) * pi * (half_cone_base_radius^2) * half_cone_height"
-    by (simp add: volume_half_cone_def)
-  also have "... = (1/2) * (1/3) * pi * (3^2) * 9"
-    by (simp add: half_cone_base_radius_def half_cone_height_def)
-  also have "... = (1/2) * (1/3) * pi * 9 * 9"
-    by simp
-  also have "... = (1/2) * (1/3) * pi * 81"
-    by simp
-  also have "... = (1/6) * pi * 81"
-    by simp
-  also have "... = (27/2) * pi"
-    by simp
-  also have "... ≈ 1045"
-    by (rule approx_eq_refl) (* 这里只是符号表示"约等于"，实际值约为42.41 *)
-  finally show ?thesis .
-qed
-
+definition r_cone :: real where
+  "r_cone = 3.0" 
+definition l_cone :: real where
+  "l_cone = 9.0" 
+definition h_cone :: real where
+  "h_cone = sqrt (l_cone * l_cone - r_cone * r_cone)"
+definition volume_half_cone_calculated :: real where
+  "volume_half_cone_calculated = (1.0/6.0) * pi * (r_cone * r_cone) * h_cone"
+definition round_real_to_2_decimal_places :: "real => real" where
+  "round_real_to_2_decimal_places x = floor (x * 100.0 + 0.5) / 100.0"
+definition volume_half_cone_claimed :: real where
+  "volume_half_cone_claimed = 1045.0"
 end

@@ -8,29 +8,31 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section ShadedRegionArea.
+
 Variable R : realType.
 
-(* Points in the plane *)
-Variables A K O C M B : 'rV[R]_2.
+(* Define points and distances *)
+Variable O : 'rV[R]_2.
+Variable OC : R := 32%:R.
+Variable CB : R := 36%:R.
+Variable C : 'rV[R]_2 := O + (OC, 0)%R.
+Variable B : 'rV[R]_2 := C + (CB, 0)%R.
+Variable K : 'rV[R]_2 := (O.1 - (OC / 2), 0)%R.
+Variable M : 'rV[R]_2 := (C.1 + (CB / 2), 0)%R.
 
-(* Pi constant *)
-Variable pi : R.
-Axiom pi_def : 0 < pi.
+(* Define radii of semicircles *)
+Variable r1 : R := (OC / 2)%:R.
+Variable r2 : R := ((OC + CB) / 2)%:R.
+Variable r3 : R := (CB / 2)%:R.
 
-(* Collinearity and order on x-axis (all points are collinear, left-to-right as in the diagram) *)
-Hypotheses
-  (H_collinear : exists v : 'rV[R]_2, forall P, P \in [::A;K;O;C;M;B] -> exists t : R, P = v + t *: row2 1 0)
-  (H_order : forall (f : 'rV[R]_2 -> R),
-                f = (fun P => P 0 0) ->
-                f A < f K < f O < f C < f M < f B).
+(* Area of a semicircle *)
+Definition semicircle_area (r : R) := (PI * r^+2) / 2.
 
-(* Centers of semicircles *)
-Hypotheses
-  (K_center_left : K = (A + O) / 2)
-  (O_center_main : O = (A + C) / 2)
-  (M_center_right : M = (C + B) / 2).
+(* Theorem to prove the shaded area is 900\pi *)
+Theorem shaded_area_is_900pi :
+  semicircle_area r2 - (semicircle_area r1 + semicircle_area r3) = 900 * PI.
+Proof. Admitted.
 
-(* Linear distances specified *)
-Hypotheses
-  (H
+End ShadedRegionArea.
 ####

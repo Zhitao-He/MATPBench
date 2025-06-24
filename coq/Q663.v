@@ -23,7 +23,12 @@ Hypotheses
 
 Theorem arc_DTU_measure :
   arc_measure C D T U = 46%:R.
-Proof. Admitted.
+Proof.
+  (* The proof would involve showing that the measure of arc DTU is twice the measure of angle V T U,
+     due to the property that an inscribed angle is half the measure of the intercepted arc. *)
+  (* Here, angle V T U is given as 23 degrees, so the intercepted arc DTU should be 46 degrees. *)
+  (* The actual proof steps would involve using geometric theorems about angles and arcs. *)
+  Admitted. (* Placeholder for the actual proof steps. *)
 
 End ArcDTU.
 ####

@@ -1,48 +1,30 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Basic
-
-open scoped Real EuclideanPlane
-
-namespace ProblemDefinition
-
--- We work in a Euclidean plane P
-variable {P : Type*} [EuclideanPlane P]
-
--- Points in the diagram
-variable (A B C D E : P)
-
--- Real variables for the angles
-variable (x y : ℝ)
-
--- Helper: convert degrees to radians
-noncomputable def degToRad (deg : ℝ) : ℝ := deg * Real.pi / 180
-
--- Distinctness to ensure non-degenerate lines
-axiom h_E_ne_A : E ≠ A
-axiom h_B_ne_D : B ≠ D
-
--- Given angle relationships (all angles measured in radians)
-axiom h_angle_ACE : (∠ A C E).toReal = degToRad y
-axiom h_angle_BDA : (∠ B D A).toReal = degToRad 68
-axiom h_angle_EAC : (∠ E A C).toReal = degToRad (2 * x)
-axiom h_angle_EBD : (∠ E B D).toReal = degToRad (3 * x - 15)
-
--- Constraints for positivity and geometric meaning
-axiom h_y_pos : 0 < y
-axiom h_y_lt_180 : y < 180
-
-axiom h_2x_pos : 0 < 2 * x
-axiom h_2x_lt_180 : 2 * x < 180
-
-axiom h_3x_minus_15_pos : 0 < 3 * x - 15
-axiom h_3x_minus_15_lt_180 : 3 * x - 15 < 180
-
--- Parallelism: EA ∥ BD
-axiom h_parallel_EA_BD : line[E, A] ∥ line[B, D]
-
--- The goal: find y
-theorem find_value_of_y : y = 25 := by sorry
-
-end ProblemDefinition
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (θ : ℝ) : ℝ := θ * (Real.pi / 180)
+theorem find_y_value
+  (A B C D E : P)
+  (x y : ℝ)
+  (h_collinear_DAC : ∃ (k : ℝ), A -ᵥ D = k • (C -ᵥ D))
+  (h_collinear_BEC : ∃ (k : ℝ), B -ᵥ E = k • (C -ᵥ E))
+  (h_parallel_EA_BD : ∃ (k : ℝ), E -ᵥ A = k • (B -ᵥ D))
+  (h_angle_ACE : inner ℝ (A -ᵥ C) (E -ᵥ C) = Real.cos (degToRad y))
+  (h_angle_BDA : inner ℝ (B -ᵥ D) (A -ᵥ D) = Real.cos (degToRad 68))
+  (h_angle_EAC : inner ℝ (E -ᵥ A) (C -ᵥ A) = Real.cos (degToRad (2 * x)))
+  (h_angle_EBD : inner ℝ (E -ᵥ B) (D -ᵥ B) = Real.cos (degToRad (3 * x - 15)))
+  (h_2x_valid : (0 : ℝ) < 2 * x ∧ 2 * x < 180)
+  (h_3x_minus_15_valid : (0 : ℝ) < 3 * x - 15 ∧ 3 * x - 15 < 180)
+  (h_y_valid : (0 : ℝ) < y ∧ y < 180)
+  (h_C_ne_A : C ≠ A)
+  (h_C_ne_E : C ≠ E)
+  (h_D_ne_B : D ≠ B)
+  (h_D_ne_A : D ≠ A)
+  (h_A_ne_E : A ≠ E)
+  (h_A_ne_C_for_EAC : A ≠ C)
+  (h_B_ne_E_for_EBD : B ≠ E)
+  (h_B_ne_D_for_EBD : B ≠ D)
+  : y = 25 :=
+sorry

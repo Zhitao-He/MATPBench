@@ -1,54 +1,36 @@
-theory CongruentTriangles
-imports
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory GeometryProblem
+imports Main
 begin
-
-(* 定义二维平面上的点 *)
-type_synonym point = "real × real"
-
-(* 定义角度计算函数 *)
-definition angle :: "point → point → point → real" where
-  "angle A B C = (
-    let v1 = (fst A - fst B, snd A - snd B);
-        v2 = (fst C - fst B, snd C - snd B);
-        dot_product = fst v1 * fst v2 + snd v1 * snd v2;
-        len_v1 = sqrt((fst v1)^2 + (snd v1)^2);
-        len_v2 = sqrt((fst v2)^2 + (snd v2)^2)
-    in
-    if len_v1 = 0 ∨ len_v2 = 0 then 0
-    else acos(dot_product/(len_v1*len_v2))
-  )"
-
-(* 定义三角形全等 *)
-definition congruent_triangles :: "point × point × point → point × point × point → bool" where
-  "congruent_triangles t1 t2 = (
-    let (A, B, C) = t1;
-        (D, E, F) = t2
-    in
-    sqrt((fst A - fst B)^2 + (snd A - snd B)^2) = sqrt((fst D - fst E)^2 + (snd D - snd E)^2) ∧
-    sqrt((fst B - fst C)^2 + (snd B - snd C)^2) = sqrt((fst E - fst F)^2 + (snd E - snd F)^2) ∧
-    sqrt((fst C - fst A)^2 + (snd C - snd A)^2) = sqrt((fst F - fst D)^2 + (snd F - snd D)^2)
-  )"
-
-(* 定义角平分线 *)
-definition is_angle_bisector :: "point → point → point → point → bool" where
-  "is_angle_bisector A B C D = (angle A B D = angle D B C)"
-
-(* 度数与弧度的转换 *)
-definition degrees_to_radians :: "real → real" where
-  "degrees_to_radians d = d * pi / 180"
-
-definition radians_to_degrees :: "real → real" where
-  "radians_to_degrees r = r * 180 / pi"
-
-(* 题目关键条件 *)
-theorem angle_E_is_26_degrees:
-  fixes A B C D E F G :: point
-  assumes "congruent_triangles (A, B, C) (D, E, F)"
-    and "is_angle_bisector B C A D"
-    and "angle B A C = degrees_to_radians 22"
-    and "angle C G F = degrees_to_radians 88"
-  shows "angle D E F = degrees_to_radians 26"
-
+typedecl point
+consts
+  angle_measure :: "point ⇒ point ⇒ point ⇒ real"
+  triangle_congruent :: "point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ bool"
+  is_angle_bisector :: "point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ bool"
+  collinear :: "point ⇒ point ⇒ point ⇒ bool"
+axiom cong_vertex1_angle_eq:
+  "⟦ triangle_congruent P Q R S T U ⟧ ⟹ angle_measure Q P R = angle_measure T S U" 
+axiom cong_vertex2_angle_eq:
+  "⟦ triangle_congruent P Q R S T U ⟧ ⟹ angle_measure P Q R = angle_measure S T U" 
+axiom cong_vertex3_angle_eq:
+  "⟦ triangle_congruent P Q R S T U ⟧ ⟹ angle_measure Q R P = angle_measure T U S" 
+axiom bisector_divides_angle_equally:
+  "⟦ is_angle_bisector V M P V R ⟧ ⟹ angle_measure P V M = angle_measure M V R"
+axiom bisector_angle_sum_property:
+  "⟦ is_angle_bisector V M P V R ⟧ ⟹ angle_measure P V R = angle_measure P V M + angle_measure M V R"
+axiom sum_of_angles_in_triangle:
+  "⟦ ¬ collinear P Q R ⟧ ⟹
+     angle_measure P Q R + angle_measure Q R P + angle_measure R P Q = 180"
+lemma TriangleProblem:
+  fixes A B C D E F G :: point 
+  assumes triangle_congruence: "triangle_congruent A B C D E F"
+  assumes angle_A_value: "angle_measure B A C = 22" 
+  assumes cd_is_bisector: "is_angle_bisector C D B C A" 
+  assumes G_on_line_AB: "collinear A G B"
+  assumes G_on_line_DF: "collinear D G F"
+  assumes angle_CGF_value: "angle_measure C G F = 88" 
+  assumes non_degenerate_ABC: "¬ collinear A B C"
+  assumes non_degenerate_DEF: "¬ collinear D E F"
+  assumes non_degenerate_CGF: "¬ collinear C G F"
+  shows "angle_measure D E F = 26" 
+sorry 
 end

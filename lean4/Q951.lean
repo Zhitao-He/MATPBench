@@ -1,53 +1,39 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.InnerProductSpace.Basic
-
--- Local notation for 2D Euclidean vectors and affine points
-local notation "VEC" => EuclideanSpace ℝ (Fin 2)
-local notation "PNT" => Point ℝ VEC
-
-namespace TangentBisectorProblem
-
--- Given points in the plane
-variable (O P A B C D E F : PNT)
--- Circle center and radius
-variable (r : ℝ)
-variable (S : Sphere O r)
-
--- Basic circle and tangency assumptions
-variable (hr_pos : 0 < r)
-variable (hA_on_S : A ∈ S)
-variable (hB_on_S : B ∈ S)
-variable (hC_on_S : C ∈ S)
-variable (hA_ne_B : A ≠ B) (hB_ne_C : B ≠ C) (hC_ne_A : C ≠ A)
-variable (hP_outside_S : r < dist P O)
-variable (hPA_tangent : InnerProductSpace.Orthogonal ℝ (P -ᵥ A) (A -ᵥ O))
-variable (hPB_tangent : InnerProductSpace.Orthogonal ℝ (P -ᵥ B) (B -ᵥ O))
-
--- D lies strictly between A and B on line AB
-variable (hD_sbtw_AB : Sbtw ℝ A D B)
--- CD ⟂ AB at D
-variable (hCD_perp_AB : InnerProductSpace.Orthogonal ℝ (C -ᵥ D) (B -ᵥ A))
-
--- E, F are the intersections as described, and C E F collinear (tangent at C)
-variable (hCEF_collinear : Collinear ℝ ({C, E, F} : Set PNT))
-variable (hE_on_PA : Collinear ℝ ({P, A, E} : Set PNT))
-variable (hF_on_PB : Collinear ℝ ({P, B, F} : Set PNT))
-variable (hE_ne_C : E ≠ C)
-variable (hF_ne_C : F ≠ C)
--- Tangent at C is orthogonal to OC
-variable (hTangent_CE_perp_OC : InnerProductSpace.Orthogonal ℝ (E -ᵥ C) (C -ᵥ O))
-
--- D ≠ E, D ≠ C, D ≠ F for the angles to be well-defined
-variable (hD_ne_E : D ≠ E) (hD_ne_C : D ≠ C) (hD_ne_F : D ≠ F)
-
--- The conclusion: CD bisects angle EDF, i.e., ∠EDC = ∠CDF
-theorem cd_bisects_angle_edf :
-  unorientedAngle E D C = unorientedAngle C D F := by
+open EuclideanGeometry
+open Real
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace Problem
+noncomputable def circleO (O : P) (r : ℝ) : EuclideanGeometry.Sphere P := EuclideanGeometry.Sphere.mk O r
+noncomputable def perp_vec (O C : P) : P :=
+  ![ -((C - O) 1), (C - O) 0 ]
+noncomputable def tangent_at_C (O C : P) : AffineSubspace ℝ P :=
+  affineSpan ℝ {C, C + perp_vec O C}
+theorem cd_bisects_angle_edf
+  (O Q A B C D E F : P)
+  (r : ℝ)
+  (hr_pos : 0 < r)
+  (hA_on_circleO : A ∈ circleO O r)
+  (hB_on_circleO : B ∈ circleO O r)
+  (hC_on_circleO : C ∈ circleO O r)
+  (hQ_outside_circleO : r < dist Q O)
+  (hQA_tangent_at_A : EuclideanGeometry.angle Q A O = π / 2)
+  (hQB_tangent_at_B : EuclideanGeometry.angle Q B O = π / 2)
+  (hA_ne_B : A ≠ B)
+  (hD_on_line_AB : D ∈ line[ℝ, A, B])
+  (hCD_perp_AB : inner ℝ (C -ᵥ D) (B -ᵥ A) = 0)
+  (hC_ne_D : C ≠ D)
+  (hE_on_line_QA : E ∈ line[ℝ, Q, A])
+  (hE_on_tangent_at_C : E ∈ tangent_at_C O C)
+  (hF_on_line_QB : F ∈ line[ℝ, Q, B])
+  (hF_on_tangent_at_C : F ∈ tangent_at_C O C)
+  (hE_ne_D : E ≠ D)
+  (hF_ne_D : F ≠ D)
+  : EuclideanGeometry.angle E D C = EuclideanGeometry.angle F D C := by
   sorry
-
-end TangentBisectorProblem
+end Problem

@@ -18,7 +18,7 @@ Hypothesis B_neq_C : B != C.
 Hypothesis C_neq_A : C != A.
 
 (* Circle O passes through A, B, C *)
-Hypothesis O_circle : colinear R O A B C = false.
+Hypothesis circle_O : colinear R O A B C = false.
 
 (* D is the midpoint of BC *)
 Definition D : 'rV[R]_2 := ((B + C) / 2)%R.
@@ -28,7 +28,6 @@ Variable E : 'rV[R]_2.
 Hypothesis E_on_circle : norm (E - O) = norm (A - O).
 Hypothesis E_on_AD : colinear R A D E.
 Hypothesis E_neq_A : E != A.
-Hypothesis E_on_other_side : (exists k : R, k != 0 /\ E = A + k *: (D - A)).
 
 (* Line EF parallel to BC, F ≠ E, F on circle O *)
 Variable F : 'rV[R]_2.
@@ -48,7 +47,7 @@ Theorem putnam_geom_2023 :
   let angle (P Q R : 'rV[R]_2) :=
       let u := (P - Q) in
       let v := (R - Q) in
-      acos ((u *m v ^T) ``_0 / (norm u * norm v)) in
+      acos ((u *m v^T) ``_0 / (norm u * norm v)) in
   angle A G C = angle F G C.
 Proof. Admitted.
 

@@ -1,37 +1,18 @@
 import Mathlib.Data.Real.Basic
-
-namespace Is173LinkedRings
-
--- Problem constants (unit: centimeters)
-def thickness : ℝ := 1.0
-def odTop : ℝ := 20.0
-def odBottom : ℝ := 3.0
-def diameterDecreaseStep : ℝ := 1.0
-
--- Number of rings: compute how many steps from odTop to odBottom with 'step', inclusive
-def numRings : Nat := (Real.toNat ((odTop - odBottom) / diameterDecreaseStep)) + 1
-
--- k-th ring's outside diameter (0 ≤ k < numRings)
-def outsideDiameterOfRing (k : Nat) : ℝ :=
-  odTop - (k : ℝ) * diameterDecreaseStep
-
--- Distance between centers of ring k and ring k+1
-def centerToCenterDist (k : Nat) : ℝ :=
-  (outsideDiameterOfRing k / 2) + (outsideDiameterOfRing (k + 1) / 2) - thickness
-
--- Sum f(i) for i = 0, ..., n-1
-def sumNatRange (f : Nat → ℝ) : Nat → ℝ
-  | 0     => 0
-  | n + 1 => sumNatRange f n + f n
-
--- Total distance between centers of all successive rings (numRings-1 gaps)
-def totalCenterDistances : ℝ :=
-  if numRings ≤ 1 then 0
-  else sumNatRange centerToCenterDist (numRings - 1)
-
--- The full height from the very top of the top ring, to the very bottom of the bottom ring
-def totalChainHeight : ℝ :=
-  if numRings = 0 then 0
-  else totalCenterDistances + thickness
-
-end Is173LinkedRings
+noncomputable def ringThickness : ℝ := 1.0
+noncomputable def topRingOutsideDiameter : ℝ := 20.0
+noncomputable def outsideDiameterDecrement : ℝ := 1.0
+noncomputable def bottomRingOutsideDiameter : ℝ := 3.0
+noncomputable def numberOfRings_real : ℝ :=
+  (topRingOutsideDiameter - bottomRingOutsideDiameter) / outsideDiameterDecrement + 1.0
+noncomputable def numberOfRings : Nat := 18
+noncomputable def totalVerticalDistance : ℝ :=
+  (numberOfRings : ℝ) * ringThickness
+structure MyRing where
+  outsideDiameter : ℝ
+  thickness : ℝ := ringThickness
+noncomputable def getRing (k : Nat) : MyRing :=
+  if k = 0 then { outsideDiameter := 0 }
+  else
+    let od_k : ℝ := topRingOutsideDiameter - ((k - 1 : Nat) : ℝ) * outsideDiameterDecrement
+    { outsideDiameter := od_k }

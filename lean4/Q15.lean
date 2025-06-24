@@ -1,28 +1,22 @@
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
-section CircleGeometryProblem
-
-variable (P : Type*)
-  [NormedAddTorsor (EuclideanSpace ℝ (Fin 2)) P] [MetricSpace P]
-
-variable (O A B C D : P) (r : ℝ)
-
-variable (h_O_midpoint_AB : O = midpoint ℝ A B)
-variable (h_r_pos : 0 < r)
-variable (hA_on_circle : A ∈ Metric.sphere O r)
-variable (hC_on_circle : C ∈ Metric.sphere O r)
-variable (hD_on_circle : D ∈ Metric.sphere O r)
-variable (hC_ne_D : C ≠ D)
-variable (hA_ne_D : A ≠ D)
-variable (hC_ne_A : C ≠ A)
-variable (hB_ne_A : B ≠ A)
-variable (h_angle_ADC_value : Angle.Unoriented.value (Angle.Unoriented.angle A D C) = (26 / 180) * Real.pi)
-
-theorem angle_CAB_is_64_degrees :
-  Angle.Unoriented.value (Angle.Unoriented.angle C A B) = (64 / 180) * Real.pi := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open EuclideanGeometry
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (deg : ℝ) : ℝ := deg * Real.pi / 180
+namespace GeometryProblem
+theorem inscribed_angle_theorem_specific_case
+  (A B C D O : Point) (r : ℝ)
+  (h_r_positive : 0 < r)
+  (hA_on_circle : A ∈ Metric.sphere O r)
+  (hB_on_circle : B ∈ Metric.sphere O r)
+  (h_AB_is_diameter : O = midpoint ℝ A B)
+  (hC_on_circle : C ∈ Metric.sphere O r)
+  (hD_on_circle : D ∈ Metric.sphere O r)
+  (h_angle_ADC_eq_26_deg : ∠ A D C = degToRad 26) :
+  ∠ C A B = degToRad 64 := by
   sorry
-
-end CircleGeometryProblem
+end GeometryProblem

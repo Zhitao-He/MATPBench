@@ -1,5 +1,5 @@
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals sequences.
+From mathcomp Require Import reals sequences analysis.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -24,6 +24,16 @@ Fixpoint f (x : R) (l : seq (R * R)) : option R :=
     else f x ((x1, y1) :: t)
   end.
 
-(* Example usage: Eval compute in (f 1994 data_points). *)
+(* Define differentiability (simplified for illustration) *)
+Definition differentiable_at (x : R) (g : R -> R) : Prop :=
+  exists (l : R), forall h, h <> 0 -> (g (x + h) - g x) / h --> l as h --> 0.
 
+(* Theorem: The function f is not differentiable at every point (simplified) *)
+Theorem f_not_differentiable_everywhere :
+  forall x, ~ differentiable_at x (fun y => match f y data_points with Some z => z | None => 0 end).
+Proof.
+(* Here you would need to prove the theorem using appropriate tactics and reasoning. *)
+(* This might involve showing that the function has corners or discontinuities in its derivative. *)
+(* For simplicity, this proof is omitted and marked as Admitted. *)
+Admitted.
 ####

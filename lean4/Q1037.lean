@@ -1,75 +1,56 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Geometry.Euclidean.Projection
+import Mathlib.Analysis.InnerProductSpace.PiL2
 open EuclideanGeometry
-
--- We work in an arbitrary Euclidean plane
-variable {P : Type*} [EuclideanPlane P]
-
--- Given points (vertices of the triangle and centers of circles)
-variable (a b c : P)           -- triangle vertices
-variable (p : P)               -- center of circumcircle (P)
-variable (o : P)               -- center of the second circle (O)
-
--- The circles
-variable (circP : Sphere P ℝ)      -- The circumcircle P
-variable (circO : Sphere P ℝ)      -- The circle O passing through A and B
-
--- Hypotheses of distinctness for triangle
-variable (hab : a ≠ b)
-variable (hac : a ≠ c)
-variable (hbc : b ≠ c)
-
--- Circle P is the circumcircle of ABC, with center p
-variable (hcircP_center : circP.center = p)
-variable (ha_on_circP : a ∈ circP)
-variable (hb_on_circP : b ∈ circP)
-variable (hc_on_circP : c ∈ circP)
-variable (hcircP_radius : circP.radius = dist a p)
-
--- Circle O has center o, passes through a and b
-variable (hcircO_center : circO.center = o)
-variable (ha_on_circO : a ∈ circO)
-variable (hb_on_circO : b ∈ circO)
-variable (hcircO_radius : circO.radius = dist a o)
-
--- Points E and F as intersections
-variable (e f : P)
-variable (he_on_ac : Collinear ℝ a e c)
-variable (he_on_circO : e ∈ circO)
-variable (he_ne_a : e ≠ a)
-variable (he_ne_c : e ≠ c)
-variable (hf_on_bc : Collinear ℝ b f c)
-variable (hf_on_circO : f ∈ circO)
-variable (hf_ne_b : f ≠ b)
-variable (hf_ne_c : f ≠ c)
-
--- Point D intersection of lines AF and BE
-variable (d : P)
-variable (hd_on_af : Collinear ℝ a f d)
-variable (hd_on_be : Collinear ℝ b e d)
-
--- Point K as the other intersection of line OD with the circumcircle P
-variable (k : P)
-variable (hk_on_od : Collinear ℝ o d k)
-variable (hk_on_circP : k ∈ circP)
-variable (hk_ne_o : k ≠ o)
-variable (hk_ne_d : k ≠ d)
-variable (hk_ne_a : k ≠ a)
-variable (hk_ne_b : k ≠ b)
-variable (hk_ne_c : k ≠ c)
-
--- Definitions of the triangles KBE and KAF (order given as in the problem)
-def triangleKBE : Triangle P := ⟨![k, b, e]⟩
-def triangleKAF : Triangle P := ⟨![k, a, f]⟩
-
--- Noncollinearity needed for incenter
-variable (hKBE_noncol : (triangleKBE k b e).Noncollinear)
-variable (hKAF_noncol : (triangleKAF k a f).Noncollinear)
-
--- THEOREM: Triangle KBE and KAF have the same incenter
-theorem triangles_KBE_and_KAF_share_same_incenter :
-  Triangle.incenter (triangleKBE k b e) = Triangle.incenter (triangleKAF k a f) := by
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def triangle_mk₃ (A B C : P) : Set P := {A, B, C}
+noncomputable def circumcenter (A B C : P) : P := sorry
+noncomputable def circumradius (A B C : P) : ℝ := sorry
+namespace ProblemFormalization
+def is_incenter_of (I P1 P2 P3 : P) : Prop :=
+  ¬ Collinear ℝ ({P1, P2, P3} : Set P) ∧
+  let line12 := affineSpan ℝ {P1, P2}
+  let line23 := affineSpan ℝ {P2, P3}
+  let line31 := affineSpan ℝ {P3, P1}
+  (dist I (orthogonalProjection line12 I) = dist I (orthogonalProjection line23 I)) ∧
+  (dist I (orthogonalProjection line23 I) = dist I (orthogonalProjection line31 I))
+theorem inscribed_circles_common_incenter
+  (A B C : P)
+  (P_center : P)
+  (O_center : P)
+  (E F : P)
+  (D : P)
+  (K : P)
+  (h_ABC_noncoll : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (hP_is_circumcenter : P_center = circumcenter A B C)
+  (rP_val : ℝ)
+  (hrP_is_circumradius : rP_val = circumradius A B C)
+  (circumcircle_P_obj : EuclideanGeometry.Sphere P)
+  (h_circumcircle_P_center : circumcircle_P_obj.center = P_center)
+  (h_circumcircle_P_radius : circumcircle_P_obj.radius = rP_val)
+  (rO_val : ℝ)
+  (circleO_obj : EuclideanGeometry.Sphere P)
+  (h_circleO_center : circleO_obj.center = O_center)
+  (h_circleO_radius : circleO_obj.radius = rO_val)
+  (hA_on_circleO : A ∈ circleO_obj)
+  (hB_on_circleO : B ∈ circleO_obj)
+  (hE_on_line_AC : E ∈ affineSpan ℝ {A, C})
+  (hE_on_circleO : E ∈ circleO_obj)
+  (hE_ne_A : E ≠ A) (hE_ne_C : E ≠ C)
+  (hF_on_line_BC : F ∈ affineSpan ℝ {B, C})
+  (hF_on_circleO : F ∈ circleO_obj)
+  (hF_ne_B : F ≠ B) (hF_ne_C : F ≠ C)
+  (hA_ne_F : A ≠ F)
+  (hB_ne_E : B ≠ E)
+  (hD_on_AF : D ∈ affineSpan ℝ {A, F})
+  (hD_on_BE : D ∈ affineSpan ℝ {B, E})
+  (hO_center_ne_D : O_center ≠ D)
+  (hK_on_line_OD : K ∈ affineSpan ℝ {O_center, D})
+  (hK_on_circumcircle_P : K ∈ circumcircle_P_obj)
+  (h_KBE_noncoll : ¬ Collinear ℝ ({K, B, E} : Set P))
+  (h_KAF_noncoll : ¬ Collinear ℝ ({K, A, F} : Set P)) :
+  ∃ I : P, (is_incenter_of I K B E) ∧ (is_incenter_of I K A F) := by
   sorry
+end ProblemFormalization

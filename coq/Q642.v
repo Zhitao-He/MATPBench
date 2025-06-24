@@ -1,2 +1,30 @@
-#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals euclidean_geometry angles. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Variables A B C D E : 'e2[R]. Variable x : R. Hypotheses h_distinct: A != B /\B != C /\C != D /\D != A /\A != C /\B != D. Hypotheses h_E: collinear A E C /\collinear B E D /\between A E C /\between B E D. Hypotheses h_AB: `|A - B| = 2*x + 3; h_BC: `|B - C| = 5*x. Hypothesis h_angle_CBA: angle B A C = 80%:R * PI/180. Theorem solve_x: x = 4. Proof. by []. Qed.
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry angles.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Local Open Scope ring_scope.
+
+Variable R : realType.
+
+Variables A B C D : 'rV[R]_2.
+Variable x : R.
+
+Hypothesis H_AB : `|A - B| = 2 * x + 3.
+Hypothesis H_BC : `|B - C| = 5 * x.
+Hypothesis H_angle_CBA : angle B A C = 80%:R.
+Hypothesis H_rhombus_ADCB : is_rhombus A D C B.
+
+Theorem measure_angle_DCB : angle D C B = 100%:R.
+Proof.
+  (* Using rhombus properties and angle relationships *)
+  have H_opposite_angles : angle D C B = angle B A D by apply: rhombus_opposite_angles.
+  have H_adjacent_angles : angle B A D + angle C B A = 180%:R by apply: rhombus_adjacent_angles.
+  rewrite H_angle_CBA in H_adjacent_angles.
+  have H_eq : angle D C B = 180%:R - 80%:R by field in H_adjacent_angles.
+  by rewrite H_eq; field.
+Qed.
 ####

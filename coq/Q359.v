@@ -29,7 +29,7 @@ Hypothesis HN_tangent :
 
 (* The requested angles: angle at center J, and angle at external point H *)
 Definition angle_J := angle (O - J) (N - J).
-Definition angle_H := angle (O - H) (N - H).
+Definition angle_H := angle (H - O) (H - N).
 
 Theorem tangent_circle_angle_sum :
   angle_J + angle_H = 180%:R.

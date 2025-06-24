@@ -1,41 +1,26 @@
-import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
-namespace TrapezoidProblem
-
--- Setup for Euclidean geometry
-variable {V P : Type*} 
-  [NormedAddCommGroup V] 
-  [InnerProductSpace ℝ V] 
-  [MetricSpace P] 
-  [NormedAddTorsor V P]
-
--- Points
-variable (A B C D O P₀ : P)
-
--- Side lengths and configuration
-axiom dist_AD : dist A D = 10
-axiom dist_AO : dist A O = 10
-axiom dist_OB : dist O B = 10
-axiom dist_BC : dist B C = 10
-axiom dist_AB : dist A B = 12
-axiom dist_DO : dist D O = 12
-axiom dist_OC : dist O C = 12
-
--- Point P₀ is on segment AB
-axiom P_on_AB : P₀ ∈ segment ℝ A B
-
--- OP₀ is perpendicular to AB
-axiom OP_perp_AB : ⟪O -ᵥ P₀, B -ᵥ A⟫_ℝ = 0
-
--- O is between D and C
-axiom O_on_DC : O ∈ segment ℝ D C
-
--- AB ∥ DC (trapezoid condition)
-axiom AB_parallel_DC : (affineSpan ℝ {A, B}).Parallel (affineSpan ℝ {D, C})
-
--- The statement to be proved
-theorem OP₀_length_eq_8 : dist O P₀ = 8 := by
-  sorry
-
-end TrapezoidProblem
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+open Real
+open scoped EuclideanGeometry
+open Affine
+open AffineSubspace
+open InnerProductSpace 
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem length_OP_is_8
+  (A B C D O P : PPoint)
+  (hAD : dist A D = 10)
+  (hAO : dist A O = 10)
+  (hOB : dist O B = 10)
+  (hBC : dist B C = 10)
+  (hAB : dist A B = 12)
+  (hDO : dist D O = 12)
+  (hOC : dist O C = 12)
+  (h_O_between_DC : Sbtw ℝ D O C) 
+  (h_AB_parallel_DC : line[ℝ, A, B] ∥ line[ℝ, D, C])
+  (hP_on_AB : Wbtw ℝ A P B) 
+  (hOP_perp_AB : inner ℝ (O -ᵥ P) (B -ᵥ A) = 0) :
+  dist O P = 8 := by sorry

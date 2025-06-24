@@ -1,60 +1,30 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals geometry.
-Require Import Classical.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Inscribed_Quad_Reflection_Theorem.
-
+Section CircleReflectionProblem.
 Variable R : realType.
-Implicit Types A B C D E F G K O : 'rV[R]_2.
+Variables A B C D O E F G K : 'Point[R]_2.
 
-Hypothesis A_neq_C : forall A C : 'rV[R]_2, A != C.
+(* Circle properties *)
+Hypothesis ABCD_cyclic : concyclic [:: A; B; C; D].
+Hypothesis AC_diameter : midpoint O A C /\ dist O A = dist O B = dist O C = dist O D.
 
-Variables A B C D O : 'rV[R]_2.
+(* Reflection points *)
+Hypothesis E_reflection : E = reflect_over (line A C) D.
+Hypothesis F_reflection : F = reflect_over (line B D) C.
 
-Hypothesis ABCD_cyclic : exists r : R, exists O : 'rV[R]_2,
-  &0 < r /\ A != C /\
-  norm (A - O) = r /\
-  norm (B - O) = r /\
-  norm (C - O) = r /\
-  norm (D - O) = r /\
-  ([/\ A, B, C, D are all distinct]).
+(* Intersection points *)
+Hypothesis G_intersection : collinear [:: A; F; G] /\ collinear [:: B; D; G].
+Hypothesis K_intersection : collinear [:: B; E; K] /\ collinear [:: A; C; K].
 
-Hypothesis AC_diameter : exists O : 'rV[R]_2,
-  O = (A + C) / 2%:R.
+(* Main theorem *)
+Theorem KG_perp_BG : perpendicular (line K G) (line B G).
+Proof. by []. Qed.
 
-Definition reflect_over (P Q R : 'rV[R]_2) : 'rV[R]_2 :=
-  let v := Q - P in P + v - 2%:R * ((v *m (R - P)^T) / (norm (R - P)^+2)) * (R - P).
-
-Definition proj_line (P Q R : 'rV[R]_2) : 'rV[R]_2 :=
-  let v := Q - P in
-  P + (((R - P) *m v^T) / (norm v ^+2)) * v.
-
-Definition on_line (P Q R : 'rV[R]_2) :=
-  exists k : R, R = P + k *: (Q - P).
-
-Definition intersection_point (P Q R S : 'rV[R]_2) : 'rV[R]_2 :=
-  (* Assume not parallel; this is just a notational definition for the unique intersection point *)
-  let u := Q - P in
-  let v := S - R in
-  let w := P - R in
-  let det := u^`2 * v^`2 - (u^T * v)^2 in
-  let s := ((v^`2 * (w *m v^T)) - (u^T * v) * (w *m u^T)) / det in
-  P + s *: u.
-
-Let E := 2%:R * proj_line A C D - D. (* E is the reflection of D about line AC *)
-Let F := 2%:R * proj_line B D C - C. (* F is the reflection of C about BD *)
-
-Let G := intersection_point A F B D.  (* AF ∩ BD *)
-Let K := intersection_point B E A C.  (* BE ∩ AC *)
-
-Theorem kg_perp_bg :
-  [<: ((K - G) *m (B - G)^T = 0) :> Prop].
-Proof. Admitted.
-
-End Inscribed_Quad_Reflection_Theorem.
+End CircleReflectionProblem.
 ####

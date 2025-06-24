@@ -8,23 +8,30 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section TriangleArea.
+
 Variable R : realType.
 
-(* Define 2D points as pairs of real numbers *)
+(* Define a point as a pair of real numbers *)
 Definition point := (R * R)%type.
 
-(* Area of triangle given coordinates of vertices *)
+(* Calculate the area of a triangle given its vertices *)
 Definition triangle_area (A B C : point) : R :=
   (1%:R / 2) * `| (fst B - fst A) * (snd C - snd A) - (fst C - fst A) * (snd B - snd A) |.
 
-Theorem triangle_midpoint_area
-  (A B C : point)
-  (hC_right : (fst B - fst C) * (fst A - fst C) + (snd B - snd C) * (snd A - snd C) = 0)
-  (* M = midpoint of BC *)
-  (M := ((fst B + fst C) / 2 , (snd B + snd C) / 2))
-  (* N = midpoint of AC *)
-  (N := ((fst A + fst C) / 2 , (snd A + snd C) / 2))
-  (* P = midpoint of AB *)
-  (P := ((fst A + fst B) / 2 , (snd A + snd B) / 2))
-  (
+(* Define the midpoints of the sides of triangle ABC *)
+Variables A B C : point.
+Hypothesis right_angle_at_C : (fst B - fst C) * (fst A - fst C) + (snd B - snd C) * (snd A - snd C) = 0.
+Definition M := ((fst B + fst C) / 2%:R, (snd B + snd C) / 2%:R).
+Definition N := ((fst A + fst C) / 2%:R, (snd A + snd C) / 2%:R).
+Definition P := ((fst A + fst B) / 2%:R, (snd A + snd B) / 2%:R).
+
+(* Theorem to prove the area of triangle ABC is 8 given the area of triangle APN is 2 *)
+Theorem triangle_ABC_area_is_8 : 
+  let area_APN := triangle_area A P N in
+  area_APN = 2%:R ->
+  triangle_area A B C = 8%:R.
+Proof. Admitted.
+
+End TriangleArea.
 ####

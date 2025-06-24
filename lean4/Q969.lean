@@ -1,56 +1,35 @@
 import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Projection
 import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
-noncomputable section IncenterTangentCircles
-
-open scoped RealInnerProductSpace
-
--- Let P be a 2-dimensional Euclidean affine space, modeled on V
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Fact (finrank ℝ V = 2)]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Triangle points A, B, C (non-collinear)
-variable (A B C : P)
-variable (h_indep : AffineIndependent ℝ ![A, B, C])
-
--- Incenter I of triangle ABC (using a placeholder since Mathlib4 may not have incenter)
-variable (I : P)
-variable (hI_incenter : True) -- Placeholder for incenter property
-
--- Circle P tangent to AB and AC, centered at P₀, radius rP > 0
-variable (P₀ : P) (rP : ℝ)
-variable (hrP_pos : 0 < rP)
--- Tangency to lines AB and AC: dist from center to line equals rP
-variable (hP_tangent_AB : dist P₀ (EuclideanGeometry.orthogonalProjection (AffineSubspace.line ℝ A B) P₀) = rP)
-variable (hP_tangent_AC : dist P₀ (EuclideanGeometry.orthogonalProjection (AffineSubspace.line ℝ A C) P₀) = rP)
-
--- To be inside angle BAC, center must be on same side as C (for AB) and as B (for AC)
-variable (hP_side_C : EuclideanGeometry.SameSide (AffineSubspace.line ℝ A B) P₀ C)
-variable (hP_side_B : EuclideanGeometry.SameSide (AffineSubspace.line ℝ A C) P₀ B)
-
--- Circle O passes through B and C, centered at O₀, radius rO > 0
-variable (O₀ : P) (rO : ℝ)
-variable (hrO_pos : 0 < rO)
-variable (hO_passes_B : dist B O₀ = rO)
-variable (hO_passes_C : dist C O₀ = rO)
-
--- Point K: circles P and O are externally tangent at K
-variable (K : P)
-variable (hK_on_P : dist K P₀ = rP)
-variable (hK_on_O : dist K O₀ = rO)
-variable (h_centers_dist : dist P₀ O₀ = rP + rO)
-
--- Angle well-definedness conditions
-variable (hK_ne_B : K ≠ B)
-variable (hK_ne_C : K ≠ C)
-variable (hK_ne_I : K ≠ I)
-
--- Theorem: KI bisects angle BKC, i.e., ∠BKI = ∠IKC (unoriented angles)
-theorem incenter_bisects_bkc :
-    Angle.Unoriented.angle B K I = Angle.Unoriented.angle I K C := by
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+namespace ProblemFormalization
+open Real EuclideanGeometry InnerProductSpace Affine
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable instance : NormedAddTorsor P P := inferInstance
+variable (A B C : P)     
+variable (I : P)         
+variable (P_center : P)  
+variable (O_center : P)  
+variable (K : P)         
+variable (rP rO : ℝ)
+variable (h_A_ne_B : A ≠ B) (h_B_ne_C : B ≠ C) (h_C_ne_A : C ≠ A)
+variable (h_noncollinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
+variable (h_I_is_incenter : True) 
+variable (h_rP_pos : 0 < rP)
+variable (h_rO_pos : 0 < rO)
+noncomputable def circleP_obj : EuclideanGeometry.Sphere P := EuclideanGeometry.Sphere.mk P_center rP
+noncomputable def circleO_obj : EuclideanGeometry.Sphere P := EuclideanGeometry.Sphere.mk O_center rO
+variable (h_P_tangent_AB : True) 
+variable (h_P_tangent_AC : True) 
+variable (h_B_on_O : dist B O_center = rO)
+variable (h_C_on_O : dist C O_center = rO)
+variable (h_tangency_at_K : True) 
+variable (h_K_ne_B : K ≠ B)
+variable (h_K_ne_C : K ≠ C)
+variable (h_K_ne_I : K ≠ I)
+theorem ki_bisects_angle_bkc :
+    EuclideanGeometry.angle B K I = EuclideanGeometry.angle C K I := by
   sorry
-
-end IncenterTangentCircles
+end ProblemFormalization

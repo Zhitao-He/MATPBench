@@ -1,38 +1,34 @@
 import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.Convex.Between
+import Mathlib.Topology.Basic
 import Mathlib.Data.Real.Basic
-
-open Real Set
-
-variable {A B C P D E F : EuclideanSpace ℝ (Fin 2)}
-variable {a b c d : ℝ}
-
-/--
-Let $A,B,C$ be non-collinear points in $\mathbb{R}^2$, forming a triangle.
-Let $P$ be a point in the interior of triangle $ABC$.
-Let $D,E,F$ be points on sides $BC,AC,AB$ respectively, with $APD$, $BPE$, $CPF$ collinear and in each, $P$ is strictly between the respective vertices and the corresponding point on the opposite side.
-Suppose $|AP|=a$, $|BP|=b$, $|CP|=c$ and $|PD|=|PE|=|PF|=d$ with all quantities $>0$, $a+b+c=43$, $d=3$.
-Then $a*b*c=441$.
--/
-theorem triangleCevianSegmentsProduct
-    (h₁ : ¬Collinear A B C)
-    (h₂ : P ∈ interior (convexHull ℝ {A, B, C}))
-    (hD : D ∈ segment ℝ B C)
-    (hE : E ∈ segment ℝ A C)
-    (hF : F ∈ segment ℝ A B)
-    (hAPD : Sbtw A P D)
-    (hBPE : Sbtw B P E)
-    (hCPF : Sbtw C P F)
-    (ha : dist A P = a)
-    (hb : dist B P = b)
-    (hc : dist C P = c)
-    (hPd : dist P D = d)
-    (hPe : dist P E = d)
-    (hPf : dist P F = d)
-    (ha_pos : 0 < a)
-    (hb_pos : 0 < b)
-    (hc_pos : 0 < c)
-    (hd_pos : 0 < d)
-    (h_sum : a + b + c = 43)
-    (hd : d = 3) :
-    a * b * c = 441 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+namespace CevianProblem
+theorem product_of_segment_lengths_is_441
+  (A B C P D E F : Point)
+  (a b c d : ℝ)
+  (h_triangle_nondegenerate : ¬ Collinear ℝ ({A, B, C} : Set Point))
+  (h_P_interior : P ∈ interior (convexHull ℝ ({A, B, C} : Set Point)))
+  (hD_collinear_APD : Collinear ℝ ({A, P, D} : Set Point))
+  (hD_on_segment_BC : D ∈ segment ℝ B C)
+  (hE_collinear_BPE : Collinear ℝ ({B, P, E} : Set Point))
+  (hE_on_segment_AC : E ∈ segment ℝ A C)
+  (hF_collinear_CPF : Collinear ℝ ({C, P, F} : Set Point))
+  (hF_on_segment_AB : F ∈ segment ℝ A B)
+  (h_P_between_A_D : Sbtw ℝ A P D)
+  (h_P_between_B_E : Sbtw ℝ B P E)
+  (h_P_between_C_F : Sbtw ℝ C P F)
+  (h_a_is_dist_AP : a = dist A P)
+  (h_b_is_dist_BP : b = dist B P)
+  (h_c_is_dist_CP : c = dist C P)
+  (h_d_is_dist_PD : d = dist P D)
+  (h_d_is_dist_PE : d = dist P E)
+  (h_d_is_dist_PF : d = dist P F)
+  (h_sum_lengths : a + b + c = 43)
+  (h_d_value : d = 3) :
+  a * b * c = 441 := by
   sorry
+end CevianProblem

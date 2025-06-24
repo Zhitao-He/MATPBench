@@ -1,28 +1,32 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry euclidean.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope R_scope.
+Local Open Scope ring_scope.
 
 Variable R : realType.
-Variables A B C : 'rV[R]_2.
-Variables P Q R' S : 'rV[R]_2.
-Hypothesis noncol : ~~ colinear A B C.
-Hypotheses
-  HP : norm (P - A) = 2 /\norm (P - B) = 2 /\norm (P - C) = 2.
-Hypotheses
-  HQ : norm (Q - A) = 2 /\norm (Q - B) = 2 /\norm (Q - C) = 2.
-Hypotheses
-  HR : norm (R' - A) = 2 /\norm (R' - B) = 2 /\norm (R' - C) = 2.
-Hypotheses
-  HS : norm (S - A) = 2 /\norm (S - B) = 2 /\norm (S - C) = 2.
+Variables A B C P Q R' S : 'rV[R]_2.
 
-Theorem four_circle_concurrence : exists X, True.
-Proof.
-admit.
-Qed.
+Hypotheses
+  (circle_P : let r := 1 in `| P - A | = r \/ `| P - B | = r \/ `| P - C | = r)
+  (circle_Q : let r := 1 in `| Q - A | = r \/ `| Q - B | = r \/ `| Q - C | = r)
+  (circle_R : let r := 1 in `| R' - A | = r \/ `| R' - B | = r \/ `| R' - C | = r)
+  (circle_S : let r := 1 in `| S - A | = r \/ `| S - B | = r \/ `| S - C | = r)
+  (tangency_PQ : `| P - Q | = 2)
+  (tangency_PR : `| P - R' | = 2)
+  (tangency_PS : `| P - S | = 2)
+  (tangency_QR : `| Q - R' | = 2)
+  (tangency_QS : `| Q - S | = 2)
+  (tangency_RS : `| R' - S | = 2).
+
+Theorem smallest_angle_PQS :
+  let angle_P := angle_deg P Q S in
+  let angle_Q := angle_deg Q P S in
+  let angle_S := angle_deg S P Q in
+  (angle_P <= angle_Q) && (angle_P <= angle_S) ==> angle_P = 30.
+Proof. Admitted.
 ####

@@ -1,39 +1,37 @@
-theory GeometryProblem
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Geometry_Problem
+  imports Main
 begin
-
-type_synonym point = "real × real"
-
-(* 定义距离函数 *)
-definition dist :: "point ⇒ point ⇒ real" where
-  "dist p1 p2 = sqrt((fst p2 - fst p1)^2 + (snd p2 - snd p1)^2)"
-
-(* 定义角度类型，使用度数表示 *)
-type_synonym angle = real
-
-(* 定义中线 *)
-definition is_median :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "is_median P W A H = (dist P W = dist P H ∧ P ≠ A)"
-
-(* 定义角平分线 *)
-definition is_angle_bisector :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "is_angle_bisector W X H Q = (∃α. α > 0 ∧ X - W = α *R (H - W) / dist H W + α *R (Q - W) / dist Q W)"
-
-(* 几何问题描述 *)
+typedecl Point
+consts
+  W :: Point
+  H :: Point
+  Q :: Point
+  A :: Point
+  P :: Point
+  X :: Point
+consts
+  between :: "Point ⇒ Point ⇒ Point ⇒ bool"  
+  on_line :: "Point ⇒ Point ⇒ Point ⇒ bool"   
+consts
+  length :: "Point ⇒ Point ⇒ real"
+consts
+  angle :: "Point ⇒ Point ⇒ Point ⇒ real"  
 locale geometry_problem =
-  fixes W H Q A P X :: point
-  fixes x y :: real
-  assumes distinct: "W ≠ H ∧ H ≠ Q ∧ Q ≠ A ∧ A ≠ W ∧ W ≠ Q ∧ H ≠ A"
-  assumes P_distances: "dist A P = 3*y + 11" "dist H P = 7*y - 5"
-  assumes angles: "angle H W Q = 4*x - 16" "angle H W X = x + 12" "angle Q A P = 3*x - 2"
-  assumes WX_bisector: "is_angle_bisector W X H Q"
-  assumes WP_median: "is_median W P A H"
-
-(* 主定理 *)
-theorem (in geometry_problem) length_HA:
-  "dist H A = 46"
+  fixes x :: real and y :: real
+  assumes AP_def: "length A P = 3 * y + 11"
+    and HP_def: "length H P = 7 * y - 5"
+    and angle_HWQ_def: "angle H W Q = 4 * x - 16"
+    and angle_HWX_def: "angle H W X = x + 12"
+    and angle_QAP_def: "angle Q A P = 3 * x - 2"
+    and WX_bisects_HWQ: "angle H W X = angle X W Q"
+    and WP_median: "between W P A ∧ length H P = length H A"
+    and P_on_HA: "between H P A"
+    and X_on_WQ: "between W X Q"
+    and X_on_WP: "between W X P"
+    and X_on_WX: "on_line W X X"
+    and all_points_distinct: "W ≠ H ∧ W ≠ Q ∧ W ≠ A ∧ W ≠ P ∧ W ≠ X ∧ H ≠ Q ∧ H ≠ A ∧ H ≠ P ∧ H ≠ X ∧ Q ≠ A ∧ Q ≠ P ∧ Q ≠ X ∧ A ≠ P ∧ A ≠ X ∧ P ≠ X"
+begin
+theorem length_HA_46: "length H A = 46"
   sorry
-
+end
 end

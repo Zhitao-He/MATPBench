@@ -1,23 +1,24 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals normedtype trigo.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section RightTriangleProblem.
 Variable R : realType.
+Variables A B C : 'Point[R]_2.
 
-Theorem triangle_ABC_value_x :
-  forall (A B C : 'cV[R]_2),
-    let AB := B - A in let AC := C - A in let BC := C - B in
-    (AB *m BC^T) ``_0_0 = 0 ->
-    sqrt (AB *m AB^T) = 18 ->
-    let cos_angle :=
-      ((AB *m AC^T) ``_0_0) / (sqrt (AB *m AB^T) * sqrt (AC *m AC^T)) in
-    cos_angle = sqrt 2 / 2 ->
-    sqrt (BC *m BC^T) = 18 * sqrt 2 / 2.
+Hypotheses
+  BA_length : dist B A = 18;
+  angle_BAC : angle_deg (B,A,C) = 45;
+  AC_perp_BC : perpendicular (line A C) (line B C).
+
+Definition x := dist B C.
+
+Theorem x_value : x = 9 * sqrt 2.
 Proof. by []. Qed.
+
+End RightTriangleProblem.
 ####

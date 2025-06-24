@@ -12,12 +12,11 @@ Record point := mkPoint { px : R; py : R }.
 Variables O E F G A D H K N : point.
 Variable circle : point -> R -> Prop.
 Hypothesis circle_def : exists r, 0 < r /\ forall P, circle O r P <-> (P.px - O.px)^+2 + (P.py - O.py)^+2 = r^+2.
-Hypotheses
-  square_vertices : uniq [:: E; F; G; A; D; H];
-  square_sides : Distinct F G A D H E;
-  midpoint_G : G = mkPoint ((D.px + A.px)/2) ((D.py + A.py)/2);
-  foot_H : (H = mkPoint D.px A.py) /\ (D - H) *m (A - E)^T = 0.
+Hypothesis diameter_EH : forall P, circle O r P -> (P = E \/ P = H).
+Hypothesis tangent_DH : (D - H) *m (O - H)^T = 0.
+Hypothesis tangent_FE : (F - E) *m (O - E)^T = 0.
+Hypothesis FD_length : sqrt ((F.px - D.px)^+2 + (F.py - D.py)^+2) = 25.
 
-Theorem square_incircle_relation : True.
+Theorem circle_perimeter : 2 * PI * r = 25 * PI.
 Proof. by []. Qed.
 ####

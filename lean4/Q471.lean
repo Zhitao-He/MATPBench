@@ -1,53 +1,23 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle -- for Triangle.area
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic -- for angle definition
-import Mathlib.Data.Real.Basic -- for ℝ, π, /
-
-open EuclideanGeometry
-open Real
-
-/--
-Define `Point` as a point in the Euclidean plane ℝ²
--/
-abbreviation Point := EuclideanSpace ℝ (Fin 2)
-
-/--
-Definition of a rectangle by vertices A, B, C, D (in order).
-- A rectangle is a parallelogram with one right angle.
-- Parallelogram = diagonals bisect: A + C = B + D.
-- Non-degenerate: sides have positive length.
--/
-structure IsRectangle (A B C D : Point) : Prop where
-  diag_midpoints_coincide : A + C = B + D
-  angle_ABC_is_right : angle A B C = π / 2
-  A_ne_B : A ≠ B
-  B_ne_C : B ≠ C
-
-/--
-Area of a rectangle (A, B, C, D). Uses `IsRectangle` for assumptions.
--/
-def areaOfRectangle (A B C D : Point) (h_rect : IsRectangle A B C D) : ℝ :=
-  dist A B * dist B C
-
-/--
-Area of a general quadrilateral PQRS by splitting into triangles.
--/
-def areaOfQuadrilateral (P Q R S : Point) : ℝ :=
-  Triangle.area P Q R + Triangle.area R S P
-
-/--
-**The geometry lemma**:
-Let ABCD be a rectangle with area 10,
-M = midpoint of AD,
-N = midpoint of BC.
-Then the area of quadrilateral MBND is 5.
--/
-theorem rectangle_midpoint_quadrilateral_area_is_five :
-  ∀ (A B C D : Point),
-  IsRectangle A B C D →
-  let M := midpoint ℝ A D
-  let N := midpoint ℝ B C
-  areaOfRectangle A B C D (by assumption) = 10 →
-  areaOfQuadrilateral M B N D = 5 :=
-by
-  sorry  -- Proof not required
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+noncomputable section
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+def IsParallelogramPoints (A B C D : Point) : Prop :=
+  (B -ᵥ A = C -ᵥ D) ∧ (D -ᵥ A = C -ᵥ B)
+structure IsRectangle (A B C D : Point) where
+  is_parallelogram : IsParallelogramPoints A B C D
+  angle_DAB_is_right : inner ℝ (B -ᵥ A) (D -ᵥ A) = 0 
+noncomputable def parallelogram_area_from_vectors (u v : Point) : ℝ := 
+  abs (u 0 * v 1 - u 1 * v 0)
+namespace Problem
+variable (A B C D : Point)
+variable (h_rect : IsRectangle A B C D)
+variable (h_area_ABCD : (norm (B -ᵥ A)) * (norm (D -ᵥ A)) = 10)
+variable (M N : Point)
+variable (hM : M = midpoint ℝ A D) 
+variable (hN : N = midpoint ℝ B C) 
+theorem area_MBND_is_5 : parallelogram_area_from_vectors (B -ᵥ M) (D -ᵥ M) = 5 := by
+  sorry
+end Problem
+end 

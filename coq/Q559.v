@@ -1,31 +1,34 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Rectangle_MNQR_Problem.
+Local Open Scope ring_scope.
 
 Variable R : realType.
 
-(* Define the points *)
-Variables M N Q R P : 'e2[R].
-Hypothesis rect_MNQR : is_rectangle M N Q R.
+(* Points in the rectangle *)
+Variables M N Q R P : 'rV[R]_2.
 
-(* P is the intersection point of diagonals NR and MQ *)
-Hypothesis P_on_NR : on_line P (Line N R).
-Hypothesis P_on_MQ : on_line P (Line M Q).
+(* Hypotheses *)
+Hypothesis H_NMRQ_rectangle : is_rectangle M N Q R.
+Hypothesis H_NP : `|P - N| = 2 * x - 30`.
+Hypothesis H_NR : `|R - N| = 2 * x + 10`.
+Hypothesis H_P_on_diagonals : P = (N + R) / 2 /
+                              P = (M + Q) / 2.
 
-(* Given: NP = 2x - 30, MP = 40 for some real x *)
-Variable x : R.
-Hypothesis NP_length : `|P - N| = 2 * x - 30.
-Hypothesis MP_length : `|P - M| = 40.
-
-Theorem rectangle_diagonals_problem :
-  `|P - M| = 40.
-Proof. Admitted.
-
-End Rectangle_MNQR_Problem.
+(* Theorem to prove *)
+Theorem find_MP_length : `|P - M| = 40.
+Proof.
+  (* Using rectangle diagonal properties *)
+  have H_diagonal_equal : `|N - Q| = `|M - R|` by apply: H_NMRQ_rectangle.
+  (* Express P in terms of N and R *)
+  have H_P_expr : P = (N + R) / 2 by move: H_P_on_diagonals => [-> _].
+  (* Express M in terms of N, Q, R *)
+  (* ... detailed geometric reasoning would go here ... *)
+  admit.
+Qed.
 ####

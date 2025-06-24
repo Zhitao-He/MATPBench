@@ -2,29 +2,31 @@ import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open EuclideanGeometry Real
-
--- Working in a Euclidean affine plane
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {Pt : Type*} [MetricSpace Pt] [NormedAddTorsor V Pt]
-
--- Points as described in the problem
-variable (A B C P Q R X Y : Pt)
-
-/-- Point `p` is on the line through `l₁`, `l₂` -/
-def IsOnLine (p l₁ l₂ : Pt) : Prop := p ∈ affineSpan ℝ ({l₁, l₂} : Set Pt)
-
-/--
-If △ABC and △PQR are equilateral,
-X is the intersection of lines AR and BQ,
-then the measure of ∠C X Y is 40 degrees.
--/
-theorem equilateral_triangles_angle_theorem
-    (h_ABC_equilateral : Triangle.IsEquilateral A B C)
-    (h_PQR_equilateral : Triangle.IsEquilateral P Q R)
-    (hX_on_AR : IsOnLine X A R)
-    (hX_on_BQ : IsOnLine X B Q)
-    -- Note: Y is presumed given in the problem, its construction not specified.
-    : (angle C X Y).toDegrees = (40 : ℝ) := by
-  sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+namespace GeometricProblem
+open Real EuclideanGeometry Affine AffineSubspace
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem angle_CXY_is_40_degrees
+  (A B C P Q R X Y B_L P_R : PPoint)
+  (h_B_ne_P : B ≠ P)
+  (h_sbtw_BL_B_P : Sbtw ℝ B_L B P)
+  (h_sbtw_B_P_PR : Sbtw ℝ B P P_R)
+  (hAnrABC : ¬ Collinear ℝ ({A, B, C} : Set PPoint))
+  (hAnrPQR : ¬ Collinear ℝ ({P, Q, R} : Set PPoint))
+  (h_ABC_equilateral_ab : dist A B = dist B C)
+  (h_ABC_equilateral_bc : dist B C = dist C A)
+  (h_PQR_equilateral_pq : dist P Q = dist Q R)
+  (h_PQR_equilateral_qr : dist Q R = dist R P)
+  (h_B_ne_R : B ≠ R)
+  (hX_on_line_AC : X ∈ line[ℝ, A, C])
+  (hX_on_line_BR : X ∈ line[ℝ, B, R])
+  (h_P_ne_X : P ≠ X)
+  (hY_on_line_BC : Y ∈ line[ℝ, B, C])
+  (hY_on_line_PX : Y ∈ line[ℝ, P, X])
+  (h_angle_B : angle A B B_L = (65 / 180 * π))
+  (h_angle_P : angle Q P P_R = (75 / 180 * π))
+  (hne_C_X : C ≠ X)
+  (hne_Y_X : Y ≠ X) :
+  angle C X Y = (40 / 180 * π) := by sorry
+end GeometricProblem

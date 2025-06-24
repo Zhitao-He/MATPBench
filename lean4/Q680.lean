@@ -1,26 +1,19 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Data.Real.Sqrt
-
-open Real EuclideanGeometry
-
--- We work in a 2D Euclidean affine space over ℝ
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [MetricSpace P] [FiniteDimensional ℝ P]
-
--- The points involved in the problem:
-variable (A B C D E : P)
-
--- Hypotheses from the problem statement
-axiom h_AC : dist A C = 16
-axiom h_CD : dist C D = 23
-axiom h_angle_BDE : ∠ B D E = π / 3
-axiom h_parallelogram : IsParallelogram ℝ B D C A
-axiom h_right_angle_DEB : ∠ D E B = π / 2
-
--- The area formula for this parallelogram using provided data
-noncomputable def area_BDCA (A B C D E : P) (h_AC : dist A C = 16) (h_CD : dist C D = 23) : ℝ :=
-  h_CD * (h_AC * Real.sin (π / 3))
-
-theorem area_BDCA_value :
-  area_BDCA A B C D E h_AC h_CD = 184 * Real.sqrt 3 := by sorry
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry Affine
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+example
+  (A B C D E : P)
+  (h_AC_len : dist A C = 16)
+  (h_CD_len : dist C D = 23)
+  (h_angle_BDE_val : ∠ B D E = Real.pi / 3)
+  (h_parallelogram_BDCA : dist B D = dist C A ∧ dist B C = dist D A)
+  (h_perp_DE_BE : ∠ D E B = Real.pi / 2)
+  (h_E_on_segment_DC_interior : E ∈ segment ℝ D C ∧ E ≠ D ∧ E ≠ C) :
+  dist A C * dist C D * sin (Real.pi / 3) = 184 * sqrt 3 := by
+  sorry

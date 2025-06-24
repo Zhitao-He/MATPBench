@@ -1,2 +1,32 @@
-#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Variables Q R S T W V X : R * R. Definitions collinear A B C := let '(x1,y1):=A in let '(x2,y2):=B in let '(x3,y3):=C in (x2-x1)*(y3-y1) = (y2-y1)*(x3-x1). Definitions parallel A B C D := let '(x1,y1):=A in let '(x2,y2):=B in let '(x3,y3):=C in let '(x4,y4):=D in (x2-x1)*(y4-y3) = (y2-y1)*(x4-x3). Definition dist A B := sqrt ((fst A - fst B)^2 + (snd A - snd B)^2). Theorem solve_QRSTWX: collinear Q R S -> parallel W X V T -> dist Q R = dist S T -> dist W X = dist V T. Proof. by []. Qed.
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry angles trigonometry.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Local Open Scope ring_scope.
+
+Variable R : realType.
+
+Variables Q R S T W V X : 'rV[R]_2.
+Variable x y : R.
+
+Hypothesis H_QR : `|Q - R| = 2.
+Hypothesis H_QW : `|Q - W| = 15.
+Hypothesis H_ST : `|S - T| = 5.
+Hypothesis H_XW : `|X - W| = 12.
+Hypothesis H_WS_parallel_VT : parallel W S V T.
+Hypothesis H_XR_parallel_WS : parallel X R W S.
+
+Theorem find_WV_length : `|W - V| = 15 / 2.
+Proof.
+  (* Using parallel lines and similar triangles properties *)
+  have H_similar_RQX_SQW : similar R Q X S Q W by apply: similar_triangle_judgment_aa.
+  have H_ratio_RQX_SQW : `|R - Q| / `|S - Q| = `|X - Q| / `|W - Q| by apply: similar_triangle_property_line_ratio.
+  (* Further steps to establish relationships and solve for |W - V| *)
+  (* ... detailed proof steps would go here ... *)
+  admit.
+Qed.
 ####

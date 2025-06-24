@@ -16,18 +16,11 @@ import Mathlib.Geometry.Euclidean.Angle.Unoriented.CrossProduct
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
 open scoped Real
 open EuclideanGeometry
-
 abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
-
-
 def IsIsoscelesRightTriangleAt (P Q R : EuclideanPlane) : Prop :=
   angle Q P R = Real.pi / 2 ∧ dist P Q = dist P R
-
-
 noncomputable def perimeter (A B C D : EuclideanPlane) : ℝ :=
   dist A B + dist B C + dist C D + dist D A
-
-
 theorem quadrilateral_perimeter_is_4_add_sqrt2
     (A B C D : EuclideanPlane)
     (hABC : IsIsoscelesRightTriangleAt A B C)

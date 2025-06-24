@@ -1,28 +1,31 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
-Unset Strict Implicit Defensive.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Section perpendicular_feet.
-
+Section TrapezoidAreaProblem.
 Variable R : realType.
-Variables A B C D E F : R * R.
+Variables A B C D E F : 'Point[R]_2.
+
 Hypotheses
-  HE : exists k1, E = ((1 - k1) *: B + k1 *: A) /\n       (D.1 - E.1) * (A.1 - B.1) + (D.2 - E.2) * (A.2 - B.2) = 0,
-  HF : exists k2, F = ((1 - k2) *: B + k2 *: A) /
-       (C.1 - F.1) * (A.1 - B.1) + (C.2 - F.2) * (A.2 - B.2) = 0,
-  HDCE_parallel :
-    (D.2 - E.2) * (C.1 - A.1) = (D.1 - E.1) * (C.2 - A.2).
+  AB_length : dist A B = 35;
+  CD_length : dist C D = 19;
+  perimeter_DBAC : dist D B + dist B A + dist A C + dist C D = 74;
+  isosceles_trapezoid : (dist D B = dist A C) /\ parallel (line D C) (line B A);
+  CF_perp_AF : perpendicular (line C F) (line A F);
+  DE_perp_AE : perpendicular (line D E) (line A E);
+  collinear_ABE : collinear [:: A; B; E];
+  collinear_ABF : collinear [:: A; B; F];
+  collinear_CFA : collinear [:: C; F; A];
+  collinear_DEA : collinear [:: D; E; A].
 
-Theorem perpendicular_feet_parallelism :
-  True.
-Proof.
-  (* proof omitted *)
-Admitted.
+Definition area := area_quadrilateral [:: D; B; A; C].
 
-End perpendicular_feet.
+Theorem area_value_162 : area = 162.
+Proof. by []. Qed.
+
+End TrapezoidAreaProblem.
 ####

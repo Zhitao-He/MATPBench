@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals trigo.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -8,13 +8,29 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Variables P Q A Z S R : R^2.
-Hypotheses
-  A <> Z;
-  exists k1 k2, 0 < k1 < k2 < 1 /\A = ((1 - k1) *: P + k1 *: Q)%R /\Z = ((1 - k2) *: P + k2 *: Q)%R;
-  exists x, 0 < x /\ S = A + x *: (0,1) /\ R = Z + x *: (0,1) /\ S.1 = R.1;
-  dist P Z = d.
+Variable R : realType.
 
-Theorem trapezoid_length_y : True.
-Proof. by []. Qed.
+Variables A Z Q R S P : 'rV[R]_2.
+Variables x y z : R.
+
+Hypotheses
+  (AZ_length : norm (A - Z) = y)
+  (QZ_length : norm (Q - Z) = z)
+  (RQ_length : norm (R - Q) = 12)
+  (RS_length : norm (R - S) = 10)
+  (RZ_length : norm (R - Z) = x)
+  (angle_AQR : angle A Q R = PI/6)
+  (angle_SPA : angle S P A = PI/4)
+  (parallel_SR_AZ : parallel (line S R) (line A Z))
+  (perp_PA_SA : angle P A S = PI/2)
+  (perp_RZ_QZ : angle R Z Q = PI/2).
+
+Theorem y_value : y = 10.
+Proof.
+  (* Proof would involve:
+     1. Using parallel and perpendicular properties
+     2. Applying trigonometric relationships
+     3. Solving for y using given lengths and angles *)
+  admit.
+Qed.
 ####

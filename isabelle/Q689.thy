@@ -1,49 +1,26 @@
-theory TriangleProblem
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Triangle_TUV
+  imports Main
 begin
-
-(* 三角形TUV，其中TV=TU，∠VTU=74°，求∠TUV *)
-
-locale triangle_problem =
-  fixes T U V :: "real^2"
-  assumes non_collinear: "~(collinear {T, U, V})"
-  and TU_eq_TV: "dist T U = dist T V"
-  and angle_VTU: "angle V T U = 74 * pi / 180"
-
-context triangle_problem begin
-
-(* 在等腰三角形中，底边两端的角相等 *)
-lemma base_angles_equal:
-  "angle T U V = angle T V U"
+locale triangle =
+  fixes U T V :: "'a"
+  assumes distinct: "U ≠ T" "T ≠ V" "U ≠ V"
+locale isosceles_triangle_TUV =
+  triangle U T V +
+  fixes angle_VTU :: real
+  assumes sides_equal: "dist T V = dist T U"
+    and angle_VTU_def: "angle_VTU = 74"
+definition triangle_angle_sum :: "real ⇒ real ⇒ real ⇒ bool" where
+  "triangle_angle_sum A B C ⟷ (A + B + C = 180)"
+definition isosceles_base_angles :: "real ⇒ real ⇒ bool" where
+  "isosceles_base_angles A B ⟷ (A = B)"
+theorem angle_TUV_value:
+  assumes "isosceles_triangle_TUV U T V"
+  shows "∃A. isosceles_base_angles A A ∧ triangle_angle_sum 74 A A ∧ A = 53"
 proof -
-  have "dist T U = dist T V" by (rule TU_eq_TV)
-  then show ?thesis
-    by (simp add: euclidean_geometry.equal_angles_in_isosceles)
+  have "triangle_angle_sum 74 A A ⟷ (74 + A + A = 180)" for A
+    by (simp add: triangle_angle_sum_def)
+  hence "74 + 2 * A = 180 ⟷ 2 * A = 106 ⟷ A = 53" by simp
+  thus ?thesis
+    by (rule exI[where x=53], simp add: isosceles_base_angles_def triangle_angle_sum_def)
 qed
-
-(* 三角形内角和为180° *)
-lemma triangle_angle_sum:
-  "angle V T U + angle T U V + angle T V U = pi"
-  by (simp add: euclidean_geometry.triangle_angle_sum non_collinear)
-
-(* 证明∠TUV = 53° *)
-theorem angle_TUV_is_53:
-  "angle T U V = 53 * pi / 180"
-proof -
-  have "angle T U V = angle T V U" by (rule base_angles_equal)
-  hence "2 * angle T U V + angle V T U = pi" 
-    using triangle_angle_sum by simp
-  hence "2 * angle T U V = pi - angle V T U" by simp
-  hence "2 * angle T U V = pi - 74 * pi / 180" 
-    using angle_VTU by simp
-  hence "2 * angle T U V = pi * (1 - 74/180)" by (simp add: divide_right_mono)
-  hence "2 * angle T U V = pi * 106/180" by simp
-  hence "angle T U V = pi * 53/180" by (simp add: divide_right_mono)
-  thus "angle T U V = 53 * pi / 180" by (simp add: mult.commute)
-qed
-
-end
-
 end

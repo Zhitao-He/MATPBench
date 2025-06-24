@@ -1,44 +1,41 @@
-theory AngleProblem
-imports Main HOL.Euclidean_Geometry
+theory Geometry_Problem_Formalization
+imports Main
 begin
-
-(* 我们根据题目描述创建几何问题 *)
-locale angle_problem =
-  fixes F O E L D A I J :: "point"
-  assumes angle_FOE: "angle F O E = 118"
-  assumes angle_LDA: "angle L D A = 104"
-  assumes parallel_OD_FI: "parallel O D F I"
-
-(* 根据思路提示，我们添加必要的辅助点和线 *)
-  fixes K :: "point"
-  assumes collinear_IF_OE_K: "col I F O E K"
-  assumes collinear_FK_OE_J: "col F K O E J"
-  assumes flat_angle_IFK: "angle I F K = 180"
-
-(* 最终定理 *)
-theorem angle_IFJ: 
-  "angle I F J = 62"
-proof -
-  (* 由于平行线性质，我们可以确定对应角相等 *)
-  have "angle F K O = angle O D F" 
-    using parallel_OD_FI by (simp add: parallel_corresponding_angles)
-    
-  (* 根据平角性质和角度加法 *)
-  have "angle I F J + angle J F K = angle I F K" 
-    by (simp add: angle_addition)
-    
-  (* 利用已知条件求解 *)
-  have "angle I F J + angle J F K = 180" 
-    using flat_angle_IFK by simp
-    
-  (* 计算角度 *)
-  have "angle J F K = 118" 
-    (* 此处应有详细证明，但因为简化所以省略 *)
-    sorry
-    
-  (* 最终结果 *)
-  thus "angle I F J = 62" 
-    by (simp add: angle_subtraction)
-qed
-
+typedecl point
+consts
+  O :: point
+  D :: point
+  F :: point
+  I :: point
+  E :: point
+  J :: point
+  K :: point
+consts
+  Collinear :: "point ⇒ point ⇒ point ⇒ bool" 
+  IsBetween :: "point ⇒ point ⇒ point ⇒ bool" 
+  Parallel :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" 
+  Angle :: "point ⇒ point ⇒ point ⇒ real" 
+axiomatization where
+  Collinear_ODE: "Collinear O D E" and
+  Collinear_IFK: "Collinear I F K" and
+  F_is_between_I_K: "IsBetween I F K" and
+  Collinear_OFJ: "Collinear O F J" and
+  F_is_between_O_J: "IsBetween O F J" and
+  Distinct_O_F: "O ≠ F" and
+  Distinct_O_E: "O ≠ E" and
+  Distinct_F_E: "F ≠ E" and 
+  Distinct_J_F: "J ≠ F" and
+  Distinct_J_K: "J ≠ K" and
+  Distinct_F_K: "F ≠ K" and 
+  Distinct_I_F: "I ≠ F" and
+  Distinct_I_J: "I ≠ J" and 
+  Angle_FOE_is_118: "Angle F O E = 118" and
+  Parallel_OD_FI: "Parallel O D F I" and
+  Rule_Corresponding_Angles_Equality:
+    "(Parallel O D F I) ⇒ (Collinear O D E) ⇒ (Collinear I F K) ⇒ (Collinear O F J) ⇒
+     Angle F O E = Angle J F K" and
+  Rule_Angles_On_Straight_Line_Sum_to_180:
+    "(Collinear I F K) ⇒ (IsBetween I F K) ⇒ (¬ Collinear I F J) ⇒
+     Angle I F J + Angle J F K = 180" and
+  J_not_on_line_IFK: "¬ Collinear I F J"
 end

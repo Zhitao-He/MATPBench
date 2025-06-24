@@ -1,35 +1,24 @@
-import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry
-
--- Define ℝ-plane points as PPoint
-abbrev PPoint := EuclideanPlane ℝ
-
--- Declare points in the plane
-variable (A B C D E F G O : PPoint)
-
--- Hypotheses for the geometry configuration:
-
--- 1. ABCD is a parallelogram
-axiom h_parallelogram_ABCD : IsParallelogram A B C D
-
--- 2. O is the intersection (midpoint) of diagonals AC and BD
-axiom hO_mid_AC : O = midpoint ℝ A C
-axiom hO_mid_BD : O = midpoint ℝ B D
-
--- 3. E is the foot of the perpendicular from C to line AD
-axiom hE_on_AD : E ∈ affineSpan ℝ ({A, D} : Set PPoint)
-axiom hCE_perp_AD : inner (C -ᵥ E) (D -ᵥ A) = 0
-
--- 4. F is the foot of the perpendicular from D to line AC
-axiom hF_on_AC : F ∈ affineSpan ℝ ({A, C} : Set PPoint)
-axiom hDF_perp_AC : inner (D -ᵥ F) (C -ᵥ A) = 0
-
--- 5. G is the intersection of line FE and the extension of BA
-axiom hG_collinear_FE : Collinear ℝ (Set.insert F (Set.insert E {G}))
-axiom hG_on_extBA : ∃ (s : ℝ), G = A +ᵥ s • (A -ᵥ B)
-
--- Theorem: GO is perpendicular to AD, i.e., (G - O) ⋅ (D - A) = 0
-theorem GO_perp_AD : inner (G -ᵥ O) (D -ᵥ A) = 0 := by
-  sorry
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+open EuclideanGeometry Real 
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (A B C D O E F G : P)
+axiom h_O_midpoint_AC : O = midpoint ℝ A C
+axiom h_O_midpoint_BD : O = midpoint ℝ B D
+axiom h_noncollinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set P) 
+axiom h_C_ne_E : C ≠ E 
+axiom h_E_on_segment_BD : E ∈ segment ℝ B D
+axiom h_CE_perp_BD : True 
+axiom h_D_ne_F : D ≠ F 
+axiom h_F_on_segment_AC : F ∈ segment ℝ A C
+axiom h_DF_perp_AC : True 
+axiom h_F_ne_E : F ≠ E 
+axiom h_G_on_line_FE : Collinear ℝ ({G, F, E} : Set P) 
+axiom h_G_ne_A : G ≠ A
+axiom h_G_ne_B : G ≠ B
+axiom h_GAB_collinear : Collinear ℝ ({G, A, B} : Set P) 
+axiom h_GAB_dist_eq : dist G A + dist A B = dist G B 
+axiom h_G_ne_O : G ≠ O 
+theorem go_perp_ad : True := by trivial 

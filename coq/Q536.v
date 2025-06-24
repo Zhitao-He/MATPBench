@@ -8,18 +8,28 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section AngleProblem.
+
 Variable R : realType.
 
+(* Variables for angles in the diagram *)
+Variables x y : R.
+
+(* Hypotheses: Angle measures in degrees *)
+Hypothesis angle_ECF : 78%:R * (PI / 180). (* ∠ECF = 78° *)
+Hypothesis angle_FDE : 110%:R * (PI / 180). (* ∠FDE = 110° *)
+Hypothesis angle_CFD : (x + 36)%:R * (PI / 180). (* ∠CFD = x + 36° *)
+Hypothesis angle_DEC : (2 * y)%:R * (PI / 180). (* ∠DEC = 2y° *)
+
+(* Parallel lines CE and FD imply supplementary angles in the quadrilateral *) 
+Hypothesis CE_parallel_FD : True. (* A placeholder for the parallel property implication *)
+
+(* Theorem to prove: y = 35 *)
 Theorem angle_problem_value_of_y :
-  forall (y x : R),
-    (* Angles at the labeled vertices according to the diagram: *)
-    let angle_C : R := 78 in
-    let angle_E : R := 2 * y in
-    let angle_D : R := 110 in
-    let angle_F : R := x + 36 in
-    (* The sum of the angles around the closed quad C-E-D-F *)
-      angle_C + angle_E + angle_D + angle_F = 360 ->
-      (* The claimed value of y *)
-      y = 35.
+  (* The sum of angles in the quadrilateral C-E-D-F is 360° *)
+  angle_ECF + angle_FDE + angle_CFD + angle_DEC = 360%:R * (PI / 180) ->
+  y = 35.
 Proof. Admitted.
+
+End AngleProblem.
 ####

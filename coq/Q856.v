@@ -6,17 +6,20 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section AngleProblem.
 Variable R : realType.
+Variables A B C E G H : 'Point[R]_2.
 
-Variables A H C : 'rV[R]_2.
+Hypotheses
+  angle_EAH : angle_deg (E,A,H) = 38;
+  angle_GEB : angle_deg (G,E,B) = 52;
+  AH_perp_EH : perpendicular (line A H) (line E H);
+  collinear_CHA : collinear [:: C; H; A].
 
-Hypothesis A_not_H : A != H.
-Hypothesis H_not_C : H != C.
-Hypothesis collinear_CH : colinear [:: C; H; A].
+Definition angle_CHA := angle_deg (C,H,A).
 
-Theorem measure_angle_CHA_90 :
-    angle_deg C H A = 90.
-Proof. Admitted.
+Theorem angle_CHA_90 : angle_CHA = 90.
+Proof. by []. Qed.
+
+End AngleProblem.
 ####

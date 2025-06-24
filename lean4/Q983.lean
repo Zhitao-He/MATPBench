@@ -1,44 +1,49 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-variable {PMP : Type*} [MetricSpace PMP] [NormedAddTorsor V PMP]
-variable [FiniteDimensional ℝ V] [Fact (FiniteDimensional.finrank ℝ V = 2)]
-
-open EuclideanGeometry
-
-namespace TwoCirclesExternalTangent
-
-variable (A B C D E F G H P Q : PMP)
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open EuclideanGeometry InnerProductSpace
+open scoped RealInnerProductSpace EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (Pc Qc A B C D E F G H : P)
 variable (rP rQ : ℝ)
-
-theorem circles_external_tangent_angle_bisector
-    (hA_ne_B : A ≠ B)
-    (hP_ne_Q : P ≠ Q)
-    (hC_ne_D : C ≠ D)
-    (hF_ne_C : F ≠ C)
-    (hG_ne_D : G ≠ D)
-    (hrP_pos : rP > 0)
-    (hrQ_pos : rQ > 0)
-    (hA_on_circleP : A ∈ Sphere P rP)
-    (hA_on_circleQ : A ∈ Sphere Q rQ)
-    (hB_on_circleP : B ∈ Sphere P rP)
-    (hB_on_circleQ : B ∈ Sphere Q rQ)
-    (hC_on_circleP : C ∈ Sphere P rP)
-    (hD_on_circleQ : D ∈ Sphere Q rQ)
-    (hCD_tangent_P_at_C : inner (P -ᵥ C) (D -ᵥ C) = (0 : ℝ))
-    (hCD_tangent_Q_at_D : inner (Q -ᵥ D) (C -ᵥ D) = (0 : ℝ))
-    (hE_on_extension_BA : ∃ (t : ℝ) (_ : t > 1), E = B +ᵥ t • (A -ᵥ B))
-    (hE_ne_C : E ≠ C)
-    (hE_ne_D : E ≠ D)
-    (hF_on_line_EC : Collinear ℝ ({E, C, F} : Set PMP))
-    (hF_on_circleP : F ∈ Sphere P rP)
-    (hG_on_line_ED : Collinear ℝ ({E, D, G} : Set PMP))
-    (hG_on_circleQ : G ∈ Sphere Q rQ)
-    (hH_on_segment_FG : Sbtw ℝ F H G)
-    (hAH_bisects_angle_FAG : ∠ F A H = ∠ H A G) :
-    ∠ F C H = ∠ G D H := by sorry
-
-end TwoCirclesExternalTangent
+noncomputable def circP (Pc : P) (rP : ℝ) : EuclideanGeometry.Sphere P :=
+  EuclideanGeometry.Sphere.mk Pc rP
+noncomputable def circQ (Qc : P) (rQ : ℝ) : EuclideanGeometry.Sphere P :=
+  EuclideanGeometry.Sphere.mk Qc rQ
+axiom hrP_pos : 0 < rP
+axiom hrQ_pos : 0 < rQ
+axiom hPc_ne_Qc : Pc ≠ Qc
+axiom hA_on_circP : A ∈ circP Pc rP
+axiom hB_on_circP : B ∈ circP Pc rP
+axiom hA_on_circQ : A ∈ circQ Qc rQ
+axiom hB_on_circQ : B ∈ circQ Qc rQ
+axiom hA_ne_B : A ≠ B
+axiom hC_on_circP : C ∈ circP Pc rP
+axiom hD_on_circQ : D ∈ circQ Qc rQ
+axiom hC_ne_D : C ≠ D
+axiom h_tangent_P : inner ℝ (Pc -ᵥ C) (D -ᵥ C) = 0
+axiom h_tangent_Q : inner ℝ (Qc -ᵥ D) (C -ᵥ D) = 0
+axiom h_collinear_BAE : Collinear ℝ ({B, A, E} : Set P)
+axiom h_A_between_B_E : Sbtw ℝ B A E
+axiom hE_ne_C : E ≠ C
+axiom h_collinear_ECF : Collinear ℝ ({E, C, F} : Set P)
+axiom hF_on_circP : F ∈ circP Pc rP
+axiom hF_ne_C : F ≠ C
+axiom hE_ne_D : E ≠ D
+axiom h_collinear_EDG : Collinear ℝ ({E, D, G} : Set P)
+axiom hG_on_circQ : G ∈ circQ Qc rQ
+axiom hG_ne_D : G ≠ D
+axiom hF_ne_A : F ≠ A
+axiom hG_ne_A : G ≠ A
+axiom hH_ne_A : H ≠ A
+axiom h_AH_bisects_FAG : EuclideanGeometry.angle F A H = EuclideanGeometry.angle H A G
+axiom h_H_on_segment_FG : H ∈ openSegment ℝ F G
+axiom h_A_not_on_line_FG : ¬ Collinear ℝ ({F, A, G} : Set P)
+axiom hF_ne_G : F ≠ G
+axiom hH_ne_C : H ≠ C
+axiom hH_ne_D : H ≠ D
+theorem common_tangent_angle_equality :
+  EuclideanGeometry.angle F C H = EuclideanGeometry.angle G D H := by
+  sorry

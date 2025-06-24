@@ -1,57 +1,40 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
-
--- Use EuclideanSpace for 2D points
-abbrev Point : Type := EuclideanSpace ℝ (Fin 2)
-
--- Structure encoding the problem data and geometric setup
-structure HexagonProblemSetup where
-  -- Rectangle width, variable, positive
-  a : ℝ
-  h_a_pos : 0 < a
-
-  -- Rectangle length, fixed, hinges at both ends and at midpoints
-  rectSideLong : ℝ := 36
-
-  -- Area of original rectangle
-  rectangleArea : ℝ := a * rectSideLong
-
-  -- Desired distance between parallel sides after folding
-  hexParallelSidesDistance : ℝ := 24
-
-  -- Each bent segment after hinge: half the long side
-  hexBentSegmentLen : ℝ := rectSideLong / 2
-  
-  -- Intermediate calculation: vertical pos. of parallel sides (centered at origin for symmetry)
-  yCoordAbs : ℝ := hexParallelSidesDistance / 2
-
-  -- Condition to ensure Real.sqrt argument is nonnegative
-  sqrtArgNonneg : hexBentSegmentLen ^ 2 - yCoordAbs ^ 2 ≥ 0 := by
-    -- 18^2 - 12^2 = 324 - 144 = 180 ≥ 0
-    norm_num
-
-  -- Horizontal projection from the hinged side
-  triangleHorProj : ℝ := Real.sqrt (hexBentSegmentLen ^ 2 - yCoordAbs ^ 2)
-
-  -- The ordered vertices of the hexagon (centered at origin)
-  v1 : Point := ![-(a / 2), yCoordAbs]
-  v2 : Point := ![a / 2, yCoordAbs]
-  v3 : Point := ![a / 2 + triangleHorProj, 0]
-  v4 : Point := ![a / 2, -yCoordAbs]
-  v5 : Point := ![-(a / 2), -yCoordAbs]
-  v6 : Point := ![-(a / 2) - triangleHorProj, 0]
-
-  hexagonVertices : List Point := [v1, v2, v3, v4, v5, v6]
-
-  -- Area: rectangle (width a, height D) + two triangles of base D, height = triangleHorProj
-  hexagonArea : ℝ :=
-    let areaCentralRect := a * hexParallelSidesDistance
-    let areaTwoTriangles := hexParallelSidesDistance * triangleHorProj
-    areaCentralRect + areaTwoTriangles
-
-  -- The given: areas equal
-  areasEqual : hexagonArea = rectangleArea
-
--- Main theorem: find a^2 in terms of setup
-theorem find_a_squared (config : HexagonProblemSetup) : config.a ^ 2 = 720 := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2
+local notation "P2" => EuclideanSpace ℝ (Fin 2)
+namespace HexagonProblem
+open Real
+def length36 : ℝ := 36
+def separation24 : ℝ := 24
+def segment18 : ℝ := 18 
+noncomputable def triHSq : ℝ := segment18 ^ 2 - (separation24 / 2) ^ 2
+lemma triHSq_eq_180 : triHSq = 180 := by sorry 
+noncomputable def triH : ℝ := sqrt triHSq 
+lemma triH_eq_6_sqrt_5 : triH = 6 * sqrt 5 := by sorry
+lemma triH_pos : 0 < triH := by sorry
+noncomputable def hexV1 : P2 := ![0, separation24]
+noncomputable def hexV2 : P2 := ![-triH, separation24 / 2]
+noncomputable def hexV3 : P2 := ![0, 0]
+noncomputable def hexV4 (aLen : ℝ) : P2 := ![aLen, 0]
+noncomputable def hexV5 (aLen : ℝ) : P2 := ![aLen + triH, separation24 / 2]
+noncomputable def hexV6 (aLen : ℝ) : P2 := ![aLen, separation24]
+noncomputable def hexagonVertices (aLen : ℝ) : List P2 :=
+  [hexV1, hexV2, hexV3, hexV4 aLen, hexV5 aLen, hexV6 aLen]
+noncomputable def hexagonArea (aLen : ℝ) : ℝ :=
+  (aLen * separation24) + (2 * (1 / 2 * separation24 * triH))
+lemma hexagonArea_simplified (aLen : ℝ) :
+  hexagonArea aLen = aLen * separation24 + separation24 * triH := by sorry
+noncomputable def originalRectangleArea (aLen : ℝ) : ℝ := aLen * length36
+def problemCondition (aLen : ℝ) : Prop :=
+  hexagonArea aLen = originalRectangleArea aLen
+noncomputable def denominatorVal : ℝ := length36 - separation24
+lemma denominator_eq_12 : denominatorVal = 12 := by sorry
+lemma denominator_pos : 0 < denominatorVal := by sorry
+noncomputable def aSolution : ℝ := (separation24 * triH) / denominatorVal
+lemma aSolution_pos : 0 < aSolution := by sorry
+lemma aSolution_eq_12_sqrt_5 : aSolution = 12 * sqrt 5 := by sorry
+theorem aSolution_sq_eq_720 : aSolution ^ 2 = 720 := by sorry
+lemma aSolution_satisfies_problemCondition :
+  problemCondition aSolution := by sorry
+end HexagonProblem

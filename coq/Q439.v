@@ -19,8 +19,10 @@ Let W := (R + K) / 2.
 Let N := (K + B) / 2.
 Variables C A L I : 'rV[R]_2.
 Hypothesis cali_square : square C A L I.
+(* Add the parallel condition *)
+Hypothesis ca_bo_parallel : parallel (A - C) (O - B).
 Hypothesis on_perim : [/\C \in [seg B E], A \in [seg E R], L \in [seg R K], I \in [seg K B]].
-Theorem cali_area : (norm (A - C))^2 = 100.
+Theorem cali_area_corrected : (norm (A - C))^2 = 180.
 Proof.
 admit.
 Qed.

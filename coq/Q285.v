@@ -14,13 +14,20 @@ Variable R : realType.
 Parameter pi : R.
 Axiom pi_gt0 : 0 < pi.
 
+(* Define the radii of the concentric circles. *)
+Definition r0 := 2%:R. (* Smallest circle radius *)
+Definition r1 := 4%:R. (* Next circle radius *)
+Definition r2 := 6%:R. (* Next circle radius *)
+
+(* Central angle for each of the 12 congruent sectors. *)
+Definition central_angle := pi / 6.
+
+(* Theorem: Calculate the area of the shaded region, which is one twelfth of the annulus between r = 4 and r = 6. *)
 Theorem floor_tile_shaded_area :
-  (* There are 4 concentric circles of radii 2, 4, 6, 8 centered at O *)
-  (* The 12 radii divide the disk into 48 sectors; the shaded region is the second-outermost annular sector, one twelfth of the annulus between r = 4 and r = 6 *)
-  let r1 := 4%:R in
-  let r2 := 6%:R in
-  let central_angle := pi / 6 in
   let area_annular_sector := (central_angle / (2 * pi)) * (r2 ^+ 2 - r1 ^+ 2) * pi in
   area_annular_sector = pi.
-Proof. Admitted.
+Proof.
+  (* The actual proof would involve substituting the values and simplifying. *)
+  (* For the sake of this exercise, we'll admit the theorem. *)
+  Admitted.
 ####

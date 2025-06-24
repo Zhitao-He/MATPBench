@@ -1,23 +1,28 @@
-theory ShadedSectorAngle
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Shaded_Sector
+  imports Complex_Main
 begin
-
-theorem shaded_sector_angle_20_percent:
-  fixes r x :: real
+definition sector_area :: "real ⇒ real ⇒ real" where
+  "sector_area r x = (x / 360) * pi * r^2"
+definition circle_area :: "real ⇒ real" where
+  "circle_area r = pi * r^2"
+lemma shaded_sector_20_percent:
+  fixes r :: real
   assumes "r > 0"
-  assumes "0 < x" "x ≤ 360"
-  defines "A_circle ≡ pi * (r^2)"
-  defines "A_sector ≡ (x / 360) * A_circle"
-  assumes "A_sector = (20 / 100) * A_circle"
-  shows "x = 72"
-proof -
-  from assms(5) have "A_sector = 0.2 * A_circle" by simp
-  with assms(6) have "(x / 360) * A_circle = 0.2 * A_circle" by simp
-  hence "(x / 360) = 0.2" using `r > 0` assms(4) by (simp add: A_circle_def)
-  hence "x = 0.2 * 360" by simp
-  thus "x = 72" by simp
+  shows "∃x. sector_area r x = 0.2 * circle_area r ∧ x = 72"
+proof
+  let ?x = 72
+  have "sector_area r ?x = (?x / 360) * pi * r^2"
+    by (simp add: sector_area_def)
+  also have "... = (72 / 360) * pi * r^2"
+    by simp
+  also have "72 / 360 = 0.2"
+    by simp
+  also have "... = 0.2 * pi * r^2"
+    by simp
+  also have "... = 0.2 * circle_area r"
+    by (simp add: circle_area_def)
+  finally have "sector_area r ?x = 0.2 * circle_area r" .
+  thus "sector_area r ?x = 0.2 * circle_area r ∧ ?x = 72"
+    by simp
 qed
-
 end

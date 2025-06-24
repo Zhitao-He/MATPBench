@@ -1,17 +1,19 @@
-theory ShadedFigureArea
-imports Complex_Main 
+theory Shaded_Figure_Area
+  imports Main "HOL-Analysis.Analysis"
 begin
-
-theorem shaded_figure_area:
-  "let rect_length = 20 :: real;
-       rect_width = 15 :: real;
-       tri_base = 8 :: real;
-       tri_height = 15 :: real;
-       rect_area = rect_length * rect_width;
-       tri_area = (tri_base * tri_height) / 2;
-       total_area = rect_area + tri_area;
-       rounded_area = round (total_area * 10) / 10
-   in rounded_area = 420"
-  by (simp add: Let_def)
-
+definition rectangle_area :: "real => real => real" where
+  "rectangle_area length width = length * width"
+definition triangle_area :: "real => real => real" where
+  "triangle_area base height = (base * height) / 2.0"
+definition rect_side_a :: real where "rect_side_a = 15.0" 
+definition rect_side_b :: real where "rect_side_b = 20.0" 
+definition tri_base :: real where "tri_base = rect_side_a" 
+definition tri_height :: real where "tri_height = 8.0"  
+definition area_rectangle_component :: real where
+  "area_rectangle_component = rectangle_area rect_side_a rect_side_b"
+definition area_triangle_component :: real where
+  "area_triangle_component = triangle_area tri_base tri_height"
+definition total_shaded_area :: real where
+  "total_shaded_area = area_rectangle_component + area_triangle_component"
+value "total_shaded_area"
 end

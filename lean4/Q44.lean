@@ -1,34 +1,29 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
-
-open Real EuclideanGeometry
-
--- Define P as the Euclidean 2D space
-local notation "P" => EuclideanSpace ℝ (Fin 2)
-
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+open Real EuclideanGeometry Affine
 namespace TreeHeightProblem
-
-theorem calculate_tree_height
-  -- Parameters defining the points in 2D Euclidean space
-  (A B C D : P)
-  -- Parameters for the x-coordinate of D and the height h of the tree
-  (d_x h : ℝ)
-  -- Assumptions about the coordinates of the points
-  (hA : A = ![0, 0])                             -- Point A is at the origin
-  (hB : B = ![10, 0])                            -- Point B is at (10,0)
-  (hD : D = ![d_x, 0])                           -- Point D (base of the tree) is at (d_x,0)
-  (hC : C = ![d_x, h])                           -- Point C (top of the tree) is at (d_x,h)
-  -- Assumptions about the geometric configuration and values
-  (h_pos : h > 0)                                -- The height of the tree is positive
-  (d_x_gt_10 : d_x > 10)                         -- D is to the right of B, implies A-B-D order and dist B D > 0
-  -- Assumptions relating angles to side ratios using the tangent function
-  -- tan(elevation angle at A) = CD / AD
-  (htanA : Real.tan (Real.pi / 6) = h / dist A D)
-  -- tan(elevation angle at B) = CD / BD
-  (htanB : Real.tan (Real.pi / 3) = h / dist B D) :
-  -- The statement to be proven
-  h = 5 * Real.sqrt 3 := by sorry
-
+variable (A B C D : PPoint)
+axiom h_C_ne_D : C ≠ D
+axiom h_A_ne_D : A ≠ D
+axiom h_B_ne_D : B ≠ D
+axiom h_A_ne_B : A ≠ B
+axiom h_A_ne_C : A ≠ C
+axiom h_B_ne_C : B ≠ C
+axiom h_right_angle_CDA : ∠ C D A = π / 2
+axiom h_right_angle_CDB : ∠ C D B = π / 2
+axiom h_collinear_ABD : Collinear ℝ ({A, B, D} : Set PPoint)
+axiom h_dist_AB_eq_10 : dist A B = (10 : ℝ)
+axiom h_B_between_A_D : Sbtw ℝ A B D
+axiom h_angle_CAD : ∠ C A D = π / 6
+axiom h_angle_CBD : ∠ C B D = π / 3
+noncomputable def treeHeight (C D : PPoint) : ℝ := dist C D
+theorem target_tree_height_is_5_sqrt_3 :
+  treeHeight C D = 5 * sqrt 3 := by
+  sorry
 end TreeHeightProblem

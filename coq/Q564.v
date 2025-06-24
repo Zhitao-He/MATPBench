@@ -21,5 +21,18 @@ Theorem geometry_wxyz_length_wx :
     `|Z - W| = 4 * a - 15 ->
     (* Conclusion: WX = 21 *)
     `|X - W| = 21.
-Proof. Admitted.
+Proof. 
+  move=> W X Y Z a HYmid WX_ne_W WZ_ne_W XZ_ne_Z.
+  move=> WX_len WZ_len.
+  (* Since WY is the perpendicular bisector of ZX, we have WX = WZ. *)
+  have WX_eq_WZ: `|X - W| = `|Z - W|.
+    by apply: perpendicular_bisector_property; rewrite HYmid.
+  (* Substitute the given lengths into the equation. *)
+  rewrite WX_len WZ_len in WX_eq_WZ.
+  (* Solve for a: a + 12 = 4a - 15 => 3a = 27 => a = 9. *)
+  have a_val: a = 9.
+    by apply: (addrI (12)); rewrite addrAC -subr_eq addrN.
+  (* Substitute a = 9 back into WX = a + 12. *)
+  by rewrite a_val.
+Qed.
 ####

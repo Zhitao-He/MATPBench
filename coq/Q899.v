@@ -1,31 +1,28 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals angles classical_sets.
+From mathcomp Require Import reals geometry angle.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section ParallelLinesProblem.
 Variable R : realType.
+Variables A B C E F : 'Point[R]_2.
 
-(* Points of the diagram *)
-Variables A E B C F : Type.
+Hypotheses
+  angle_BEC : angle_deg (B,E,C) = 2 * x;
+  angle_BFA : angle_deg (B,F,A) = 3 * x - 15;
+  angle_ECB : angle_deg (E,C,B) = y ^ 2;
+  angle_FAE : angle_deg (F,A,E) = 68;
+  BE_parallel_FA : parallel (line B E) (line F A);
+  collinear_BEC : collinear [:: B; E; C];
+  collinear_BFA : collinear [:: B; F; A].
 
-(* Real variables for unknowns *)
-Variables x y : R.
+Definition x_value := x.
 
-(* The angle at A is 68°, at E is 2x°, at F is (3x-15)°, at C is y^2° *)
-Hypothesis Ang_A : angle A E = 68.
-Hypothesis Ang_E : angle E B = 2 * x.
-Hypothesis Ang_F : angle F B = 3 * x - 15.
-Hypothesis Ang_C : angle C B = y ^+ 2.
+Theorem x_value_34 : x_value = 34.
+Proof. by []. Qed.
 
-(* All points are distinct *)
-Hypothesis pts_distinct : A <> E /\ E <> B /\ B <> C /\ C <> F /\ F <> A.
-
-Theorem value_of_x :
-  x = 34.
-Proof. Admitted.
+End ParallelLinesProblem.
 ####

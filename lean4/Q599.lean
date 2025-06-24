@@ -1,28 +1,15 @@
+import Mathlib.Data.Real.Pi.Bounds
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open scoped Real
-open EuclideanGeometry
-
-namespace EuclideanProblemSolution
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable [FiniteDimensional ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable (hdim : FiniteDimensional.finrank ℝ V = 2)
-
-variable (A B C D : P)
-
-axiom h_dist_DA : dist D A = 3
-axiom h_C_midpoint_DB : C = midpoint ℝ D B
-axiom h_angle_DCA_right : angle D C A = π / 2
-
-def triangle_DCA : EuclideanGeometry.Triangle P := ⟨D, C, A⟩
-def triangle_BCA : EuclideanGeometry.Triangle P := ⟨B, C, A⟩
-
-theorem length_AB_is_3 : dist A B = 3 := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem prove_length_AB_eq_3
+  (A B C D : P)
+  (h_DA_length : dist D A = 3)
+  (h_DC_eq_CB : dist D C = dist C B)
+  (h_DCA_is_right_angle : ∠ D C A = Real.pi / 2)
+  (h_C_between_D_B : Sbtw ℝ D C B)
+  : dist A B = 3 := by
   sorry
-
-end EuclideanProblemSolution

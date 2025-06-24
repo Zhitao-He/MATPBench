@@ -1,17 +1,24 @@
-theory FindX
-  imports Main HOL.Real
+theory Problem_Geometry_Secant
+  imports Main "HOL-Analysis.Euclidean_Space"
 begin
-
-(* 定义x的值，根据题目描述x = 143 *)
-definition x :: real where "x = 143"
-
-(* 定义四舍五入到最接近的十分位的函数 *)
-definition round_to_nearest_tenth :: "real ⇒ real" where
-  "round_to_nearest_tenth x = real_of_int (floor (x * 10 + 0.5)) / 10"
-
-(* 证明x四舍五入到最接近的十分位后等于143 *)
-lemma x_rounded: "round_to_nearest_tenth x = 143"
-  unfolding round_to_nearest_tenth_def x_def
-  by auto
-
+type_synonym point = "real^2"
+definition between :: "point ⇒ point ⇒ point ⇒ bool" where
+  "between A M B ≡ dist A M + dist M B = dist A B"
+consts
+  O :: point  
+  L :: point  
+  G :: point  
+  E :: point  
+  S :: point  
+  x :: real   
+axiomatization where
+  x_is_positive: "x > 0" and
+  G_on_circle: "dist G O = x" and
+  E_on_circle: "dist E O = x" and
+  S_on_circle: "dist S O = x" and
+  LG_length: "dist L G = 3" and
+  LE_length: "dist L E = 4" and
+  ES_length: "dist E S = 9" and
+  G_is_between_L_O: "between L G O" and
+  E_is_between_L_S: "between L E S"
 end

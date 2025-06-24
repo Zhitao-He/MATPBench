@@ -1,32 +1,27 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
-open Real EuclideanGeometry
-
--- 二维欧几里得空间中的点
-abbrev EPoint := EuclideanSpace ℝ (Fin 2)
-
--- 点 P 到点 S 的距离
-def xGeom (P S : EPoint) : ℝ := dist P S
-
-/--
-  已知：
-  - O 为圆心，R, Q, T, S 在同一圆上
-  - P 是 RS 与 QT 的交点，且 P 在 R,S 之间，P 在 Q,T 之间
-  - |RP| = 15, |QP| = 6, |TP| = 4
-  - A 是 RP 的中点
-  求：x = |PS| = 10
--/
-theorem value_of_x_is_10
-    (O R Q T S A P : EPoint)
-    (h_R_on_circle : dist O R = dist O Q)
-    (h_T_on_circle : dist O T = dist O R)
-    (h_S_on_circle : dist O S = dist O R)
-    (h_P_between_R_S : Sbtw ℝ R P S)
-    (h_P_between_Q_T : Sbtw ℝ Q P T)
-    (h_dist_RP : dist R P = 15)
-    (h_dist_QP : dist Q P = 6)
-    (h_dist_TP : dist T P = 4)
-    (h_A_midpoint_RP : A = midpoint ℝ R P)
-    : xGeom P S = 10 := by
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+open Real InnerProductSpace
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemDescription
+theorem value_of_x
+  (A : P) (P₁ : P) (Q : P) (R : P) (S : P) (T : P)
+  (circleA : EuclideanGeometry.Sphere P)
+  (x : ℝ)
+  (h_center_A : circleA.center = A)
+  (hQ_on_circleA : Q ∈ circleA)
+  (hR_on_circleA : R ∈ circleA)
+  (hS_on_circleA : S ∈ circleA)
+  (hT_on_circleA : T ∈ circleA)
+  (hP_between_Q_S : Sbtw ℝ Q P₁ S)
+  (hP_between_R_T : Sbtw ℝ R P₁ T)
+  (hPQ_length : dist P₁ Q = 6)
+  (hPS_length : dist P₁ S = x)
+  (hRP_length : dist P₁ R = 15)
+  (hTP_length : dist P₁ T = 4)
+  : x = 10 := by
   sorry
+end ProblemDescription

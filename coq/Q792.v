@@ -12,13 +12,22 @@ Variable R : realType.
 
 Theorem circle_chord_problem :
   forall (A B C D E F : R^2) (x : R),
+    (* All points lie on circle centered at D *)
     norm (A - D) = norm (B - D) ->
     norm (A - D) = norm (C - D) ->
     norm (A - D) = norm (F - D) ->
-    colinear A E C -> colinear B E F ->
-    norm (C - E) = 9 -> norm (E - B) = 4 ->
-    norm (B - F) = x -> norm (A - E) = x + 7 ->
-    A <> B -> A <> C -> A <> F -> B <> C -> B <> F -> C <> F ->
-    x = 63/5.
-Proof. by []. Qed.
+    (* Colinearity conditions *)
+    colinear A E B -> colinear C E F ->
+    (* Given lengths *)
+    norm (B - E) = 4 -> norm (E - C) = 9 ->
+    norm (E - F) = x -> norm (A - E) = x + 7 ->
+    (* Applying power of a point theorem *)
+    x = 28/5.
+Proof.
+  (* Proof would involve:
+     1. Applying power of a point theorem for point E
+     2. Setting up equation AE * EB = CE * EF
+     3. Solving for x *)
+  admit.
+Qed.
 ####

@@ -1,42 +1,16 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-
-namespace GeometryProblem
-
--- Consider a real inner product space as our underlying Euclidean geometry
-variable {Point : Type} [NormedAddCommGroup Point] [InnerProductSpace ℝ Point] [MetricSpace Point]
-
--- Points in the plane
-variable (P Q R S T : Point)
-
--- The unknown value x (degrees)
-variable (x : ℝ)
-
--- Helper: convert degrees to radians, since angles in Lean are in radians
-def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
-
--- Hypotheses from problem statement:
-
--- 1. Collinearity
--- P, R, T are collinear; Q, R, S are collinear
-variable (h_collinear_PRT : Euclidean.collinear ℝ {P, R, T})
-variable (h_collinear_QRS : Euclidean.collinear ℝ {Q, R, S})
-
--- 2. Isosceles triangle data
-variable (h_PQ_eq_PR : dist P Q = dist P R)
-variable (h_QR_eq_RS : dist Q R = dist R S)
-variable (h_ST_eq_RT : dist S T = dist R T)
-
--- 3. ∠PQR = 40°
-variable (h_angle_PQR : ∠ P Q R = degToRad 40)
-
--- 4. ∠STR = x°
-variable (h_angle_STR : ∠ S T R = degToRad x)
-
--- Conclusion: x = 55
-theorem value_of_x : x = 55 := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
+variable (p q r s t : P)
+noncomputable def deg_to_rad (d : ℝ) : ℝ := d * (Real.pi / 180)
+variable (h_r_between_pt : Sbtw ℝ p r t)
+variable (h_r_between_qs : Sbtw ℝ q r s)
+variable (h_angle_pqr_value : EuclideanGeometry.angle p q r = deg_to_rad 40)
+variable (h_pq_eq_qr : dist p q = dist q r)
+variable (h_rs_eq_rt : dist r s = dist r t)
+theorem angle_RTS_is_55_degrees : EuclideanGeometry.angle r t s = deg_to_rad 55 := by
   sorry
-
-end GeometryProblem

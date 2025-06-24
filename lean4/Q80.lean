@@ -1,98 +1,49 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
-
-namespace SolidGeometryProblem
-
--- 定义三维欧氏空间内的点
+import Mathlib.Geometry.Euclidean.Projection
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open AffineSubspace
+noncomputable section SolidGeometryProblem
 abbrev Point3D := EuclideanSpace ℝ (Fin 3)
-
--- 边长为 s (s > 0)
-variable {s : ℝ} (hs : 0 < s)
-
--- 高度 h = s / sqrt(2)
-def h : ℝ := s / Real.sqrt 2
-
--- 正方形底面，z = 0，中心在原点
-def A : Point3D := ![-s/2, -s/2, 0]
-def B : Point3D := ![s/2, -s/2, 0]
-def C : Point3D := ![s/2, s/2, 0]
-def D : Point3D := ![-s/2, s/2, 0]
-
--- 上面的 2s 边: 平行于 x 轴，y = 0，高度 h
-def E : Point3D := ![-s, 0, h hs]
-def F : Point3D := ![s, 0, h hs]
-
--- 底面边长证明
-lemma base_AB_length : dist (A s) (B s) = s := by
-  simp [A, B, dist, EuclideanSpace.instEDistEuclideanSpace, PiLp.eDist]
-  have : ((s/2) - (-s/2)) = s := by ring
-  simp [this]
-  rw [sub_self, sub_self]
-  simp only [zero_sub, pow_two]
-  rw [add_zero, add_zero, abs_of_nonneg (by linarith [hs]), Real.sqrt_mul_self]
-  · rw [abs_of_nonneg hs.le]
-  · linarith
-
-lemma base_BC_length : dist (B s) (C s) = s := by
-  simp [B, C, dist, EuclideanSpace.instEDistEuclideanSpace, PiLp.eDist]
-  have : ((s/2) - (s/2)) = 0 := by ring
-  have : ((s/2) - (-s/2)) = s := by ring
-  simp [this]
-  rw [add_zero, sub_self, zero_sub, pow_two]
-  rw [add_zero, abs_of_nonneg (by linarith [hs]), Real.sqrt_mul_self]
-  · rw [abs_of_nonneg hs.le]
-  · linarith
-
-lemma base_CD_length : dist (C s) (D s) = s := by
-  simp [C, D, dist, EuclideanSpace.instEDistEuclideanSpace, PiLp.eDist]
-  have : ((-s/2) - (s/2)) = -s := by ring
-  have : ((s/2) - (s/2)) = 0 := by ring
-  simp [this]
-  rw [add_zero, sub_self, zero_sub, pow_two]
-  rw [add_zero, abs_of_nonneg (by linarith [hs]), Real.sqrt_mul_self]
-  · rw [abs_of_nonneg hs.le]
-  · linarith
-
-lemma base_DA_length : dist (D s) (A s) = s := by
-  simp [D, A, dist, EuclideanSpace.instEDistEuclideanSpace, PiLp.eDist]
-  have : ((-s/2) - (-s/2)) = 0 := by ring
-  have : ((-s/2) - (s/2)) = -s := by ring
-  simp [this]
-  rw [add_zero, sub_self, zero_sub, pow_two]
-  rw [add_zero, abs_of_nonneg (by linarith [hs]), Real.sqrt_mul_self]
-  · rw [abs_of_nonneg hs.le]
-  · linarith
-
--- 上边 EF 长 2s
-lemma upper_edge_EF_length : dist (E hs) (F hs) = 2 * s := by
-  simp [E, F, h, dist, EuclideanSpace.instEDistEuclideanSpace, PiLp.eDist]
-  have : (s - (-s)) = 2 * s := by ring
-  simp [this]
-  rw [zero_sub, pow_two, pow_two, add_zero, add_zero, abs_of_nonneg (by linarith [hs]), Real.sqrt_mul_self]
-  · rw [abs_of_nonneg (by linarith [hs])]
-  · linarith
-
--- 斜边长度 (待证明)
-lemma slanted_edge_AE_length : dist (A s) (E hs) = s := by sorry
-lemma slanted_edge_DE_length : dist (D s) (E hs) = s := by sorry
-lemma slanted_edge_BF_length : dist (B s) (F hs) = s := by sorry
-lemma slanted_edge_CF_length : dist (C s) (F hs) = s := by sorry
-
--- 体积公式：V = (sqrt(2) * s^3) / 3
-def solid_volume : ℝ := (Real.sqrt 2) * s ^ 3 / 3
-
--- s = 6 * sqrt(2) 时，体积为 288
-theorem volume_is_288_when_s_is_6sqrt2 :
-    let s₀ : ℝ := 6 * Real.sqrt 2
-    have s₀_pos : 0 < s₀ := by
-      apply mul_pos; norm_num; exact Real.sqrt_pos.mpr (by norm_num)
-    solid_volume s₀ = 288 := by
-  simp [solid_volume]
-  have : (Real.sqrt 2)^3 = 2 * Real.sqrt 2 := by
-    rw [pow_succ, pow_two, Real.sqrt_mul_self (by norm_num)]
-  rw [this]
-  field_simp
-  ring_nf
-
+noncomputable instance : MetricSpace Point3D := inferInstance
+noncomputable instance : NormedAddTorsor (EuclideanSpace ℝ (Fin 3)) Point3D := inferInstance
+variable (s : ℝ) (A B C D E F : Point3D)
+structure IsSquare3D (A B C D_sq : Point3D) (s_len : ℝ) : Prop where
+  side_AB_eq_s_len : dist A B = s_len
+  side_DA_eq_s_len : dist D_sq A = s_len
+  angle_DAB_is_right : inner ℝ (B -ᵥ A) (D_sq -ᵥ A) = 0
+  C_completes_parallelogram : C = B +ᵥ (D_sq -ᵥ A)
+def base_plane : AffineSubspace ℝ Point3D := affineSpan ℝ ({A, B, C, D} : Set Point3D)
+def orthogonalProjection (K : AffineSubspace ℝ Point3D) (x : Point3D) : Point3D := sorry
+def height_from_E_to_base (A B C D E : Point3D) : ℝ := dist E (orthogonalProjection (base_plane A B C D) E)
+def area_of_base_square_fn (s_len : ℝ) : ℝ := s_len * s_len
+def area_of_top_edge_fn : ℝ := 0
+def area_of_mid_section_fn (s_len : ℝ) : ℝ := (3 * s_len^2) / 4
+def volume_by_prismatoid_formula (s_len h : ℝ) : ℝ :=
+  (h / 6) * (area_of_base_square_fn s_len + area_of_top_edge_fn + 4 * (area_of_mid_section_fn s_len))
+def ProblemConjecture
+    (s_val_hyp : s = 6 * Real.sqrt 2)
+    (s_pos_hyp : s > 0)
+    (h_base_is_square : IsSquare3D A B C D s)
+    (h_upper_edge_len : dist E F = 2 * s)
+    (h_EF_parallel_to_base_plane_direction :
+      (vectorSpan ℝ ({F -ᵥ E} : Set (EuclideanSpace ℝ (Fin 3)))) ≤ (base_plane A B C D).direction)
+    (h_E_not_in_base_plane : E ∉ (base_plane A B C D))
+    (h_EF_at_constant_height : dist F (orthogonalProjection (base_plane A B C D) F) = height_from_E_to_base A B C D E)
+    (h_solid_has_positive_height : height_from_E_to_base A B C D E > 0)
+    (h_slanted_edges_lengths :
+      dist A E = s ∧
+      dist B F = s ∧
+      dist C F = s ∧
+      dist D E = s)
+    (h_upper_edge_alignment :
+      let E_proj := orthogonalProjection (base_plane A B C D) E
+      let F_proj := orthogonalProjection (base_plane A B C D) F
+      midpoint ℝ E_proj F_proj = midpoint ℝ A C ∧
+      (vectorSpan ℝ ({F_proj -ᵥ E_proj} : Set (EuclideanSpace ℝ (Fin 3)))) = (vectorSpan ℝ ({B -ᵥ A} : Set (EuclideanSpace ℝ (Fin 3)))) ∧
+      dist E_proj F_proj = 2 * s
+    ) : Prop :=
+  volume_by_prismatoid_formula s (height_from_E_to_base A B C D E) = 288
 end SolidGeometryProblem

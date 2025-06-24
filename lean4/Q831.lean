@@ -1,22 +1,16 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Sqrt
-
-open EuclideanGeometry
-open Real
-
--- Points in the Euclidean plane (ℝ^2)
-abbrev Point : Type := EuclideanSpace ℝ (Fin 2)
-
-namespace TriangleProblem
-
--- Three non-collinear points forming a triangle
-variable (A B C : Point)
-variable (hCA : dist C A = 3)
-variable (hAngle_BAC : (∠ B A C : ℝ) = π / 4)
-variable (hAngle_ACB : (∠ A C B : ℝ) = π / 2)
-
--- Theorem: side AB has length 3 * sqrt 2
-theorem value_of_h : dist A B = 3 * sqrt 2 := by sorry
-
-end TriangleProblem
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (A B C : P)
+variable (h : ℝ)
+variable (h_dist_AB : dist A B = h)
+variable (h_dist_AC : dist A C = 3)
+variable (h_angle_BAC : EuclideanGeometry.angle B A C = Real.pi / 4)
+variable (h_angle_ACB : EuclideanGeometry.angle A C B = Real.pi / 2)
+theorem find_h_value : h = 3 * Real.sqrt 2 := by sorry
+end

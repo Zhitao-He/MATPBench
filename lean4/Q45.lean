@@ -1,23 +1,26 @@
 import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
+namespace ConcentricCirclesProblem
 open Real
-
-namespace ConcentricCirclesRingArea
-
-theorem ring_area_is_9_pi
-    (O A B C : EuclideanSpace ℝ (Fin 2))
-    (R r : ℝ)
-    (r_pos : 0 < r)
-    (R_pos : 0 < R)
-    (r_lt_R : r < R)
-    (A_on_large_circle : dist A O = R)
-    (B_on_large_circle : dist B O = R)
-    (C_on_small_circle : dist C O = r)
-    (AB_length : dist A B = 6)
-    (C_on_segment_AB : C ∈ segment ℝ A B)
-    (OC_perp_AB : inner (C - O) (B - A) = 0)
-    : π * (R^2 - r^2) = 9 * π := by
-  sorry
-
-end ConcentricCirclesRingArea
+open scoped RealInnerProductSpace
+variable (O A B C : EuclideanPlane)
+variable (r R : ℝ)
+variable (h_r_pos : 0 < r)
+variable (h_r_lt_R : r < R)
+variable (hA_on_large : A ∈ Metric.sphere O R)
+variable (hB_on_large : B ∈ Metric.sphere O R)
+variable (hA_ne_B : A ≠ B)
+def chordAB (A B : EuclideanPlane) : Set EuclideanPlane := segment ℝ A B
+variable (hC_on_small : C ∈ Metric.sphere O r)
+variable (hC_on_chord : C ∈ chordAB A B)
+variable (h_tangent : ⟪C - O, B - A⟫ = 0)
+variable (h_AB_len : dist A B = 6)
+noncomputable def areaOfRing (R r : ℝ) : ℝ := π * (R^2 - r^2)
+noncomputable def givenArea : ℝ := 9 * π
+def problem_conclusion (R r : ℝ) : Prop := areaOfRing R r = givenArea
+theorem solve_problem : problem_conclusion R r := by sorry
+end ConcentricCirclesProblem

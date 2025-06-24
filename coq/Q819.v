@@ -8,16 +8,36 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Variables A B C D E F : R * R.
-Definition dist P Q := Num.sqrt ((P.1 - Q.1)^2 + (P.2 - Q.2)^2).
-Hypotheses
-  hAB : dist A B = 5;
-  hBC : dist B C = 6;
-  hCA : dist C A = 7;
-  hDE : dist D E = 3;
-  similar : dist A B / dist D E = dist B C / dist E F;
-  similar' : dist A B / dist D E = dist C A / dist F D.
+Section Similar_Triangles_Perimeter.
 
-Theorem perimeter_DEF : dist D E + dist E F + dist F D = 54/5.
-Proof. by []. Qed.
+Variables A B C D E F : 'rV[R]_2.
+
+(* Given side lengths *)
+Definition AB := dist A B.
+Definition AC := dist A C.
+Definition BC := dist B C.
+Definition DE := dist D E.
+Definition DF := dist D F.
+Definition EF := dist E F.
+
+Hypothesis H_AB : AB = 5.
+Hypothesis H_AC : AC = 7.
+Hypothesis H_BC : BC = 6.
+Hypothesis H_DE : DE = 3.
+
+(* Similarity relationship between triangles ABC and DEF *)
+Hypothesis H_similarity : 
+  (AB / DE) = (BC / EF) /\ (AB / DE) = (AC / DF).
+
+(* Goal: Find perimeter of triangle DEF *)
+Theorem DEF_perimeter : DE + EF + DF = 54/5.
+Proof.
+  (* In a real proof, we would:
+     1. Use the similarity ratio to find EF and DF
+     2. Calculate the perimeter
+     3. Show it equals 54/5
+     Since this is just the statement, we'll admit the proof *)
+  Admitted.
+
+End Similar_Triangles_Perimeter.
 ####

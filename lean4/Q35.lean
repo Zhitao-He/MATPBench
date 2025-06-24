@@ -1,17 +1,19 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-
-theorem inscribed_angle_implies_chord_length
-    (O A B C : P)
-    (hOA : dist A O = 2)
-    (hOB : dist B O = 2)
-    (hOC : dist C O = 2)
-    (h_angle_ACB : ∠ A C B = Real.pi / 6)
-    (hDistinct_CA : C ≠ A)
-    (hDistinct_CB : C ≠ B)
-    (hDistinct_AB : A ≠ B) : 
-    dist A B = 2 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+theorem length_of_chord_AB_from_inscribed_angle
+  (O A B C : Point)
+  (hA_on_circle : A ∈ Metric.sphere O 2)
+  (hB_on_circle : B ∈ Metric.sphere O 2)
+  (hC_on_circle : C ∈ Metric.sphere O 2)
+  (h_angle_ACB : ∠ A C B = π / 6)
+  (hA_ne_C : A ≠ C)
+  (hB_ne_C : B ≠ C)
+  (hA_ne_B : A ≠ B) :
+  dist A B = 2 := by
   sorry

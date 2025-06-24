@@ -1,62 +1,36 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Projection
 import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Geometry.Euclidean.Circumcenter
-
-namespace PutnamGeometryProblem
-
-open Real InnerProductSpace EuclideanGeometry
-
--- 2D Euclidean space of points over ℝ
-variable {PPoint : Type*} [NormedAddCommGroup PPoint] [InnerProductSpace ℝ PPoint]
-variable [FiniteDimensional ℝ PPoint] [fact_dim : Fact (finrank ℝ PPoint = 2)]
-
--- Declare points
-variable (A B O C P D E F K : PPoint)
-
--- AB is diameter of circle O
-variable (hA_ne_B : A ≠ B)
-variable (hO_mid_AB : O = midpoint ℝ A B)
-
--- C lies on the circle O
-variable (hC_on_circ : C ∈ Metric.sphere O (dist A O))
-
--- P lies on the extension of AB with B between A and P
-variable (hP_col_AB : Collinear ℝ ({A, B, P} : Set PPoint))
-variable (hB_sbtw_AP : Sbtw ℝ A B P)
-
--- PC is tangent to circle O at C
-variable (hC_ne_P : C ≠ P)
-variable (hOC_perp_PC : inner (O -ᵥ C) (P -ᵥ C) = 0)
-
--- D is the reflection of C about AB
-def reflectionAcrossLine (p1 p2 pt : PPoint) : PPoint :=
-  let ℓ := affineLine ℝ p1 p2
-  pt +ᵥ (2 • (orthogonalProjection ℓ pt -ᵥ pt))
-
-variable (hD_refl : D = reflectionAcrossLine A B C)
-
--- CE ⟂ AD at E
-variable (hA_ne_D : A ≠ D)
-variable (hE_proj : E = orthogonalProjection (affineLine ℝ A D) C)
-
--- F is midpoint of CE
-variable (hF_mid : F = midpoint ℝ C E)
-
--- AF intersects circle O again at K (K ≠ A)
-variable (hA_ne_F : A ≠ F)
-variable (hK_on_circle : K ∈ Metric.sphere O (dist A O))
-variable (hK_on_AF : Collinear ℝ ({A, F, K} : Set PPoint))
-variable (hK_ne_A : K ≠ A)
-
--- P, C, K not collinear
-variable (hP_C_K_not_coll : ¬Collinear ℝ ({P, C, K} : Set PPoint))
-
--- Main theorem: AP is tangent to circumcircle of triangle PCK at P
-theorem AP_tangent_to_circumcircle_PCK :
-  let Ocirc := circumcenter P C K hP_C_K_not_coll
-  inner (Ocirc -ᵥ P) (A -ᵥ P) = 0 := by
+import Mathlib.Geometry.Euclidean.Projection
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Triangle
+open Real EuclideanGeometry InnerProductSpace Affine AffineSubspace
+open scoped EuclideanGeometry
+theorem ap_tangent_to_circumcircle_pck
+  [InnerProductSpace ℝ (EuclideanSpace ℝ (Fin 2))]
+  (O A B C D E F K P_pt : EuclideanSpace ℝ (Fin 2))
+  (Ω_O : EuclideanGeometry.Sphere (EuclideanSpace ℝ (Fin 2)))
+  (h_O_center : Ω_O.center = O)
+  (hA_on_Ω_O : A ∈ Ω_O)
+  (hB_on_Ω_O : B ∈ Ω_O)
+  (hO_midpoint_AB : O = midpoint ℝ A B)
+  (h_Ω_O_radius_pos : 0 < Ω_O.radius)
+  (hB_sbtw_A_P_pt : Sbtw ℝ A B P_pt)
+  (hC_on_Ω_O : C ∈ Ω_O)
+  (hP_pt_ne_C : P_pt ≠ C)
+  (hP_ptC_tangent_Ω_O : inner ℝ (O -ᵥ C) (P_pt -ᵥ C) = 0)
+  (hC_ne_A : C ≠ A)
+  (hC_ne_B : C ≠ B)
+  (hA_ne_D : A ≠ D)
+  (hF_midpoint_CE : F = midpoint ℝ C E)
+  (hK_collinear_AFK : Collinear ℝ ({A, F, K} : Set (EuclideanSpace ℝ (Fin 2))))
+  (hK_on_Ω_O : K ∈ Ω_O)
+  (hK_ne_A : K ≠ A)
+  (hA_ne_F : A ≠ F)
+  (h_P_pt_C_K_NonCollinear : ¬ Collinear ℝ ({P_pt, C, K} : Set (EuclideanSpace ℝ (Fin 2))))
+  (center : EuclideanSpace ℝ (Fin 2))
+  : inner ℝ (center -ᵥ P_pt) (A -ᵥ P_pt) = 0 :=
+by
   sorry
-
-end PutnamGeometryProblem

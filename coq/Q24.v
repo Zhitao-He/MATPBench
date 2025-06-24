@@ -1,4 +1,3 @@
-####
 From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals geometry euclidean_circle angle.
 
@@ -14,20 +13,27 @@ Variable R : realType.
 
 Variables A B C D O : 'rV[R]_2.
 
+(* A and B are distinct points *)
 Hypothesis H_neq : A != B.
-Hypothesis H_on_circle : on_circle O A B /\ on_circle O B B /\ on_circle O C B /\ on_circle O D B.
+
+(* AB is the diameter of the circle centered at O *)
 Hypothesis H_diameter : O = midpoint A B.
 
-(* C and D are both on the circle with center O passing through A and B *)
+(* C and D are points on the circle centered at O passing through A and B *)
 Hypothesis H_C_on : on_circle O C A.
 Hypothesis H_D_on : on_circle O D A.
 
-(* angle B C D = 25 degrees *)
+(* Angle BCD is 25 degrees *)
 Hypothesis H_angle_BCD : angle_deg B C D = 25.
 
+(* Theorem to prove: The measure of angle AOD is 130 degrees *)
 Theorem circle_diameter_angle
   : angle_deg A O D = 130.
-Proof. Admitted.
+Proof.
+  (* Here, we would insert the actual proof, which would involve using properties of circles, angles, and diameters 
+     to derive the measure of angle AOD. *)
+  (* For the sake of this example, the proof is omitted. *)
+  Admitted.
 
 End CircleAngles.
 ####

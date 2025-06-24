@@ -1,30 +1,23 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
-
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
 namespace EuclideanGeometryProblem
-
-open Real InnerProductSpace
-
--- Define Point as a function Fin 2 → ℝ (i.e., ℝ²)
-abbrev Point := Fin 2 → ℝ
-
--- Define points A, B, D with coordinates
-noncomputable def A : Point := ![0, 0]      -- A = (0, 0)
-noncomputable def B : Point := ![-12, 0]    -- B = (-12, 0)
-noncomputable def D : Point := ![4, 0]      -- D = (4, 0)
-
--- The main theorem: there exist coordinates c_x, c_y for C,
--- such that BA ⊥ CA, DC ⊥ BC, and BC = 8 * sqrt 3
-theorem value_of_x_is_8_sqrt_3 :
-  ∃ (c_x c_y : ℝ),
-    let C : Point := ![c_x, c_y]
-    -- BA ⊥ CA: vector (A - B) ⊥ (A - C)
-    inner (A - B) (A - C) = 0 ∧
-    -- DC ⊥ BC: vector (D - C) ⊥ (B - C)
-    inner (D - C) (B - C) = 0 ∧
-    -- BC = 8 * sqrt 3
-    dist B C = 8 * sqrt 3 :=
-by sorry
-
+theorem value_of_x_eq_8_sqrt_3
+  (A B C D : P)
+  (x y z : ℝ)
+  (hAB : dist A B = 12)
+  (hAD : dist A D = 4)
+  (hBC : dist B C = x)
+  (hAC : dist A C = y)
+  (hCD : dist C D = z)
+  (hBAC_right : ∠ B A C = Real.pi / 2)
+  (hBCD_right : ∠ B C D = Real.pi / 2)
+  (hSbtw_BAD : Sbtw ℝ B A D) :
+  x = 8 * Real.sqrt 3 :=
+by
+  sorry
 end EuclideanGeometryProblem

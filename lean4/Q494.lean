@@ -1,22 +1,9 @@
 import Mathlib.Data.Real.Basic
-
-
-
 namespace ParallelogramProblem
-
-
 def angleA (x : ℝ) : ℝ := 3 * x - 17
-
-
 def angleB (y : ℝ) : ℝ := 5 * y - 6
-
-
 def angleC (y : ℝ) : ℝ := y + 58
-
-
 def angleX (x : ℝ) : ℝ := 2 * x + 24
-
-
 theorem value_of_y_in_parallelogram_angles
     (x y : ℝ)
     (h_parallelogram :            
@@ -31,5 +18,4 @@ theorem value_of_y_in_parallelogram_angles
     )
   : y = 16 := by
   sorry
-
 end ParallelogramProblem

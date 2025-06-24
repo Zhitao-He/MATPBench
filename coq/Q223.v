@@ -11,9 +11,9 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem sector_area_23deg_50cm
+Theorem sector_area_23deg_5cm
   :
-  let r : R := 50 in
+  let r : R := 5 in
   let theta_deg : R := 23 in
   let theta : R := (23 * PI) / 180 in
   let area : R := (r ^+ 2) * theta / 2 in

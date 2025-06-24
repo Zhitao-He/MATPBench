@@ -1,32 +1,15 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Data.Real.Sqrt
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open EuclideanGeometry
-open Real
-
-variable {P : Type*} [EuclideanPlane P]
-
-/--
-Let A, B, C be points in a Euclidean plane such that
-- AB = 12,
-- AC = y,
-- BC = x,
-- ∠ACB = 60°,
-- ∠BAC = 30°,
-- ∠ABC = 90°.
-Then y = 8 * sqrt 3.
--/
-theorem find_y_value
-  (A B C : P)
-  (x y : ℝ)
-  (h_AB : dist B A = 12)
-  (h_AC : dist C A = y)
-  (h_BC : dist C B = x)
-  (h_ACB : ∠ A C B = π / 3)
-  (h_BAC : ∠ B A C = π / 6)
-  (h_ABC : ∠ A B C = π / 2)
-  : y = 8 * sqrt 3 :=
-by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem value_of_y (A B C : PPoint)
+    (h_AB : dist A B = 12)
+    (h_angle_ACB : angle A C B = Real.pi / 3)
+    (h_angle_BAC : angle B A C = Real.pi / 6)
+    (h_right : angle C B A = Real.pi / 2) :
+    dist A C = 8 * Real.sqrt 3 := by
+  sorry

@@ -1,32 +1,42 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-open EuclideanGeometry
-
-section IntersectingChords
-
-variable {P : Type*} [EuclideanPlane P]
-variable (A B C D E F : P) (x r : ℝ)
-
--- All points lie on the circle centered at D with radius r
-variable (hr : r > 0)
-variable (hA : A ∈ Sphere.mk D r)
-variable (hB : B ∈ Sphere.mk D r)
-variable (hC : C ∈ Sphere.mk D r)
-variable (hF : F ∈ Sphere.mk D r)
-
--- Distance conditions
-variable (hx : x > 0)
+import Mathlib.Geometry.Euclidean.Sphere.Power
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+abbrev Plane := EuclideanSpace ℝ (Fin 2)
+namespace IntersectingChordsProblem
+variable (A B C E F D : Plane)
+variable (Ω : EuclideanGeometry.Sphere Plane)
+variable (x : ℝ)
+variable (h_center : Ω.center = D)
+variable (hA : A ∈ Ω)
+variable (hB : B ∈ Ω)
+variable (hC : C ∈ Ω)
+variable (hF : F ∈ Ω)
 variable (hAE : dist A E = x + 7)
-variable (hEB : dist E B = 4)
-variable (hCE : dist C E = 9)
+variable (hBE : dist E B = 4)
+variable (hEC : dist E C = 9)
 variable (hEF : dist E F = x)
-
--- E is interior point of both chords AB and CF
-variable (hEab : Sbtw P A E B)
-variable (hEcf : Sbtw P C E F)
-
-theorem value_of_x : x = 28 / 5 := by
+variable (hE_AB : E ∈ segment ℝ A B)
+variable (hE_CF : E ∈ segment ℝ C F)
+variable (hx_pos : x > 0)
+lemma cospherical_ABCF (A B C F D : Plane) (Ω : EuclideanGeometry.Sphere Plane)
+  (_ : Ω.center = D) (hA : A ∈ Ω) (hB : B ∈ Ω) (hC : C ∈ Ω) (hF : F ∈ Ω) :
+  EuclideanGeometry.Cospherical ({A, B, C, F} : Set Plane) :=
+  by
+    refine ⟨Ω.center, Ω.radius, ?_⟩
+    intro p hp
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hp
+    rcases hp with (rfl | rfl | rfl | rfl)
+    · exact hA
+    · exact hB
+    · exact hC
+    · exact hF
+theorem value_of_x (A B C E F D : Plane) (Ω : EuclideanGeometry.Sphere Plane) (x : ℝ)
+  (h_center : Ω.center = D) (hA : A ∈ Ω) (hB : B ∈ Ω) (hC : C ∈ Ω) (hF : F ∈ Ω)
+  (hAE : dist A E = x + 7) (hBE : dist E B = 4) (hEC : dist E C = 9) (hEF : dist E F = x)
+  (hE_AB : E ∈ segment ℝ A B) (hE_CF : E ∈ segment ℝ C F) (hx_pos : x > 0) :
+  x = 28 / 5 := by
   sorry
-
-end IntersectingChords
+end IntersectingChordsProblem

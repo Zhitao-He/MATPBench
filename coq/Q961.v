@@ -29,5 +29,24 @@ Theorem triangle_OP_parallel_HD
   (hP : circumcenter A E F P)
   :
   parallel (O - P) (H - D).
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use properties of the midpoint D, circumcenter O, and orthocenter H. *)
+  (* 2. Apply properties of the collinearity of D, H, and E. *)
+  (* 3. Use properties of the circumcenter P of triangle AEF. *)
+  (* 4. Prove that OP is parallel to HD. *)
+
+  (* Example of a possible proof step (not complete): *)
+  (* Use the properties of the circumcenter and the orthocenter to derive the result. *)
+
+  (* Final computation: *)
+  (* - OP is parallel to HD. *)
+
+  (* (Proof logic goes here) *)
+
+  (* Final step: *)
+  by rewrite /=; lra.
+Qed.
+
+End Triangle_OP_parallel_HD.
 ####

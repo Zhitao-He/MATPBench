@@ -1,31 +1,17 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Data.Real.Basic
-
-section RectangleProblem
-
-open EuclideanGeometry
-
--- Let V be a real inner product space, and E an affine Euclidean space modelled on V
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {E : Type*} [NormedAddTorsor V E]
-
--- Points: n, m, q, r are vertices of the rectangle; p is the intersection of diagonals
-variable (n m q r p : E)
-variable (x : ℝ)
-
--- Rectangle properties (expressed through parallelogram + right angle properties)
--- 1. Parallelogram: midpoints coincide
-hypothesis h_midpoint : midpoint ℝ n r = midpoint ℝ m q
--- 2. Right angles (using dot product)
-hypothesis h_right_angle_n : ⟪(m - n : V), (q - n : V)⟫ = 0
--- 3. Diagonals are equal in length (property of a rectangle)
-hypothesis h_diagonals_eq : dist n r = dist m q
-
--- Given lengths
-hypothesis h_np : dist n p = 2 * x - 30
-hypothesis h_nr : dist n r = 2 * x + 10
-
--- The problem asks: Show that dist m p = 40
-theorem length_of_mp_is_40 : dist m p = 40 := by
-  sorry
-
-end RectangleProblem
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+import Mathlib.LinearAlgebra.AffineSpace.Midpoint 
+namespace RectangleDiagonalProblem
+open EuclideanGeometry Real
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem length_MP_is_40 (N M R Q P : PPoint) (x : ℝ)
+    (h_len_NP : dist N P = 2 * x - 30)
+    (h_len_NR : dist N R = 2 * x + 10)
+    (h_P_midpoint_NR : P = midpoint ℝ N R)
+    (h_P_midpoint_MQ : P = midpoint ℝ M Q)
+    (h_diagonals_eq : dist N R = dist M Q)
+    (hN_ne_R : N ≠ R) (hM_ne_Q : M ≠ Q)
+    : dist M P = 40 := by sorry
+end RectangleDiagonalProblem

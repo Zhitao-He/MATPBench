@@ -1,23 +1,23 @@
 import Mathlib.Data.Real.Basic
-
-namespace RectangleProblem
-
-
-variable (x y : ℝ)
-
-
-def lengthAB_pos : Prop := 4 * x - 17 > 0
-def lengthDC_pos : Prop := 2 * x - 1 > 0
-def angleBAC_pos : Prop := 3 * y + 3 > 0
-def angleBCA_pos : Prop := 4 * y - 19 > 0
-def angle_sum_constraint : Prop := (3 * y + 3) + (4 * y - 19) = 90
-
-theorem value_of_x_is_8
-  (h1 : lengthAB_pos x)
-  (h2 : lengthDC_pos x)
-  (h3 : angleBAC_pos y)
-  (h4 : angleBCA_pos y)
-  (h5 : angle_sum_constraint y)
-  : x = 8 := by sorry
-
-end RectangleProblem
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+theorem value_of_x
+  (A B C D : P)
+  (x y : ℝ)
+  (h_par : (C -ᵥ A) = (B -ᵥ D) ∧ (A -ᵥ C) = (D -ᵥ B))
+  (h_AB_len : dist A B = 4 * x - 17)
+  (h_CD_len : dist C D = 2 * x - 1)
+  (h_angle_BCD : EuclideanGeometry.angle D C B = (4 * y - 19) * (Real.pi / 180))
+  (h_angle_CBA : EuclideanGeometry.angle A B C = (3 * y + 3) * (Real.pi / 180))
+  (h_len_AB_pos : 4 * x - 17 > 0)
+  (h_len_CD_pos : 2 * x - 1 > 0)
+  (h_angle_BCD_pos : (4 * y - 19) * (Real.pi / 180) > 0)
+  (h_angle_BCD_lt_pi : (4 * y - 19) * (Real.pi / 180) < Real.pi)
+  (h_angle_CBA_pos : (3 * y + 3) * (Real.pi / 180) > 0)
+  (h_angle_CBA_lt_pi : (3 * y + 3) * (Real.pi / 180) < Real.pi) :
+  x = 8 := by sorry
+end
+end

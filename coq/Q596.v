@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry angle.
+From mathcomp Require Import reals geometry angles.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -10,31 +10,24 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Record point := Point { px : R; py : R }.
+Variables A B C : 'rV[R]_2.
+Variable x : R.
 
-Definition A : point.
-Proof. Admitted.
+Hypothesis H_AB : `|A - B| = 12.
+Hypothesis H_CB : `|C - B| = 12.
+Hypothesis H_BAC : angle B A C = 44%:R.
 
-Definition B : point.
-Proof. Admitted.
-
-Definition C : point.
-Proof. Admitted.
-
-Definition dist (P Q : point) : R :=
-  sqrt ((px P - px Q)^2 + (py P - py Q)^2).
-
-Definition angle (P Q R : point) : R :=
-  let u := ((px P - px Q), (py P - py Q)) in
-  let v := ((px R - px Q), (py R - py Q)) in
-  let dot := fst u * fst v + snd u * snd v in
-  let nu := sqrt (fst u ^ 2 + snd u ^ 2) in
-  let nv := sqrt (fst v ^ 2 + snd v ^ 2) in
-  let c := dot / (nu * nv) in
-  acos c * 180 / PI.
-
-Theorem triangle_angle_CBA_92 :
-  (* Given: triangle ABC, AB = BC, AC = 12, angle BAC = 44 degrees *)
-  dist A B = dist B C ->
-  dist
+Theorem find_angle_CBA : angle C B A = 92%:R.
+Proof.
+  (* Using isosceles triangle properties and triangle angle sum *)
+  have H_isosceles : `|A - B| = `|C - B| by apply: H_AB; apply: H_CB.
+  have H_angles_equal : angle C B A = angle B A C by apply: isosceles_triangle_property_angle_equal.
+  rewrite H_BAC in H_angles_equal.
+  (* Use triangle angle sum property *)
+  have H_angle_sum : angle A B C + angle B A C + angle C B A = 180%:R by apply: triangle_property_angle_sum.
+  rewrite H_angles_equal in H_angle_sum.
+  (* Solve for angle CBA *)
+  have H_eq : angle C B A = (180%:R - 44%:R - 44%:R) by move: H_angle_sum => /eqP ->.
+  by rewrite H_eq; field.
+Qed.
 ####

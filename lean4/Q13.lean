@@ -1,45 +1,31 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-import Mathlib.Analysis.Convex.Segment
-
-open Real EuclideanGeometry Angle
-
--- 度转弧度
-noncomputable def degToRad (d : ℝ) : ℝ := (d / 180) * Real.pi
-
--- 点的变量
-variable (O A B C E F : EuclideanPlane ℝ)
--- 半径
-variable (r : ℝ)
-
--- A, B, E, F 在以 O 为圆心、r 为半径的圆上
-variable (h_A_on_circle : dist A O = r)
-variable (h_B_on_circle : dist B O = r)
-variable (h_E_on_circle : dist E O = r)
-variable (h_F_on_circle : dist F O = r)
-variable (hr_pos : 0 < r)
-
--- AB 为直径，O 为 AB 的中点
-variable (h_AB_diameter : midpoint ℝ A B = O)
-
--- EF、EB 是弦，E≠F，E≠B，F≠B
-variable (h_E_ne_F : E ≠ F)
-variable (h_E_ne_B : E ≠ B)
-variable (h_F_ne_B : F ≠ B)
-
--- E 是弧 FEB 的中点（即圆心角 ∠FOE = ∠EOB）
-variable (h_E_mid_arc : EuclideanGeometry.angle F O E = EuclideanGeometry.angle E O B)
-
--- EF 与 AB 相交于 C，且 C 分别在 EF, AB 的开放线段上
-variable (h_C_on_segment_EF : C ∈ openSegment ℝ E F)
-variable (h_C_on_segment_AB : C ∈ openSegment ℝ A B)
-
--- ∠AOF = 40°
-variable (h_angle_AOF_40 : EuclideanGeometry.angle A O F = degToRad 40)
-
--- 结论：∠EFB = 35°
-theorem angle_EFB_is_35_degrees :
-  EuclideanGeometry.angle E F B = degToRad 35 := by
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open EuclideanGeometry
+open scoped EuclideanGeometry
+open Real
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+def SameSide (l : Set Point) (A B : Point) : Prop := sorry
+namespace ProblemDescription
+noncomputable def angle_AOF_rad : ℝ := (40 : ℝ) / (180 : ℝ) * π
+noncomputable def target_EFB_angle_rad : ℝ := (35 : ℝ) / (180 : ℝ) * π
+theorem angle_EFB_is_35_degrees
+  (O A B C E F : Point)
+  (R : ℝ) (hR_pos : R > 0)
+  (hA_on_circle : A ∈ Metric.sphere O R)
+  (hB_on_circle : B ∈ Metric.sphere O R)
+  (hE_on_circle : E ∈ Metric.sphere O R)
+  (hF_on_circle : F ∈ Metric.sphere O R)
+  (hAB_diameter_midpoint : midpoint ℝ A B = O)
+  (h_angle_FOE_eq_EOB : angle F O E = angle E O B)
+  (h_E_on_arc_FOB : (angle F O E : ℝ) + (angle E O B : ℝ) = (angle F O B : ℝ))
+  (hC_on_EF : C ∈ segment ℝ E F)
+  (hC_on_AB : C ∈ segment ℝ A B)
+  (h_angle_AOF_val : (angle A O F : ℝ) = angle_AOF_rad)
+  (h_AOF_plus_FOB_eq_pi : (angle A O F : ℝ) + (angle F O B : ℝ) = π)
+  (h_SameSide_OF_EB : SameSide (affineSpan ℝ {O, F}) E B) :
+  (angle E F B : ℝ) = target_EFB_angle_rad := by
   sorry
+end ProblemDescription

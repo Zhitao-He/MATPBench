@@ -1,6 +1,4 @@
 import Mathlib.Data.Real.Basic
-
-
 theorem projection_triangle_side_length
     (d1 d2 : ℝ)    
     (L pL : ℝ)     

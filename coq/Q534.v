@@ -8,23 +8,24 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section TriangleSideLength.
+
 Variable R : realType.
 
+(* Points A, B, C in the plane *)
+Variables A B C : R^2.
+
+(* Hypotheses *)
+Hypothesis AB_length : \norm[2] (B - A) = 8. (* AB = 8 *)
+Hypothesis CA_length : \norm[2] (A - C) = 10. (* CA = 10 *)
+Hypothesis angle_BAC : \angle (B, A, C) = 60%:R * (PI / 180). (* ∠BAC = 60° *)
+
+(* Theorem to prove: CB = a = 2 * sqrt(21) *)
 Theorem triangle_side_length_value :
-  forall (A B C : R^2)
-         (a : R),
-    (* Triangle vertices are non-collinear *)
-    A <> B -> B <> C -> C <> A ->
-    (* Side BC has length a *)
-    norm (B - C) = a ->
-    (* Side AC has length 8 *)
-    norm (A - C) = 10 ->
-    (* Side AB has length 8 *)
-    norm (A - B) = 8 ->
-    (* Angle at A is 60 degrees *)
-    let u := (C - A) / norm (C - A) in
-    let v := (B - A) / norm (B - A) in
-    \angleu u v = PI / 3 ->
+  exists a : R,
+    \norm[2] (C - B) = a /\
     a = 2 * sqrt 21.
 Proof. Admitted.
+
+End TriangleSideLength.
 ####

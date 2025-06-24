@@ -1,42 +1,18 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2 
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Definition
-
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 noncomputable section
-
-open Real EuclideanGeometry InnerProductSpace
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [fact_dim_eq_2 : Fact (FiniteDimensional.finrank ℝ V = 2)]
-
-variable (A B C D E F : P)
-
-def degrees_to_radians (d : ℝ) : ℝ := d * (π / 180)
-
-namespace FormalizedProblem
-
-hypothesis h_collinear_BCD : Collinear ℝ ({B, C, D} : Set P)
-hypothesis h_collinear_DAB : Collinear ℝ ({D, A, B} : Set P)
-hypothesis h_collinear_ABC : Collinear ℝ ({A, B, C} : Set P)
-
-hypothesis h_angle_ABC_is_right : Angle A B C = π / 2
-
-hypothesis h_angle_DEB_is_right : Angle D E B = π / 2
-
-hypothesis h_collinear_DEB_explicit : Collinear ℝ ({D, E, B} : Set P)
-hypothesis h_E_on_segment_DB : E ∈ segment ℝ D B
-
-hypothesis h_angle_BEA_35 : Angle B E A = degrees_to_radians 35
-
-hypothesis h_collinear_AFE : Collinear ℝ ({A, F, E} : Set P)
-hypothesis h_collinear_CFB : Collinear ℝ ({C, F, B} : Set P)
-
-hypothesis h_angle_EFA_70 : Angle E F A = degrees_to_radians 70
-
-theorem target_angle_FEB : Angle F E B = degrees_to_radians 75 := by sorry
-
-end FormalizedProblem
-
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+def degreesToRadians (d : ℝ) : ℝ := d * Real.pi / 180
+theorem angle_FEB_eq_75_degrees
+    (A B C D E F : PPoint) 
+    (h_angle_AFC : EuclideanGeometry.angle A F C = degreesToRadians 70)
+    (h_angle_EBF : EuclideanGeometry.angle E B F = degreesToRadians 35)
+    (h_AD_perp_ED : EuclideanGeometry.angle A D E = degreesToRadians 90)
+    (h_EB_perp_CB : EuclideanGeometry.angle E B C = degreesToRadians 90)
+    (h_vertical_angles_AFC_BFE : EuclideanGeometry.angle A F C = EuclideanGeometry.angle B F E)
+    : EuclideanGeometry.angle F E B = degreesToRadians 75 := by 
+  sorry
 end

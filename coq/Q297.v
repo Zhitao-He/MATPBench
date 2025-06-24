@@ -1,7 +1,7 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals.
-Require Import Reals Vector.
+Require Import Reals.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -11,17 +11,15 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Definition cube_vertex i j k := ((if i then 2 else 0)%:R, (if j then 2 else 0)%:R, (if k then 2 else 0)%:R).
-Definition base_A := (0,0,0).
-Definition base_B := (2,0,0).
-Definition base_C := (2,2,0).
-Definition base_D := (0,2,0).
+Definition side_length : R := 2%:R.
+Definition cube_center : 'rV[R]_3 := \row_(i < 3) (side_length / 2%:R).
 
-Definition plane_base := fun P => P.2 = 0.
-Definition perp_to_base P Q := (fst3 (Q - P)) * (fst3 (Q - P)) + (snd3 (Q - P)) * (snd3 (Q - P)) = 0.
+(* Volume of pyramid with base area A and height h *)
+Definition pyramid_volume (A h : R) : R := (A * h) / 3%:R.
 
-Theorem cube_fold_symmetry : exists P, True.
-Proof.
-admit.
-Qed.
+Theorem pyramid_volume_correct :
+  let base_area := side_length * side_length in
+  let height := side_length / 2%:R in
+  pyramid_volume base_area height = (4%:R / 3%:R).
+Proof. Admitted.
 ####

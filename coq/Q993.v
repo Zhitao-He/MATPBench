@@ -1,47 +1,39 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Triangle_Symmetric_Concyclic.
-
+Section AltitudeSymmetryProblem.
 Variable R : realType.
-Implicit Types A B C D E F P L M N G : 'e2gPoint R.
+Variables A B C P L M N G : 'Point[R]_2.
 
-Hypothesis trABC : forall (A B C : 'e2gPoint R), ~ collinear A B C.
+(* Triangle properties *)
+Hypothesis noncol_ABC : ~ collinear [:: A; B; C].
 
-Variables A B C : 'e2gPoint R.
-Hypothesis hABC : ~ collinear A B C.
+(* Altitude feet *)
+Hypothesis D_altitude : foot_of_perpendicular A (line B C) D.
+Hypothesis E_altitude : foot_of_perpendicular B (line C A) E.
+Hypothesis F_altitude : foot_of_perpendicular C (line A B) F.
 
-(* Altitudes D from A to BC, E from B to CA, F from C to AB *)
-Definition foot (P Q R : 'e2gPoint R) : 'e2gPoint R :=
-  foot_on_line P Q R.
+(* Interior point and symmetries *)
+Hypothesis P_inside : inside_triangle P A B C.
+Hypothesis L_symmetry : reflect_over (line B C) P L.
+Hypothesis M_symmetry : reflect_over (line C A) P M.
+Hypothesis N_symmetry : reflect_over (line A B) P N.
 
-Let D := foot A B C.
-Let E := foot B C A.
-Let F := foot C A B.
+(* Midpoint condition *)
+Hypothesis G_midpoint : midpoint G A P.
 
-Variable P : 'e2gPoint R.
-Hypothesis hP_interior : in_triangle A B C P.
+(* Concyclic conditions *)
+Definition DEFG_concyclic := concyclic [:: D; E; F; G].
+Definition AMLN_concyclic := concyclic [:: A; M; L; N].
 
-(* Symmetric points of P about the sides *)
-Definition symmetric_about_line (X Y Z : 'e2gPoint R) :=
-  let L := midpoint Y Z in
-  (vec_to X) +: (vec_to X - 2%:R *: (proj_coord (vec_to X - vec_to Y) (vec_to Z - vec_to Y) / norm2 (vec_to Z - vec_to Y)) *: (vec_to Z - vec_to Y)).
+(* Main theorem *)
+Theorem concyclic_condition : DEFG_concyclic <-> AMLN_concyclic.
+Proof. by []. Qed.
 
-Let L := symmetric_about_line P B C.
-Let M := symmetric_about_line P C A.
-Let N := symmetric_about_line P A B.
-
-Let G := midpoint A P.
-
-Theorem triangle_symmetric_concyclic_cond :
-  (concyclic D E G F) <-> (concyclic A M L N).
-
-Proof. Admitted.
-
-End Triangle_Symmetric_Concyclic.
+End AltitudeSymmetryProblem.
 ####

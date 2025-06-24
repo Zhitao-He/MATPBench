@@ -1,42 +1,33 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-
-namespace GeometryProblem
-
--- Let P be a Euclidean affine space (Euclidean plane)
-variable (P : Type*) [EuclideanPlane P]
-
--- Define the points as in the problem
-variable (B C D E F : P)
-variable (x y : ℝ)
-
--- Helper: degrees to radians
-def degToRad (θ : ℝ) : ℝ := θ * (Real.pi / 180)
-
--- Given angles (unoriented, in radians)
-variable (h_angle_BCF : EuclideanGeometry.Angle.Unoriented.value (∠ B C F) = degToRad 120)
-variable (h_angle_DBC : EuclideanGeometry.Angle.Unoriented.value (∠ D B C) = degToRad (5 * y))
-variable (h_angle_DFE : EuclideanGeometry.Angle.Unoriented.value (∠ D F E) = degToRad 108)
-variable (h_angle_FDB : EuclideanGeometry.Angle.Unoriented.value (∠ F D B) = degToRad (2 * x))
-
--- Parallel lines: BD ∥ CE
-variable (h_BD_parallel_CE : 
-  AffineSubspace.Parallel ℝ (affineSpan ℝ ({B, D} : Set P)) (affineSpan ℝ ({C, E} : Set P)))
-
--- Collinearity: F ∈ line CE
-variable (h_F_on_line_CE : F ∈ affineSpan ℝ ({C, E} : Set P))
-
--- Points not equal for well-defined lines/angles
-variable (h_B_ne_D : B ≠ D)
-variable (h_C_ne_E : C ≠ E)
-
--- Angle constraints
-variable (h_y_pos : y > 0)
-variable (h_x_pos : x > 0)
-
--- Target: value of y
-theorem value_of_y : y = 12 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open Real InnerProductSpace Affine AffineSubspace
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace EuclideanGeometryProblem
+noncomputable def degToRad (d : ℝ) : ℝ := d * (π / 180)
+lemma b_ne_d_of_fdb_bounds
+  (B D F : P) (x : ℝ)
+  (h_FDB_val : ∠ F D B = degToRad (2 * x))
+  (hx_bounds : 0 < 2 * x ∧ 2 * x < 180) : B ≠ D := by
+  intro h_B_eq_D
+  rw [h_B_eq_D] at h_FDB_val
   sorry
-
-end GeometryProblem
+theorem find_y_value
+  (B C D E F : P)
+  (x y : ℝ)
+  (h_val_y_bounds : 0 < 5 * y ∧ 5 * y < 180)
+  (h_val_x_bounds : 0 < 2 * x ∧ 2 * x < 180)
+  (h_C_ne_E : C ≠ E)
+  (h_wbtw_CFE : Wbtw ℝ C F E)
+  (h_BCF : ∠ B C F = degToRad 120)
+  (h_DBC : ∠ D B C = degToRad (5 * y))
+  (h_DFE : ∠ D F E = degToRad 108)
+  (h_FDB : ∠ F D B = degToRad (2 * x))
+  (h_parallel : (affineSpan ℝ ({B, D} : Set P)) ∥ (affineSpan ℝ ({C, E} : Set P)))
+  : y = 12 := by
+  sorry
+end EuclideanGeometryProblem

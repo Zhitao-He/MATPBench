@@ -1,36 +1,36 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry angle order.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Inscribed_Quadrilateral_Theorem.
+Section CyclicQuadrilateral.
 
 Variable R : realType.
-Let Point := R^2.
+Let point := 'rV[R]_2.
 
-Variables (A B C D E F G O : Point).
+Variables A B C D E F G O : point.
 
-Hypotheses
-  (Hcircle : forall P : Point, (P = A \/ P = B \/ P = C \/ P = D) -> norm (P - O) = norm (A - O))
-  (Hcyclic : & [A; B; C; D] is_cyclic4) (* A, B, C, D concyclic *)
-  (HinsideE : inside_quadrilateral E A B C D)
-  (H1 : angle E A B = angle E C D)
-  (H2 : angle E B A = angle E D C)
-  (HFG : collinear F E G)
-  (Hbisect : is_angle_bisector (line_through F G) E B C)
-  (HF_on_circle : norm (F - O) = norm (A - O))
-  (HG_on_circle : norm (G - O) = norm (A - O))
-  (F_neq_G : F <> G)
-  (F_neq_E : F <> E)
-  (G_neq_E : G <> E)
-  (between_F_E_G : between F E G).
+Hypothesis ABCD_cyclic : concyclic A B C D.
+Hypothesis O_circumcenter : is_circumcenter O A B C /\ on_circle O D.
+Hypothesis E_inside : inside_quadrilateral E A B C D.
 
-Theorem inscribed_quadrilateral_equal_chords :
-  norm (E - F) = norm (E - G).
+(* Angle conditions *)
+Hypothesis angle_EAB : angle E A B = angle E C D.
+Hypothesis angle_EBA : angle E B A = angle E D C.
+
+(* FG is angle bisector of BEC passing through E *)
+Hypothesis FG_line : on_line F E G.
+Hypothesis FG_bisector : is_angle_bisector (line_through F G) E B C.
+
+(* F and G lie on the circumcircle *)
+Hypothesis F_on_circle : on_circle O F.
+Hypothesis G_on_circle : on_circle O G.
+
+Theorem EF_equals_EG : dist E F = dist E G.
 Proof. Admitted.
 
-End Inscribed_Quadrilateral_Theorem.
+End CyclicQuadrilateral.
 ####

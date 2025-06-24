@@ -11,14 +11,12 @@ Local Open Scope ring_scope.
 Variable R : realType.
 
 Theorem triangle_isoceles_find_x :
-  forall (x y : R),
-    (* Triangle ABC, AB = AC = 3, BC = 4*y - 5 *)
-    (* Angles at A and B are both 2x degrees *)
-    (* Triangle angle sum: 2x + 2x + angle_C = 180 *)
-    (* AB = AC, so triangle is isoceles at A and B; angles at A and B are equal *)
+  forall (x : R),
+    (* Triangle ABC, AB = AC, and angles at A and B are both 2x degrees *)
+    (* The sum of angles in a triangle is 180 degrees: 2x + 2x + angle_C = 180 *)
+    (* From the properties of an isosceles triangle, angles at A and B are equal *)
     (* The value of x is 30 *)
       (180 = 2 * x + 2 * x + (180 - 4 * x)) ->
-      3 = 3 ->
       x = 30.
 Proof. Admitted.
 ####

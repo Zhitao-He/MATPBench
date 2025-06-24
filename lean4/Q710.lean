@@ -1,48 +1,26 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-/-!
-# Intersecting Chords Theorem
-
-Given a circle with center A and points B, C, D, E on the circle.
-Chords BE and CD intersect at point F with lengths:
-- FB = 9
-- FC = 6
-- FD = 6
-- FE = x
-
-We need to find the value of x (which is 4 by the intersecting chords theorem).
--/
-
-section IntersectingChords
-
-variable {P : Type*} [MetricSpace P] [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-
+import Mathlib.Geometry.Euclidean.Sphere.Power
+import Mathlib.Data.Real.Basic
+namespace IntersectingChordsProblem
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+variable [Fact (Module.finrank ℝ V = 2)]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
 variable (A B C D E F : P)
+variable (r : ℝ) (hr_pos : 0 < r)
+@[reducible]
+def circleA : EuclideanGeometry.Sphere P := { center := A, radius := r }
+variable (hB_on_circleA : B ∈ (circleA A r : Set P))
+variable (hC_on_circleA : C ∈ (circleA A r : Set P))
+variable (hD_on_circleA : D ∈ (circleA A r : Set P))
+variable (hE_on_circleA : E ∈ (circleA A r : Set P))
+variable (hF_between_EB : Sbtw ℝ E F B)
+variable (hF_between_CD : Sbtw ℝ C F D)
+variable (hFB_dist : dist F B = 9)
+variable (hFC_dist : dist F C = 6)
+variable (hFD_dist : dist F D = 6)
 variable (x : ℝ)
-
--- Circle centered at A with points B, C, D, E on it
-variable (S : Sphere P)
-hypothesis hS : S = Sphere.mk A (dist A B)
-hypothesis hB : B ∈ S
-hypothesis hC : C ∈ S
-hypothesis hD : D ∈ S
-hypothesis hE : E ∈ S
-
--- Intersection point F is on both chords
-hypothesis hF_BE : F ∈ segment ℝ B E
-hypothesis hF_CD : F ∈ segment ℝ C D
-
--- Given lengths
-hypothesis hFB : dist F B = 9
-hypothesis hFC : dist F C = 6
-hypothesis hFD : dist F D = 6
-hypothesis hFE : dist F E = x
-
-/--
-By the intersecting chords theorem: FE * FB = FC * FD
-Therefore x * 9 = 6 * 6 ⇒ x = 4
--/
-theorem x_eq_4 : x = 4 := by sorry
-
-end IntersectingChords
+variable (hFE_dist : dist F E = x)
+theorem value_of_x_is_4 : x = 4 := by
+  sorry
+end IntersectingChordsProblem

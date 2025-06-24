@@ -1,19 +1,16 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-
--- Define the Euclidean plane as a type abbreviation for EuclideanSpace ℝ (Fin 2)
-abbrev EPlane := EuclideanSpace ℝ (Fin 2)
-
--- Vertices of right triangle ABC
-def pointA : EPlane := ![0, 0]
-def pointB : EPlane := ![15, 0]
-def pointC : EPlane := ![0, 24]
-
--- Midpoints D, E, F of sides AC, AB, BC respectively
-def pointD : EPlane := midpoint ℝ pointA pointC
-def pointE : EPlane := midpoint ℝ pointA pointB
-def pointF : EPlane := midpoint ℝ pointB pointC
-
--- Theorem: The area of triangle DEF is 45 square units
-theorem area_DEF_claim :
-    Triangle.area pointD pointE pointF = (45 : ℝ) := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+open Real EuclideanGeometry
+abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
+theorem right_triangle_midpoint_triangle_area
+    (A B C D E F : EuclideanPlane)
+    (h_right_angle : ∠ B A C = π / 2)  
+    (h_AB : dist A B = 15)             
+    (h_AC : dist A C = 24)             
+    (hD : D = midpoint ℝ A C)          
+    (hE : E = midpoint ℝ A B)          
+    (hF : F = midpoint ℝ B C)          
+    : (sorry : ℝ) = 45 ^ 2 := by  
+  sorry

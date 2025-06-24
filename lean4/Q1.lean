@@ -1,25 +1,13 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-namespace EuclideanGeometryProblem
-
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-
-theorem angleAtIncenterGivenVertexAngle
-    
-    (A B C O : P)
-    
-    (notCollinearABC : ¬Collinear ℝ A B C)
-    
-    (oIsIncenter : O = Triangle.incenter ℝ A B C)
-    
-    (angleBAC : ∠ B A C = (110 / 180 : ℝ) * Real.pi) :
-    
-    ∠ B O C = (145 / 180 : ℝ) * Real.pi := by sorry
-
-end EuclideanGeometryProblem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real
+open EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem angle_bisector_intersection_angle
+    (A B C O : PPoint)
+    (h_noncollinear : ¬Collinear ℝ ({A, B, C} : Set PPoint))
+    (h_angle_A : EuclideanGeometry.angle B A C = (110 / 180 : ℝ) * π) :
+    EuclideanGeometry.angle B O C = (145 / 180 : ℝ) * π := by
+  sorry

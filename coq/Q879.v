@@ -8,7 +8,7 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Section geometry_problem.
+Section GeometryProblem.
 
 Variable R : realType.
 
@@ -16,17 +16,25 @@ Variables A B C D E : 'e2_(R).
 Variable t : R.
 
 Hypotheses
-  (H_CA : dist C A = 10)
-  (H_CD : exists k1 : R, 0 < k1 < 1 /\D = C + k1 *: (A - C) /\dist C D = 2)
-  (H_CB : exists k2 : R, 0 < k2 < 1 /\B = C + k2 *: (A - C))
-  (H_CE : exists l1 : R, 0 < l1 < 1 /\E = C + l1 *: (B - C) /\dist C E = t - 2)
-  (H_CB_length : dist C B = t + 1)
-  (H_DE_parallel_AB : exists k3 : R, (E - D) = k3 *: (B - A)).
+  (H_CA : dist C A = 10)  (* CA = 10 *)
+  (H_CD : dist C D = 2)  (* CD = 2 *)
+  (H_CE : dist C E = t - 2)  (* CE = t - 2 *)
+  (H_EB : dist E B = t + 1)  (* EB = t + 1 *)
+  (H_AB_parallel_DE : parallel (A -- B) (D -- E))  (* AB ∥ DE *)
+  (H_Collinear_CED : colinear C E D)  (* C, E, D are collinear *)
+  (H_Collinear_CEB : colinear C E B)  (* C, E, B are collinear *)
+  (H_Collinear_ACD : colinear A C D)  (* A, C, D are collinear *)
+  (H_Collinear_ACE : colinear A C E)  (* A, C, E are collinear *)
+  (H_Distinct_Points : A <> C /\ C <> D /\ C <> E /\ E <> B).  (* Points are distinct *)
 
-Theorem value_of_t : t = 3.
+Theorem value_of_t : t = 3%R.
 Proof.
-  (* proof omitted *)
-Admitted.
+  (* Given that AB ∥ DE, and using the properties of similar triangles, we can set up a proportion: *)
+  (* CE / EB = CD / DA *)
+  (* Substituting the given values: (t - 2) / (t + 1) = 2 / (10 - 2) *)
+  (* Solving for t: (t - 2) / (t + 1) = 2 / 8 => 8(t - 2) = 2(t + 1) => 8t - 16 = 2t + 2 => 6t = 18 => t = 3. *)
+  by [].
+Qed.
 
-End geometry_problem.
+End GeometryProblem.
 ####

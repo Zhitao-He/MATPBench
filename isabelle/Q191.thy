@@ -1,59 +1,32 @@
 theory GeometryProblem
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+  imports Main "HOL-Analysis.Analysis"
 begin
-
-section "Triangle DBE Perimeter Problem"
-
-(* 
-   Problem statement: As shown in the figure, AC = BC, AD bisects angle CAB, 
-   then the perimeter of triangle DBE is 6cm.
-*)
-
-(* We represent points in the Euclidean plane as pairs of real numbers *)
-type_synonym point = "real × real"
-
-(* Distance between two points *)
-definition distance :: "point ⇒ point ⇒ real" where
-  "distance p q = sqrt((fst p - fst q)² + (snd p - snd q)²)"
-
-(* Vector from point p to point q *)
-definition vector :: "point ⇒ point ⇒ real × real" where
-  "vector p q = (fst q - fst p, snd q - snd p)"
-
-(* Dot product of two vectors *)
-definition dot_product :: "real × real ⇒ real × real ⇒ real" where
-  "dot_product v w = fst v * fst w + snd v * snd w"
-
-(* Angle between three points (with the second point as vertex) *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle p q r = 
-    (let v1 = vector q p; 
-         v2 = vector q r;
-         cos_theta = dot_product v1 v2 / (sqrt(dot_product v1 v1) * sqrt(dot_product v2 v2))
-     in acos(cos_theta))"
-
-(* Point is on line segment *)
-definition is_on_segment :: "point ⇒ point ⇒ point ⇒ bool" where
-  "is_on_segment p q r = 
-    (distance p q + distance q r = distance p r ∧ 
-     distance p q ≠ 0 ∧ 
-     distance q r ≠ 0)"
-
-(* Perimeter of a triangle *)
-definition triangle_perimeter :: "point ⇒ point ⇒ point ⇒ real" where
-  "triangle_perimeter p q r = distance p q + distance q r + distance r p"
-
-(* Problem formulation *)
-theorem triangle_DBE_perimeter:
-  fixes A B C D E :: point
-  assumes "distance A C = distance B C"       (* AC = BC *)
-    and "angle D A B = angle C A D"           (* AD bisects angle CAB *)
-    and "is_on_segment A D C"                 (* D is on segment AC *)
-    and "is_on_segment A E B"                 (* E is on segment AB *)
-    and "angle D E B = pi/2"                  (* Angle DEB is a right angle *)
-  shows "triangle_perimeter D B E = 6"        (* Perimeter of triangle DBE is 6 cm *)
-  oops  (* No proof provided as requested *)
-
+type_synonym point = "real ^ 2"
+definition dist :: "point ⇒ point ⇒ real" where
+  "dist A B = norm (A - B)"
+definition lies_on_segment :: "point ⇒ point ⇒ point ⇒ bool" where
+  "lies_on_segment P A B ↔ (∃t::real. 0 ≤ t ∧ t ≤ 1 ∧ P = (1-t) *R A + t *R B)"
+definition perimeter :: "point ⇒ point ⇒ point ⇒ real" where
+  "perimeter A B C = dist A B + dist B C + dist C A"
+locale GeometricProblem =
+  fixes A B C D E :: point 
+  assumes
+    AC_positive: "dist A C > 0" and 
+    right_angle_at_C: "HOL.angle (A - C) (B - C) = pi / 2" and 
+    isosceles_ABC: "dist A C = dist B C" and 
+    angle_CAD_positive: "HOL.angle (C - A) (D - A) > 0" and
+    angle_bisector_AD: "HOL.angle (C - A) (D - A) = HOL.angle (D - A) (B - A)" and
+    angle_sum_bisector: "HOL.angle (C - A) (D - A) + HOL.angle (D - A) (B - A) = HOL.angle (C - A) (B - A)" and
+    D_on_BC: "lies_on_segment D B C" and
+    E_on_AB: "lies_on_segment E A B" and
+    DE_perp_AB: "HOL.angle (D - E) (A - E) = pi / 2" and
+    length_AB: "dist A B = 6"
+begin
+lemma perimeter_DBE_equals_AB:
+  "perimeter D B E = dist A B"
+  sorry 
+lemma perimeter_DBE_is_6:
+  "perimeter D B E = 6"
+  using perimeter_DBE_equals_AB length_AB by simp 
+end
 end

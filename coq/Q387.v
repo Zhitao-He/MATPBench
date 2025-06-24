@@ -8,15 +8,29 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section AluminumContainerCost.
+
 Variable R : realType.
 
-Theorem aluminum_container_cost :
-  let l := 10%:R in    (* length in inches *)
-  let w := 10%:R in    (* width in inches *)
-  let h := 12%:R in    (* height in inches *)
-  let cost_per_sq_in := 0.05 in
-  let surface_area := 2 * (l * w + l * h + w * h) in
-  let total_cost := cost_per_sq_in * surface_area in
-  total_cost = 34.
+(* Define dimensions of the rectangular prism *)
+Let length := 10%:R.
+Let width := 10%:R.
+Let height := 12%:R.
+
+(* Cost per square inch of aluminum *)
+Let cost_per_sq_in := 0.05%:R.
+
+(* Calculate surface area of the rectangular prism *)
+Definition surface_area := 
+  2 * (length * width + length * height + width * height).
+
+(* Calculate total cost *)
+Definition total_cost := cost_per_sq_in * surface_area.
+
+(* Theorem to prove the total cost is $34 *)
+Theorem aluminum_container_cost : 
+  total_cost = 34%:R.
 Proof. Admitted.
+
+End AluminumContainerCost.
 ####

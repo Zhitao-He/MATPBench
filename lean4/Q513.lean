@@ -1,31 +1,21 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Data.Real.Sqrt
-
-open EuclideanGeometry
-open Real
-
-namespace TriangleHeightProblem
-
--- Let A, B, C, X be points in the Euclidean plane ℝ²
-variable (A B C X : EuclideanSpace ℝ (Fin 2))
-
--- Given: |AB| = 8, |AC| = 14, |BC| = 8
-axiom hAB : dist A B = 8
-axiom hAC : dist A C = 14
-axiom hBC : dist B C = 8
-
--- X lies on the segment AC
-axiom hX_on_AC : ∃ t : ℝ, 0 ≤ t ∧ t ≤ 1 ∧ X = (1 - t) • A + t • C
-
--- BX is perpendicular to AC
-axiom hPerp : Angle.IsRight (angle B X C)
-
--- Define x = |BX|
-abbrev x_val : ℝ := dist B X
-
--- The formalized statement: x = sqrt 15
-theorem value_of_x : x_val = Real.sqrt 15 := by
-  sorry
-
-end TriangleHeightProblem
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Data.Real.Basic 
+import Mathlib.Data.Real.Pi.Bounds 
+open EuclideanGeometry Real
+open scoped EuclideanGeometry 
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemSetup
+variable (A B C X : P)
+variable (x : ℝ)
+axiom h_AB : dist A B = 8
+axiom h_AC : dist A C = 14
+axiom h_BC : dist B C = 8
+axiom h_BX : dist B X = x
+axiom h_BX_perp_CX : ∠ B X C = Real.pi / 2
+axiom h_X_on_AC : Wbtw ℝ A X C
+noncomputable def target_x : ℝ := sqrt 15 
+theorem value_of_x_is_sqrt_15 : x = target_x := by sorry
+end ProblemSetup

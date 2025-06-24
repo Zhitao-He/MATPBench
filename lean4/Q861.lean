@@ -1,24 +1,16 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Sqrt
-
-namespace ProblemFormalization
-
-open EuclideanGeometry
-
-abbrev E2 := EuclideanSpace ℝ (Fin 2)
-
-variable (A B C D : E2)
-
--- Hypotheses
-variable (h_D_on_CB : Sbtw ℝ C D B)
-variable (h_dist_BC : dist B C = 29)
-variable (h_dist_DC : dist D C = 6)
-variable (h_AD_perp_BC : ⟪A - D, B - C⟫_ℝ = 0)
-variable (h_dist_AB : dist A B = 13)
-
-theorem area_ADB_eq_target :
-    Triangle.area (⟨![A, D, B]⟩ : Triangle ℝ E2) = (29 * Real.sqrt 133) / 2 := by
-  sorry
-
-end ProblemFormalization
+open Real EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (A B C D : P)
+variable (hAC : dist A C = 13)
+variable (hCD : dist C D = 6)
+variable (hDB : dist D B = 29)
+variable (h_angle_ADC : EuclideanGeometry.angle A D C = π / 2)
+theorem find_area_of_triangle_ADB :
+  (1 / 2 : ℝ) * dist D B * dist A D = 29 * Real.sqrt 133 / 2 := by sorry
+end

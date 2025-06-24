@@ -8,16 +8,21 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section RegularDecagonAngle.
+
 Variable R : realType.
 
-(* Let P0, P1, ..., P9 be the consecutive vertices of a regular decagon inscribed in a circle. Consider the diagonal from P0 to P8, which creates an octagon and a quadrilateral as shown.
-Let x denote the interior angle at vertex P9 between sides P8P9 and P9P0 as indicated in the diagram. *)
+(* Define the vertices of a regular decagon inscribed in a unit circle *)
+Variable P : 'I_10 -> 'rV[R]_2.
+Hypothesis P_def : forall k, P k = (cos (2 * PI * k%:R / 10), sin (2 * PI * k%:R / 10)).
 
-Theorem regular_decagon_octagon_angle :
-  let center := (0, 0) : R * R in
-  let r := 1 in
-  let P := fun k : 'I_10 => (r * cos (2 * PI * k%:R / 10), r * sin (2 * PI * k%:R / 10)) in
-  let angle_x := angleR (P 8) (P 9) (P 0) in
+(* Define the angle x as the interior angle at vertex P9 between sides P8P9 and P9P0 *)
+Definition angle_x := angle (P 8 - P 9) (P 0 - P 9).
+
+(* Theorem to prove that angle x is 36 degrees *)
+Theorem regular_decagon_octagon_angle : 
   angle_x = 36%:R.
 Proof. Admitted.
+
+End RegularDecagonAngle.
 ####

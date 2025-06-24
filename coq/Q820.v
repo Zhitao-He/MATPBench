@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals trigo.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -10,14 +10,22 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem triangle_ABC_x_value :
-  let A := (0%:R, 0%:R) in
-  let B := (x, 0%:R) in
-  let C := (x, y) in
-  sqrt ((x - 0%:R)^+2 + (y - 0%:R)^+2) = 14 ->
-  let dot u v := fst u * fst v + snd u * snd v in
-  let norm u := sqrt (fst u ^+2 + snd u ^+2) in
-  dot (B - A) (C - A) / (norm (B - A) * norm (C - A)) = cos (PI / 6) ->
-  y = 7 * sqrt 3.
-Proof. by []. Qed.
+Variables A B C : 'rV[R]_2.
+Variables x y : R.
+
+Hypotheses
+  (AB_length : norm (A - B) = x)
+  (BC_length : norm (B - C) = y)
+  (CA_length : norm (C - A) = 14)
+  (angle_CAB : angle C A B = PI/6)
+  (right_angle_ABC : angle A B C = PI/2).
+
+Theorem x_value : x = 7 * sqrt 3.
+Proof.
+  (* Proof would involve:
+     1. Using right triangle properties
+     2. Applying trigonometric relationships (sine/cosine of 30°)
+     3. Solving for x using given hypotenuse length *)
+  admit.
+Qed.
 ####

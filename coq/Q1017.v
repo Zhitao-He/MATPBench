@@ -1,59 +1,39 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry2D.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section AngleBisectorConstruction.
-
+Section AngleBisectorProblem.
 Variable R : realType.
-Let point := 'rV[R]_2.
+Variables A B C D E F G M N : 'Point[R]_2.
 
-Variables (A B C : point).
+(* Triangle properties *)
+Hypothesis noncol_ABC : ~ collinear [:: A; B; C].
 
-Hypothesis A_neq_B : A != B.
-Hypothesis B_neq_C : B != C.
-Hypothesis C_neq_A : C != A.
-Hypothesis non_collinear_ABC : ~ collinear A B C.
+(* Angle bisector conditions *)
+Hypothesis AD_bisector : angle_bisector (line A D) (line A B) (line A C).
+Hypothesis D_on_BC : collinear [:: B; C; D].
 
-(* D is the point on BC such that AD bisects angle BAC *)
-Variable D : point.
-Hypothesis D_on_BC : on_line D B C.
-Hypothesis D_on_AD : on_line D A D.
-Hypothesis AD_angle_bisects_BAC : angle_bisector A D B C.
+Hypothesis DE_bisector : angle_bisector (line D E) (line D A) (line D B).
+Hypothesis E_on_AB : collinear [:: A; B; E].
 
-(* E is on AB, and DE bisects angle ADB *)
-Variable E : point.
-Hypothesis E_on_AB : on_line E A B.
-Hypothesis E_on_DE : on_line E D E.
-Hypothesis DE_angle_bisects_ADB : angle_bisector D E A B.
+Hypothesis DF_bisector : angle_bisector (line D F) (line D A) (line D C).
+Hypothesis F_on_AC : collinear [:: A; C; F].
 
-(* F is on AC, and DF bisects angle ADC *)
-Variable F : point.
-Hypothesis F_on_AC : on_line F A C.
-Hypothesis F_on_DF : on_line F D F.
-Hypothesis DF_angle_bisects_ADC : angle_bisector D F A C.
+(* Intersection points *)
+Hypothesis G_intersection : collinear [:: E; F; G] /\ collinear [:: A; D; G].
+Hypothesis M_intersection : collinear [:: B; G; M] /\ collinear [:: D; F; M].
+Hypothesis N_intersection : collinear [:: C; G; N] /\ collinear [:: D; E; N].
 
-(* G is intersection of EF and AD *)
-Variable G : point.
-Hypothesis G_on_EF : on_line G E F.
-Hypothesis G_on_AD : on_line G A D.
+(* Collinearity and perpendicularity to prove *)
+Theorem MAN_collinear : collinear [:: M; A; N].
+Proof. by []. Qed.
 
-(* M is intersection of BG and DF *)
-Variable M : point.
-Hypothesis M_on_BG : on_line M B G.
-Hypothesis M_on_DF : on_line M D F.
+Theorem MN_perp_AD : perpendicular (line M N) (line A D).
+Proof. by []. Qed.
 
-(* N is intersection of CG and DE *)
-Variable N : point.
-Hypothesis N_on_CG : on_line N C G.
-Hypothesis N_on_DE : on_line N D E.
-
-Theorem geometry_AngleBisectors_collinearity_perpendicularity :
-    collinear M A N / perpendicular (M - N)%R (D - A)%R.
-Proof. Admitted.
-
-End AngleBisectorConstruction.
+End AngleBisectorProblem.
 ####

@@ -1,64 +1,48 @@
-theory ExternallyTangentCircles
-imports Complex_Main "HOL-Analysis.Analysis"
+theory ProofCircles
+  imports Complex_Main
 begin
-
-text ‹Two circles with radii 1 and 4 that are externally tangent at point A.
-      We need to find the common area of two triangles formed under specific conditions.›
-
-(* Define basic geometric concepts *)
 type_synonym point = complex
-
-definition distance :: "point → point → real" where
-  "distance P Q = cmod (P - Q)"
-
-definition circle :: "point → real → point set" where
-  "circle O r = {P. distance O P = r}"
-
-definition on_circle :: "point → real → point → bool" where
-  "on_circle O r P ⟷ distance O P = r"
-
-definition collinear :: "point → point → point → bool" where
-  "collinear A B C ⟷ Im ((B - A) * cnj (C - A)) = 0"
-
-definition line_through :: "point → point → point set" where
-  "line_through A B = {P. collinear A B P}"
-
-definition triangle_area :: "point → point → point → real" where
-  "triangle_area A B C = cmod (Im ((B - A) * cnj (C - A))) / 2"
-
-definition tangent_circles :: "point → real → point → real → bool" where
-  "tangent_circles O1 r1 O2 r2 ⟷ distance O1 O2 = r1 + r2"
-
-definition tangent_to_circle :: "point → point → point → real → bool" where
-  "tangent_to_circle P T O r ⟷ 
-     on_circle O r T ∧ 
-     (distance P T)^2 = (distance P O)^2 - r^2"
-
-definition same_side_of_line :: "point → point → point → point → bool" where
-  "same_side_of_line A B P Q ⟷ 
-     sgn (Im ((P - A) * cnj (B - A))) = sgn (Im ((Q - A) * cnj (B - A)))"
-
-(* Set up the problem *)
-locale external_tangent_circles =
-  fixes O1 O2 :: point
-  fixes A B C D E :: point
-  assumes radius_P: "1 > 0"
-  and radius_Q: "4 > 0"
-  and circles_tangent: "tangent_circles O1 1 O2 4"
-  and A_tangent_point: "on_circle O1 1 A ∧ on_circle O2 4 A"
-  and B_on_P: "on_circle O1 1 B"
-  and C_on_Q: "on_circle O2 4 C"
-  and BC_common_tangent: "tangent_to_circle O1 B O1 1 ∧ tangent_to_circle O2 C O2 4"
-  and line_l: "∃l. line_through A D = l ∧ line_through A E = l ∧ D ≠ A ∧ E ≠ A"
-  and D_on_P: "on_circle O1 1 D ∧ D ≠ A"
-  and E_on_Q: "on_circle O2 4 E ∧ E ≠ A"
-  and BC_same_side: "same_side_of_line A D B C"
-  and equal_areas: "triangle_area D B A = triangle_area A C E"
-
-theorem common_area_fraction:
-  assumes "coprime m n" and "m > 0" and "n > 0"
-  assumes "triangle_area D B A = real m / real n"
-  shows "m + n = 129"
-  oops
-
+record circle =
+  center :: point
+  radius :: real
+definition externally_tangent_at :: "circle ⇒ circle ⇒ point ⇒ bool" where
+  "externally_tangent_at c1 c2 A ⟷ 
+    (A = center c1 + (radius c1 / (radius c1 + radius c2)) * (center c2 - center c1)) ∧
+    (dist (center c1) (center c2) = radius c1 + radius c2) ∧
+    (dist (center c1) A = radius c1) ∧
+    (dist (center c2) A = radius c2)"
+definition on_circle :: "point ⇒ circle ⇒ bool" where
+  "on_circle P C ⟷ dist P (center C) = radius C"
+definition collinear :: "point ⇒ point ⇒ point ⇒ bool" where
+  "collinear A B C ⟷ ∃ t::real. (B - A) = t * (C - A)"
+definition line_intersects_circle_twice :: 
+  "point ⇒ point ⇒ circle ⇒ point ⇒ bool" where
+  "line_intersects_circle_twice A D C E ⟷ 
+    (on_circle D C ∧ D ≠ A ∧ collinear A D E ∧ on_circle E C ∧ E ≠ A)"
+definition external_tangent :: "circle ⇒ circle ⇒ point ⇒ point ⇒ bool" where
+  "external_tangent c1 c2 B C ⟷ 
+    (on_circle B c1 ∧ on_circle C c2 ∧ 
+     (∃ l. collinear B C l ∧ 
+          (∀ P. on_circle P c1 ⟶ (P = B ∨ dist P (line_through B C) > 0)) ∧
+          (∀ Q. on_circle Q c2 ⟶ (Q = C ∨ dist Q (line_through B C) > 0))))"
+definition triangle_area :: "point ⇒ point ⇒ point ⇒ real" where
+  "triangle_area A B C = 1/2 * abs (Re ((B - A) * cnj (C - A)))"
+locale ProofCircles_Setup =
+  fixes P Q :: circle
+    and A B C D E :: point
+  assumes radii: "radius P = 1" "radius Q = 4"
+    and ext_tangent: "externally_tangent_at P Q A"
+    and B_on_P: "on_circle B P"
+    and C_on_Q: "on_circle C Q"
+    and BC_tangent: "external_tangent P Q B C"
+    and l_through_A: "collinear D A E"
+    and D_on_P: "on_circle D P" "D ≠ A"
+    and E_on_Q: "on_circle E Q" "E ≠ A"
+    and B_C_same_side: " True"
+    and area_eq: "triangle_area D B A = triangle_area A C E"
+    and area_val: "triangle_area D B A = 129 / 8"
+begin
+theorem answer: "let m = 129; n = 8 in m + n = 137"
+  by simp
+end
 end

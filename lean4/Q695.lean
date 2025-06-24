@@ -1,32 +1,19 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 open EuclideanGeometry
-namespace SectorAreaProblem
-
-open Real EuclideanSpace
-
-
-variables (K L J : EuclideanSpace ℝ (Fin 2))
-
-
-axiom h_KL_radius : dist L K = 10
-axiom h_KJ_radius : dist J K = 10
-
-
-axiom h_angle_LKJ : ∠ L K J = (85 / 180 : ℝ) * Real.pi
-
-
-noncomputable def areaOfSector (radius angleRad : ℝ) : ℝ :=
-  (1 / 2 : ℝ) * radius ^ 2 * angleRad
-
-
-theorem stated_sector_area_LKJ :
-  areaOfSector (dist L K) (∠ L K J) = (1375 * Real.pi) / 18 :=
-by sorry
-
-end SectorAreaProblem
+open scoped EuclideanGeometry
+abbrev P₂ := EuclideanSpace ℝ (Fin 2)
+noncomputable def problemSectorArea (center : P₂) (p1 p2 : P₂) : ℝ :=
+  let radius := dist center p1
+  let givenAngle := ∠ p1 center p2
+  let sectorCentralAngle := 2 * Real.pi - givenAngle
+  (1/2) * (radius ^ 2) * sectorCentralAngle
+theorem sectorKLJ_area_calculation
+    (K L J : P₂)
+    (h_KL_length : dist K L = 10)
+    (h_KJ_is_radius : dist K J = dist K L)
+    (h_angle_LKJ_is_85_degrees : ∠ L K J = (85 / 180) * Real.pi) :
+    problemSectorArea K L J = (1375 * Real.pi / 18) := by
+  sorry

@@ -1,29 +1,21 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry
-
--- Let A, B, C, D, E be points in the Euclidean plane
-variable (A B C D E : EuclideanPlane)
-
--- Given lengths:
-axiom h_AB : dist A B = 8
-axiom h_AD : dist A D = 27
-axiom h_AE : dist A E = 12
-
--- B is strictly between A and C (A - B - C)
-axiom h_B_sbtw_AC : Sbtw ℝ A B C
-
--- E is strictly between A and D (A - E - D)
-axiom h_E_sbtw_AD : Sbtw ℝ A E D
-
--- The points A, B, E are not collinear (so △ABE is non-degenerate)
-axiom h_ABE_noncollinear : ¬Collinear ℝ ({A, B, E} : Set EuclideanPlane)
-
--- The line through B and E is parallel to the line through C and D
-axiom h_BE_parallel_CD : AffineSubspace.Parallel (affineSpan ℝ {B, E}) (affineSpan ℝ {C, D})
-
--- The conclusion to prove:
-theorem length_BC_is_10 : dist B C = 10 := by
+import Mathlib.Geometry.Euclidean.Basic 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+open EuclideanGeometry Affine AffineSubspace 
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem find_BC_length
+    (A B C D E : P)
+    (hAB : dist A B = 8)
+    (hAE : dist A E = 12)
+    (hAD : dist A D = 27)
+    (h_col_ABC : Collinear ℝ ({A, B, C} : Set P))
+    (h_btw_ABC : Wbtw ℝ A B C)
+    (h_col_AED : Collinear ℝ ({A, E, D} : Set P))
+    (h_btw_AED : Wbtw ℝ A E D)
+    (hneB_E : B ≠ E)
+    (hneC_D : C ≠ D)
+    (hParallel : (affineSpan ℝ ({B, E} : Set P)).Parallel (affineSpan ℝ ({C, D} : Set P))) :
+    dist B C = 10 := by
   sorry

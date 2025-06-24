@@ -31,6 +31,14 @@ Let A0 : point := (0,0).
 Let v1 : point := (1,0).
 Let v2 : point := (cos theta, sin theta).
 
-Theorem largest_n_blahaj_sequence :
-  (*
+(* Define the sequence of points A_0, A_1,..., A_n satisfying the given conditions *)
+Variable n : nat.
+Variable A : point -> nat -> point.
+Hypothesis A0_def : A 0 = A0.
+Hypothesis A_recursive : forall i, 1 <= i <= n -> dist (A (i-1)) (A i) = 1.
+Hypothesis A_distance_increase : forall i, 1 <= i <= n -> dist (A i) A0 > dist (A (i-1)) A0.
+
+(* Theorem to find the largest possible value of n *)
+Theorem largest_n_blahaj_sequence : exists n_max : nat, (forall n, n <= n_max -> exists A_seq : point -> nat -> point, (A_seq 0 = A0) /\ (forall i, 1 <= i <= n -> dist (A_seq (i-1)) (A_seq i) = 1) /\ (forall i, 1 <= i <= n -> dist (A_seq i) A0 > dist (A_seq (i-1)) A0)) /\ (forall n, n > n_max -> ~ (exists A_seq : point -> nat -> point, (A_seq 0 = A0) /\ (forall i, 1 <= i <= n -> dist (A_seq (i-1)) (A_seq i) = 1) /\ (forall i, 1 <= i <= n -> dist (A_seq i) A0 > dist (A_seq (i-1)) A0))).
+
 ####

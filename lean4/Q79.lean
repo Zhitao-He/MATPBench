@@ -1,27 +1,20 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-namespace Putnam1987B2
-
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 open EuclideanGeometry
-
-/-
-Let O, A, B, C be points in the Euclidean plane ℝ such that:
-- A and C lie on a circle of radius √50 centered at O,
-- distSq A B = 36,
-- distSq B C = 4,
-- The angle ∠ A B C = π / 2,
-We are to show that distSq O B = 26.
--/
-
-theorem putnam_1987_b2
-    (O A B C : EuclideanPlane ℝ)
-    (hO_A : distSq O A = 50)
-    (hO_C : distSq O C = 50)
-    (hAB : distSq A B = 36)
-    (hBC : distSq B C = 4)
-    (h_angle : ∠ A B C = π / 2) :
-    distSq O B = 26 := by sorry
-
-end Putnam1987B2
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def radius : ℝ := Real.sqrt 50
+theorem distance_squared_from_B_to_O
+  (O A B C : P)
+  (hA_on_circle : dist A O = radius)
+  (hC_on_circle : dist C O = radius)
+  (hAB_length : dist A B = 6)
+  (hBC_length : dist B C = 2)
+  (hABC_right_angle : EuclideanGeometry.angle A B C = Real.pi / 2)
+  (hB_inside_circle : dist B O < radius) :
+  dist B O ^ 2 = 26 := by
+  sorry

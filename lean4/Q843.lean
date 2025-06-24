@@ -1,35 +1,18 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-
--- 设定 V 是实的内积空间，P 是实欧氏空间
-variable {V P : Type*}
-variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [MetricSpace P] [NormedAddTorsor V P]
-
--- 点 X W Y ∈ P，x ∈ ℝ
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
 variable (X W Y : P)
 variable (x : ℝ)
-
--- 边长表达式
-def lengthXWExpr (x : ℝ) : ℝ := 9 * x
-def lengthWYExpr (x : ℝ) : ℝ := 4 * x + 5
-def lengthYXExpr (x : ℝ) : ℝ := 6 * x + 3
-
-/--
-IsContextualEquilateralTriangle X W Y x ：
-三角形 XWY 三边长分别如图表示，且为等边三角形，边长>0。
--/
-def IsContextualEquilateralTriangle (X W Y : P) (x : ℝ) : Prop :=
-  dist X W = lengthXWExpr x ∧
-  dist W Y = lengthWYExpr x ∧
-  dist Y X = lengthYXExpr x ∧
-  lengthXWExpr x > 0 ∧
-  Triangle.IsEquilateral X W Y
-
-/--
-形式化自然语言陈述 "Relation(EquilateralTriangle(XWY))=EquilateralTriangle(XWY)" 的命题表达。
-Lean中用 ↔ 代替 =，即陈述为逻辑等价。
--/
-theorem statement_from_natural_language :
-    (IsContextualEquilateralTriangle X W Y x) ↔ (IsContextualEquilateralTriangle X W Y x) := by
-  sorry
+def lengthXW_expr (x : ℝ) : ℝ := 9 * x
+def lengthXY_expr (x : ℝ) : ℝ := 4 * x + 5
+def lengthWY_expr (x : ℝ) : ℝ := 6 * x + 3
+variable (h_WY_length_expr : dist W Y = lengthWY_expr x)
+variable (h_WY_eq_XY : dist W Y = dist X Y)
+variable (h_XW_length_expr : dist X W = lengthXW_expr x)
+variable (h_XW_eq_WY : dist X W = dist W Y)
+variable (h_XY_length_expr : dist X Y = lengthXY_expr x)
+theorem triangle_XWY_is_equilateral :
+  dist X W = dist W Y ∧ dist W Y = dist X Y := by sorry
+end

@@ -9,10 +9,17 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
+Variable y : R.
 
-Theorem triangle_problem_y_value :
-  4 * y - 10 > 0 -> 3 * y + 5 > 0 -> True.
+Hypothesis angle_eq : 4 * y - 10 = 3 * y + 5.
+
+Theorem y_value_15 :
+  y = 15%:R.
 Proof.
-admit.
+  rewrite -subr_eq0.
+  have H : (4 * y - 10) - (3 * y + 5) = y - 15 by field.
+  move: angle_eq.
+  rewrite H.
+  by move=> /eqP.
 Qed.
 ####

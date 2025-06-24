@@ -8,23 +8,30 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Variable R : realType.
-Let A := row2 0 0.
-Let B := row2 8 0.
-Let C := row2 8 18.
-Let D := row2 2 30.
-Let E := row2 0 12.
-Definition pts := [:: A; B; C; D; E].
+Section PentagonArea.
 
-Definition polygon_area vs :=
+Variable R : realType.
+
+(* Define the vertices of the pentagon in order *)
+Let A := (0, 0)%R.
+Let B := (8, 0)%R.
+Let C := (8, 18)%R.
+Let D := (2, 30)%R.
+Let E := (0, 12)%R.
+
+(* Function to calculate polygon area using shoelace formula *)
+Definition polygon_area (pts : seq (R * R)) : R :=
   let sum := 
-    \sum_(i < size vs)
-      let P := nth A vs i in let Q := nth A vs ((i+1) %% size vs) in
+    \sum_(i < size pts)
+      let P := nth A pts i in
+      let Q := nth A pts ((i + 1) %% size pts)%N in
       fst P * snd Q - fst Q * snd P in
   abs (sum / 2).
 
-Theorem pentagon_area_276 : polygon_area pts = 276.
-Proof.
-admit.
-Qed.
+(* Theorem to prove the area is 144 *)
+Theorem pentagon_area_144 : 
+  polygon_area [:: A; B; C; D; E] = 144%:R.
+Proof. Admitted.
+
+End PentagonArea.
 ####

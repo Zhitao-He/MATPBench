@@ -1,7 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals.
-Require Import Psatz.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -9,24 +8,24 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-(* We approximate pi as 3.14, as per the problem statement *)
+(* Approximate pi as 3.14 as specified *)
 Definition pi_approx : R := 3.14.
 
-(* The diameters of the four semicircles, from smallest to largest, are 4 cm, 8 cm, 12 cm, and 16 cm *)
-Definition radius1 : R := 2.
-Definition radius2 : R := 4.
-Definition radius3 : R := 6.
-Definition radius4 : R := 8.
+(* Radii of the four semicircles (cm) *)
+Definition r1 : R := 2. (* Smallest *)
+Definition r2 : R := 4.
+Definition r3 : R := 6.
+Definition r4 : R := 8. (* Largest with 16cm diameter *)
 
-(* The area of a semicircle is (1/2)*pi*r^2 *)
-Definition semicircle_area (r : R) : R := (/2) * pi_approx * (r ^+ 2).
+(* Area of a semicircle formula *)
+Definition semicircle_area (r : R) : R := (pi_approx * r ^+ 2) / 2.
 
-(* The shaded regions are: largest semicircle minus next largest, and third minus smallest *)
-Definition shaded_area : R :=
-  (semicircle_area radius4 - semicircle_area radius3) +
-  (semicircle_area radius2 - semicircle_area radius1).
+(* Shaded areas calculation *)
+Definition shaded_area1 : R := semicircle_area r4 - semicircle_area r3.
+Definition shaded_area2 : R := semicircle_area r2 - semicircle_area r1.
+Definition total_shaded_area : R := shaded_area1 + shaded_area2.
 
-Theorem shaded_area_value :
-  Rabs (shaded_area - 62.8) < 0.05.
+Theorem shaded_area_is_62_8 :
+  Rabs (total_shaded_area - 62.8) < 0.1.
 Proof. Admitted.
 ####

@@ -1,30 +1,20 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Pi.Bounds
 import Mathlib.Geometry.Euclidean.Basic
-
--- Working in the plane ℝ²
-abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
-
-section ProblemDescription
-
-variable {A B C D : EuclideanPlane}
-
--- Convenient conversion: degrees to radians
-def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
-
--- Given: ∠ADE = 43°
-variable (h_angle_ADE : Angle.value (∠ A D C) = degToRad 43)
--- Given: AD ∥ BC
-variable (h_AD_parallel_BC : (EuclideanGeometry.line A D) ∥ (EuclideanGeometry.line B C))
--- Given: DC ∥ AB
-variable (h_DC_parallel_AB : (EuclideanGeometry.line D C) ∥ (EuclideanGeometry.line A B))
-
--- (Diagram implied) The points A, B, D are not collinear (non-degeneracy of parallelogram)
-variable (h_noncollinear : ¬ Collinear ℝ ({A, B, D} : Set EuclideanPlane))
-
--- Conclusion: ∠ABC = 137°
-theorem measure_angle_ABC_is_137_degrees :
-    Angle.value (∠ A B C) = degToRad 137 :=
-  by sorry
-
-end ProblemDescription
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (d : ℝ) : ℝ := d * Real.pi / 180
+open EuclideanGeometry
+open Affine AffineSubspace
+theorem find_angle_ABC
+  (A B C D E : PPoint)
+  (hAD : A ≠ D) (hDC : D ≠ C) (hCB : C ≠ B) (hBA : B ≠ A) (hED : E ≠ D)
+  (h_CDE_measure : angle C D E = degToRad 43)
+  (h_supplementary_CDA_CDE : angle C D A + angle C D E = Real.pi)
+  (h_AD_parallel_BC : affineSpan ℝ {A, D} ∥ affineSpan ℝ {B, C})
+  (h_DC_parallel_AB : affineSpan ℝ {D, C} ∥ affineSpan ℝ {A, B}) :
+  angle A B C = degToRad 137 :=
+by
+  sorry

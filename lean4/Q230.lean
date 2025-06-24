@@ -1,16 +1,14 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
-namespace FigureProblem
-
--- Define the center of the figure as the point (-3, -3) in ℝ².
-def centerPoint : Fin 2 → ℝ :=
-  fun
-  | 0 => -3
-  | 1 => -3
-
--- Statement: For some r, the only point (x, y) such that (x + 3)^2 + (y + 3)^2 = r^2 is (-3, -3).
-theorem coqEquivalentProp :
-  ∃ r : ℝ, ∀ (p : Fin 2 → ℝ), ‖p - centerPoint‖ ^ 2 = r ^ 2 → p = centerPoint := by
-  sorry
-
-end FigureProblem
+abbrev P₂ := EuclideanSpace ℝ (Fin 2)
+def xCoord (p : P₂) : ℝ := p 0
+def yCoord (p : P₂) : ℝ := p 1
+def O : P₂ := ![-3, -3]
+def r : ℝ := 3
+noncomputable def cFigure : EuclideanGeometry.Sphere P₂ := {
+  center := O,
+  radius := r
+}
+theorem center_of_cFigure_is_O : cFigure.center = O := by
+  rfl

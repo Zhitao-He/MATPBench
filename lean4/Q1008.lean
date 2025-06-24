@@ -1,57 +1,27 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-/-!
-# Geometry Problem: Triangle, Circle Tangent, and Perpendicularity
-
-In triangle ABC, let D be the midpoint of BC. A circle with center O passes through A and C,
-and is tangent to DA at A. Let line BA meet the circle again at E (E ≠ A), and line CE meet DA at F. Prove that FO ⟂ BC.
--/
-
-section GeometryProblem
-
-open EuclideanGeometry
-
--- We model the Euclidean plane as P, a torsor over the 2D Euclidean space.
-variable {P : Type*} [EuclideanSpace ℝ (Fin 2)] [NormedAddTorsor (EuclideanSpace ℝ (Fin 2)) P]
-
--- Declare all points involved.
-variable (A B C D E F O : P)
-variable (r : ℝ)
-
--- Hypotheses correspond to the problem description:
-
--- A, B, C are not collinear: triangle.
-variable (h_non_collinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
-
--- D is the midpoint of BC.
-variable (hD_midpoint_BC : D = midpoint ℝ B C)
-
--- The circle (center O, radius r) passes through A and C.
-variable (hA_on_circle : A ∈ sphere O r)
-variable (hC_on_circle : C ∈ sphere O r)
--- r > 0
-variable (hr_pos : 0 < r)
-
--- D ≠ A (for DA to be a line)
-variable (hD_ne_A : D ≠ A)
-
--- Circle is tangent to line DA at A
--- OA ⟂ DA
-variable (h_tangent_DA_at_A : (O -ᵥ A) ⟂ (D -ᵥ A))
-
--- E is the second intersection of BA with circle (other than A).
-variable (hE_on_BA : E ∈ line[ℝ, B, A])
-variable (hE_on_circle : E ∈ sphere O r)
-variable (hE_ne_A : E ≠ A)
-
--- F is intersection of DA and CE.
-variable (hF_on_DA : F ∈ line[ℝ, D, A])
-variable (hF_on_CE : F ∈ line[ℝ, C, E])
-
--- The goal: FO ⟂ BC
-theorem geometry_FO_perp_BC : (F -ᵥ O) ⟂ (C -ᵥ B) := by
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Geometry.Euclidean.Sphere.SecondInter
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+theorem fo_perp_bc
+  (A B C D E F O : Point)
+  (ω : EuclideanGeometry.Sphere Point)
+  (h_noncollinear : ¬Collinear ℝ ({A, B, C} : Set Point))
+  (hD : D = midpoint ℝ B C)
+  (hO : O = ω.center)
+  (hA_on_ω : A ∈ ω)
+  (hC_on_ω : C ∈ ω)
+  (hA_ne_D : A ≠ D)
+  (h_tangent : inner ℝ (A -ᵥ ω.center) (D -ᵥ A) = 0)
+  (hE_on_ω : E ∈ ω)
+  (hE_ne_A : E ≠ A)
+  (hE_on_BA : E ∈ line[ℝ, B, A])
+  (hA_between_B_E : Wbtw ℝ B A E)
+  (hF_on_CE : F ∈ line[ℝ, C, E])
+  (hF_on_DA : F ∈ line[ℝ, D, A])
+  (hF_ne_O : F ≠ O)
+  : inner ℝ (F -ᵥ O) (B -ᵥ C) = 0 := by
   sorry
-
-end GeometryProblem

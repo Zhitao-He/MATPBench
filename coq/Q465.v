@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -10,19 +10,21 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem circle_diameter_pythagoras :
-  exists (O A B C : 'rV[R]_2),
-    (* O is the center of the circle *)
-    euclidean_axiom.center O
-      (fun P => norm (P - O) = 5) /\
-    (* Points A, B, C lie on the circle *)
-    norm (A - O) = 5 /\
-    norm (B - O) = 5 /\
-    norm (C - O) = 5 /\
-    (* Right triangle: angle at C is right, |AB| = 5, |BC| = 4, |AC| = 3 *)
-    [/\ dist A B = 5,
-        dist B C = 4,
-        dist A C = 3,
-        orthogonal (A - C) (B - C)].
-Proof. Admitted.
+Section Circle_Diameter.
+
+Variable O : 'rV[R]_2.  (* Center of the circle *)
+Variable A : 'rV[R]_2.  (* Point on the circle *)
+
+Hypothesis radius_len : `|A - O| = 5.
+
+Definition diameter := 2 * `|A - O|.
+
+Theorem circle_diameter_is_10 :
+  diameter = 10.
+Proof.
+rewrite /diameter radius_len.
+field.
+Qed.
+
+End Circle_Diameter.
 ####

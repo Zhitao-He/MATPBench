@@ -13,21 +13,32 @@ Section GeometrySquareRectangle.
 
 Variable R : realType.
 
-Variables A B C D E F G H : Point R.
+(* Define points for the square CDEG and rectangle BEFH *)
+Variables C D E G B E F H : 'rV[R]_2.
 
-Hypothesis CDGEsquare : square C D E G.
-Hypothesis BEFHrectangle : rectangle B E F H.
-Hypothesis CD_eq3 : dist C D = 3.
-Hypothesis BE_eq5 : dist B E = 5.
+(* Hypotheses for the square and rectangle *)
+Hypothesis CDGE_square : let side := 3%:R in
+  norm (C - D) = side /
+  norm (D - E) = side /
+  norm (E - G) = side /
+  norm (G - C) = side /
+  colinear [:: C; D; E; G] /
+  orthogonal (D - C) (E - D).
 
-(* All points A, B, C, D, E, F, G, H are coplanar and as depicted: 
-Let A, B, C, D be collinear with B between A and C and C between B and D, 
-and with square CDEG constructed so that CD = 3, D E parallel to CG,
-and BEFH constructed such that BEFH is a rectangle with BE = 5, 
-adjacent to square CDEG, sharing vertex E. *)
+Hypothesis BEFH_rectangle : let length := 5%:R in
+  norm (B - E) = length /
+  norm (E - F) = length /
+  norm (F - H) = length /
+  norm (H - B) = length /
+  colinear [:: B; E; F; H] /
+  orthogonal (E - B) (F - E).
 
-Theorem number_of_units_BH :
-  dist B H = 9 / 5 :> R.
+(* Hypothesis for the shared vertex E *)
+Hypothesis shared_vertex_E : E = E.
+
+(* Theorem to prove BH = 9/5 *)
+Theorem BH_is_9_over_5 : 
+  norm (B - H) = (9 / 5)%:R.
 Proof. Admitted.
 
 End GeometrySquareRectangle.

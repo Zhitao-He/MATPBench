@@ -20,13 +20,13 @@ Definition dist (A B : point2d) : R :=
 Variables P Q R S T : point2d.
 
 Hypotheses
-  (HPQ : px P = 0 /\py P = 0 /\px Q = 0 /\py Q = 24)
+  (HPQ : px P = 0 /\ py P = 0 /\ px Q = 0 /\ py Q = 24)
   (HPQ' : dist P Q = 24)
-  (HTR : px R = 0 /\py R = 16)
+  (HTR : px R = 0 /\ py R = 16)
   (HTR' : dist H P R = 16)
-  (HST : py S = 0 /\px S = 9)
-  (Hcollinear_PTQS : px P = px T = px S = 0 / py P = py T = py S = 0)
-  (HQT_perp : px Q = px P /\py Q > py P).
+  (HST : py S = 0 /\ px S = 9)
+  (Hcollinear_PTQS : px P = px T = px S = 0 /\ py P = py T = py S = 0)
+  (HQT_perp : px Q = px P /\ py Q > py P).
 
 Lemma compute_PS : dist P S = 9.
 Proof. by []. Qed.

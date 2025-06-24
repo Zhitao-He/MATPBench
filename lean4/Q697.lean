@@ -1,57 +1,36 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Data.Real.Pi.Bounds
+open Real EuclideanGeometry Affine AffineSubspace
+open scoped EuclideanGeometry
 noncomputable section
-
-abbrev P2 := EuclideanPlane ℝ
-
--- Points as variables
-variable (C H M P R S : P2)
-
--- Variables for unknowns
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace EuclideanGeometryProblem
+variable (H P_pt M R C S N D E G I L : P)
 variable (x y z : ℝ)
-
--- Converts degrees to Real.Angle 
-def degrees (d : ℝ) : Real.Angle := (d / 180 * Real.pi : ℝ)
-
--- Distinctness assumptions
-variable (h_P_ne_H : P ≠ H)
-variable (h_P_ne_M : P ≠ M)
-variable (h_P_ne_R : P ≠ R)
-variable (h_R_ne_C : R ≠ C)
-variable (h_C_ne_S : C ≠ S)
-variable (h_C_ne_M : C ≠ M)
-variable (h_M_ne_P : M ≠ P)
-
--- Angle value hypotheses
-variable (h_angle_HPM : ∠ H P M = degrees (4 * y))
-variable (h_angle_MPR : ∠ M P R = degrees 68)
-variable (h_angle_PRC : ∠ P R C = degrees x)
-variable (h_angle_SCR : ∠ S C R = degrees (5 * z + 2))
-
--- Angle value ranges (degrees)
-variable (h_4y_range : 0 ≤ 4 * y ∧ 4 * y ≤ 180)
-variable (h_x_range : 0 ≤ x ∧ x ≤ 180)
-variable (h_5z2_range : 0 ≤ 5 * z + 2 ∧ 5 * z + 2 ≤ 180)
-
--- Collinearity: H, P, R are collinear
-variable (h_HPR_straight : ∠ H P R = Real.Angle.pi)
-
--- Ray definitions
-def rayPH : Ray P2 P := ray P H
-def rayPM : Ray P2 P := ray P M
-def rayPR : Ray P2 P := ray P R
-
--- Angle addition configuration
-variable (h_PM_between_PH_PR : Angle.IsBetweenRay P rayPM rayPH rayPR)
-
--- Parallelism hypotheses
-variable (h_CM_parallel_RP : Line.Parallel (EuclideanGeometry.line C M) (EuclideanGeometry.line R P))
-variable (h_CR_parallel_MP : Line.Parallel (EuclideanGeometry.line C R) (EuclideanGeometry.line M P))
-
--- The statement to prove
-theorem find_value_of_y : y = 28 := by
-  sorry
-
-end
+noncomputable def degreesToRadians (degrees : ℝ) : ℝ := degrees * (Real.pi / 180)
+axiom angle_HPM_eq : ∠ H P_pt M = degreesToRadians (4 * y)
+axiom angle_MPR_eq : ∠ M P_pt R = degreesToRadians 68
+axiom angle_PRC_eq : ∠ P_pt R C = degreesToRadians x
+axiom angle_SCR_eq : ∠ S C R = degreesToRadians (5 * z + 2)
+axiom cm_parallel_rp : line[ℝ, C, M] ∥ line[ℝ, R, P_pt]
+axiom cr_parallel_mp : line[ℝ, C, R] ∥ line[ℝ, M, P_pt]
+axiom hpr_is_straight_angle : ∠ H P_pt R = Real.pi
+axiom angle_sum_HPM_MPR_eq_HPR : ∠ H P_pt M + ∠ M P_pt R = ∠ H P_pt R
+axiom p_ne_H : P_pt ≠ H
+axiom p_ne_M : P_pt ≠ M
+axiom p_ne_R : P_pt ≠ R
+axiom r_ne_C : R ≠ C
+axiom c_ne_S : C ≠ S
+axiom c_ne_M : C ≠ M
+axiom m_not_on_line_HPR : ¬ Collinear ℝ ({H, P_pt, M} : Set P)
+axiom hprlg_collinear : Collinear ℝ ({H, P_pt, R, L, G} : Set P)
+axiom scmed_collinear : Collinear ℝ ({S, C, M, E, D} : Set P)
+axiom ncri_collinear : Collinear ℝ ({N, C, R, I} : Set P)
+theorem value_of_y_is_28 : y = 28 := by sorry
+end EuclideanGeometryProblem
+end noncomputable section

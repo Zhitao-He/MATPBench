@@ -1,54 +1,28 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Circumcenter
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Geometry.Euclidean.Projection
-import Mathlib.Data.Real.Basic
-
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 open EuclideanGeometry
-open scoped Real
-
-namespace InscribedTriangleTheorem
-
--- Let V be a real vector space and P a 2D Euclidean affine plane modeled on V
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [FiniteDimensional ℝ V] [Fact (FiniteDimensional.finrank ℝ V = 2)]
-
--- Given points
-variable (A B C O I J K D F G : P)
-
--- A, B, C are distinct and not collinear
-variable (h_ABC_distinct : A ≠ B ∧ B ≠ C ∧ C ≠ A)
-variable (h_ABC_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set P))
-
--- O is the circumcenter of triangle ABC
-variable (h_O_circum : O = circumcenter ℝ (mkTriangle A B C))
-
--- J is the foot of the perpendicular from I to AB (orthogonal projection)
-variable (h_J_proj : J = orthogonalProjection (affineSpan ℝ {A, B}) I)
-variable (h_J_on_AB : J ∈ segment ℝ A B)
-
--- K is the foot of the perpendicular from I to AC
-variable (h_K_proj : K = orthogonalProjection (affineSpan ℝ {A, C}) I)
-variable (h_K_on_AC : K ∈ segment ℝ A C)
-
--- D is the second intersection of line AO with circle O (other than A)
-variable (h_D_on_line : D ≠ A ∧ Collinear ℝ ({A, O, D} : Set P))
-variable (h_D_on_circum : dist D O = dist A O)
-
--- F is a point on the extension of CA such that AF = BJ
-variable (h_Sbtw_CAF : Sbtw ℝ C A F)
-variable (h_AF_eq_BJ : dist A F = dist B J)
-
--- G is intersection of:
---   (1) The perpendicular to DI through F
---   (2) The extension of BA (B, A, G are collinear and A between B and G)
-variable (h_DI_distinct : D ≠ I)
-variable (h_G_on_BA_ext : Sbtw ℝ B A G)
-variable (h_G_perp : ∃ (t : ℝ), G = F + t • (orthogonalProjection (affineSpan ℝ {D, I}) F - F) 
-  ∧ ⟪(G -ᵥ F), (I -ᵥ D)⟫_ℝ = 0)
-
--- Conclusion: AG = CK
-theorem AG_eq_CK : dist A G = dist C K := by sorry
-
-end InscribedTriangleTheorem
+open Affine AffineSubspace
+open scoped EuclideanGeometry
+noncomputable def circumcenter (A B C : Point) : Point := sorry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+namespace EuclideanGeometryProblem
+theorem main
+  (A B C D I F G : Point)
+  (h_nondeg : ¬ Collinear ℝ ({A, B, C} : Set Point))
+  (hD_on_circum : D ∈ EuclideanGeometry.Sphere.mk (circumcenter A B C) (dist A (circumcenter A B C)))
+  (hAOD_collinear : Collinear ℝ ({A, circumcenter A B C, D} : Set Point))
+  (hD_ne_A : D ≠ A)
+  (hJ_on_seg : (EuclideanGeometry.orthogonalProjection (line[ℝ, A, B]) I : Point) ∈ (segment ℝ A B : Set Point))
+  (hK_on_seg : (EuclideanGeometry.orthogonalProjection (line[ℝ, A, C]) I : Point) ∈ (segment ℝ A C : Set Point))
+  (hF_wbtw : Wbtw ℝ C A F)
+  (hAF_eq_BJ : dist A F = dist B (EuclideanGeometry.orthogonalProjection (line[ℝ, A, B]) I))
+  (hG_wbtw : Wbtw ℝ B A G)
+  (hD_ne_I : D ≠ I)
+  (h_perp : inner ℝ (G -ᵥ F) (D -ᵥ I) = 0)
+  : dist A G = dist C (EuclideanGeometry.orthogonalProjection (line[ℝ, A, C]) I) := by
+  sorry
+end EuclideanGeometryProblem

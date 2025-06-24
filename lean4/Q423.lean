@@ -1,37 +1,34 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Data.Real.Basic
-
-noncomputable section
-
--- We work in a 2-dimensional Euclidean space
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [FiniteDimensional ℝ P]
-  (fact_dim_2 : FiniteDimensional.finrank ℝ P = 2)
-
--- Points in the plane
-variable (B C D E F G H : P)
-
--- Square CDEG with side length 3
-axiom CDEG_square : 
-  dist C D = 3 ∧ dist D E = 3 ∧ dist E G = 3 ∧ dist G C = 3 ∧
-  Angle.Unoriented (G - C) (D - C) = Real.pi / 2 ∧
-  Angle.Unoriented (C - D) (E - D) = Real.pi / 2 ∧
-  Angle.Unoriented (D - E) (G - E) = Real.pi / 2 ∧
-  Angle.Unoriented (E - G) (C - G) = Real.pi / 2
-
--- Rectangle BEFH with BE = 5
-axiom BEFH_rectangle :
-  dist B E = 5 ∧
-  dist B E = dist F H ∧ dist E F = dist H B ∧
-  Angle.Unoriented (H - B) (E - B) = Real.pi / 2 ∧
-  Angle.Unoriented (B - E) (F - E) = Real.pi / 2 ∧
-  Angle.Unoriented (E - F) (H - F) = Real.pi / 2 ∧
-  Angle.Unoriented (F - H) (B - H) = Real.pi / 2
-
--- Relative position of points
-axiom C_between_G_and_B : Collinear ℝ ({G, C, B} : Set P) ∧ Sbtw ℝ G C B
-
--- The theorem to be proven: BH = 9/5
-theorem length_BH_is_nine_fifths : dist B H = 9 / 5 := by sorry
-
-end
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+namespace ParallelogramProblem
+open EuclideanGeometry 
+open scoped EuclideanGeometry 
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+def IsMyRectangle (p₁ p₂ p₃ p₄ : PPoint) : Prop :=
+  EuclideanGeometry.angle p₁ p₂ p₃ = Real.pi / 2 ∧
+  EuclideanGeometry.angle p₂ p₃ p₄ = Real.pi / 2 ∧
+  EuclideanGeometry.angle p₃ p₄ p₁ = Real.pi / 2 ∧
+  EuclideanGeometry.angle p₄ p₁ p₂ = Real.pi / 2
+def IsMySquare (p₁ p₂ p₃ p₄ : PPoint) : Prop :=
+  IsMyRectangle p₁ p₂ p₃ p₄ ∧
+  dist p₁ p₂ = dist p₂ p₃ ∧
+  dist p₂ p₃ = dist p₃ p₄ ∧
+  dist p₃ p₄ = dist p₄ p₁
+namespace ProblemSetup
+variable (A B C D E F G H : PPoint)
+theorem target_proposition
+    (hCDEG_is_square : IsMySquare C D E G)
+    (hCD_length : dist C D = 3)
+    (hBEFH_is_rectangle : IsMyRectangle B E F H)
+    (hBE_length : dist B E = 5)
+    (hCollinearDAB : A ∈ segment ℝ D B)
+    (hCollinearCBE : C ∈ segment ℝ B E)
+    (hCollinearGFH : F ∈ segment ℝ G H)
+    (hA_on_DE : A ∈ segment ℝ D E)
+    (hB_on_CG : B ∈ segment ℝ C G)
+    : dist B H = 9 / 5 := by
+  sorry
+end ProblemSetup
+end ParallelogramProblem

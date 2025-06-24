@@ -1,37 +1,15 @@
-import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.LinearAlgebra.AffineSpace.Midpoint
-
-namespace ProblemFormalization
-
-open EuclideanSpace
-
--- We work in a real Euclidean affine space
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Module ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Declare points in the affine Euclidean space
-variable (Q U T R V' S : P)
-
--- Given: QR = 2
-axiom hQR : dist Q R = 2
-
--- Given: VS = 7
-axiom hVS : dist V' S = 7
-
--- Given: S is midpoint of RT
-axiom hS_midpoint_RT : S = midpoint ℝ R T
-
--- Given: V is midpoint of QU (here written as V')
-axiom hV_midpoint_QU : V' = midpoint ℝ Q U
-
--- Trapezoid midsegment theorem applies here for this configuration:
--- 2 * dist(V' S) = dist(Q R) + dist(U T)
-axiom h_trapezoid_midsegment : 2 * dist V' S = dist Q R + dist U T
-
--- To Prove: dist(U T) = 12
-theorem conclusion_length_UT_is_12 : dist U T = 12 := by
-  rw [hQR, hVS] at h_trapezoid_midsegment
-  linarith
-
-end ProblemFormalization
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+namespace Problem
+open EuclideanGeometry 
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (Q U T R V S : P)
+axiom hQR_len : dist Q R = 2
+axiom hVS_len : dist V S = 7
+axiom hS_mid : S = midpoint ℝ R T
+axiom hV_mid : V = midpoint ℝ Q U
+axiom hTrapezoid_parallel : ∃ c : ℝ, c > 0 ∧ (R -ᵥ Q) = c • (T -ᵥ U)
+theorem find_length_UT : dist U T = 12 := by
+  sorry
+end Problem

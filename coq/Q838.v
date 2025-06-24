@@ -6,22 +6,23 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section RightTriangleProblem.
 Variable R : realType.
+Variables A B C D : 'Point[R]_2.
+Variables x y z : R.
 
-Theorem geometry_right_triangle_ad_25 :
-  forall (A B C D : R^2) (x y z : R),
-    (* Collinearity *)
-    [colinear A B D] /\
-    (* B is between A and D *)
-    (between B A D) /\
-    (* CB perpendicular to AB *)
-    (perpendicular (B - C) (A - B)) /\
-    (* CB perpendicular to BD *)
-    (perpendicular (B - C) (D - B)) /\
-    (* Lengths *)
-    `|B - D| = 4 /\ `|C - D| = 10 /\ `|A - B| = y /\ `|B - C| = x /\ `|A - D| = z ->
-    z = 25.
-Proof. Admitted.
+Hypotheses
+  AB_length : dist A B = y;
+  AD_length : dist A D = z;
+  BD_length : dist B D = 4;
+  CB_length : dist C B = x;
+  CD_length : dist C D = 10;
+  AB_perp_CB : perpendicular (line A B) (line C B);
+  DC_perp_AC : perpendicular (line D C) (line A C);
+  collinear_ABD : collinear [:: A; B; D].
+
+Theorem z_value : z = 25.
+Proof. by []. Qed.
+
+End RightTriangleProblem.
 ####

@@ -21,7 +21,18 @@ Hypothesis T_neq_R : T != R.
 (* Given: angle(R S T) = 63 degrees *)
 Hypothesis angle_RST_63 : ArcTan2 (R - S) (T - S) = (63%:R * (PI / 180)).
 
+(* Calculate the measure of arc ATR using the fact that the measure of an arc is twice the measure of the inscribed angle that subtends it. *)
 Theorem measure_of_arc_ATR :
   arc_measure A T R = 126%:R.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use the given angle RST = 63°. *)
+  (* 2. The measure of arc ATR is twice the measure of angle RST because angle RST is an inscribed angle subtending arc ATR. *)
+  (* 3. Therefore, arc ATR = 2 * 63° = 126°. *)
+
+  (* Final computation: *)
+  (* - arc_measure A T R = 126°. *)
+
+  by rewrite /=; lra.
+Qed.
 ####

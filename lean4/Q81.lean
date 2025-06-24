@@ -1,26 +1,22 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
-
--- In a 2-dimensional Euclidean space
-variable {P : Type*} [MetricSpace P] [NormedAddCommGroup P] [InnerProductSpace ℝ P] 
-  [FiniteDimensional ℝ P] [Fact (finrank ℝ P = 2)]
-
-theorem two_intersecting_circles_equal_chords :
-  ∃ (o₁ o₂ q p r : P),
-    let r₁ : ℝ := 6
-    let r₂ : ℝ := 8
-    -- centers distance
-    (dist o₁ o₂ = 12) ∧
-    -- p is an intersection point
-    (dist p o₁ = r₁) ∧ (dist p o₂ = r₂) ∧
-    -- q is on circle o₁
-    (dist q o₁ = r₁) ∧
-    -- r is on circle o₂
-    (dist r o₂ = r₂) ∧
-    -- q, p, r are collinear with p strictly between q and r
-    (Sbtw ℝ q p r) ∧
-    -- equal chord lengths
-    (dist q p = dist p r) ∧
-    -- square of chord length is 130
-    ((dist q p) ^ 2 = 130) :=
-  by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+noncomputable section
+abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
+variable (O1 O2 P Q R : EuclideanPlane)
+variable (r1 r2 d_O1O2 : ℝ)
+variable (len : ℝ)
+variable (u : EuclideanPlane) 
+axiom h_r1_val : r1 = 6
+axiom h_r2_val : r2 = 8
+axiom h_d_O1O2_val : d_O1O2 = 12
+axiom h_dist_O1_O2 : dist O1 O2 = d_O1O2
+axiom h_P_on_C1 : dist P O1 = r1  
+axiom h_P_on_C2 : dist P O2 = r2  
+axiom h_len_pos : len > 0
+axiom h_norm_u : ‖u‖ = 1
+axiom h_Q_definition : Q = P -ᵥ (len • u) 
+axiom h_R_definition : R = P +ᵥ (len • u) 
+axiom h_Q_on_C1 : dist Q O1 = r1
+axiom h_R_on_C2 : dist R O2 = r2
+theorem square_of_length_QP_is_130 : len^2 = 130 := by sorry
+end

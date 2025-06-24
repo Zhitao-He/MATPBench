@@ -1,24 +1,22 @@
-import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-
+import Mathlib.Data.Real.Basic
+abbrev P := EuclideanSpace ℝ (Fin 2)
 theorem circle_power_theorem_example :
-    ∃ x : ℝ, 0 < x ∧
+  ∃ x : ℝ, 0 < x ∧
     ∀ (A B C D E X_center : P) (r : ℝ),
-      
-      A ∈ Metric.sphere X_center r ∧
-      B ∈ Metric.sphere X_center r ∧
-      C ∈ Metric.sphere X_center r ∧
-      D ∈ Metric.sphere X_center r ∧
-      E ∈ Metric.sphere X_center r ∧
-      
-      E ∈ segment ℝ A B ∧
-      E ∈ segment ℝ D C ∧
-      
+      A ∈ EuclideanGeometry.Sphere.mk X_center r ∧
+      B ∈ EuclideanGeometry.Sphere.mk X_center r ∧
+      C ∈ EuclideanGeometry.Sphere.mk X_center r ∧
+      D ∈ EuclideanGeometry.Sphere.mk X_center r ∧
+      E ∈ EuclideanGeometry.Sphere.mk X_center r ∧
+      Sbtw ℝ A E B ∧
+      Sbtw ℝ D E C ∧
       dist A E = 2 ∧
       dist E C = 5 ∧
       dist D E = 4 ∧
       dist E B = x →
-      x = 10 := by sorry
+      x = 10 := by
+  sorry

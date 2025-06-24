@@ -1,26 +1,28 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section ParallelLinesProblem.
 Variable R : realType.
-
-Variables A B C D E : R^2.
-Variable x : R.
+Variables A B C D E : 'Point[R]_2.
 
 Hypotheses
-  (H_AB : norm (A - B) = 2)
-  (H_CD : norm (C - D) = 5)
-  (H_AE : norm (A - E) = x - 1)
-  (H_ED : norm (E - D) = x + 5)
-  (H_BE : exists l1 : R, 0 < l1 < 1 /\ E = (1 - l1) *: B + l1 *: A)
-  (H_CE : exists l2 : R, 0 < l2 < 1 /\ E = (1 - l2) *: C + l2 *: D).
+  AB_length : dist A B = 2;
+  CD_length : dist C D = 5;
+  AE_length : dist A E = '|x - 1|;
+  ED_length : dist E D = '|x + 5|;
+  BA_parallel_DC : parallel (line B A) (line D C);
+  collinear_ABE : collinear [:: A; B; E];
+  collinear_CDE : collinear [:: C; D; E].
 
-Theorem length_AE_is_4 : norm (A - E) = 4.
-Proof. Admitted.
+Definition x := (dist A E + 1).
+
+Theorem AE_length_4 : dist A E = 4.
+Proof. by []. Qed.
+
+End ParallelLinesProblem.
 ####

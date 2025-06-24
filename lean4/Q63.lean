@@ -1,5 +1,4 @@
 import Mathlib.Data.Real.Basic
-
 theorem harmonic_potential_not_larger_at_zero
     (k E : ℝ)
     (hk : 0 < k)

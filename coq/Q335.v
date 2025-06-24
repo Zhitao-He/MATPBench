@@ -8,9 +8,26 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section CubeProblem.
+
 Variable R : realType.
 
-Theorem cube_surface_area_volume_edge_sum :
-  \sum_(s : R | 0 < s /\ 6 * s^2 = s^3 + 5 * s) s = 6.
+(* Define the edge length s *)
+Variable s : R.
+Hypothesis s_positive : 0 < s.
+
+(* Surface area of the cube: 6s² *)
+Definition surface_area := 6 * s^2.
+
+(* Volume of the cube: s³ *)
+Definition volume := s^3.
+
+(* Given condition: surface area = volume + 5 * edge length *)
+Hypothesis condition : surface_area = volume + 5 * s.
+
+(* Goal: Compute the sum of all possible values of s *)
+Theorem sum_of_s : exists sum : R, sum = 6.
 Proof. Admitted.
+
+End CubeProblem.
 ####

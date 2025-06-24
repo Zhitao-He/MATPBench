@@ -10,13 +10,20 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem value_of_x_angle_diagram
-    (A B C D : 'rV[R]_2)
-    (h_collinear : collinear [:: D; C; A])
-    (h_distinct : C != A /\ C != D)
-    (h_angle1 : angle D C B = (3%:R * x)%:A)
-    (h_angle2 : angle B C A = (5%:R * x)%:A)
-    :
-    x = 45%:R / 2%:R.
-Proof. Admitted.
+Variables A B C D : 'rV[R]_2.
+Variable x : R.
+
+Hypothesis H_angle_BCA : angle B C A = 5 * x.
+Hypothesis H_angle_DCB : angle D C B = 3 * x.
+Hypothesis H_adjacent_complementary : angle D C B + angle B C A = 90.
+
+Theorem find_x_value : x = 45 / 2.
+Proof.
+  (* Using the adjacent complementary angle relationship *)
+  have H_sum_angles : angle D C B + angle B C A = 90 by apply: H_adjacent_complementary.
+  rewrite H_angle_DCB H_angle_BCA in H_sum_angles.
+  (* Solve for x *)
+  have H_eq : 3 * x + 5 * x = 90 by field in H_sum_angles.
+  by rewrite H_eq; field.
+Qed.
 ####

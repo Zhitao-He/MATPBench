@@ -1,31 +1,27 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Record point := Point { px : R; py : R }.
-Definition dist (A B : point) := sqrt ((px A - px B)^+2 + (py A - py B)^+2).
-
-Variable C D E F R_pt S B : point.
-Variable r1 r2 : R.
+Section CircleProblem.
+Variable R : realType.
+Variables C D R_pt S : 'Point[R]_2.
 
 Hypotheses
-  HC  : dist C R_pt = r1;
-  HE  : dist E R_pt = r1;
-  HF  : dist F R_pt = r1;
-  HS  : dist S B    = 9;
-  HC' : dist C S    = r2;
-  HD  : dist D S    = r2;
-  HE_on : exists t1, 0 < t1 < 1 /\E = Point (px C + t1 * (px D - px C)) (py C + t1 * (py D - py C));
-  HF_on : exists t2, 0 < t2 < 1 /\F = Point (px C + t2 * (px D - px C)) (py C + t2 * (py D - py C));
-  col_CDF : colinear [:: C; D; F];
-  col_CES : colinear [:: C; E; S].
+  diameter_R : dist R_pt (Point (px R_pt + 10) (py R_pt)) = 20;
+  diameter_S : dist S (Point (px S + 15) (py S)) = 30;
+  DS_length : dist D S = 9;
+  collinear_CDS : collinear [:: C; D; S];
+  on_circle_C : dist C R_pt = 10;
+  on_circle_D : dist D S = 15.
 
-Theorem two_circles_intersect : r1 = r2.
+Definition CD_length := dist C D.
+
+Theorem CD_length_6 : CD_length = 6.
 Proof. by []. Qed.
+
+End CircleProblem.
 ####

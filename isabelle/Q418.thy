@@ -1,50 +1,22 @@
-theory ParallelTriangleAreaRatio
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Triangle_Area_Ratio
+  imports Main
 begin
-
-section ‹Triangles with Parallel Bases›
-
-locale euclidean_geometry =
-  fixes dim :: nat
-  assumes dim_pos: "dim > 0"
+locale similar_triangles =
+  fixes h1 h2 :: real
+  assumes h1_pos: "h1 > 0"
+    and h2_pos: "h2 > 0"
+    and ratio_base: "h1 / h2 = 4 / 10"
 begin
-
-type_synonym point = "real^dim"
-
-definition collinear :: "point ⇒ point ⇒ point ⇒ bool" where
-  "collinear A B C ⟷ (∃t. C = A + t *R (B - A)) ∨ (∃t. B = A + t *R (C - A))"
-
-definition line :: "point ⇒ point ⇒ point set" where
-  "line A B = {A + t *R (B - A) | t. True}"
-
-definition on_line :: "point ⇒ point set ⇒ bool" where
-  "on_line P L ⟷ P ∈ L"
-
-definition parallel :: "point set ⇒ point set ⇒ bool" where
-  "parallel L1 L2 ⟷ (∃A B C D. L1 = line A B ∧ L2 = line C D ∧ 
-                      (∃r. r ≠ 0 ∧ (B - A) = r *R (D - C)))"
-
-definition between :: "point ⇒ point ⇒ point ⇒ bool" where
-  "between A B C ⟷ (∃t. t ≥ 0 ∧ t ≤ 1 ∧ B = A + t *R (C - A))"
-
-definition triangle_area :: "point ⇒ point ⇒ point ⇒ real" where
-  "triangle_area A B C = norm (cross_product (B - A) (C - A)) / 2"
-
-theorem parallel_triangle_area_ratio:
-  fixes A B C D E :: "real^2"
-  assumes "¬collinear A B C"
-  and "on_line D (line A B)"
-  and "on_line E (line A C)"
-  and "parallel (line D E) (line B C)"
-  and "dist B C = 10"
-  and "dist D E = 4"
-  and "between D A B"
-  and "between E A C"
-  shows "triangle_area A D E / triangle_area A B C = 4/25"
-  oops
-
+definition base_small :: real where "base_small = 4"
+definition base_large :: real where "base_large = 10"
+definition area_small :: real where "area_small = (1/2) * base_small * h1"
+definition area_large :: real where "area_large = (1/2) * base_large * h2"
+definition area_ratio :: real where "area_ratio = area_small / area_large"
 end
-
+definition area_ratio_condition :: bool where
+  "area_ratio_condition =
+    (let h1 = 4; h2 = 10 in
+      let area_small = (1/2) * 4 * h1;
+          area_large = (1/2) * 10 * h2
+      in (area_small / area_large = 4 / 25))"
 end

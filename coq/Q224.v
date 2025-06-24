@@ -16,7 +16,7 @@ Definition P2 : R * R := let θ2 := PI - deg2rad 49 in (fst P1 + 16 * cos θ2, s
 Definition return_vector := (- fst P2, - snd P2).
 Definition bearing_W_of_N := atan2 (fst return_vector) (snd return_vector) * 180 / PI.
 
-Theorem find_return_bearing : bearing_W_of_N = deg2rad (atan2 (fst return_vector) (snd return_vector) * 180 / PI).
+Theorem find_return_bearing : bearing_W_of_N = 34.
 Proof.
 admit.
 Qed.

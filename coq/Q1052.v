@@ -27,46 +27,34 @@ Hypothesis HAonO : on_O A.
 
 (* E lies on AC, E ≠ A, and on_O E *)
 Variable E : 'rV[R]_2.
-Hypothesis HEonAC : exists kE : R, (0 < kE < 1) /\ E = A + kE *: (C - A).
+Hypothesis HEonAC : colinear A C E /\ E != A.
 Hypothesis HEonO : on_O E.
-Hypothesis HEneqA : E != A.
 
 (* F lies on AB, F ≠ A, and on_O F *)
 Variable F : 'rV[R]_2.
-Hypothesis HFonAB : exists kF : R, (0 < kF < 1) /\ F = A + kF *: (B - A).
+Hypothesis HFonAB : colinear A B F /\ F != A.
 Hypothesis HFonO : on_O F.
-Hypothesis HFneqA : F != A.
 
 (* K lies on AD, K ≠ A, K ≠ D, and on_O K *)
 Variable K : 'rV[R]_2.
-Hypothesis HKonAD : exists kK : R, (0 < kK < 1) /\ K = A + kK *: (D - A).
+Hypothesis HKonAD : colinear A D K /\ K != A /\ K != D.
 Hypothesis HKonO : on_O K.
-Hypothesis HKneqA : K != A.
-Hypothesis HKneqD : K != D.
 
 (* P is the circumcenter of triangle BDF *)
-Definition OnCircle (C : 'rV[R]_2) (r : R) (X : 'rV[R]_2) := norm (X - C) = r.
-Definition circumcenter (X Y Z : 'rV[R]_2) : 'rV[R]_2 :=
-  let a := 2 * ((X \* (Y - Z)^T) - (Y \* (X - Z)^T)) in
-  let b := (Y * normsq X - X * normsq Y) in
-  let c := (Z * (normsq X - normsq Y)) in
-  (b + c) / a.
-(* In 2D, we can define the circumcenter as the intersection of the perpendicular bisectors: Use mathcomp's geometry library in a practical context *)
-
 Variable P : 'rV[R]_2.
 Variable rP : R.
 Hypothesis HrP : 0 < rP.
-Hypothesis HonP_B : OnCircle P rP B.
-Hypothesis HonP_D : OnCircle P rP D.
-Hypothesis HonP_F : OnCircle P rP F.
+Hypothesis HonP_B : norm (B - P) = rP.
+Hypothesis HonP_D : norm (D - P) = rP.
+Hypothesis HonP_F : norm (F - P) = rP.
 
 (* Q is the circumcenter of triangle CDE *)
 Variable Q : 'rV[R]_2.
 Variable rQ : R.
 Hypothesis HrQ : 0 < rQ.
-Hypothesis HonQ_C : OnCircle Q rQ C.
-Hypothesis HonQ_D : OnCircle Q rQ D.
-Hypothesis HonQ_E : OnCircle Q rQ E.
+Hypothesis HonQ_C : norm (C - Q) = rQ.
+Hypothesis HonQ_D : norm (D - Q) = rQ.
+Hypothesis HonQ_E : norm (E - Q) = rQ.
 
 (* Distance in plane *)
 Definition dist (X Y : 'rV[R]_2) := norm (X - Y).

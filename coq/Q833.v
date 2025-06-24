@@ -14,12 +14,12 @@ Variable R : realType.
 Variables (A B C : 'rV[R]_2).
 
 Hypotheses
-  (h_ABC_right : angle B C A = PI./2)
-  (h_AB : `|A - B| = 26)
-  (h_AC : `|A - C| = 24)
-  (h_BC : `|B - C| = 10).
+  (h_ABC_right : angle B C A = (PI./2)%:R)
+  (h_AB : `|A - B| = 26%:R)
+  (h_AC : `|A - C| = 24%:R)
+  (h_BC : `|B - C| = 10%:R).
 
 Theorem triangle_tan_ABC :
-  tan (angle A B C) = 12 / 5.
+  tan (angle A B C) = 12%:R / 5%:R.
 Proof. Admitted.
 ####

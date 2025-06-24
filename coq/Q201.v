@@ -12,16 +12,15 @@ Variable R : realType.
 
 Variables O A B P : 'rV[R]_2.
 
-Hypothesis AB_nondeg : A <> B.
-Hypothesis OA_pos : norm (O - A) > 0.
-Hypothesis OB_pos : norm (O - B) > 0.
-Hypothesis OP_pos : norm (O - P) > 0.
+Hypothesis O_distinct_points : O <> A /\ O <> B /\ O <> P.
+Hypothesis A_distinct_B : A <> B.
+Hypothesis A_distinct_P : A <> P.
+Hypothesis B_distinct_P : B <> P.
 
-(* All four points are distinct and lie on the same circle with center O *)
+(* All four points lie on the same circle with center O *)
 Hypothesis A_on_circle : norm (A - O) = norm (B - O).
 Hypothesis B_on_circle : norm (B - O) = norm (P - O).
 Hypothesis P_on_circle : norm (P - O) = norm (A - O).
-Hypothesis AB_arc_not_whole : A <> P /\ B <> P.
 
 (* Central angle AOB is 40 degrees *)
 Hypothesis angle_AOB_40 : angle O A B = (40%:R * PI) / 180.

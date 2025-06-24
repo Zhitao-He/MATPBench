@@ -1,34 +1,26 @@
-theory RectangleIntersection
-imports Complex_Main "HOL-Analysis.Euclidean_Space"
+theory Rectangle_Intersection_Area
+  imports Complex_Main
 begin
-
-(* 定义矩形的坐标点 *)
-definition A :: "real × real" where "A = (0, 0)"
-definition B :: "real × real" where "B = (3, 0)"
-definition C :: "real × real" where "C = (3, 11)"
-definition D :: "real × real" where "D = (0, 11)"
-
-(* 定义第二个矩形的坐标点 *)
-definition E :: "real × real" where "E = (7, 0)"
-definition F :: "real × real" where "F = (7, 9)"
-
-(* 计算两个矩形的交集面积 *)
-lemma "let rect1_x_min = fst A;
-          rect1_x_max = fst C;
-          rect1_y_min = snd A;
-          rect1_y_max = snd C;
-          rect2_x_min = fst A;
-          rect2_x_max = fst E;
-          rect2_y_min = snd A;
-          rect2_y_max = snd F;
-          intersection_x_min = max rect1_x_min rect2_x_min;
-          intersection_x_max = min rect1_x_max rect2_x_max;
-          intersection_y_min = max rect1_y_min rect2_y_min;
-          intersection_y_max = min rect1_y_max rect2_y_max;
-          intersection_width = max 0 (intersection_x_max - intersection_x_min);
-          intersection_height = max 0 (intersection_y_max - intersection_y_min);
-          intersection_area = intersection_width * intersection_height
-      in intersection_area = 21/2"
-  by (simp add: A_def B_def C_def D_def E_def F_def Let_def)
-
+type_synonym point = "real × real"
+definition rectangle :: "point ⇒ point ⇒ point set" where
+  "rectangle p1 p2 = { (x, y). fst p1 ≤ x ∧ x ≤ fst p2 ∧ snd p1 ≤ y ∧ y ≤ snd p2 }"
+definition A :: point where "A = (0, 0)"
+definition B :: point where "B = (0, 3)"
+definition C :: point where "C = (11, 3)"
+definition D :: point where "D = (11, 0)"
+definition rect_ABCD :: "point set" where
+  "rect_ABCD = rectangle A C"
+definition F :: point where "F = (0, 7)"
+definition E :: point where "E = (9, 0)"
+definition rect_AECF :: "point set" where
+  "rect_AECF = rectangle A C' "
+    where "C' = (9, 7)"
+definition intersection_area :: "real" where
+  "intersection_area = 
+    (let x1 = max (fst A) (fst A);
+         y1 = max (snd A) (snd A);
+         x2 = min (fst C) (fst C');
+         y2 = min (snd C) (snd C')
+     in if x2 > x1 ∧ y2 > y1 then (x2 - x1) * (y2 - y1) else 0)"
+  where "C' = (9, 7)"
 end

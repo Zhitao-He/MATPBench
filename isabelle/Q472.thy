@@ -1,27 +1,12 @@
-theory MarbleInCone
-imports
-  Main
-  "HOL-Analysis.Analysis"
-  "HOL-Algebra.Algebra"
+theory Marble_in_Cone
+  imports Complex_Main
 begin
-
-text ‹Proof: A marble of radius 15 is rolled into a cone-shaped hole. It fits in perfectly. 
-From the side the cone looks like an equilateral triangle. How deep is the hole if the depth is 45?›
-
-definition radius :: "real" where
-  "radius = 15"
-
-definition depth :: "real" where
-  "depth = 45"
-
-(* Let the cone have its axis vertical, vertex at the origin O (0,0,0),
-   opening upwards, with side view an equilateral triangle of height h = depth.
-   The sphere of radius r is tangent to all three cone faces and to the base. *)
-
-theorem marble_in_cone_depth:
-  "∃h::real. h > 0 ∧ 
-   (* The marble of radius 'radius' fits perfectly in a cone with 
-      equilateral triangle cross section of height h *)
-   h = depth"
-
+definition marble_radius :: real where
+  "marble_radius = 15"
+definition triangle_side :: real where
+  "triangle_side = 2 * sqrt 3 * marble_radius"
+definition triangle_height :: real where
+  "triangle_height = (sqrt 3 / 2) * triangle_side"
+definition hole_depth :: real where
+  "hole_depth = triangle_height"
 end

@@ -1,31 +1,22 @@
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
--- We work in a general Euclidean affine space.
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
+import Mathlib.Geometry.Euclidean.Triangle
+open Real InnerProductSpace
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
 namespace ProblemFormalization
-
--- Declare points as variables, following lowerCamelCase.
-variable (s t u v y z j : P)
-
--- Betweenness relations (weak betweenness)
-variable (h_sjt : Wbtw ℝ s j t)
-variable (h_zjt : Wbtw ℝ z j t)
-variable (h_yju : Wbtw ℝ y j u)
-variable (h_zvu : Wbtw ℝ z v u)
-
--- Known distances
-variable (h_dist_zt : dist z t = 18)
-variable (h_dist_jv : dist j v = 3)
-variable (h_dist_vt : dist v t = 9)
-
--- Midpoint/equality relations
-variable (h_sj_eq_jt : dist s j = dist j t)
-variable (h_zv_eq_vu : dist z v = dist v u)
-
--- Statement to prove: dist j t = 6
-theorem length_of_JT_is_6 : dist j t = 6 := by
+theorem length_JT_is_6
+  (S T U Y Z J V_pt : P)
+  (hT : T = midpoint ℝ S U)
+  (hY : Y = midpoint ℝ S Z)
+  (hV : V_pt = midpoint ℝ Z U)
+  (hJ : J = (1/3 : ℝ) • (S +ᵥ Z +ᵥ U))
+  (h_noncollinear : ¬ Collinear ℝ ({S, Z, U} : Set P))
+  (h_UJ : dist U J = 9)
+  (h_VJ : dist V_pt J = 3)
+  (h_ZT : dist Z T = 18)
+  : dist J T = 6 := by
   sorry
-
 end ProblemFormalization

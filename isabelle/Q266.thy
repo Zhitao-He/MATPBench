@@ -1,59 +1,24 @@
-theory TriangularPrism
-imports Main "HOL-Analysis.Analysis"
+theory Triangular_Prism_Surface_Area
+imports Main
 begin
-
-theorem triangular_prism_surface_area:
-  fixes base_length :: real
-    and triangle_height :: real
-    and triangle_side :: real
-    and prism_length :: real
-  assumes "base_length = 12"
-    and "triangle_height = 8"
-    and "triangle_side = 10"
-    and "prism_length = 21"
-  shows "2 * ((1/2) * base_length * triangle_height) + 
-         base_length * prism_length + 
-         triangle_side * prism_length + 
-         triangle_side * prism_length = 768"
-proof -
-  have triangle_area: "(1/2) * base_length * triangle_height = (1/2) * 12 * 8"
-    using assms(1) assms(2) by simp
-  also have "... = 48"
-    by simp
-  finally have triangle_area': "(1/2) * base_length * triangle_height = 48" .
-
-  have lateral_face1: "base_length * prism_length = 12 * 21"
-    using assms(1) assms(4) by simp
-  also have "... = 252"
-    by simp
-  finally have lateral_face1': "base_length * prism_length = 252" .
-
-  have lateral_face2: "triangle_side * prism_length = 10 * 21"
-    using assms(3) assms(4) by simp
-  also have "... = 210"
-    by simp
-  finally have lateral_face2': "triangle_side * prism_length = 210" .
-
-  have lateral_face3: "triangle_side * prism_length = 10 * 21"
-    using assms(3) assms(4) by simp
-  also have "... = 210"
-    by simp
-  finally have lateral_face3': "triangle_side * prism_length = 210" .
-
-  have "2 * ((1/2) * base_length * triangle_height) + 
-        base_length * prism_length + 
-        triangle_side * prism_length + 
-        triangle_side * prism_length = 
-        2 * 48 + 252 + 210 + 210"
-    using triangle_area' lateral_face1' lateral_face2' lateral_face3'
-    by simp
-  also have "... = 96 + 252 + 210 + 210"
-    by simp
-  also have "... = 96 + 252 + 420"
-    by simp
-  also have "... = 768"
-    by simp
-  finally show ?thesis .
-qed
-
+definition triangle_base_length :: real where
+  "triangle_base_length = 12.0"
+definition triangle_height :: real where
+  "triangle_height = 8.0"
+definition triangle_slanted_side :: real where 
+  "triangle_slanted_side = 10.0"
+definition prism_length_val :: real where 
+  "prism_length_val = 21.0"
+definition calculate_area_triangle :: "real => real => real" where
+  "calculate_area_triangle base height = (1.0/2.0) * base * height"
+definition calculate_area_rectangle :: "real => real => real" where
+  "calculate_area_rectangle side1 side2 = side1 * side2"
+definition total_surface_area :: real where
+  "total_surface_area =
+    (2.0 * calculate_area_triangle triangle_base_length triangle_height) + 
+    (calculate_area_rectangle prism_length_val triangle_base_length) +    
+    (2.0 * calculate_area_rectangle prism_length_val triangle_slanted_side)" 
+lemma statement_surface_area_is_768:
+  "total_surface_area = 768.0"
+  oops 
 end

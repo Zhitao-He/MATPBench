@@ -6,19 +6,20 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Geometry_Context.
+Local Open Scope ring_scope.
 
 Variable R : realType.
-Let R2 := 'rV[R]_2.
 
-Variables C D E F N : R2.
+Variables C D N : 'rV[R]_2.
 
-Hypothesis H_circ : on_circle C D E F.
-Hypothesis H_center : incenter N C D E F.
+Hypothesis H_NC : `|N - C| = 8.
+Hypothesis H_N_center : forall P : 'rV[R]_2, on_circle P N C D -> `|N - P| = `|N - C|.
 
-Theorem length_DN_is_8 :
-  dist D N = 8.
-Proof. Admitted.
-
-End Geometry_Context.
+Theorem DN_equals_8 : `|N - D| = 8.
+Proof.
+  (* Using the property that all radii of a circle are equal *)
+  have H_radius_equal : `|N - D| = `|N - C| by apply: H_N_center; apply: on_circle_intro.
+  rewrite H_NC in H_radius_equal.
+  by [].
+Qed.
 ####

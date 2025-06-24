@@ -1,39 +1,29 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
--- Let P be the type of points in an inner product space (Euclidean space)
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-
--- Points used in the problem
-variable (B C D E F G H J : P)
-
--- Angle values in radians
-def angleDGH_val_in_rad : ℝ := (64 / 180 : ℝ) * Real.pi
-def angleJGD_val_in_rad : ℝ := (116 / 180 : ℝ) * Real.pi
-
--- Geometric hypotheses
-
--- Distinctness for angle definition and line spans
-axiom hD_ne_G : D ≠ G
-axiom hH_ne_G : H ≠ G
-axiom hJ_ne_G : J ≠ G
-axiom hB_ne_C : B ≠ C
-axiom hD_ne_E : D ≠ E
-axiom hD_ne_F : D ≠ F
-
--- Angle ∠DGH equals 64°
-axiom h_angle_DGH : (Angle D G H : ℝ) = angleDGH_val_in_rad
-
--- BC ∥ DE (affine spans are parallel)
-axiom h_BC_parallel_DE : line[B, C] ∥ line[D, E]
-
--- DF ∥ GH
-axiom h_DF_parallel_GH : line[D, F] ∥ line[G, H]
-
--- GJ and GH are opposite rays (forming a straight angle)
-axiom h_JGH_collinear_opposite_rays : SameRay ℝ (G -ᵥ J) (-(G -ᵥ H))
-
--- What we want to prove
-theorem find_angle_JGD : (Angle J G D : ℝ) = angleJGD_val_in_rad := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+import Mathlib.Data.Real.Basic
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+import Mathlib.Geometry.Euclidean.Basic 
+namespace Lean4Problem
+open Real EuclideanGeometry Affine AffineSubspace
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem find_angle_JGD (A B C D E F G H I J K L : PPoint)
+    (hB_ne_C : B ≠ C) (hD_ne_E : D ≠ E) (hD_ne_F : D ≠ F) (hG_ne_H : G ≠ H)
+    (h_angle_DGH : angle D G H = (64 / 180 : ℝ) * Real.pi)
+    (h_BC_parallel_DE : line[ℝ, B, C] ∥ line[ℝ, D, E])
+    (h_DF_parallel_GH : line[ℝ, D, F] ∥ line[ℝ, G, H])
+    (hA_on_line_DF : A ∈ line[ℝ, D, F])
+    (hB_on_line_DF : B ∈ line[ℝ, D, F])
+    (hL_on_line_GH : L ∈ line[ℝ, G, H])
+    (hJ_on_line_GH : J ∈ line[ℝ, G, H])
+    (hJ_on_line_BC : J ∈ line[ℝ, B, C])
+    (hK_on_line_BC : K ∈ line[ℝ, B, C])
+    (hG_on_line_DE : G ∈ line[ℝ, D, E])
+    (hI_on_line_DE : I ∈ line[ℝ, D, E])
+    (h_Sbtw_G_J_H : Sbtw ℝ G J H)
+    (h_D_ne_G : D ≠ G)
+    (hJ_ne_G : J ≠ G)
+    : angle J G D = (116 / 180 : ℝ) * Real.pi := by
   sorry
+end Lean4Problem

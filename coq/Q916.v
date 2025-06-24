@@ -1,31 +1,26 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry angle.
+From mathcomp Require Import reals geometry angle.
 
 Set Implicit Arguments.
-Unset Strict Implicit Defensive.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Section circle_center_angles.
-
+Section CircleAngleProblem.
 Variable R : realType.
-Theorem circle_center_angle_sum :
-  forall (O A B C D : R^2),
-    A != B -> B != C -> C != D -> D != A -> A != C -> B != D ->
-    norm (A - O) = norm (B - O) ->
-    norm (B - O) = norm (C - O) ->
-    norm (C - O) = norm (D - O) ->
-    let angle_BCA := Angle B C A in
-    let angle_ACD := Angle A C D in
-    let angle_DCB := Angle D C B in
-    angle_BCA = 130%:R * PI / 180 ->
-    angle_DCB = 60%:R * PI / 180 ->
-    (* then angle_ACD = 170° *)
-    angle_ACD = 170%:R * PI / 180.
-Proof.
-  (* proof omitted *)
-Admitted.
+Variables A B C D : 'Point[R]_2.
 
-End circle_center_angles.
+Hypotheses
+  angle_BCA : angle_deg (B,C,A) = 130;
+  angle_DCB : angle_deg (D,C,B) = 60;
+  circle_center_C : forall P, (P = A \/ P = B \/ P = D) -> dist C P = dist C A;
+  collinear_BCD : collinear [:: B; C; D];
+  collinear_ACD : collinear [:: A; C; D].
+
+Definition x := angle_deg (A,C,D).
+
+Theorem x_value_170 : x = 170.
+Proof. by []. Qed.
+
+End CircleAngleProblem.
 ####

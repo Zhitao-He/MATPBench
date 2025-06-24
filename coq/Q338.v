@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals Rstruct.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -9,17 +9,26 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
+Variables A B C D W X Y Z P : 'rV[R]_2.
 
-Record point := Point { px : R; py : R }.
+Hypotheses
+  (square_size : let s := 2 in
+     `|W.1 - X.1| = s /
+     `|X.1 - Y.1| = s /
+     `|Y.1 - Z.1| = s /
+     `|Z.1 - W.1| = s /
+     `|A.1 - B.1| = 6 /
+     `|B.1 - C.1| = 6 /
+     `|C.1 - D.1| = 6 /
+     `|D.1 - A.1| = 6)
+  (points_on_corners : W = (0, 0) /
+                      X = (6, 0) /
+                      Y = (6, 6) /
+                      Z = (0, 6))
+  (square_construction : forall u v, on_line u (line A B) -> on_line v (line A D) -> ... )
 
-Definition square (A B C D : point) : Prop :=
-  [/\ 
-    (* All sides equal and consecutive, all angles right-angles *)
-    (A <> B) /\ (B <> C) /\ (C <> D) /\ (D <> A) /\
-    ((px B - px A)^2 + (py B - py A)^2 = (px C - px B)^2 + (py C - py B)^2) /\
-    ((px B - px A)^2 + (py B - py A)^2 = (px D - px C)^2 + (py D - py C)^2) /\
-    ((px B - px A)^2 + (py B - py A)^2 = (px A - px D)^2 + (py A - py D)^2) /\
-    (* Consecutive sides perpendicular *)
-    ((px B - px A)*(px C - px B) + (py B - py A)*(py C - py B) = 0) /\
-    ((px C - px B)*(px D - px C) + (py C -
+Definition max_distance_AP := `|A - P|`.
+
+Theorem max_distance_from_A_to_P : max_distance_AP <= 6.
+Proof. Admitted.
 ####

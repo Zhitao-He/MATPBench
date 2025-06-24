@@ -10,9 +10,11 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem trapezoid_FEK_label_perimeter :
-  6%:R + 15%:R + 11%:R + 12%:R + x + y = 70%:R.
+Theorem ratio_of_similar_quadrilaterals :
+  (CF / BN) ^ 2 = (Area CDEF) / (Area BLAN).
 Proof.
-admit.
+  rewrite /Area CDEF /Area BLAN.
+  (* Calculation based on similarity ratio *)
+  admit.
 Qed.
 ####

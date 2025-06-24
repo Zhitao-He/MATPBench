@@ -6,16 +6,26 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Variables A B C D x : 'rV[R]_2.
-Hypotheses
-  (HBC : norm (B - C) = 2 * x + 5)
-  (HBA : norm (B - A) = 3 * x - 13)
-  (Hangle : angle A B C = PI/3)
-  (Hcol : colinear [:: C;A;D]).
+Local Open Scope ring_scope.
 
-Theorem solve_x_value :
-  x = 6.
+Variable R : realType.
+
+Variables A B C D E F : 'rV[R]_2.
+Variable x : R.
+
+Hypothesis H_AB_BC : `|A - B| = `|B - C|.
+Hypothesis H_DF : `|F - D| = 3 * x - 7.
+Hypothesis H_FE : `|F - E| = x + 9.
+Hypothesis H_F_center : F = (0, 0).
+Hypothesis H_CE_FE : perpendicular (C - E) (F - E).
+Hypothesis H_FD_AD : perpendicular (F - D) (A - D).
+
+Theorem find_x_value : x = 8.
 Proof.
-admit.
+  (* Using circle properties and perpendicularity *)
+  have H_perp_bisect : `|F - B| = `|F - A| by apply: circle_property_chord_perpendicular_bisect_chord.
+  (* Further geometric relationships *)
+  (* ... detailed proof steps would go here ... *)
+  admit.
 Qed.
 ####

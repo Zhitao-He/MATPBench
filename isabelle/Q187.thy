@@ -1,19 +1,21 @@
-theory IsoscelesTrapezoid
-imports Complex_Main "HOL-Analysis.Analysis"
+theory Isosceles_Trapezoid_Area
+  imports Main
 begin
-
-theorem isosceles_trapezoid_area_perimeter:
-  fixes a b :: real
-  assumes "a = 19" and "b = 35"
-  shows "∃h l x1 x2 :: real.
-         0 < h ∧ 0 < l ∧
-         2 * l + a + b = 74 ∧
-         (a + b) * h / 2 = 162 ∧
-         x2 - x1 = a ∧
-         sqrt (x1^2 + h^2) = l ∧ sqrt ((b - x2)^2 + h^2) = l"
-proof -
-  (* 这里是证明部分，按照要求可以省略 *)
-  sorry
-qed
-
+locale isosceles_trapezoid =
+  fixes a :: real  
+    and b :: real  
+    and c :: real  
+  assumes a_gt_0: "a > 0"
+    and b_gt_0: "b > 0"
+    and c_gt_0: "c > 0"
+definition a :: real where "a = 19"
+definition b :: real where "b = 35"
+definition perimeter :: real where "perimeter = 74"
+definition area :: real where "area = 162"
+definition height :: real where
+  "height = (2 * area) / (a + b)"
+definition leg :: real where
+  "leg = sqrt ((height ^ 2) + ((b - a) / 2) ^ 2)"
+definition perimeter_expr :: real where
+  "perimeter_expr = a + b + 2 * leg"
 end

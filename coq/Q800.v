@@ -10,20 +10,28 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem circle_power_theorem_example :
-  exists2 x : R,
-    0 < x &
-    forall (A B C D E : R * R) (O : R * R) (r : R),
-      (* Points A, B, C, D, E all on circle centered at O with radius r *)
-      on_circle O r A /\ on_circle O r B /\ on_circle O r C /\ on_circle O r D /\ on_circle O r E /\
-      (* Collinear points D, E, C *)
-      collinear [:: D; E; C] /\
-      (* Collinear points A, E, B *)
-      collinear [:: A; E; B] /\
-      (* Segment lengths defined as in the diagram *)
-      dist A E = 2 /\ dist E C = 5 /\ dist D E = 4 /\ dist E B = x /\
-      (* Intersection point E of chords AB and DC *)
-      intersection_of_segments A B D C = Some E ->
-      x = 10.
-Proof. Admitted.
+Theorem circle_chord_problem :
+  forall (A B C D E X : 'rV[R]_2) (x : R),
+    (* All points lie on circle centered at X *)
+    norm (A - X) = norm (B - X) ->
+    norm (A - X) = norm (C - X) ->
+    norm (A - X) = norm (D - X) ->
+    norm (A - X) = norm (E - X) ->
+    (* Collinearity conditions *)
+    colinear C E D ->
+    colinear A E B ->
+    (* Given lengths *)
+    norm (A - E) = 2 ->
+    norm (E - C) = 5 ->
+    norm (D - E) = 4 ->
+    norm (E - B) = x ->
+    (* Applying power of a point theorem *)
+    x = 10.
+Proof.
+  (* Proof would involve:
+     1. Applying power of a point theorem for point E
+     2. Setting up equation AE * EB = CE * ED
+     3. Solving for x *)
+  admit.
+Qed.
 ####

@@ -1,27 +1,24 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2 
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
-namespace FormalProblem
-
-open EuclideanGeometry
-
-variable {V P : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable [EuclideanSpace V P]
-
-variable (K A B H C J : P)
-variable (x : ℝ)
-
-axiom h_x_pos : 0 < x
-axiom h_dist_KA : dist K A = 4 * x
-axiom h_dist_AB : dist A B = x
-axiom h_dist_AH : dist A H = x
-axiom h_dist_HC : dist H C = x
-axiom h_dist_CJ : dist C J = 2 * x
-
-/-- Between relation in Lean 4 --/
-axiom h_collinear_ordered_ABC : between ℝ A B C
-axiom h_collinear_ordered_BCJ : between ℝ B C J
-
-theorem length_of_KJ_is_24 : dist K J = 24 := by sorry
-
-end FormalProblem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+noncomputable def radiusOfCircleH (x_val : ℝ) : ℝ := x_val 
+noncomputable def radiusOfCircleJ (x_val : ℝ) : ℝ := 2 * x_val 
+noncomputable def radiusOfCircleK (x_val : ℝ) : ℝ := 4 * x_val 
+noncomputable def circumferenceOfCircle (radius : ℝ) : ℝ := 2 * Real.pi * radius 
+theorem target_theorem_KJ_length_eq_24
+    (A C H J K : PPoint) (x : ℝ) 
+    (x_pos : 0 < x)
+    (h_HA : dist H A = x)
+    (h_HC : dist H C = x)
+    (h_CJ : dist C J = 2 * x)
+    (h_KA : dist K A = 4 * x)
+    (h_sum_circumferences :
+      circumferenceOfCircle (radiusOfCircleK x) +
+      circumferenceOfCircle (radiusOfCircleJ x) +
+      circumferenceOfCircle (radiusOfCircleH x) = 42 * Real.pi)
+    (h_Sbtw_K_A_H : Sbtw ℝ K A H)
+    (h_Sbtw_A_H_C : Sbtw ℝ A H C)
+    (h_Sbtw_H_C_J : Sbtw ℝ H C J)
+    : dist K J = 24 := by sorry

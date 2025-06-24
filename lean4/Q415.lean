@@ -1,40 +1,24 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
-import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Equiv
-
-open EuclideanSpace
-
-abbrev P2 := EuclideanSpace ℝ (Fin 2)
-
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+noncomputable section
+abbrev Point := EuclideanSpace ℝ (Fin 2)
 def s : ℝ := 8
-
-def ptA : P2 := ![0, 0]
-def ptB : P2 := ![s, 0]
-def ptC : P2 := ![s, s]
-def ptD : P2 := ![0, s]
-
-def semicircleRadius : ℝ := s / 2
-
-def centerSemicircleBC : P2 := ![s, s/2]
-def centerSemicircleCD : P2 := ![s/2, s]
-
-def semicircleBCRegion : Set P2 :=
-  { p | dist p centerSemicircleBC ≤ semicircleRadius ∧ p.get 0 ≤ s }
-
-def semicircleCDRegion : Set P2 :=
-  { p | dist p centerSemicircleCD ≤ semicircleRadius ∧ p.get 1 ≤ s }
-
-def shadedRegion : Set P2 := semicircleBCRegion ∩ semicircleCDRegion
-
-def distCenters : ℝ := dist centerSemicircleBC centerSemicircleCD
-
-def calculatedAreaOfShadedRegion : ℝ :=
-  let r := semicircleRadius
-  let d := distCenters
-  2 * r^2 * Real.acos(d/(2*r)) - (d/2) * Real.sqrt (4 * r^2 - d^2)
-
-def expectedAreaValue : ℝ := 8 * Real.pi - 16
-
-theorem areaIsAsExpected : calculatedAreaOfShadedRegion = expectedAreaValue := by sorry
+def A : Point := ![0, 0]
+def B : Point := ![s, 0]
+def C : Point := ![s, s]
+def D : Point := ![0, s]
+def semicircleBC : Set Point :=
+  let center := midpoint ℝ B C 
+  let radius := s / 2
+  { p : Point | dist p center ≤ radius ∧ p 1 ≥ center 1 }
+def semicircleCD : Set Point :=
+  let center := midpoint ℝ C D 
+  let radius := s / 2
+  { p : Point | dist p center ≤ radius ∧ p 0 ≤ center 0 }
+def shadedRegion : Set Point := semicircleBC ∩ semicircleCD
+def area (R : Set Point) : ℝ := sorry
+theorem area_of_shadedRegion :
+    area shadedRegion = 8 * Real.pi - 16 := by sorry
+end

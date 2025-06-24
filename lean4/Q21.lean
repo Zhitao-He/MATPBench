@@ -1,16 +1,17 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Polynomial.Basic
-
--- Define the function f(x) = x³
-def f (x : ℝ) : ℝ := x ^ 3
-
-/-!
-  The degree of the function f(x) = x³ is 3. 
-  Formally: f is a polynomial function of degree 3.
-  One can characterize this by showing that there exists a degree 3 polynomial p such that
-  ∀ x, f(x) = p.eval x and p.degree = 3.
--/
-
-theorem degree_of_f_is_3 :
-  ∃ (p : Polynomial ℝ), (Polynomial.degree p = 3) ∧ (∀ x : ℝ, f x = Polynomial.eval x p) :=
-by sorry
+import Mathlib.Data.Real.Basic 
+def thisFunction (x : ℝ) : ℝ := 5 * x^3 + (-2) * x^2 + 7 * x + (-10)
+structure IsPolynomialOfDegreeThree (f : ℝ → ℝ) where
+  coeff_a : ℝ  
+  coeff_b : ℝ  
+  coeff_c : ℝ  
+  coeff_d : ℝ  
+  a_ne_zero : coeff_a ≠ 0  
+  is_of_form : ∀ (x : ℝ), f x = coeff_a * x^3 + coeff_b * x^2 + coeff_c * x + coeff_d
+def degree_of_thisFunction_is_3 : IsPolynomialOfDegreeThree thisFunction := {
+  coeff_a := 5,
+  coeff_b := -2,
+  coeff_c := 7,
+  coeff_d := -10,
+  a_ne_zero := by norm_num,
+  is_of_form := fun x ↦ rfl
+}

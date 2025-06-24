@@ -1,19 +1,21 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2 
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor ℝ P]
-variable (A B C D E F : P)
-
--- Helper: degrees to radians
-noncomputable def degreesToRadians (d : ℝ) : ℝ := d * (Real.pi / 180)
-
--- Assumptions from the diagram and problem statement
-variable (hAngleEDF : (∠ E D F).value = degreesToRadians 39)
-variable (hAngleFBA : (∠ F B A).value = degreesToRadians 48)
-variable (hFcParallelEd : line[ℝ, F, C] ∥ line[ℝ, E, D])
-variable (hAfPerpBf : (∠ A F B).value = degreesToRadians 90)
-variable (hDcPerpFc : (∠ D C F).value = degreesToRadians 90)
-variable (hFePerpDe : (∠ F E D).value = degreesToRadians 90)
-
--- The result to prove: measure of ∠FDC is 51°
-theorem measureOfAngleFDC : (∠ F D C).value = degreesToRadians 51 := by sorry
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Data.Real.Basic
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Defs 
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
+namespace Problem
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+theorem target_angle_measure
+    (A B C D E F : PPoint) 
+    (h_EDF : EuclideanGeometry.angle E D F = degToRad 39)
+    (h_FBA : EuclideanGeometry.angle F B A = degToRad 48)
+    (h_FC_parallel_ED : AffineSubspace.Parallel (affineSpan ℝ ({F, C} : Set PPoint)) (affineSpan ℝ ({E, D} : Set PPoint))) 
+    (h_AF_perp_BF : EuclideanGeometry.angle A F B = Real.pi / 2)
+    (h_DC_perp_FC : EuclideanGeometry.angle D C F = Real.pi / 2)
+    (h_FE_perp_DE : EuclideanGeometry.angle F E D = Real.pi / 2)
+    (h_FDC_noncollinear : ¬ Collinear ℝ ({F, D, C} : Set PPoint))
+    : EuclideanGeometry.angle F D C = degToRad 51 := by 
+  sorry
+end Problem

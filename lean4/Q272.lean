@@ -1,6 +1,4 @@
 import Mathlib.Data.Real.Basic
-
-
 theorem right_square_pyramid_volume :
   let s : ℝ := 11     
   let h : ℝ := 7      

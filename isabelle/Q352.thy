@@ -1,26 +1,13 @@
-theory GeometryProblem
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Geometry_Angle75
+  imports Main
 begin
-
-(* 定义角度单位转换 *)
-definition deg_to_rad :: "real ⇒ real" where
-  "deg_to_rad α = (α * pi) / 180"
-
-(* 定义点和角度 *)
-locale triangle_problem =
-  fixes A B C D :: "complex"
-  assumes AB_BC: "cmod (A - B) = cmod (B - C)"  (* AB = BC *)
-  assumes angle_ABD: "arg ((D - B) / (A - B)) = deg_to_rad 30"  (* ∠ABD = 30° *)
-  assumes angle_C: "arg ((D - C) / (B - C)) = deg_to_rad 50"  (* ∠C = 50° *)
-  assumes angle_CBD: "arg ((D - B) / (C - B)) = deg_to_rad 80"  (* ∠CBD = 80° *)
-  assumes distinct_points: "A ≠ B" "B ≠ C" "B ≠ D" "C ≠ D"
-
-(* 定理：在满足以上条件的情况下，∠A = 75° *)
-theorem angle_A_is_75:
-  assumes "triangle_problem A B C D"
-  shows "arg ((B - A) / (C - A)) = deg_to_rad 75"
-  sorry  (* 这里省略证明部分，因为题目只需要形式化定义 *)
-
+locale geometry_problem =
+  fixes A B C D :: "'a"
+  assumes distinct: "A ≠ B" "B ≠ C" "C ≠ D" "A ≠ C" "A ≠ D" "B ≠ D" "A ≠ C" "B ≠ C"
+  and eq_AB_BC: "dist A B = dist B C"
+  and angle_ABD: "angle A B D = 30"
+  and angle_C: "angle B C A = 50"
+  and angle_CBD: "angle C B D = 80"
+definition angle_A_is_75 :: "bool" where
+  "angle_A_is_75 ≡ (angle B A D = 75)"
 end

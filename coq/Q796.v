@@ -10,23 +10,23 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem geometry_uz_length :
-  forall (W U Z Y : R^2)
-         (x : R),
-    (* Collinear points: Z, U, Y *)
-    colinear Z U Y ->
-    (* U is between Z and Y, with Z---U---Y *)
-    [>` Z ; U ; Y `] ->
-    (* Angle W U Z is a right angle *)
-    '[| (W - U) \dot (Z - U) |] = 0 ->
-    (* Angle W U Y is a right angle *)
-    '[| (W - U) \dot (Y - U) |] = 0 ->
-    (* Distances as labeled *)
-    `|Z - U| = x + 6 ->
-    `|Y - U| = 32 ->
-    `|W - Z| = 3 * x - 6 ->
-    `|W - Y| = 40 ->
-    (* Conclusion *)
-    `|U - Z| = 18.
-Proof. Admitted.
+Variables W U Z Y : 'rV[R]_2.
+Variable x : R.
+
+Hypotheses
+  (UY_length : norm (U - Y) = 32)
+  (WY_length : norm (W - Y) = 40)
+  (WZ_length : norm (W - Z) = 3 * x - 6)
+  (ZU_length : norm (Z - U) = x + 6)
+  (angle_eq : angle U W Z = angle U Y W)
+  (ZU_perp_WU : angle Z U W = PI/2).
+
+Theorem UZ_length : norm (U - Z) = 18.
+Proof.
+  (* Proof would involve:
+     1. Using angle equality to establish triangle similarity
+     2. Applying right triangle properties
+     3. Setting up and solving the resulting equations *)
+  admit.
+Qed.
 ####

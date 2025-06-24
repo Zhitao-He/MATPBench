@@ -1,44 +1,28 @@
-theory GeometryProblem
-imports Complex_Main "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem
+  imports Complex_Main
 begin
-
-(* 定义二维平面上的点 *)
-type_synonym point = "real × real"
-
-(* 计算两点之间的距离 *)
-definition dist :: "point ⇒ point ⇒ real" where
-  "dist p1 p2 = sqrt((fst p2 - fst p1)^2 + (snd p2 - snd p1)^2)"
-
-(* 判断三点共线 *)
-definition collinear :: "point ⇒ point ⇒ point ⇒ bool" where
-  "collinear p1 p2 p3 = (
-    let v1 = (fst p2 - fst p1, snd p2 - snd p1);
-        v2 = (fst p3 - fst p1, snd p3 - snd p1)
-    in fst v1 * snd v2 = snd v1 * fst v2)"
-
-(* 判断点是否在圆上 *)
-definition on_circle :: "point ⇒ point ⇒ real ⇒ bool" where
-  "on_circle p center radius = (dist p center = radius)"
-
-(* 证明点在线段上的公理 *)
-definition between :: "point ⇒ point ⇒ point ⇒ bool" where
-  "between A B C = (
-    collinear A B C ∧ 
-    dist A C = dist A B + dist B C)"
-
-(* 定义问题 *)
-lemma geometry_problem:
-  fixes A B C D E X :: point
-  assumes "dist A B = 5"
-    and "dist C A = 15/2"
-    and "dist E C = 9/2"
-    and "collinear A B C E"
-    and "between A B C"
-    and "between B C E"
-    and "∃r. on_circle A X r ∧ on_circle B X r ∧ on_circle C X r ∧ on_circle D X r ∧ on_circle E X r"
-    and "collinear B D X"
-    and "between B D X"
-  shows "dist B D = 13"
-  sorry
-
+locale geometry_setup =
+  fixes A B C D E X :: "'a::euclidean_space"
+  assumes AB_neq: "A ≠ B" and BC_neq: "B ≠ C" and CD_neq: "C ≠ D"
+    and DE_neq: "D ≠ E" and EX_neq: "E ≠ X" and XA_neq: "X ≠ A"
+begin
+definition AB :: real where "AB = 5"
+definition BD :: real where "BD = x"
+definition CA :: real where "CA = 15/2"
+definition EC :: real where "EC = 9/2"
+definition collinear_ABD :: bool where "collinear_ABD ≡ collinear {A, B, D}"
+definition collinear_ACE :: bool where "collinear_ACE ≡ collinear {A, C, E}"
+definition circle_X :: "'a set" where
+  "circle_X = {P. dist P X = dist B X}"
+assumes B_on_circle: "B ∈ circle_X"
+    and D_on_circle: "D ∈ circle_X"
+    and E_on_circle: "E ∈ circle_X"
+    and C_on_circle: "C ∈ circle_X"
+assumes AB_len: "dist A B = AB"
+    and BD_len: "dist B D = BD"
+    and CA_len: "dist C A = CA"
+    and EC_len: "dist E C = EC"
+definition Value :: "real ⇒ bool" where
+  "Value x ≡ (x = 13)"
+end
 end

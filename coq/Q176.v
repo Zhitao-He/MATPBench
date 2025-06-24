@@ -10,9 +10,8 @@ Local Open Scope R_scope.
 
 Variable R : realType.
 Theorem find_x_in_diagram :
-  forall x y : R,
-    68 + (3 * x - 15) + 2 * x = 180 /\
-    (y ^ 2) + 2 * x + (3 * x - 15) = 180 ->
+  forall x : R,
+    68 + (3 * x - 15) + 2 * x = 180 ->
     x = 34.
 Proof. Admitted.
 ####

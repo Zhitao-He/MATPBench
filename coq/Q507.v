@@ -21,10 +21,11 @@ Hypotheses
   (HB : dist B O = 3)
   (angle_AOB : angle A O B = PI/4).
 
-Theorem length_major_arc_OBA :
-  (* Major arc length = circumference - minor arc = 6*PI - 3*(PI/4) = (21*PI)/4 *)
-  6 * PI - 3 * (PI / 4) = 21 * PI / 4.
+Theorem length_arc_OBA :
+  arc_length O A B = 3 * PI / 4.
 Proof.
-admit.
+  have H1 : radius O A = 3 by rewrite /radius HO HA; exact: eq_refl.
+  have H2 : central_angle O A B = PI / 4 by exact: angle_AOB.
+  rewrite /arc_length H1 H2; field.
 Qed.
 ####

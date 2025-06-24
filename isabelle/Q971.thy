@@ -1,41 +1,50 @@
-theory Tangent_Parallelogram
-imports Main "HOL-Analysis.Analysis"
+theory Geometry_Parallelogram
+  imports
+    Main
+    "HOL-Analysis.Euclidean_Space" 
 begin
-
-locale tangent_parallelogram =
-  fixes A C O P E F B D :: "real × real"
-  assumes distinct: "A ≠ C" "C ≠ O" "P ≠ C" "E ≠ F" "P ≠ E" "P ≠ F" "A ≠ O" "A ≠ P"
-  
-  (* Circle definition *)
-  defines "dist x y ≡ sqrt((fst x - fst y)² + (snd x - snd y)²)"
-  assumes circle: "dist O A = dist O C"
-  
-  (* AC is a diameter *)
-  assumes diameter: "O = ((fst A + fst C) / 2, (snd A + snd C) / 2)"
-  
-  (* PC is tangent to circle O at point C *)
-  defines "slope x y ≡ if fst x = fst y then undefined else (snd y - snd x) / (fst y - fst x)"
-  defines "perpendicular m1 m2 ≡ m1 * m2 = -1"
-  assumes tangent_PC: "perpendicular (slope P C) (slope O C)"
-  
-  (* PEF is a secant line *)
-  defines "collinear x y z ≡ (fst y - fst x) * (snd z - snd x) = (snd y - snd x) * (fst z - fst x)"
-  assumes secant_PEF: "collinear P E F" "E ≠ F" 
-                       "dist O E = dist O A" "dist O F = dist O A"
-  
-  (* B is intersection of AE and PO *)
-  defines "on_line x y z ≡ collinear x y z"
-  assumes B_def: "on_line A E B" "on_line P O B" "¬ collinear A E P"
-  
-  (* D is intersection of AF and PO *)
-  assumes D_def: "on_line A F D" "on_line P O D" "¬ collinear A F P"
-  
-  (* Parallelogram definition *)
-  defines "is_parallelogram w x y z ≡ 
-    (fst x - fst w) = (fst z - fst y) ∧ (snd x - snd w) = (snd z - snd y)"
-
-theorem tangent_quadrilateral_parallelogram:
-  "is_parallelogram B A C D"
-  sorry
-
+type_synonym point = "real vector"
+definition on_circle :: "point \<Rightarrow> point \<Rightarrow> real \<Rightarrow> bool" where
+  "on_circle P O_center r_val \<equiv> r_val > 0 \<and> dist P O_center = r_val"
+definition is_tangent_at :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> bool"
+  where "is_tangent_at P_line C_tangent_point O_center \<equiv>
+    P_line \<noteq> C_tangent_point \<and>    
+    dist O_center C_tangent_point > 0 \<and> 
+    orthogonal (P_line - C_tangent_point) (O_center - C_tangent_point)" 
+definition is_diameter :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> bool"
+  where "is_diameter A_end C_end O_center \<equiv>
+    A_end \<noteq> C_end \<and>                     
+    O_center = (A_end + C_end) / (2::real) \<and> 
+    dist A_end O_center > 0"               
+definition is_secant_line :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> real \<Rightarrow> bool"
+  where "is_secant_line P_external E_on_circle F_on_circle O_center r_val \<equiv>
+    E_on_circle \<noteq> F_on_circle \<and>        
+    on_circle E_on_circle O_center r_val \<and>
+    on_circle F_on_circle O_center r_val \<and>
+    collinear {P_external, E_on_circle, F_on_circle}" 
+definition intersection_of_lines :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> bool"
+  where "intersection_of_lines p1_l1 p2_l1 p1_l2 p2_l2 I_intersect \<equiv>
+    p1_l1 \<noteq> p2_l1 \<and> 
+    p1_l2 \<noteq> p2_l2 \<and> 
+    collinear {p1_l1, I_intersect, p2_l1} \<and> 
+    collinear {p1_l2, I_intersect, p2_l2}"    
+definition is_parallelogram :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> bool"
+  where "is_parallelogram A B C D_pt \<equiv>
+    (A + C) / (2::real) = (B + D_pt) / (2::real) \<and> 
+    A \<noteq> B \<and> B \<noteq> C \<and> C \<noteq> D_pt \<and> D_pt \<noteq> A \<and> 
+    \<not> collinear {A, B, C}" 
+theorem Tangent_Secant_Parallelogram:
+  fixes P A C O E F B D :: point
+  assumes A_neq_E: "A \<noteq> E" 
+  assumes A_neq_F: "A \<noteq> F" 
+  assumes P_neq_O: "P \<noteq> O" 
+  assumes tangent_PC: "is_tangent_at P C O"
+  assumes diameter_AC: "is_diameter A C O"
+  let ?r = "dist O C"
+  assumes secant_PEF: "is_secant_line P E F O ?r"
+  assumes B_is_intersection: "intersection_of_lines A E P O B"
+  assumes D_is_intersection: "intersection_of_lines A F P O D"
+  shows "is_parallelogram A B C D"
+proof -
+qed
 end

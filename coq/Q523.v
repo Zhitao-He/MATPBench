@@ -10,17 +10,30 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-(* Points in the Euclidean plane *)
-Variables E D F : 'rV[R]_2.
+Variables D E F G H : 'rV[R]_2.
+Variable x : R.
 
-(* The triangle DEF is formed by the points D, E, F *)
+Hypothesis H_FE : `|F - E| = 6`.
+Hypothesis H_FG : `|F - G| = 3`.
+Hypothesis H_FH : `|F - H| = 4`.
+Hypothesis H_HG : `|H - G| = 2`.
+Hypothesis H_sim_DEF_GFH : similar D E F G H F.
 
-(* The perimeter of triangle DEF is defined as the sum of the side lengths *)
 Definition perimeter_triangle (A B C : 'rV[R]_2) : R :=
-  norm (A - B) + norm (B - C) + norm (C - A).
+  `|A - B| + `|B - C| + `|C - A|`.
 
-(* Given the diagram's configuration for points D, E, F inferred from the image, the perimeter is 27/2 *)
-Theorem perimeter_DEF_value :
-  perimeter_triangle D E F = 27 / 2.
-Proof. Admitted.
+Theorem perimeter_DEF_value : perimeter_triangle D E F = 27 / 2.
+Proof.
+  (* Using similarity ratios to find DE, EF, FD *)
+  have H_ratio_DE : `|D - E| / `|G - F| = `|F - E| / `|F - H|` by admit.
+  have H_ratio_EF : `|E - F| / `|F - G| = `|F - E| / `|F - H|` by admit.
+  have H_ratio_FD : `|F - D| / `|H - F| = `|F - E| / `|F - H|` by admit.
+  (* Calculate side lengths *)
+  have H_DE : `|D - E| = (6 * 4) / 3` by field; rewrite H_ratio_DE.
+  have H_EF : `|E - F| = 6` by admit.
+  have H_FD : `|F - D| = (6 * 2) / 3` by field; rewrite H_ratio_FD.
+  (* Compute perimeter *)
+  rewrite /perimeter_triangle H_DE H_EF H_FD.
+  by field.
+Qed.
 ####

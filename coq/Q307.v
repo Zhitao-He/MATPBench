@@ -20,8 +20,6 @@ Hypotheses
   (right_D : `[< angle B D C = pi/2 >] )
   (right_ADC : `[< angle A D C = pi/2 >] )
   (angle_A : `[< angle C A B = pi/6 >] )
-  (between_D : on_line D (line B A))
-  (between_D_C : on_line D (line A C)).
 
 Definition area (P Q R : 'rV[R]_2) : R :=
   (1%:R/2) * `| (Q - P) ** (R - P) |.

@@ -1,53 +1,61 @@
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
-
-abbrev Point := ℝ × ℝ
-
-
-def pointA : Point := (0, 0)
-def pointB : Point := (1, 0)
-def pointC : Point := (1, 1)
-def pointD : Point := (0, 1)
-
-
-noncomputable def P₁ (n : ℝ) : Point := (1, 1 / n)          
-noncomputable def P₂ (n : ℝ) : Point := (1 - 1 / n, 1)      
-noncomputable def P₃ (n : ℝ) : Point := (0, 1 - 1 / n)      
-noncomputable def P₄ (n : ℝ) : Point := (1 / n, 0)          
-
-
-noncomputable def V_AD (n : ℝ) : Point :=
-  let x := n / (n^2 + 1)
-  let y := 1 / (n^2 + 1)
-  (x, y)
-
-noncomputable def V_AB (n : ℝ) : Point :=
-  let x := n^2 / (n^2 + 1)
-  let y := n / (n^2 + 1)
-  (x, y)
-
-noncomputable def V_BC (n : ℝ) : Point :=
-  let x := (n^2 - n + 1) / (n^2 + 1)
-  let y := n^2 / (n^2 + 1)
-  (x, y)
-
-noncomputable def V_CD (n : ℝ) : Point :=
-  let x := 1 / (n^2 + 1)
-  let y := (n^2 - n + 1) / (n^2 + 1)
-  (x, y)
-
-
-def distSq (p1 p2 : Point) : ℝ :=
-  (p1.1 - p2.1)^2 + (p1.2 - p2.2)^2
-
-
-noncomputable def areaSmallSquare (n : ℝ) : ℝ :=
-  distSq (V_AD n) (V_AB n)
-
-
-theorem aime_1985_square_area_implies_n_equals_32 :
-  ∀ (n : ℕ), n ≥ 2 → areaSmallSquare (n : ℝ) = 1 / 1985 → n = 32 := by sorry
-
-
-lemma areaSmallSquare_formula (n : ℝ) (h₁ : n ≠ 0) (h₂ : n^2 + 1 ≠ 0) :
-  areaSmallSquare n = (n - 1)^2 / (n^2 + 1) := by sorry
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+noncomputable section
+abbrev EPoint := Fin 2 → ℝ
+def mkPt (x y : ℝ) : EPoint := ![x, y]
+def dPt : EPoint := mkPt 0 0 
+def cPt : EPoint := mkPt 1 0 
+def bPt : EPoint := mkPt 1 1 
+def aPt : EPoint := mkPt 0 1 
+namespace InnerSquareConstruction
+variable (nNat : ℕ)
+variable (hnGe1 : nNat ≥ 1)
+private def nRVal : ℝ := ↑nNat
+lemma commonDenomPosLemma : 2 * nRVal^2 - 2 * nRVal + 1 > 0 :=
+  by sorry
+def dp1 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  mkPt ((nRVal - 1) / nRVal) 1
+def dp2 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  mkPt 1 (1 / nRVal)
+def dp3 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  mkPt (1 / nRVal) 0
+def dp4 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  mkPt 0 ((nRVal - 1) / nRVal)
+def lineFromD (nNat : ℕ) : AffineSubspace ℝ EPoint := affineSpan ℝ {dPt, dp1 nNat}
+def lineFromA (nNat : ℕ) : AffineSubspace ℝ EPoint := affineSpan ℝ {aPt, dp2 nNat}
+def lineFromB (nNat : ℕ) : AffineSubspace ℝ EPoint := affineSpan ℝ {bPt, dp3 nNat}
+def lineFromC (nNat : ℕ) : AffineSubspace ℝ EPoint := affineSpan ℝ {cPt, dp4 nNat}
+def v1 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  let commonDenomVal := 2 * nRVal^2 - 2 * nRVal + 1
+  mkPt (nRVal * (nRVal - 1) / commonDenomVal)
+       (nRVal^2 / commonDenomVal)
+def v2 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  let commonDenomVal := 2 * nRVal^2 - 2 * nRVal + 1
+  mkPt (nRVal^2 / commonDenomVal)
+       ((nRVal^2 - nRVal + 1) / commonDenomVal)
+def v3 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  let commonDenomVal := 2 * nRVal^2 - 2 * nRVal + 1
+  mkPt ((nRVal^2 - nRVal + 1) / commonDenomVal)
+       (nRVal * (nRVal - 1) / commonDenomVal)
+def v4 (nNat : ℕ) : EPoint :=
+  let nRVal := ↑nNat
+  let commonDenomVal := 2 * nRVal^2 - 2 * nRVal + 1
+  mkPt ((nRVal - 1)^2 / commonDenomVal)
+       (nRVal * (nRVal - 1) / commonDenomVal)
+def smallSquareArea (nNat : ℕ) : ℝ :=
+  let nRVal := ↑nNat
+  let commonDenomVal := 2 * nRVal^2 - 2 * nRVal + (1 : ℝ)
+  (1 : ℝ) / commonDenomVal
+end InnerSquareConstruction
+def givenSmallSquareArea : ℝ := (1:ℝ) / 1985
+def nSolution : ℕ := 32
+end

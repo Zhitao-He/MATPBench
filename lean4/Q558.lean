@@ -1,21 +1,19 @@
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
 import Mathlib.Data.Real.Basic
-
-open Real EuclideanGeometry Angle
-
-variable {P : Type*} [EuclideanAffineSpace ℝ P] [Fact (2 ≤ FiniteDimensional.finrank ℝ P)]
-variable (A B C D : P)
-
-def givenAngleABC : ℝ := (110 / 180) * π
-def expectedAngleCBD : ℝ := (70 / 180) * π
-
-theorem measure_of_angle_CBD
-    (h_collinear : Collinear ℝ ({A, B, D} : Set P))
-    (h_B_ne_A : B ≠ A)
-    (h_B_ne_D : B ≠ D)
-    (h_between : AffineSegment ℝ A D ∋ B)
-    (h_C_not_collinear : ¬ Collinear ℝ ({A, B, C} : Set P))
-    (h_angle : ∠ A B C = givenAngleABC) :
-    ∠ C B D = expectedAngleCBD := by
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+namespace GeometryProblem
+open EuclideanGeometry Real
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def degreesToRadians (d : ℝ) : ℝ := d * (Real.pi / 180)
+theorem find_angle_CBD
+    (A B C D : PPoint)
+    (h_C_ne_B : C ≠ B)
+    (h_B_sbtw_AD : Sbtw ℝ A B D)
+    (h_C_not_collinear : ¬ Collinear ℝ ({A, B, C} : Set PPoint))
+    (h_angle_ABC : angle A B C = degreesToRadians 110)
+    (hA_ne_B : A ≠ B) (hB_ne_D : B ≠ D) :
+    angle C B D = degreesToRadians 70 := by
   sorry
+end GeometryProblem

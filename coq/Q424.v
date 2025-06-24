@@ -12,12 +12,13 @@ Variable R : realType.
 Definition triangle_area a b c :=
   let s := (a + b + c) / 2 in sqrt (s * (s - a) * (s - b) * (s - c)).
 
-Theorem isosceles_integer_triangles_area_120_other_perimeter :
+Theorem other_isosceles_triangle_perimeter :
   forall a b c,
     0 < a -> 0 < b -> 0 < c ->
-    (a = b / b = c / c = a) ->
+    (a = b \/ b = c \/ c = a) ->
     triangle_area a b c = 120 ->
-    (a, b, c) = (17,17,30) / (a, b, c) = (13,13,24).
+    (a, b, c) <> (17, 17, 30) ->
+    a + b + c = 40.
 Proof.
 admit.
 Qed.

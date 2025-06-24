@@ -1,25 +1,10 @@
-theory FindX
-  imports Complex_Main "HOL-Analysis.Euclidean_Space"
+theory Find_X_Problem
+  imports Main
 begin
-
-(* 定义欧几里得空间中的点 *)
-type_synonym point = "real^2"
-
-(* 定义点和几何配置 *)
-locale geometry_setup =
-  fixes C Q Q' :: point
-  assumes hQ: "norm (Q - C) = 5"
-  and hQ'col: "∃k. Q' = Q + k *⃗ (Q - C)"
-  and hQ'dist: "norm (Q' - C) = 20"
-  and hQQ'dist: "norm (Q' - Q) = 15"
-
-context geometry_setup
-begin
-
-(* 定理：x的值为15 *)
-theorem find_x: "let x = norm (Q' - Q) in x = 15"
-  by (simp add: hQQ'dist)
-
-end
-
+definition len_CQ :: real where
+  "len_CQ = 5.0"
+definition len_CQ_prime :: real where
+  "len_CQ_prime = 15.0"
+definition x :: real where
+  "x = len_CQ_prime - len_CQ"
 end

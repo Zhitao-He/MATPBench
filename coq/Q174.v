@@ -11,10 +11,11 @@ Local Open Scope ring_scope.
 Variable R : realType.
 
 Theorem parallelogram_area_25_21_20 :
-    let base := 21%:R in
-    let side := 25%:R in
-    let height := 20%:R in
-    let area := base * height in
+    forall base side height area: R,
+    base = 21%:R /\
+    side = 25%:R /\
+    height = 20%:R /\
+    area = base * height ->
     area = 420%:R.
 Proof. Admitted.
 ####

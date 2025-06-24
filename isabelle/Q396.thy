@@ -1,28 +1,22 @@
-theory RightTriangleSinX
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Right_Triangle_Problem
+  imports
+    "HOL-Analysis.Cartesian_Euclidean_Space" 
+    "HOL-Analysis.Trigonometry"               
 begin
-
-theorem right_triangle_sin_X:
-  fixes X Y Z :: "real × real"
-  assumes "Z = (0, 0)"
-  assumes "Y = (0, 4)"  (* 根据正弦值3/5和勾股定理计算的坐标 *)
-  assumes "X = (3, 0)"  (* 根据正弦值3/5和勾股定理计算的坐标 *)
-  assumes "dist X Z = 3"  (* 边长 *)
-  assumes "dist Y Z = 4"  (* 边长 *)
-  assumes "dist X Y = 5"  (* 边长 *)
-  assumes "angle Z X Y = pi/2"  (* X处是直角 *)
-  shows "sin (angle Y X Z) = 3/5"
+type_synonym point = "real^2"
+locale right_triangle_XYZ_context =
+  fixes X Y Z :: point 
+  assumes
+    distinct_points: "X \<noteq> Y \<and> Y \<noteq> Z \<and> X \<noteq> Z" and
+    right_angle_at_Y: "(X - Y) \<cdot> (Z - Y) = 0" and
+    length_XY: "dist X Y = 8" and
+    length_XZ: "dist X Z = 10"
 begin
-  have "dist X Y^2 = dist X Z^2 + dist Y Z^2" using assms
-    by (simp add: dist_real_def pythagoras_theorem)
-  
-  have "sin (angle Y X Z) = dist Y Z / dist X Y" using assms
-    by (simp add: sin_angle_formula)
-  
-  thus "sin (angle Y X Z) = 3/5"
-    by (simp add: assms)
-end
-
+  definition angle_X :: real where
+    "angle_X = angle Y X Z"
+  definition sin_of_angle_X :: real where
+    "sin_of_angle_X = sin angle_X"
+  lemma sin_X_is_3_over_5:
+    "sin_of_angle_X = (3/5 :: real)"
+end 
 end

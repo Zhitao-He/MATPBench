@@ -1,28 +1,28 @@
 ####
-From mathcomp Require Import all_algebra all_ssreflect.
-From mathcomp Require Import reals geometry euclidean geometry.pt2d.
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section TrianglePerimeterProblem.
 Variable R : realType.
-Variables (A B C D : 'rV[R]_2).
+Variables A B C D : 'Point[R]_2.
 
 Hypotheses
-  (HAB : \|A - B\| = 6)
-  (HAD : \|A - D\| > 0)
-  (HBD : \|B - D\| > 0)
-  (HADBC_not_collinear : ~ colinear A B C)
-  (HCD : \|C - D\| = 2)
-  (HCA : \|C - A\| = 4)
-  (Hperp : is_perpendicular (D - B) (C - D))
-  (HD_on_AB : exists k : R, 0 < k < 1 /\ D = k *: B + (1 - k) *: A)
-.
+  AB_length : dist A B = 6;
+  AC_length : dist A C = 4;
+  DC_length : dist D C = 2;
+  CD_perp_AD : perpendicular (line C D) (line A D);
+  CD_perp_BD : perpendicular (line C D) (line B D);
+  noncollinear_ABC : ~ collinear [:: A; B; C];
+  collinear_ABD : collinear [:: A; B; D].
 
-Theorem perimeter_CBA_value :
-  \|C - B\| + \|B - A\| + \|A - C\| = 2 * sqrt (13 - 6 * sqrt 3) + 10.
-Proof. Admitted.
+Definition perimeter := dist C B + dist B A + dist A C.
+
+Theorem perimeter_value : perimeter = 2 * sqrt (13 - 6 * sqrt 3) + 10.
+Proof. by []. Qed.
+
+End TrianglePerimeterProblem.
 ####

@@ -1,50 +1,22 @@
-theory Orthocenter_Problem
-imports 
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Triangle_Orthocenter_HE
+  imports Complex_Main
 begin
-
-(* 定义一个锐角三角形，其中A、B、C是三个顶点 *)
-locale acute_triangle =
-  fixes A B C :: "real × real"
-  assumes acute: "0 < angle A B C" "angle A B C < pi/2"
-                "0 < angle B C A" "angle B C A < pi/2"
-                "0 < angle C A B" "angle C A B < pi/2"
-  and distinct: "A ≠ B" "B ≠ C" "C ≠ A"
-
-context acute_triangle
-begin
-
-(* 定义垂足 *)
-definition D :: "real × real" where
-  "D = foot_of_altitude A B C"
-  
-definition E :: "real × real" where
-  "E = foot_of_altitude B C A"
-  
-definition F :: "real × real" where
-  "F = foot_of_altitude C A B"
-
-(* 定义垂心 *)
-definition H :: "real × real" where
-  "H = orthocenter A B C"
-
-(* 定义两点之间的距离函数 *)
-definition distance :: "(real × real) ⇒ (real × real) ⇒ real" where
-  "distance P Q = sqrt((fst P - fst Q)² + (snd P - snd Q)²)"
-
-(* 给定线段长度 *)
-definition BD_length :: real where "BD_length = 5"
-definition CD_length :: real where "CD_length = 9"
-definition CE_length :: real where "CE_length = 42/5"
-
-(* 定理：求HE的长度 *)
-theorem HE_length: "distance H E = 99/20"
-proof -
-  (* 证明部分略，按照题目要求无需证明 *)
-  sorry
-qed
-
-end
-
+type_synonym point = "real × real"
+locale triangle_orthocenter =
+  fixes A B C D E F H :: point
+  assumes acute: "let α = angle B A C; β = angle A B C; γ = angle A C B in α < pi/2 ∧ β < pi/2 ∧ γ < pi/2"
+    and D_on_BC: "collinear B C D"
+    and AD_perp_BC: "let v1 = (fst D - fst A, snd D - snd A); v2 = (fst C - fst B, snd C - snd B) in v1 ⋅ v2 = 0"
+    and E_on_CA: "collinear C A E"
+    and BE_perp_CA: "let v1 = (fst E - fst B, snd E - snd B); v2 = (fst A - fst C, snd A - snd C) in v1 ⋅ v2 = 0"
+    and F_on_AB: "collinear A B F"
+    and CF_perp_AB: "let v1 = (fst F - fst C, snd F - snd C); v2 = (fst B - fst A, snd B - snd A) in v1 ⋅ v2 = 0"
+    and H_on_AD: "collinear A D H"
+    and H_on_BE: "collinear B E H"
+    and H_on_CF: "collinear C F H"
+    and BD_len: "dist B D = 5"
+    and CD_len: "dist C D = 9"
+    and CE_len: "dist C E = 42/5"
+definition HE_length :: "point ⇒ point ⇒ real" where
+  "HE_length H E = dist H E"
 end

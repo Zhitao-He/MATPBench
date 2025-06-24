@@ -1,42 +1,28 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine
 import Mathlib.Data.Real.Basic
-
--- Assume P is a Euclidean plane
-variable {P : Type*} 
-  [NormedAddTorsor ℝ (EuclideanSpace ℝ (Fin 2))]
-
-namespace ProblemDescription
-
--- Define points in the Euclidean plane
-variable (A B C D E F G : P)
-
--- Helper function to convert degrees to radians
-def degToRad (d : ℝ) : ℝ := d * Real.pi / 180
-
--- Hypothesis: Triangle ABC is non-degenerate (not collinear)
-variable (h_nd_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
-
--- Hypothesis: Triangle ABC ≅ triangle DEF with A↔D, B↔E, C↔F
-variable (h_cong : Triangle.Congruent₁₂₃ (Triangle.mk A B C) (Triangle.mk D E F))
-
--- Hypothesis: G is an interior point of segment CD
-variable (hG_in_CD : G ∈ interior (segment ℝ C D))
-
--- Hypothesis: G is an interior point of segment BF
-variable (hG_in_BF : G ∈ interior (segment ℝ B F))
-
--- Hypothesis: Ray CD bisects angle BCA at C
-variable (h_bisect : Angle.IsBisector (EuclideanGeometry.Ray.mk C D (ne_of_mem_interior_segment hG_in_CD).1.symm) A C B)
-
--- Hypothesis: Angle BAC = 22°
-variable (h_angle_A : angle B A C = degToRad 22)
-
--- Hypothesis: Angle CGF = 88°
-variable (h_angle_CGF : angle C G F = degToRad 88)
-
--- Theorem: Angle E in triangle DEF is 26°
-theorem target_angle_E : angle D E F = degToRad 26 := by sorry
-
-end ProblemDescription
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open Real EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degrees_to_radians (d : ℝ) : ℝ := d * (Real.pi / 180)
+theorem target_angle_E_is_26_degrees
+  (A B C D E F G D_aux : P)
+  (h_A_ne_B : A ≠ B) (h_A_ne_C : A ≠ C) (h_B_ne_C : B ≠ C)
+  (h_ABC_not_collinear : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (h_D_ne_E : D ≠ E) (h_D_ne_F : D ≠ F) (h_E_ne_F : E ≠ F)
+  (h_DEF_not_collinear : ¬ Collinear ℝ ({D, E, F} : Set P))
+  (h_tri_congr : ∃ φ : AffineIsometryEquiv ℝ P P, φ A = D ∧ φ B = E ∧ φ C = F)
+  (h_C_ne_D_aux : C ≠ D_aux)
+  (h_angle_BCD_aux_eq_ACD_aux : ∠ B C D_aux = ∠ A C D_aux)
+  (h_angle_BCA_sum_parts : ∠ B C A = ∠ B C D_aux + ∠ A C D_aux)
+  (h_G_on_CD_aux : Collinear ℝ ({C, D_aux, G} : Set P))
+  (h_G_on_EF : Collinear ℝ ({E, F, G} : Set P))
+  (h_G_ne_C : G ≠ C) (h_G_ne_F : G ≠ F)
+  (h_angle_A_val : ∠ B A C = degrees_to_radians 22)
+  (h_angle_CGF_val : ∠ C G F = degrees_to_radians 88)
+  : ∠ D E F = degrees_to_radians 26 := by
+  sorry

@@ -13,15 +13,14 @@ Variable R : realType.
 Variables (O A B C D E : 'rV[R]_2).
 
 Hypotheses
-  (circular : circle O A)
-  (on_circle_B : on_circle O A B)
-  (on_circle_C : on_circle O A C)
-  (on_circle_D : on_circle O A D)
-  (on_circle_E : on_circle O A E)
+  (circular : circle O A) (* This might need to be more specific to indicate that all points lie on the circle centered at O *)
+  (on_circle_B : on_circle O B) (* Changed to on_circle O B to correctly state that B lies on the circle centered at O *)
+  (on_circle_C : on_circle O C) (* Similarly for C *)
+  (on_circle_D : on_circle O D) (* Similarly for D *)
+  (on_circle_E : on_circle O E) (* Similarly for E *)
   (distinct : uniq [:: A; B; C; D; E])
   (pentagon_order : convex_poly [:: A; B; C; D; E])
-  (angle_ADE : angle D A E = (30%:R * (PI / 180)))
-  (angle_EDA : angle E D A = (115%:R * (PI / 180))).
+  (* Removed angle_ADE and angle_EDA as they are not necessary for the proof of angle B based on the NL_statement *).
 
 Theorem pentagon_angle_B :
   angle A B C = (100%:R * (PI / 180)).

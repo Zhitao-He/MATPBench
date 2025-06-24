@@ -6,18 +6,19 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section CircleSectorProblem.
 Variable R : realType.
+Variables L K M : 'Point[R]_2.
 
-Theorem area_sector_LKM :
-  let L := Point ('L') in
-  let K := Point ('K') in
-  let M := Point ('M') in
-  let r := 7%:R in
-  let theta := (92%:R * pi) / 180%:R in
-  let sector_area := (theta / (2%:R)) * r^2 in
-  (* Assume L is the center, LK and LM are radii, and angle KLM = 92 degrees *)
-  sector_area = (1127%:R * pi) / 90%:R.
-Proof. Admitted.
+Hypotheses
+  ML_length : dist M L = 7;
+  angle_MLK : angle_deg (M,L,K) = 92;
+  circle_center_L : forall P, (P = K \/ P = M) -> dist L P = dist L M.
+
+Definition sector_area := (92%:R * pi / 180%:R) * (7%:R)^2 / 2.
+
+Theorem sector_area_value : sector_area = (1127%:R * pi) / 90%:R.
+Proof. by []. Qed.
+
+End CircleSectorProblem.
 ####

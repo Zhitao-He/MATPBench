@@ -1,30 +1,20 @@
-theory ParallelogramAngle
-imports Main HOL.Euclidean_Geometry
+theory Parallelogram_Angle
+  imports Main
 begin
-
-(* 定义平面上的点 *)
-context euclidean_geometry begin
-
-(* 声明要使用的点 *)
-notation vec ("⟨_⟩")
-
-(* 假设 W、X、Y、Z 是平面上的四个不同点 *)
-lemma parallelogram_angles:
-  assumes "W ≠ X" and "X ≠ Y" and "Y ≠ Z" and "Z ≠ W"
-  assumes "is_parallelogram W Z Y X"  (* 定义平行四边形 WZYX *)
-  assumes "dist Y X = 24"  (* YX = 24 *)
-  assumes "dist Y Z = 28"  (* YZ = 28 *)
-  assumes "angle X W Z = 105"  (* ∠XWZ = 105° *)
-  shows "angle W Z Y = 75"  (* 证明 ∠WZY = 75° *)
+typedecl Point
+consts W X Y Z :: Point
+consts dist :: "Point ⇒ Point ⇒ real"
+consts angle :: "Point ⇒ Point ⇒ Point ⇒ real"
+definition parallelogram :: "Point ⇒ Point ⇒ Point ⇒ Point ⇒ bool" where
+  "parallelogram A B C D ⟷ (dist A B = dist C D ∧ dist B C = dist D A ∧
+    angle D A B + angle A B C = 180 ∧ angle A B C + angle B C D = 180)"
+locale parallelogram_problem =
+  assumes YX_24: "dist Y X = 24"
+    and YZ_28: "dist Y Z = 28"
+    and angle_XWZ_105: "angle X W Z = 105"
+    and parallelogram_WZYX: "parallelogram W Z Y X"
 begin
-  (* 在平行四边形中，相邻角互补，即和为180° *)
-  (* 平行四边形的对角相等 *)
-  (* 使用平行四边形性质和给定的角度信息计算 ∠WZY *)
-  
-  (* 根据平行四边形性质，∠WZY = 180° - ∠ZWX = 180° - 105° = 75° *)
-  
-  (* 具体证明步骤此处略去 *)
-end
-
+definition result :: "bool" where
+  "result ⟷ (angle W Z Y = 75)"
 end
 end

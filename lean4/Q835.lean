@@ -1,28 +1,22 @@
-
-namespace ProblemValueX
-
--- Let x and y be real variables representing angle parameters
-variable (x y : ℝ)
-
--- The measures of the angles around point F, in degrees
-def angleEFA : ℝ := 12 * y - 10    -- angle EFA
-def angleAFB : ℝ := 90             -- angle AFB
-def angleBFC : ℝ := 6 * x          -- angle BFC
-def angleCFD : ℝ := 3 * x          -- angle CFD
-def angleDFE : ℝ := 90             -- angle DFE
-
--- Hypothesis: The full angle around point F is 360°
-axiom h_sum : angleEFA y + angleAFB + angleBFC x + angleCFD x + angleDFE = 360
-
--- All angles are positive
-axiom h_angleEFA_pos : angleEFA y > 0
-axiom h_angleAFB_pos : angleAFB > 0
-axiom h_angleBFC_pos : angleBFC x > 0
-axiom h_angleCFD_pos : angleCFD x > 0
-axiom h_angleDFE_pos : angleDFE > 0
-
--- The problem statement: Prove x = 10.
-theorem x_eq_10 : x = 10 := by
-  sorry
-
-end ProblemValueX
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Data.Real.Basic
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (deg : ℝ) : ℝ := deg * Real.pi / 180
+def angleBFC (x : ℝ) : ℝ := 6 * x
+def angleCFD (x : ℝ) : ℝ := 3 * x
+def angleEFA (y : ℝ) : ℝ := 12 * y - 10
+theorem target_value_of_x (
+  A B C D E F : P) (x y : ℝ)
+  (A_ne_F : A ≠ F) (B_ne_F : B ≠ F) (C_ne_F : C ≠ F) (D_ne_F : D ≠ F) (E_ne_F : E ≠ F)
+  (h_bfc : EuclideanGeometry.angle B F C = degToRad (angleBFC x))
+  (h_cfd : EuclideanGeometry.angle C F D = degToRad (angleCFD x))
+  (h_efa : EuclideanGeometry.angle E F A = degToRad (angleEFA y))
+  (EF_perp_AF : EuclideanGeometry.angle E F A = Real.pi / 2)
+  (vertical_angles : EuclideanGeometry.angle B F D = EuclideanGeometry.angle E F A)
+  (angle_addition : EuclideanGeometry.angle B F D = EuclideanGeometry.angle B F C + EuclideanGeometry.angle C F D)
+  (angleBFC_range : 0 < angleBFC x ∧ angleBFC x ≤ 180)
+  (angleCFD_range : 0 < angleCFD x ∧ angleCFD x ≤ 180)
+  : x = 10 := by sorry

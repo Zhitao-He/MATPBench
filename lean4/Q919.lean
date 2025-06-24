@@ -1,32 +1,26 @@
-import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry
-
--- 定义二维欧几里得空间
-variable {P : Type*} [MetricSpace P] [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-variable [FiniteDimensional ℝ P] (h_dim : FiniteDimensional.finrank ℝ P = 2)
-
-variable (A B C D E : P)
-
--- 假设:
--- 1. D, A, C是共线的
-theorem h_collinear_DAC : Collinear ℝ ({D, A, C} : Set P) := by sorry
--- 2. B, E, C是共线的
-theorem h_collinear_BEC : Collinear ℝ ({B, E, C} : Set P) := by sorry
--- 3. D, B, E是共线的
-theorem h_collinear_DBE : Collinear ℝ ({D, B, E} : Set P) := by sorry
-
--- 4. dist D A = 11
-theorem h_dist_DA : dist D A = 11 := by sorry
--- 5. dist A E = 13
-theorem h_dist_AE : dist A E = 13 := by sorry
--- 6. AE ⟂ BE (即 E - A ⟂ B - E)
-theorem h_AE_perp_BE : inner (E - A) (B - E) = 0 := by sorry
--- 7. A 在线段 D E 上
-theorem h_A_on_segment_DE : A ∈ segment ℝ D E := by sorry
--- 8. E 在线段 B C 上
-theorem h_E_on_segment_BC : E ∈ segment ℝ B C := by sorry
-
--- 待证明的定理:
-theorem geometry_BC_value : dist B C = 211 / 13 := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+open Affine AffineSubspace 
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+def trapezoidArea (base1 base2 height : ℝ) : ℝ :=
+  (base1 + base2) * height / 2
+theorem value_of_x
+  (A B C D E : P)
+  (x : ℝ)
+  (h_dist_AD : dist A D = 11)
+  (h_dist_AE : dist A E = 13)
+  (h_dist_BC : dist B C = x)
+  (h_x_positive : x > 0)
+  (h_AE_perp_BE : EuclideanGeometry.angle A E B = Real.pi / 2)
+  (h_E_on_segment_BC : Wbtw ℝ B E C)
+  (h_A_ne_D : A ≠ D)
+  (h_B_ne_C : B ≠ C)
+  (h_AD_parallel_BC : (affineSpan ℝ {A, D}).direction = (affineSpan ℝ {B, C}).direction)
+  (h_area_BDAC : trapezoidArea (dist A D) (dist B C) (dist A E) = 177) :
+  x = 211 / 13 := by sorry
+end
+end

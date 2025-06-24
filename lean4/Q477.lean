@@ -1,29 +1,21 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-
--- We work in a standard Euclidean affine space over ℝ
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [MetricSpace P] [NormedAddTorsor P P]
-
--- Four points in the plane (trapezoid XYZW)
-variable (W X Y Z : P)
-
--- Helper: convert degrees to radians
-def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
-
--- Problem hypotheses
-axiom h_dist_WZ : dist W Z = 23
-axiom h_dist_XY : dist X Y = 23
-axiom h_angle_ZWX : ∠ Z W X = degToRad 112
-axiom h_parallel_XW_YZ : (Euclidean.lineThrough X W) ∥ (Euclidean.lineThrough Y Z)
-
--- Ensure points for angles are distinct
-axiom h_W_ne_Z : W ≠ Z
-axiom h_W_ne_X : W ≠ X
-axiom h_Z_ne_Y : Z ≠ Y
-
--- Consecutive interior angles between parallel sides are supplementary
-axiom h_consecutive_interior_angles_supplementary : ∠ Z W X + ∠ Y Z W = Real.pi
-
--- Goal: Find the measure of angle YZW
-theorem find_angle_YZW : ∠ Y Z W = degToRad 68 := by sorry
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+import Mathlib.Analysis.Convex.Hull 
+open EuclideanGeometry Real Affine AffineSubspace
+open scoped EuclideanGeometry 
+axiom W : EuclideanSpace ℝ (Fin 2)
+axiom X : EuclideanSpace ℝ (Fin 2)
+axiom Y : EuclideanSpace ℝ (Fin 2)
+axiom Z : EuclideanSpace ℝ (Fin 2)
+axiom h_WZ_len : dist W Z = 23
+axiom h_XY_len : dist X Y = 23
+axiom h_angleZWX : ∠ Z W X = 112 * (π / 180)
+axiom h_parallel : affineSpan ℝ ({W, X} : Set (EuclideanSpace ℝ (Fin 2))) ∥ affineSpan ℝ ({Y, Z} : Set (EuclideanSpace ℝ (Fin 2)))
+axiom h_convex : convexHull ℝ ({W, X, Y, Z} : Set (EuclideanSpace ℝ (Fin 2))) = ({W, X, Y, Z} : Set (EuclideanSpace ℝ (Fin 2)))
+theorem find_angle_YZW : ∠ Y Z W = 68 * (π / 180) := by
+  sorry

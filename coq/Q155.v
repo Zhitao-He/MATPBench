@@ -25,9 +25,10 @@ Hypotheses
   (* The "x" in the diagram is the distance from Q' to Q *)
   (hxdef : let x := norm (Q' - Q) in x = 15).
 
+(* Theorem: Prove that x = 15 *)
 Theorem diagram_find_x :
   let x := norm (Q' - Q) in x = 15.
 Proof.
-by rewrite hxdef.
+  by rewrite hxdef.
 Qed.
 ####

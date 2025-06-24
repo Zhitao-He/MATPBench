@@ -4,9 +4,7 @@ import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 open EuclideanGeometry
-
 local notation "P" => EuclideanSpace ℝ (Fin 2)
-
 theorem value_of_z_equals_6
     (A B C D : P)
     (x y z : ℝ)

@@ -1,67 +1,24 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-open Metric
-open Affine
-open EuclideanGeometry
-open InnerProductSpace
-
-namespace CircumcircleGeometry
-
--- Let V be a 2-dimensional real inner product space, 
--- and P its associated affine space (the Euclidean plane).
-variable {V : Type*}
-variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable (hV : FiniteDimensional.finrank ℝ V = 2)
-variable {P : Type*}
-variable [MetricSpace P] [NormedAddTorsor V P]
-
--- Declare the base points.
-variable (a b c d o e f g : P)
-
--- The points a, b, c are not collinear (triangle).
-variable (h_abc : ¬ Affine.collinear ℝ ({a, b, c} : Set P))
-
--- O is the circumcenter of triangle ABC.
-variable (h_o : o = EuclideanGeometry.Triangle.circumcenter ℝ a b c)
-
--- BC is a diameter of the circumcircle: O is the midpoint of B and C.
-variable (h_bc_diameter : o = midpoint ℝ b c)
-
--- d is on the circumcircle (distance to o equals that of a).
-variable (h_d_circ : dist o d = dist o a)
-
--- D does *not* lie on line BC
-variable (h_d_not_on_bc : ¬ Affine.collinear ℝ ({b, c, d} : Set P))
-
--- a and d are on opposite sides of line BC
-variable (h_a_d_opposite_wrt_bc : ¬ Affine.sameSide ℝ (Affine.Line.mk b c) a d)
-
--- a ≠ d
-variable (h_a_ne_d : a ≠ d)
-
--- Definition: E lies on BC and DE ⟂ BC.
-variable (h_e_on_bc : Affine.collinear ℝ ({b, c, e} : Set P))
-variable (h_de_perp_bc : Orthogonal (d -ᵥ e) (c -ᵥ b))
-
--- Definition: F lies on BA and DF ⟂ BA.
-variable (h_f_on_ba : Affine.collinear ℝ ({b, a, f} : Set P))
-variable (h_df_perp_ba : Orthogonal (d -ᵥ f) (a -ᵥ b))
-
--- E ≠ F (so line EF is well-defined)
-variable (h_e_ne_f : e ≠ f)
-
--- G lies on both EF and AD (intersection point).
-variable (h_g_on_ad : Affine.collinear ℝ ({a, d, g} : Set P))
-variable (h_g_on_ef : Affine.collinear ℝ ({e, f, g} : Set P))
-
--- Uniqueness: g is the only such intersection point.
-variable (h_g_unique : ∀ x : P, Affine.collinear ℝ ({a, d, x} : Set P) ∧ Affine.collinear ℝ ({e, f, x} : Set P) → x = g)
-
--- CONCLUSION: G is the midpoint of AD
-theorem g_is_midpoint_of_ad : g = midpoint ℝ a d := by
+import Mathlib.Geometry.Euclidean.Projection
+import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Convex.Side
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+noncomputable def orthogonalProjection (l : AffineSubspace ℝ Point) (p : Point) : Point := sorry
+theorem G_is_midpoint_of_AD
+  (A B C D E F G O : Point)
+  (h_noncollinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set Point))
+  (hO_mid_BC : O = midpoint ℝ B C)
+  (hA_on_circle : dist A O = dist O B)
+  (hD_on_circle : dist D O = dist O B)
+  (hD_ne_B : D ≠ B)
+  (hD_ne_C : D ≠ C)
+  (hD_opposite_A_BC : ¬ (line[ℝ, B, C]).WSameSide A D)
+  (hE_def : E = orthogonalProjection (line[ℝ, B, C]) D)
+  (hF_def : F = orthogonalProjection (line[ℝ, B, A]) D)
+  (hG_on_line_EF : G ∈ line[ℝ, E, F])
+  (hG_on_line_AD : G ∈ line[ℝ, A, D])
+  : G = midpoint ℝ A D := by
   sorry
-
-end CircumcircleGeometry

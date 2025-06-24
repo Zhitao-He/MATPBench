@@ -14,16 +14,22 @@ Variable R : realType.
 
 (* Points A, B, C, D define a square inscribed in circle K with center O *)
 Variables (A B C D O : 'P[R^2]).
-Hypotheses
-  (Hcyc : on_circle O A /\ on_circle O B /\ on_circle O C /\ on_circle O D)
-  (Hsq : square A B C D)
-  (Hcenter : O = center (circumcircle4 A B C D)).
 
-(* The central angle subtended by arc AB is 90 degrees = pi/2 radians *)
+Hypotheses
+  (Hcyc : on_circle O A /\ on_circle O B /\ on_circle O C /\ on_circle O D)  (* A, B, C, D lie on the circle centered at O *)
+  (Hsq : square A B C D)                                                      (* ABCD is a square *)
+  (Hcenter : O = center (circumcircle4 A B C D)).                             (* O is the center of the circumcircle of ABCD *)
+
+(* Theorem: The central angle subtended by arc AB is 90 degrees (pi/2 radians) *)
 Theorem square_inscribed_central_angle :
   let theta := angle R O A O B in
   theta = PI / 2.
-Proof. Admitted.
+Proof.
+  (* Proof steps would involve:
+     1. Using the properties of a square and its inscribed circle to deduce the central angle.
+     2. Concluding that the central angle subtended by arc AB is 90 degrees.
+  *)
+  Admitted.
 
 End SquareInscribedInCircle.
 ####

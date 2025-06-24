@@ -1,25 +1,23 @@
-theory SectorRadius
-imports Complex_Main "HOL-Analysis.Analysis"
+theory GeometryProblem
+  imports Main "HOL-Library.Sqrt"
 begin
-
-text ‹题目：如图所示，证明扇形的半径为4。›
-
-(* 定义一个以原点为中心的扇形 *)
-definition sector :: "real ⇒ real ⇒ real ⇒ (real × real) set" where
-  "sector r α β = {(r * cos θ, r * sin θ) | θ. α ≤ θ ∧ θ ≤ β}"
-
-(* 定义题目中的扇形 *)
-definition problem_sector :: "(real × real) set" where
-  "problem_sector = sector 4 0 (π/2)"
-
-(* 定义从扇形获取半径的函数 *)
-definition radius_of_sector :: "(real × real) set ⇒ real" where
-  "radius_of_sector s = (SOME r. ∃α β. s = sector r α β)"
-
-(* 证明题目中扇形的半径是4 *)
-theorem sector_radius_is_4:
-  "radius_of_sector problem_sector = 4"
-  unfolding radius_of_sector_def problem_sector_def
-  by (metis (no_types, lifting) sector_def someI_ex)
-
+type_synonym point = "real × real"
+fun dist_sq :: "point ⇒ point ⇒ real" where
+  "dist_sq (x1, y1) (x2, y2) = (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1)"
+fun dist :: "point ⇒ point ⇒ real" where
+  "dist p1 p2 = sqrt (dist_sq p1 p2)"
+definition L_sq :: real where
+  "L_sq = 4.0" 
+definition R_sec :: real where
+  "R_sec = 4.0" 
+definition O_sec :: point where
+  "O_sec = (0.0, 0.0)" 
+definition small_circle_center :: "real ⇒ point" where
+  "small_circle_center r = (L_sq - r, L_sq - r)"
+definition small_circle_radius_constraint :: "real ⇒ bool" where
+  "small_circle_radius_constraint r = (
+    r > 0.0 ∧
+    r ≤ L_sq / 2.0 ∧
+    dist O_sec (small_circle_center r) = R_sec + r
+  )"
 end

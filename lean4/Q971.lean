@@ -1,45 +1,36 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-namespace TangentParallelogramProblem
-
-variable {V P : Type*} 
-  [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-  [MetricSpace P] [NormedAddTorsor V P]
-  [FiniteDimensional ℝ V] [Fact (finrank ℝ V = 2)]
-
-variable (A C O P E F B D : P)
-
-variable (hA_ne_O : A ≠ O)
-local notation "r_val" => dist A O
-local notation "circleS" => Euclidean.Sphere.mk O r_val
-
-variable (hO_midpoint_AC : O = midpoint ℝ A C)
-variable (hP_ne_C : P ≠ C)
-variable (hTangent_PC_at_C : inner (P -ᵥ C) (C -ᵥ O) = 0)
-
-variable (hCollinear_P_E_F : collinear ℝ P E F)
-variable (hE_on_S : E ∈ circleS)
-variable (hF_on_S : F ∈ circleS)
-variable (hE_ne_F : E ≠ F)
-variable (hP_ne_E : P ≠ E)
-variable (hP_ne_F : P ≠ F)
-
-variable (hA_ne_E : A ≠ E)
-variable (hA_ne_F : A ≠ F)
-variable (hP_ne_O : P ≠ O)
-
-variable (hB_on_AE : collinear ℝ A E B)
-variable (hB_on_PO : collinear ℝ P O B)
-variable (hD_on_AF : collinear ℝ A F D)
-variable (hD_on_PO : collinear ℝ P O D)
-
-variable (hA_ne_P : A ≠ P)
-variable (hAEP_not_collinear : ¬ collinear ℝ A E P)
-variable (hAFP_not_collinear : ¬ collinear ℝ A F P)
-
-theorem quadrilateral_ABCD_is_parallelogram : B -ᵥ A = C -ᵥ D := by
-  sorry
-
-end TangentParallelogramProblem
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+namespace EuclideanGeometryProblem
+open EuclideanGeometry InnerProductSpace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable instance : NormedAddTorsor P P := inferInstance
+variable (A B C D E F O P₀ : P)
+variable (Ω : Sphere P)
+theorem prove_ABCD_is_parallelogram
+    (hO_center : Ω.center = O)
+    (hA_on_Ω : A ∈ Ω)
+    (hC_on_Ω : C ∈ Ω)
+    (hE_on_Ω : E ∈ Ω)
+    (hF_on_Ω : F ∈ Ω)
+    (hAC_diameter : O = midpoint ℝ A C)
+    (hA_ne_C : A ≠ C)
+    (hP0_ne_C : P₀ ≠ C)
+    (hPC_tangent : inner ℝ (O -ᵥ C) (P₀ -ᵥ C) = 0)
+    (hPEF_collinear : Collinear ℝ ({P₀, E, F} : Set P))
+    (hE_ne_F : E ≠ F)
+    (hP0_ne_E : P₀ ≠ E)
+    (hP0_ne_F : P₀ ≠ F)
+    (hP0_ne_O : P₀ ≠ O)
+    (hA_ne_E : A ≠ E)
+    (hB_on_AE : B ∈ line[ℝ, A, E])
+    (hB_on_P0O : B ∈ line[ℝ, P₀, O])
+    (hA_ne_F : A ≠ F)
+    (hD_on_AF : D ∈ line[ℝ, A, F])
+    (hD_on_P0O : D ∈ line[ℝ, P₀, O])
+    (hA_not_on_P0O : ¬ Collinear ℝ ({A, P₀, O} : Set P))
+    (hE_not_on_P0O : ¬ Collinear ℝ ({E, P₀, O} : Set P))
+    (hF_not_on_P0O : ¬ Collinear ℝ ({F, P₀, O} : Set P)) :
+    midpoint ℝ A C = midpoint ℝ B D := by sorry
+end EuclideanGeometryProblem

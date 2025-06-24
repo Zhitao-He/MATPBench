@@ -1,36 +1,24 @@
-import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Definition
-
-open EuclideanGeometry
-
--- Set up the 2D Euclidean plane
-variable (P : Type*) [EuclideanSpace ℝ P] [Fact (finrank ℝ P = 2)]
-
--- Declare points
-variable (A B C D E : P)
-
--- Given distances
-axiom dist_CB : dist C B = 20
-axiom dist_EC : dist E C = 24
-
--- Given angle: ∠CAE = 37°
-axiom angle_CAE : Angle.value C A E = (37 / 180) * Real.pi
-
--- Perpendicularity: AE ⊥ CE, i.e., ∠AEC = π/2
-axiom angle_AEC_is_right : Angle.value A E C = Real.pi / 2
-
--- Parallelogram property: BDAC is a parallelogram
-axiom h_para_BDAC : IsParallelogram P B D A C
-
--- Collinearity: E, A, D are collinear 
-axiom h_collinear_EAD : Collinear ℝ ({E, A, D} : Set P)
-
--- Define the area of parallelogram ACBD
--- If BC as the base (20), CE as the height (24), so area = 20 * 24 = 480
-def areaACBD (P : Type*) [EuclideanSpace ℝ P] (A B C D E : P) : ℝ := 
-  (dist C B) * (dist E C)
-
-theorem target_area_is_480 : areaACBD P A B C D E = 480 := by
-  rw [areaACBD, dist_CB, dist_EC]
-  norm_num
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+set_option autoImplicit false
+open Real EuclideanGeometry
+noncomputable section
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (deg : ℝ) : ℝ := deg * (Real.pi / 180)
+noncomputable def areaOfParallelogramFromAdjacentSidesAtC
+  (A C B : PPoint) : ℝ :=
+  dist C A * dist C B * Real.sin (EuclideanGeometry.angle A C B)
+theorem find_area_parallelogram_ACBD
+    (A B C D E : PPoint)
+    (h_CB_dist : dist C B = 20)
+    (h_EC_dist : dist E C = 24)
+    (h_angle_CAE : EuclideanGeometry.angle C A E = degToRad 37)
+    (h_parallelogram_ACBD : D -ᵥ A = B -ᵥ C)
+    (h_AE_perp_CE : EuclideanGeometry.angle A E C = Real.pi / 2)
+    (h_EC_perp_CB : EuclideanGeometry.angle E C B = Real.pi / 2)
+    : areaOfParallelogramFromAdjacentSidesAtC A C B = 480 := by
+  sorry
+end

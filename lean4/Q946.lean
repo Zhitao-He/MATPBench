@@ -1,34 +1,41 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic 
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
-import Mathlib.Geometry.Euclidean.Projection
-import Mathlib.Geometry.Euclidean.Circumcenter
-
-open Classical
-open Real
-open EuclideanGeometry
-
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Geometry.Euclidean.Projection 
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+noncomputable section EuclideanProblem
+open scoped EuclideanGeometry
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+variable [Fact (Module.finrank ℝ V = 2)]
 variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-def lineThrough (p₁ p₂ : P) : AffineSubspace ℝ P := affineSpan ℝ ({p₁, p₂} : Set P)
-
-def reflectionAcrossLine (p a b : P) : P :=
-  let s := lineThrough a b
-  p +ᵥ (2 • (orthogonalProjection s p -ᵥ p))
-
-theorem inscribedQuadrilateralReflectionPerpendicular
-    (A B C D O : P)
-    (r : ℝ)
-    (h_r_pos : 0 < r)
-    (hO : O = midpoint ℝ A C)
-    (hA : dist A O = r) (hB : dist B O = r) (hC : dist C O = r) (hD : dist D O = r)
-    (hA_ne_C : A ≠ C) (hB_ne_D : B ≠ D)
-    (E : P) (hE : E = reflectionAcrossLine D A C)
-    (F : P) (hF : F = reflectionAcrossLine C B D)
-    (hA_ne_F : A ≠ F) (hB_ne_E : B ≠ E)
-    (G : P)
-    (hG_AF : G ∈ lineThrough A F) (hG_BD : G ∈ lineThrough B D)
-    (K : P)
-    (hK_BE : K ∈ lineThrough B E) (hK_AC : K ∈ lineThrough A C) :
-    Perpendicular ℝ (K -ᵥ G) (B -ᵥ G) := by sorry
+def reflectionAcrossLine (l₁ l₂ D : P) (h : l₁ ≠ l₂) : P :=
+  let line_pts := line[ℝ, l₁, l₂]
+  EuclideanGeometry.reflection line_pts D
+theorem inscribed_quadrilateral_reflection_perpendicular
+    (A B C D O E F G K : P)
+    (Ω : EuclideanGeometry.Sphere P)
+    (hO : Ω.center = O)
+    (hAΩ : A ∈ Ω)
+    (hBΩ : B ∈ Ω)
+    (hCΩ : C ∈ Ω)
+    (hDΩ : D ∈ Ω)
+    (hACdiam : Ω.IsDiameter A C)
+    (hΩr_pos : 0 < Ω.radius)
+    (hA_ne_C : A ≠ C)
+    (hA_ne_B : A ≠ B) (hB_ne_C : B ≠ C) (hC_ne_D : C ≠ D) (hD_ne_A : D ≠ A)
+    (hB_ne_D : B ≠ D)
+    (hE : E = EuclideanGeometry.reflection (line[ℝ, A, C]) D) 
+    (hF : F = EuclideanGeometry.reflection (line[ℝ, B, D]) C) 
+    (hA_ne_F : A ≠ F)
+    (hG_on_AF : G ∈ line[ℝ, A, F])
+    (hG_on_BD : G ∈ line[ℝ, B, D])
+    (hB_ne_E : B ≠ E)
+    (hK_on_BE : K ∈ line[ℝ, B, E])
+    (hK_on_AC : K ∈ line[ℝ, A, C])
+    (hK_ne_G : K ≠ G)
+    (hB_ne_G : B ≠ G)
+    : EuclideanGeometry.angle K G B = Real.pi / 2 := by 
+  sorry
+end EuclideanProblem

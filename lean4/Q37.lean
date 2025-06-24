@@ -1,25 +1,22 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-
-open Real
-
--- Lean4 context: P is a Euclidean affine space over ℝ.
-variable {P : Type*} [EuclideanSpace ℝ P]
-
--- Points A, B, D, E, C in the plane
-variable (A B D E C : P)
-
--- Degrees to radians conversion
-noncomputable def degToRad (d : ℝ) : ℝ := d * (π / 180)
-
-theorem geometry_angle_DAE_eq_40_deg
-  (h_collinear : Affine.collinear ℝ {B, D, E, C})
-  (h_congr : (Triangle.mk A B D).Congruent (Triangle.mk A C E))
-  (h_angle_AEC : (Euclidean.angle A E C).value = degToRad 110)
-  (h_tri_ABD : ¬ Affine.collinear ℝ {A, B, D})
-  (h_tri_ACE : ¬ Affine.collinear ℝ {A, C, E})
-  :
-  (Euclidean.angle D A E).value = degToRad 40 := 
-by sorry
+import Mathlib.Data.Real.Basic
+open scoped Real EuclideanGeometry
+namespace EuclideanGeometryProblem
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
+variable [Fact (2 = 2)] 
+theorem angle_DAE_is_40_degrees
+    (A B C D E : P)
+    (hA_ne_B : A ≠ B) (hA_ne_C : A ≠ C) (hA_ne_D : A ≠ D) (hA_ne_E : A ≠ E)
+    (h_collinear_BDEC_ordered : Sbtw ℝ B D E ∧ Sbtw ℝ D E C)
+    (h_cong_dist_AB_AC : dist A B = dist A C)
+    (h_cong_dist_BD_CE : dist B D = dist C E)
+    (h_cong_dist_AD_AE : dist A D = dist A E)
+    (h_cong_angle_BAD_CAE : ∠ B A D = ∠ C A E)
+    (h_cong_angle_ABD_ACE : ∠ A B D = ∠ A C E)
+    (h_cong_angle_BDA_AEC : ∠ B D A = ∠ A E C)
+    (h_angle_AEC_value : ∠ A E C = (110 / 180 : ℝ) * π)
+    : ∠ D A E = (40 / 180 : ℝ) * π := by sorry
+end EuclideanGeometryProblem

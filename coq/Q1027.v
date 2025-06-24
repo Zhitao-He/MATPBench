@@ -26,7 +26,7 @@ Definition E : point := midpoint B C.
 
 (* F is such that EF ⟂ AD *)
 Variable F : point.
-Hypothesis EF_perp_AD : is_midpoint E B C /\ perpendicular (seg E F) (seg A D).
+Hypothesis EF_perp_AD : perpendicular (seg E F) (seg A D).
 
 (* The line DF, through D and F *)
 Definition line_DF := line_through D F.
@@ -37,10 +37,6 @@ Hypothesis MN_perp_DF : colinear M F N /\
     perpendicular (seg M N) (seg D F) /\
     on_line M (line_through A B) /\
     on_line N (line_through A C).
-
-Hypothesis M_on_AB : on_line M (line_through A B).
-Hypothesis N_on_AC : on_line N (line_through A C).
-Hypothesis F_on_MN : on_line F (line_through M N).
 
 Theorem triangle_circle_bisector_FM_eq_FN :
   dist F M = dist F N.

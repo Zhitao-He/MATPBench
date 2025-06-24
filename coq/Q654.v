@@ -1,26 +1,30 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry angles.
+From mathcomp Require Import reals geometry angles.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section CyclicQuadrilateralXYZW.
+Local Open Scope ring_scope.
 
 Variable R : realType.
-Variables V : 'dV_2.
-Variables X Y Z W : V.
 
-Hypothesis cyclic : on_circle (circumcircle W X Y Z) W /\ on_circle (circumcircle W X Y Z) X /\ on_circle (circumcircle W X Y Z) Y /\ on_circle (circumcircle W X Y Z) Z.
-Hypothesis quadrilateral : X <> Y /\ Y <> Z /\ Z <> W /\ W <> X.
-Hypothesis angles :
-  angle_deg W Z Y = 60 /\  (* angle WZY = 60° *)
-  angle_deg X W Z = 95.   (* angle XWZ = 95° *)
+Variables Q R S T X Y : 'rV[R]_2.
+Variable x : R.
 
-Theorem measure_angle_XYZ_85 :
-  angle_deg X Y Z = 85.
-Proof. Admitted.
+Hypothesis H_QR : `|Q - R| = 22.
+Hypothesis H_XY : `|X - Y| = 15.
+Hypothesis H_midsegment : midsegment X Y Q T S R.
+Hypothesis H_parallel_QR_TS : parallel Q R T S.
 
-End CyclicQuadrilateralXYZW.
+Theorem find_TS_length : `|T - S| = 8.
+Proof.
+  (* Using midsegment properties of trapezoids *)
+  have H_midsegment_property : `|X - Y| = (`|Q - R| + `|T - S|) / 2 by apply: midsegment_property_length.
+  rewrite H_QR H_XY in H_midsegment_property.
+  (* Solve for |T - S| *)
+  have H_eq : 15 = (22 + `|T - S|) / 2 by field in H_midsegment_property.
+  by rewrite H_eq; field.
+Qed.
 ####

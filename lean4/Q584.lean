@@ -1,28 +1,21 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
 open Real EuclideanGeometry
-
--- Assume P is a Euclidean affine space
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor (Fin 2 → ℝ) P]
-
--- Points in the diagram
-variable (A B C D E F G : P)
-
--- Angle definitions (in radians)
-def fifty_deg : ℝ := (50 / 180 : ℝ) * π
-def seventy_eight_deg : ℝ := (78 / 180 : ℝ) * π
-def one_twenty_deg : ℝ := (120 / 180 : ℝ) * π
-def fifty_six_deg : ℝ := (56 / 180 : ℝ) * π
-def fifty_two_deg : ℝ := (52 / 180 : ℝ) * π
-
--- Given angle measures
-axiom h_ACD : angle A C D = fifty_deg
-axiom h_CDA : angle C D A = seventy_eight_deg
-axiom h_FGA : angle F G A = one_twenty_deg
-axiom h_GFB : angle G F B = fifty_six_deg
-
--- Desired result
-theorem measure_angle_EAG : angle E A G = fifty_two_deg := by
+noncomputable section
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+variable (A B C D E F G : PPoint)
+theorem angle_EAG_is_52_degrees (A B C D E F G : PPoint)
+    (h_angle_DCA : EuclideanGeometry.angle D C A = (50 : ℝ) * Real.pi / 180)
+    (h_angle_ADC : EuclideanGeometry.angle A D C = (78 : ℝ) * Real.pi / 180)
+    (h_angle_FGA : EuclideanGeometry.angle F G A = (120 : ℝ) * Real.pi / 180)
+    (h_angle_BFG : EuclideanGeometry.angle B F G = (56 : ℝ) * Real.pi / 180)
+    (h_A_sbtw_C_G : Sbtw ℝ C A G)
+    (h_G_sbtw_A_B : Sbtw ℝ A G B)
+    (h_A_sbtw_E_D : Sbtw ℝ E A D) :
+    EuclideanGeometry.angle E A G = (52 : ℝ) * Real.pi / 180 := by
   sorry
+end

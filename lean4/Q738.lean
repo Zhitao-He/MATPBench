@@ -1,53 +1,27 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Definition
-
-/-!
-Formalization of the geometry problem:
-
-Given:
-- Points G, C, D, E, K, F on the Euclidean plane.
-- E is the center of a circle; C, D, K, G are on this circle.
-- ∠KFD = x°, ∠ECG = 45°, ∠EDC = 130°.
-- The diagram shows GEK collinear and F, D, K collinear.
-- Normalize: Value(x) = 20.
--/
-
-noncomputable section
-
-namespace GeometryProblem
-
-variable {P : Type*} [EuclideanPlane P]
-
--- Declare points
-variable (G C D E K F : P)
-
--- Angle x in degrees, to be solved for
-variable (x : ℝ)
-
--- E is the center of the circle, G C D K are on the circle
-axiom on_circle : dist E C = dist E D ∧ dist E C = dist E G ∧ dist E C = dist E K
-
--- Angle measures in radians
-axiom angle_KFD : ∠ K F D = (x / 180) * Real.pi
-axiom angle_ECG : ∠ E C G = (45 / 180) * Real.pi
-axiom angle_EDC : ∠ E D C = (130 / 180) * Real.pi
-
--- Collinearity
-axiom collinear_GEK : Collinear G E K
-axiom collinear_FDK : Collinear F D K
-
--- Distinctness
-axiom K_ne_F : K ≠ F
-axiom D_ne_F : D ≠ F
-axiom E_ne_C : E ≠ C
-axiom G_ne_C : G ≠ C
-axiom E_ne_D : E ≠ D
-axiom C_ne_D : C ≠ D
-
--- We are to show x = 20
-theorem value_of_x : x = 20 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemGeo
+theorem target_value_of_x
+  (C D E F G K : P)
+  (r : ℝ) (hr_pos : r > 0)
+  (hC_on_circle : dist E C = r)
+  (hD_on_circle : dist E D = r)
+  (hG_on_circle : dist E G = r)
+  (hK_on_circle : dist E K = r)
+  (hG_ne_C : G ≠ C)
+  (hC_ne_D : C ≠ D)
+  (hG_ne_K : G ≠ K)
+  (hK_ne_F : K ≠ F)
+  (hD_ne_F : D ≠ F)
+  (x_deg : ℝ)
+  (hKFD : inner ℝ (K -ᵥ F) (D -ᵥ F) = Real.cos (degToRad x_deg))
+  (hECG : inner ℝ (E -ᵥ C) (G -ᵥ C) = Real.cos (degToRad 45))
+  (hEDC : inner ℝ (E -ᵥ D) (C -ᵥ D) = Real.cos (degToRad 130))
+  : x_deg = 20 :=
   sorry
-
-end GeometryProblem
+end ProblemGeo

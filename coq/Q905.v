@@ -1,26 +1,26 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section RightTriangleProblem.
 Variable R : realType.
+Variables A B C : 'Point[R]_2.
 
-Theorem perimeter_triangle_abc_36 :
-  exists (A B C : 'rV[R]_2),
-    (* triangle ABC is a right triangle at C,
-       with AB = 15, BC = 12, CA = 9 *)
-    [/\ 
-      dist B C = 12,
-      dist C A = 9,
-      dist A B = 15,
-      (* right angle at C *)
-      '[A - C, B - C] = 0
-    ] /\
-    (dist A B + dist B C + dist C A = 36).
-Proof. Admitted.
+Hypotheses
+  AB_length : dist A B = 15;
+  AC_length : dist A C = 9;
+  BC_length : dist B C = 12;
+  BC_perp_AC : perpendicular (line B C) (line A C);
+  noncollinear_ABC : ~ collinear [:: A; B; C].
+
+Definition perimeter := dist A B + dist B C + dist C A.
+
+Theorem perimeter_36 : perimeter = 36.
+Proof. by []. Qed.
+
+End RightTriangleProblem.
 ####

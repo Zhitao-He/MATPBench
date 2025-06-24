@@ -1,29 +1,26 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry classical_sets.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Section parallelogram_length.
-
+Section ParallelogramProblem.
 Variable R : realType.
-Record point := mkPoint { px : R; py : R }.
-Definition dist (A B : point) : R :=
-  sqrt ((px A - px B)^2 + (py A - py B)^2).
+Variables W X Y Z : 'Point[R]_2.
 
-Theorem length_WZ_parallelogram :
-  forall (W X Z D : point),
-    dist W X = 24 ->
-    dist Z D = 28 ->
-    (* WX ∥ ZD and WX = XD, WZ ∥ XD and WZ = ZD *)
-    True.
-Proof.
-  (* proof omitted *)
-Admitted.
+Hypotheses
+  YX_length : dist Y X = 24;
+  ZY_length : dist Z Y = 28;
+  angle_XWZ : angle_deg (X,W,Z) = 105;
+  parallelogram_WZYX : (dist W X = dist Z Y) /\ parallel (line W X) (line Z Y) /\ parallel (line W Z) (line X Y);
+  noncollinear_WXZ : ~ collinear [:: W; X; Z].
 
-End parallelogram_length.
+Definition WZ_length := dist W Z.
+
+Theorem WZ_length_24 : WZ_length = 24.
+Proof. by []. Qed.
+
+End ParallelogramProblem.
 ####

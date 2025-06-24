@@ -1,64 +1,32 @@
-theory TriangleGeometry
-  imports 
-    Main
-    "HOL-Analysis.Euclidean_Space"
+theory GeometryProblem
+  imports "HOL-Analysis.Euclidean_Space"
 begin
-
 type_synonym point = "real^2"
-
-(* 定义三角形ABC *)
-locale triangle_setup =
-  fixes A B C :: point
-  assumes H_ABC_noncollinear: "¬ collinear {A, B, C}"
-  where collinear S ≡ "∃p q. S ⊆ {x. ∃t. x = p + t *⇩R (q - p)}"
-
-context triangle_setup
-begin
-
-(* AD bisects angle BAC and meets BC at D *)
-definition on_line :: "point ⇒ point ⇒ point ⇒ bool" where
-  "on_line P A B ≡ ∃t. P = A + t *⇩R (B - A) ∧ 0 ≤ t ∧ t ≤ 1"
-
-definition angle_bisector_at :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "angle_bisector_at A B C D ≡ 
-    let vAB = B - A;
-        vAC = C - A;
-        u = vAB /⇩R norm vAB;
-        v = vAC /⇩R norm vAC
-    in ∃t. t > 0 ∧ D = A + t *⇩R (u + v)"
-
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A B C = 
-    let vBA = A - B;
-        vBC = C - B;
-        cos_angle = (vBA •⇩R vBC) / (norm vBA * norm vBC)
-    in arccos cos_angle"
-
-(* Assume D exists on BC such that AD bisects angle BAC *)
-fixes D :: point
-assumes H_D_on_BC: "on_line D B C"
-  and H_angle_bisector_AD: "angle_bisector_at A B C D"
-
-(* E is the midpoint of AD *)
-definition E :: point where "E = (A + D) /⇩R 2"
-
-(* M on BE, N on CE *)
-fixes M N :: point
-assumes H_M_on_BE: "on_line M B E"
-  and H_N_on_CE: "on_line N C E"
-
-(* Perpendicular condition: v⋅w = 0 iff vectors are perpendicular *)
-definition perpendicular :: "point ⇒ point ⇒ point ⇒ bool" where
-  "perpendicular P Q R ≡ (Q - P) •⇩R (R - Q) = 0"
-
-(* angle AMC = 90°, angle ANB = 90° *)
-assumes H_angle_AMC_90: "perpendicular A M C"
-  and H_angle_ANB_90: "perpendicular A N B"
-
-(* Theorem: angle MBN = angle MCN *)
-theorem putnam_geom_MBN_eq_MCN: "angle M B N = angle M C N"
-  sorry
-
-end
-
+lemma problem_statement:
+  fixes A B C D E M N :: point
+  assumes
+    A_ne_B: "A ≠ B" and
+    B_ne_C: "B ≠ C" and
+    A_ne_C: "A ≠ C" and
+    non_collinear_ABC: "¬ collinear {A, B, C}" and
+    D_on_segment_BC: "D ∈ segment B C" and
+    A_ne_D: "A ≠ D" and
+    AD_bisects_BAC: "angle_between_vectors (B - A) (D - A) = angle_between_vectors (D - A) (C - A)" and
+    E_midpoint_AD: "E = midpoint A D" and
+    B_ne_E: "B ≠ E" and
+    C_ne_E: "C ≠ E" and
+    M_on_segment_BE: "M ∈ segment B E" and
+    N_on_segment_CE: "N ∈ segment C E" and
+    A_ne_M: "A ≠ M" and
+    C_ne_M: "C ≠ M" and
+    AMC_right_angle: "angle_between_vectors (A - M) (C - M) = pi / 2" and
+    A_ne_N: "A ≠ N" and
+    B_ne_N_for_ANB: "B ≠ N" and 
+    ANB_right_angle: "angle_between_vectors (A - N) (B - N) = pi / 2" and
+    M_ne_B_for_MBN: "M ≠ B" and
+    N_ne_B_for_MBN: "N ≠ B" and 
+    M_ne_C_for_MCN: "M ≠ C" and
+    N_ne_C_for_MCN: "N ≠ C"
+  shows "angle_between_vectors (M - B) (N - B) = angle_between_vectors (M - C) (N - C)"
+  sorry 
 end

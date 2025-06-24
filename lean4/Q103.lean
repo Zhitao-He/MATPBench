@@ -1,74 +1,32 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Nat.GCD
-
-open EuclideanGeometry
-
-/-!
-## Formalization of the Geometry Problem
-
-Given:
-- Circle A with radius 10.
-- Equilateral triangle T inscribed in circle A, vertices v₁, v₂, v₃.
-- Circle B (radius 3) internally tangent to A at v₁.
-- Circles C and D (radii 2) internally tangent to A at v₂, v₃.
-- Circles B, C, D all externally tangent to a circle E (radius m/n, with coprime positive m, n).
-Find: m + n = 32.
--/
-
--- Circle radii
-def rA : ℝ := 10
-def rB : ℝ := 3
-def rC : ℝ := 2
-def rD : ℝ := 2
-
-/--
-A circle with center `c2` and radius `r2` is internally tangent to a circle with center `c1` and radius `r1` at point `p`.
-- `r1 > r2 > 0`, `dist p c1 = r1`, `dist p c2 = r2`, and `dist c1 c2 = r1 - r2`.
--/
-def IsInternallyTangentAt (c1 : EuclideanPlane) (r1 : ℝ) (c2 : EuclideanPlane) (r2 : ℝ) (p : EuclideanPlane) : Prop :=
-  r1 > r2 ∧ r2 > 0 ∧
-  dist p c1 = r1 ∧
-  dist p c2 = r2 ∧
-  dist c1 c2 = r1 - r2
-
-/-- Circles (c1, r1) and (c2, r2), both with positive radii, are externally tangent iff their centers are exactly r1 + r2 apart. -/
-def AreExternallyTangent (c1 : EuclideanPlane) (r1 : ℝ) (c2 : EuclideanPlane) (r2 : ℝ) : Prop :=
-  r1 > 0 ∧ r2 > 0 ∧ dist c1 c2 = r1 + r2
-
-/--
-Formal statement of the geometry problem as a theorem in Lean 4.
-
-There exist positive coprime integers m, n, with m + n = 32, and suitable geometric data (centers/vertices)
-such that:
-- T is an equilateral triangle inscribed in circle A,
-- circle B (radius 3) is internally tangent to A at v₁,
-- circles C, D (radii 2) internally tangent to A at v₂, v₃,
-- B, C, D each are externally tangent to circle E (radius m/n).
--/
-theorem find_m_plus_n_is_32 :
-  ∃ (m n : ℕ),
-    0 < m ∧ 0 < n ∧ Nat.gcd m n = 1 ∧
-    (∃ (centerA centerB centerC centerD centerE : EuclideanPlane)
-       (v₁ v₂ v₃ : EuclideanPlane),
-      let rE : ℝ := (m : ℝ) / (n : ℝ)
-      -- 1. Triangle T (v₁ v₂ v₃) is equilateral, nondegenerate
-      ∧ IsEquilateral v₁ v₂ v₃
-      ∧ dist v₁ v₂ > 0
-      -- 2. Triangle T inscribed in circle A
-      ∧ dist v₁ centerA = rA
-      ∧ dist v₂ centerA = rA
-      ∧ dist v₃ centerA = rA
-      -- 3/4/5. Circles B,C,D internally tangent to A at the vertices
-      ∧ IsInternallyTangentAt centerA rA centerB rB v₁
-      ∧ IsInternallyTangentAt centerA rA centerC rC v₂
-      ∧ IsInternallyTangentAt centerA rA centerD rD v₃
-      -- 6. Circles B,C,D externally tangent to E
-      ∧ AreExternallyTangent centerB rB centerE rE
-      ∧ AreExternallyTangent centerC rC centerE rE
-      ∧ AreExternallyTangent centerD rD centerE rE
-      -- 7. m + n = 32
-      ∧ m + n = 32
-    )
-:= by sorry
+import Mathlib.Data.Nat.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+def radiusA : ℝ := 10
+def radiusB : ℝ := 3
+def radiusC : ℝ := 2
+def radiusD : ℝ := 2
+variable (centerA centerB centerC centerD centerE : P)
+variable (v₁ v₂ v₃ : P) 
+variable (m n : ℕ)
+variable (hT_equilateral : dist v₁ v₂ = dist v₂ v₃ ∧ dist v₂ v₃ = dist v₃ v₁ ∧ 0 < dist v₁ v₂)
+variable (hv₁_on_A : dist v₁ centerA = radiusA)
+variable (hv₂_on_A : dist v₂ centerA = radiusA)
+variable (hv₃_on_A : dist v₃ centerA = radiusA)
+variable (hB_tangent : centerB = centerA + ((radiusA - radiusB) / radiusA) • (v₁ - centerA))
+variable (hC_tangent : centerC = centerA + ((radiusA - radiusC) / radiusA) • (v₂ - centerA))
+variable (hD_tangent : centerD = centerA + ((radiusA - radiusD) / radiusA) • (v₃ - centerA))
+variable (radiusE : ℝ)
+variable (hE_tangent_B : dist centerE centerB = radiusE + radiusB)
+variable (hE_tangent_C : dist centerE centerC = radiusE + radiusC)
+variable (hE_tangent_D : dist centerE centerD = radiusE + radiusD)
+variable (hm_pos : 0 < m)
+variable (hn_pos : 0 < n)
+variable (hcoprime : Nat.gcd m n = 1)
+variable (hE_frac : radiusE = (m : ℝ) / (n : ℝ))
+theorem m_add_n_eq_32 : m + n = 32 := by
+  sorry
+end

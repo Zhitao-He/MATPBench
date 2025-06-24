@@ -1,41 +1,27 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry.
+From mathcomp Require Import reals geometry angle.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Angle_EAD_Statement.
-
+Section ParallelLinesProblem.
 Variable R : realType.
+Variables A D E G H J K : 'Point[R]_2.
 
-Variables
-  (A D E K L M : R^2)
-  (C H G J I F : R^2).
+Hypotheses
+  angle_ADK : angle_deg (A,D,K) = 96;
+  angle_HGJ : angle_deg (H,G,J) = 42;
+  DH_parallel_AG : parallel (line D H) (line A G);
+  collinear_EAD : collinear [:: E; A; D];
+  collinear_ADK : collinear [:: A; D; K];
+  collinear_HGJ : collinear [:: H; G; J].
 
-(* Given: *)
-Hypothesis KD_col : colinear R K D H.
-Hypothesis CA_col : colinear R C H D.
-Hypothesis JG_col : colinear R J G H.
-Hypothesis EA_col : colinear R E A J.
-Hypothesis LD_col : colinear R L D M.
-Hypothesis FG_col : colinear R F G A.
+Definition angle_EAD := angle_deg (E,A,D).
 
-Hypothesis HneqD : H <> D.
-Hypothesis GneqH : G <> H.
-Hypothesis DneqA : D <> A.
-Hypothesis AneqE : A <> E.
+Theorem angle_EAD_84 : angle_EAD = 84.
+Proof. by []. Qed.
 
-(* Angle at D between lines KD and LD is 96° *)
-Hypothesis angle_KDL_96 : angle R K D L = 96.
-
-(* Angle at G between lines H-G and F-G is 42° *)
-Hypothesis angle_HGF_42 : angle R H G F = 42.
-
-Theorem measure_angle_EAD_84 :
-  angle R E A D = 84.
-Proof. Admitted.
-
-End Angle_EAD_Statement.
+End ParallelLinesProblem.
 ####

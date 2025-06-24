@@ -1,16 +1,17 @@
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
--- 平面上的点类型
-abbrev P := EuclideanSpace ℝ (Fin 2)
-
--- 定义三点的角的度数值，顶点为第二个点
-def measureOfAngleInDegrees (A B C : P) : ℝ :=
-  Real.Angle.toDegrees ((∠ A B C).toReal)
-
--- 设 J, M, K 是平面上的点
-variable (J M K : P)
-
--- 形式化"∠JMK 的度数为 103"
-theorem angleJMK_measure_eq_103_degrees : measureOfAngleInDegrees J M K = 103 := by
+import Mathlib.Data.Real.Basic
+namespace ProblemFormalization
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+noncomputable def degreesToRadians (deg : ℝ) : ℝ := deg * (Real.pi / 180)
+theorem prove_angle_JMK_value (H J K L M : PPoint)
+  (hAngleHMJ : EuclideanGeometry.angle H M J = degreesToRadians 79)
+  (hAngleKML : EuclideanGeometry.angle K M L = degreesToRadians 77)
+  (hH_ne_M : H ≠ M)
+  (hK_ne_M : K ≠ M)
+  (hJML_sbtw : Sbtw ℝ J M L)
+  (hK_not_on_line_JML : ¬ Collinear ℝ ({J, M, L} : Set PPoint))
+  : EuclideanGeometry.angle J M K = degreesToRadians 103 := by
   sorry
+end ProblemFormalization

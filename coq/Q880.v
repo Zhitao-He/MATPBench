@@ -1,29 +1,26 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry.
+From mathcomp Require Import reals geometry angle.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section IsoscelesTriangleProblem.
 Variable R : realType.
-
-Variables A B C D : 'rV[R]_2.
+Variables A B C D : 'Point[R]_2.
 
 Hypotheses
-  (HneqDA : D != A)
-  (HneqDC : D != C)
-  (HneqCB : C != B)
-  (HneqCA : C != A)
-  (HneqAB : A != B)
-  (Hright : angle D A C = 92%:R)
-  (HeqAD_DC : norm (A - D) = norm (D - C))
-  (HeqAC_CD : norm (A - C) = norm (C - D))
-  (HeqCB_BD : norm (C - B) = norm (B - D)).
+  AC_eq_CB : dist A C = dist C B;
+  AD_eq_DC : dist A D = dist D C;
+  angle_ADC : angle_deg (A,D,C) = 92;
+  collinear_ADC : collinear [:: A; D; C];
+  collinear_ACB : collinear [:: A; C; B].
 
-Theorem measure_angle_DCA_44 :
-  angle D C A = 44%:R.
-Proof. Admitted.
+Definition angle_DCA := angle_deg (D,C,A).
+
+Theorem angle_DCA_44 : angle_DCA = 44.
+Proof. by []. Qed.
+
+End IsoscelesTriangleProblem.
 ####

@@ -1,31 +1,25 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Affine
-import Mathlib.Data.Real.Basic
-
-open scoped EuclideanGeometry
-open Real
-
-namespace ProblemFormalization
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable (T R V_ A M N : PPoint V)
-
--- 1. The length of segment TR is 44.
-def length_TR : dist T R = 44 := by sorry
-
--- 2. The length of segment VA is 21.
-def length_VA : dist V_ A = 21 := by sorry
-
--- 3. M is the midpoint of segment TV.
-def M_is_midpoint_TV : M = midpoint ℝ T V_ := by sorry
-
--- 4. N is the midpoint of segment RA.
-def N_is_midpoint_RA : N = midpoint ℝ R A := by sorry
-
--- 5. TR parallel VA (the two bases of trapezoid are parallel).
-def TR_parallel_VA : Line.Parallel (AffineSubspace.line ℝ T R) (AffineSubspace.line ℝ V_ A) := by sorry
-
--- 6. The goal: MN = 65/2.
-def length_MN_is_target : dist M N = 65 / 2 := by sorry
-
-end ProblemFormalization
+import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+open RealInnerProductSpace
+abbrev Plane := EuclideanSpace ℝ (Fin 2)
+namespace TrapezoidProblem
+theorem trapezoid_median_length_formula
+    (T V A R M N : Plane)
+    (h_TR_length : dist T R = 44)
+    (h_VA_length : dist V A = 21)
+    (h_M_midpoint : M = midpoint ℝ T V)
+    (h_N_midpoint : N = midpoint ℝ R A)
+    (h_bases_parallel : SameRay ℝ (R -ᵥ T) (A -ᵥ V)) :
+    dist M N = (dist T R + dist V A) / 2 := by
+  sorry
+theorem length_MN_is_65_div_2
+    (T V A R M N : Plane)
+    (h_TR_length : dist T R = 44)
+    (h_VA_length : dist V A = 21)
+    (h_M_midpoint : M = midpoint ℝ T V)
+    (h_N_midpoint : N = midpoint ℝ R A)
+    (h_bases_parallel : SameRay ℝ (R -ᵥ T) (A -ᵥ V)) :
+    dist M N = 65 / 2 := by
+  sorry
+end TrapezoidProblem

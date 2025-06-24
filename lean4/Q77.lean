@@ -1,9 +1,5 @@
-
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
-
 axiom figureGeometricRelationship (sSq sTri : ℝ) : Prop
-
 theorem squareTrianglePerimeterValue :
   ∃ (a b p sSq sTri : ℝ),
     sSq > 0 ∧

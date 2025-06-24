@@ -1,7 +1,5 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
-
 theorem concentric_circle_chord_tangent_area
   (r R k : ℝ)
   (hr : 0 < r)

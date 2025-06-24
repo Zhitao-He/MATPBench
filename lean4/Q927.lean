@@ -1,37 +1,27 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-namespace GeometryProblem
-
--- Let V be a real inner product space of dimension at least 2, P its affine space.
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [EuclideanAddTorsor V P]
-
--- Given four points on the plane
-variable (F G H J : P)
-
--- Helper: degrees to radians conversion
-noncomputable def degreesToRadians (d : ℝ) : ℝ := d * (Real.pi / 180)
-
--- Hypotheses:
--- F is the center of the circle, G, H, J are distinct points on the circle.
-variable (r : ℝ)
-variable (hr : r > 0)
-variable (hG : dist G F = r) (hH : dist H F = r) (hJ : dist J F = r)
-variable (hGF : G ≠ F) (hHF : H ≠ F) (hJF : J ≠ F)
-
--- ∠GFH = 130°
-variable (h_angle_GFH : Angle.value (∠ G F H) = degreesToRadians 130)
-
--- HF ⊥ JF, i.e., angle ∠HFJ = 90°
-variable (h_perp : Angle.value (∠ H F J) = degreesToRadians 90)
-
--- Goal: ∠JFG = 140°
-theorem value_angle_JFG :
-  Angle.value (∠ J F G) = degreesToRadians 140 := by
-  -- The actual proof is omitted per instructions
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+import Mathlib.Geometry.Euclidean.Basic 
+import Mathlib.LinearAlgebra.Pi 
+namespace ProblemFormalization
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+noncomputable instance PPoint_oriented : Module.Oriented ℝ PPoint (Fin 2) :=
+  { positiveOrientation := (Pi.basisFun ℝ (Fin 2)).orientation }
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
+noncomputable def radToDeg (r : ℝ) : ℝ := r * (180 / Real.pi)
+noncomputable def angleGFHDeg : ℝ := 130
+noncomputable def angleHFJDeg : ℝ := 90
+noncomputable def targetAngleJFGDeg : ℝ := 140
+noncomputable def valGFHRad : ℝ := degToRad angleGFHDeg
+noncomputable def valHFJRad : ℝ := degToRad angleHFJDeg
+theorem target_theorem_JFG (G F H J : PPoint) [Fact (Module.finrank ℝ PPoint = 2)]
+  (hF_ne_G : F ≠ G) (hF_ne_H : F ≠ H) (hF_ne_J : F ≠ J)
+  (h_oangle_GFH : EuclideanGeometry.oangle G F H = valGFHRad) 
+  (h_oangle_HFJ : EuclideanGeometry.oangle H F J = valHFJRad) 
+  :
+  radToDeg (EuclideanGeometry.angle J F G) = targetAngleJFGDeg := by
   sorry
-
-end GeometryProblem
+end ProblemFormalization

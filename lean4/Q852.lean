@@ -1,41 +1,25 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-
-namespace ProblemDescription
-
-noncomputable section
-
+import Mathlib.Analysis.InnerProductSpace.PiL2
 open Real
-open EuclideanGeometry
-
--- 给定欧几里得平面上的三个点
-variable {P : Type*} [EuclideanPlane P]
-variable (A B C : P)
-
--- A, B, C 为不同的三点
-axiom h_distinct_points : A ≠ B ∧ B ≠ C ∧ C ≠ A
-
--- ∠ACB = 90°
-axiom h_angle_C_is_right : ∠ A C B = π / 2
-
--- ∠CAB = 30°
-axiom h_angle_A_is_30 : ∠ C A B = π / 6
-
--- BC = 21
-axiom h_BC_length : dist B C = 21
-
--- 设 y = |AC|
-def y (A C : P) : ℝ := dist A C
-
--- 目标: y = 21 * sqrt 3
-theorem value_of_y_eq_21_sqrt_3 (A B C : P) [EuclideanPlane P]
-    (h1 : A ≠ B ∧ B ≠ C ∧ C ≠ A)
-    (h2 : ∠ A C B = π / 2)
-    (h3 : ∠ C A B = π / 6)
-    (h4 : dist B C = 21) : 
-    y A C = 21 * sqrt 3 := by
+namespace GeometryProblem
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem value_of_y
+  (A B C E : P)
+  (a b c x y : ℝ)
+  (h_BA : dist B A = c)
+  (h_BC : dist B C = a)
+  (h_BE : dist B E = x)
+  (h_CA : dist C A = b)
+  (h_EA : dist E A = y)
+  (h_x_val : x = 7 * sqrt 3)
+  (h_angle_CAE : EuclideanGeometry.angle C A E = π / 6)      
+  (h_angle_EBC : EuclideanGeometry.angle E B C = π / 3)      
+  (h_AE_perp_CE : EuclideanGeometry.angle A E C = π / 2)     
+  (h_BC_perp_AC : EuclideanGeometry.angle B C A = π / 2)     
+  : y = 21 * sqrt 3 :=
   sorry
-
-end ProblemDescription
+end GeometryProblem

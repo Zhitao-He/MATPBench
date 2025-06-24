@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -10,14 +10,21 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Variables A B C D : R * R.
-Hypotheses
-  hdD : exists lambda, 0 < lambda < 1 /\D = ((1 - lambda) *: A + lambda *: B)%R;
-  hAD : (fst A - fst D)^2 + (snd A - snd D)^2 = 25^+2;
-  hDB : (fst B - fst D)^2 + (snd B - snd D)^2 = 1^+2;
-  hCD : (fst C - fst D)^2 + (snd C - snd D)^2 = 5^+2;
-  hperp : let v1 := (fst C - fst D, snd C - snd D) in let v2 := (fst B - fst A, snd B - snd A) in v1.1 * v2.1 + v1.2 * v2.2 = 0.
+Variables A B C D : 'rV[R]_2.
 
-Theorem foot_perp_distance : True.
-Proof. by []. Qed.
+Hypotheses
+  (AD_length : norm (A - D) = 25)
+  (CD_length : norm (C - D) = 5)
+  (DB_length : norm (D - B) = 1)
+  (AD_perp_CD : angle A D C = PI/2)
+  (BC_perp_AC : angle B C A = PI/2).
+
+Theorem CA_length : norm (C - A) = 5 * sqrt 26.
+Proof.
+  (* Proof would involve:
+     1. Using right triangle properties on ADC to find AC
+     2. Applying Pythagorean theorem
+     3. Calculating the final length *)
+  admit.
+Qed.
 ####

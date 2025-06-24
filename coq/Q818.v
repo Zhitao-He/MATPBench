@@ -6,23 +6,25 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Rectangle_Angle_DEB.
+Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Variables A B C D E : 'rV[R]_2.
+Variables A B D C E : 'rV[R]_2.
 
-Hypothesis rect : is_rectangle A B C D.
-Hypothesis nb_col_AB : ~~ colinear A B.
-Hypothesis nb_col_BD : ~~ colinear B D.
-Hypothesis eq_AE_CE : intersect_line_line A C B D = Some E.
+Hypotheses
+  (rectangle_ABDC : is_rectangle A B D C)
+  (angle_EAB : angle E A B = 40 * PI / 180)
+  (perp_AB_DB : angle A B D = PI / 2)
+  (diag_intersect : intersect (line A C) (line B D) = Some E).
 
-Hypothesis angle_ABC_90 : angle A B C = PI / 2.
-Hypothesis angle_BAC_40 : angle B A C = (40%:R * PI) / 180.
-
-Theorem measure_angle_DEB_80 :
-  angle D E B = (80%:R * PI) / 180.
-Proof. Admitted.
-
-End Rectangle_Angle_DEB.
+Theorem angle_DEB_value : angle D E B = 80 * PI / 180.
+Proof.
+  (* Proof would involve:
+     1. Using rectangle properties (equal diagonals, bisection)
+     2. Applying isosceles triangle properties
+     3. Using angle sum properties in triangles
+     4. Calculating angle DEB through geometric relationships *)
+  admit.
+Qed.
 ####

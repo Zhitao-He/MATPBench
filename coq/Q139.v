@@ -8,30 +8,37 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Variable R : realType.
+Section FlowerGarden.
+  Variable R : realType.
 
-(* Definition of regions, their dimensions (extracted from diagram):
-   - Region 1: 4 x 5
-   - Region 2: 7 x 3
-   - Region 3: 6 x 1
-   - Region 4: 2 x 2 (inferred from the remaining interior rectangle)
-   - Region 5: 5 x 3 *)
+  (* Define the areas of the rectangular regions (in square feet) *)
+  Definition region1_area := 4 * 5.
+  Definition region2_area := 7 * 3.
+  Definition region3_area := 6 * 1.
+  Definition region4_area := 2 * 2.
+  Definition region5_area := 5 * 3.
 
-Definition region1_area := 4 * 5.
-Definition region2_area := 7 * 3.
-Definition region3_area := 6 * 1.
-Definition region4_area := 2 * 2.
-Definition region5_area := 5 * 3.
+  (* List of areas for all regions *)
+  Definition areas : seq R :=
+    [:: region1_area%:R; region2_area%:R; region3_area%:R; region4_area%:R; region5_area%:R].
 
-Definition areas : seq R := [:: region1_area%:R; region2_area%:R; region3_area%:R; region4_area%:R; region5_area%:R].
+  (* Costs of each flower type (asters, begonias, cannas, dahlias, Easter lilies) *)
+  Definition flower_costs : seq R := [:: 1; 1.5; 2; 2.5; 3].
 
-Definition flower_costs : seq R := [:: 1; 1.5; 2; 2.5; 3]. (* asters, begonias, cannas, dahlias, Easter lilies *)
+  (* Compute the minimal cost by assigning the cheapest flowers to the largest regions *)
+  Definition minimal_cost :=
+    let sorted_areas := sort (fun x y => x <= y) areas in
+    let sorted_costs := sort (fun x y => x <= y) flower_costs in
+    \sum_(i <- iota 0 5) (sorted_areas`_i * sorted_costs`_i).
 
-Definition total_cost := 
-  \sum_(i <- iota 0 5) (areas`_i * flower_costs`_i).
-
-Theorem minimal_flower_cost : total_cost = 118.5%:R.
-Proof.
-admit.
-Qed.
+  (* Theorem: The least possible cost is $108 *)
+  Theorem least_possible_cost : minimal_cost = 108%:R.
+  Proof.
+    (* Proof steps would involve:
+       1. Sorting the areas and costs in ascending order.
+       2. Pairing the largest areas with the cheapest flowers.
+       3. Verifying the total cost is minimized to $108.
+    *)
+    Admitted.
+End FlowerGarden.
 ####

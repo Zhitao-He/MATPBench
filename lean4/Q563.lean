@@ -1,41 +1,26 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
 import Mathlib.Data.Real.Basic
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-noncomputable section
-
-open EuclideanGeometry
-
--- We work in a Euclidean plane P
-variable {P : Type*} [EuclideanPlane P]
-
--- Declare the points involved in the geometry
-variable (A B C D E F G : P)
--- Variable for the unknown quantity
-variable (x : ℝ)
-
--- Given segment lengths
-variable (hBA : dist A B = 3)
-variable (hBD : dist B D = x - 1)
-variable (hCE : dist C E = x + 2)
-variable (hEF : dist E F = 8)
-
--- BD must be positive
-variable (h_BD_pos : x - 1 > 0)
-
--- Perpendicularity conditions
-variable (h_AB_perp_BC : Angle.Unoriented.IsRightAngle A B C)
-variable (h_DE_perp_FE : Angle.Unoriented.IsRightAngle D E F)
-
--- Angle equality
-variable (h_angle_equality : Angle.Unoriented.value G A B = Angle.Unoriented.value E F G)
-
--- D lies on the ray extending from B through C
-variable (h_D_on_ray_BC : D ∈ AffineSubspace.ray ℝ B C)
-variable (h_B_ne_C : B ≠ C)
-
--- Theorem: BD = 9/5
-theorem find_BD_value : dist B D = 9 / 5 := by
-  sorry
-
-end
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+import Mathlib.Geometry.Euclidean.Basic 
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem target_value_of_BD (A B C D E F G : PPoint) (x : ℝ)
+    (h_AB : dist A B = 3)
+    (h_BD : dist B D = x - 1)  
+    (h_CE : dist C E = x + 2)  
+    (h_EF : dist E F = 8)
+    (h_x_gt_1 : x > 1)
+    (h_ABC_right_angle : angle A B C = Real.pi / 2)
+    (h_FED_right_angle : angle F E D = Real.pi / 2)
+    (h_angle_eq : angle G A B = angle E F G)
+    (h_angle_BAD_eq_BAG : angle B A D = angle B A G) 
+    (h_angle_EFC_eq_EFG : angle E F C = angle E F G) 
+    (h_angle_ABD_is_right : angle A B D = Real.pi / 2) 
+    (h_angle_FEC_is_right : angle F E C = Real.pi / 2) 
+    (h_triangle_ABD_not_collinear : ¬ Collinear ℝ ({A, B, D} : Set PPoint))
+    (h_triangle_FEC_not_collinear : ¬ Collinear ℝ ({F, E, C} : Set PPoint))
+    (h_angle_BDA_eq_CEF : angle B D A = angle C E F) 
+    (h_angle_DAB_eq_EFC : angle D A B = angle E F C) 
+    : dist B D = (9/5 : ℝ) := by sorry

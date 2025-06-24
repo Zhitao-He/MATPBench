@@ -1,48 +1,34 @@
-theory MidsegmentOfQuadrilateral
-imports
-  Main
-  "HOL-Analysis.Euclidean_Space"
+theory MVUB_Midsegment
+  imports Main
 begin
-
-(* 定义点类型 *)
-type_synonym point = "real^2"
-
-(* 定义中点 *)
-definition midpoint :: "point ⇒ point ⇒ point" where
-  "midpoint A B = (A + B) / 2"
-
-(* 定义线段 *)
-definition segment :: "point ⇒ point ⇒ point set" where
-  "segment A B = {(1 - t) *⇩R A + t *⇩R B |t. 0 ≤ t ∧ t ≤ 1}"
-
-(* 判断两条线段是否平行 *)
-definition parallel_segments :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "parallel_segments A B C D ⟷ (B - A) = k *⇩R (D - C) ∨ (B - A) = k *⇩R (C - D) for some k"
-
-(* 判断一条线段是否是四边形的中位线 *)
-definition is_midsegment_of_quadrilateral :: "point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "is_midsegment_of_quadrilateral L Q M V U B ⟷ 
-   midpoint L M V ∧ midpoint Q U B ∧ 
-   parallel_segments L Q M V ∧ parallel_segments L Q U B"
-
-(* 问题陈述 *)
-lemma midsegment_of_quadrilateral_LQ_MVUB:
-  fixes L Q M V U B :: point
-  assumes "midpoint L M V"
-          "midpoint Q U B"
-  shows "is_midsegment_of_quadrilateral L Q M V U B"
-proof -
-  from assms have "L = midpoint M V" by (simp add: midpoint_def)
-  moreover from assms have "Q = midpoint U B" by (simp add: midpoint_def)
-  
-  (* 从中点性质可以推导出平行关系 *)
-  moreover have "parallel_segments L Q M V" 
-    using assms by (simp add: midpoint_def parallel_segments_def)
-  moreover have "parallel_segments L Q U B"
-    using assms by (simp add: midpoint_def parallel_segments_def)
-  
-  ultimately show ?thesis
-    by (simp add: is_midsegment_of_quadrilateral_def)
-qed
-
+typedecl Point
+definition Segment :: "Point ⇒ Point ⇒ (Point × Point)" where
+  "Segment A B = (A, B)"
+definition is_midpoint :: "Point ⇒ Point ⇒ Point ⇒ bool" where
+  "is_midpoint M A B ⟷ (∃f::real. 0 < f ∧ f < 1 ∧ (M = (A, B) ∨ M = (B, A)))"
+definition parallel :: "(Point × Point) ⇒ (Point × Point) ⇒ bool" where
+  "parallel AB CD ≡ undefined"  
+definition is_trapezoid :: "Point ⇒ Point ⇒ Point ⇒ Point ⇒ bool" where
+  "is_trapezoid M V U B ≡ parallel (Segment M B) (Segment V U) ∧ ¬parallel (Segment M V) (Segment B U)"
+definition is_midsegment_of_quadrilateral :: "(Point × Point) ⇒ (Point × Point × Point × Point) ⇒ bool" where
+  "is_midsegment_of_quadrilateral (L, Q) (M, V, U, B) ≡ 
+    (∃MB VU. MB = Segment M B ∧ VU = Segment V U ∧
+      is_midpoint L M V ∧ is_midpoint Q B U)"
+axiomatization
+  J H L V M N B U Q O S Y C G P :: Point and
+  x y :: real
+where
+  JH_def: "Segment J H ≠ undefined" and
+  JH_len: "" and
+  JH_eq: "" and
+  LV_len: "" and
+  ML_len: "" and
+  ML_LV_eq: "" and
+  MN_len: "" and
+  QO_len: "" and
+  Q_mid_BU: "is_midpoint Q B U" and
+  MB_VU_parallel: "parallel (Segment M B) (Segment V U)" and
+  MVUB_trapezoid: "is_trapezoid M V U B"
+definition LQ_is_midsegment_MVUB :: bool where
+  "LQ_is_midsegment_MVUB ≡ is_midsegment_of_quadrilateral (L, Q) (M, V, U, B)"
 end

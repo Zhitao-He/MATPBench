@@ -1,44 +1,22 @@
 import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Data.Real.Sqrt
-
-open scoped EuclideanSpace
-
--- Define the type for points in 2D Euclidean space over ℝ
-abbrev Point := EuclideanSpace ℝ (Fin 2)
-
--- Given constants
-def shipSpeed : ℝ := 40
-def travelTime : ℝ := 1 / 2 -- 30min = 0.5h
-
-def distAB : ℝ := shipSpeed * travelTime
-
--- Point A at the origin, Point B due east
-def pointA : Point := ![0, 0]
-def pointB : Point := ![distAB, 0]
-
--- Bearings: angles from NORTH by EAST (degrees)
-def bearingA_deg : ℝ := 45
-def bearingB_deg : ℝ := 15
-
--- Convert degrees to radians
-noncomputable def degToRad (deg : ℝ) : ℝ := deg * (Real.pi / 180)
-
--- Mathematical angle (from x-axis, counterclockwise): North is 90°
-noncomputable def angleA : ℝ := degToRad (90 - bearingA_deg)
-noncomputable def angleB : ℝ := degToRad (90 - bearingB_deg)
-
--- Unit direction vectors for the rays from A and B toward M
-noncomputable def dirVecA : Point := ![Real.cos angleA, Real.sin angleA]
-noncomputable def dirVecB : Point := ![Real.cos angleB, Real.sin angleB]
-
--- Parameter s: distance from B to M, computed from the bearings intersection law
-noncomputable def param_s : ℝ :=
-  distAB * Real.sin angleA / Real.sin (angleB - angleA)
-
--- The island M is located at pointB + param_s * dirVecB
-noncomputable def pointM : Point := pointB +ᵥ (param_s • dirVecB)
-
--- The required result: distance from B to M equals 20 * sqrt 2
-theorem distance_BM_is_20_sqrt_2 : dist pointB pointM = 20 * Real.sqrt 2 := by
-  sorry
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Data.Real.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real Angle EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ShipIslandProblem
+variable (A B M : P)
+noncomputable def ship_speed : ℝ := 40.0
+noncomputable def travel_time : ℝ := 0.5 
+noncomputable def dist_A_B_value : ℝ := ship_speed * travel_time
+variable (h_dist_AB : dist A B = dist_A_B_value)
+noncomputable def angle_MAB_value : ℝ := π / 4
+noncomputable def angle_ABM_value : ℝ := 7 * π / 12
+variable (h_angle_MAB : angle M A B = angle_MAB_value)
+variable (h_angle_ABM : angle A B M = angle_ABM_value)
+noncomputable def target_dist_BM_value : ℝ := 20 * Real.sqrt 2
+theorem distance_BM_calculation : dist B M = target_dist_BM_value := by sorry
+end ShipIslandProblem

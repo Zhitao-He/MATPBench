@@ -1,46 +1,19 @@
 theory GeometryProblem
-  imports Complex_Main Real_Vector_Spaces "HOL-Analysis.Euclidean_Space"
+  imports Main "HOL-Analysis.Euclidean_Space"
 begin
-
-(* Define the 2D vector type *)
-type_synonym point = "real × real"
-
-(* Define vector operations *)
-definition vec :: "point ⇒ point ⇒ real × real" where
-  "vec p q = (fst q - fst p, snd q - snd p)"
-
-(* Define perpendicular vectors *)
-definition perpendicular :: "real × real ⇒ real × real ⇒ bool" where
-  "perpendicular v w = (fst v * fst w + snd v * snd w = 0)"
-
-(* Define vector norm (length) *)
-definition norm :: "real × real ⇒ real" where
-  "norm v = sqrt((fst v)^2 + (snd v)^2)"
-
-(* Define area of triangle *)
-definition area_triangle :: "point ⇒ point ⇒ point ⇒ real" where
-  "area_triangle A B C = abs((fst(vec A B) * snd(vec A C) - snd(vec A B) * fst(vec A C)))/2"
-
-(* Define points *)
-consts A :: point
-consts B :: point
-consts C :: point
-consts D :: point
-consts N :: point
-consts E :: point
-
-(* Given conditions *)
-axiomatization where
-  BA_length: "norm(vec B A) = 5" and
-  CB_length: "norm(vec C B) = 8" and
-  CD_length: "norm(vec C D) = 12" and
-  NE_length: "norm(vec N E) = 5" and
-  BA_perp_DA: "perpendicular (vec B A) (vec D A)" and
-  NE_perp_BE: "perpendicular (vec N E) (vec B E)"
-
-(* Theorem: The sum of areas of triangles NCB and BCD is 50 *)
-theorem area_sum: "area_triangle N C B + area_triangle B C D = 50"
-  (* Proof omitted *)
+type_synonym point = "real^2"
+definition area_triangle_base_height :: "real => real => real" where
+  "area_triangle_base_height base height = (1/2) * base * height"
+theorem sum_of_triangle_areas_is_50:
+  fixes A B C D E N :: point 
+  assumes length_BA: "dist B A = 5"
+  and length_CB: "dist C B = 8"
+  and length_CD: "dist C D = 12"
+  and length_NE: "dist N E = 5"
+  and perpendicular_BA_DA: "orthogonal (B - A) (D - A)" 
+  and perpendicular_NE_BE: "orthogonal (N - E) (B - E)" 
+  and A_on_segment_CD: "dist C A + dist A D = dist C D"
+  and E_on_segment_CB: "dist C E + dist E B = dist C B"
+  shows "area_triangle_base_height (dist C B) (dist N E) + area_triangle_base_height (dist C D) (dist B A) = 50"
   sorry
-
 end

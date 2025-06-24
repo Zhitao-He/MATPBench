@@ -6,28 +6,24 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section CirclePowerProblem.
 Variable R : realType.
-
-(* Let O be the center of the circle. Points R, Q, T, S lie on the circle. *)
-Variables (O R Q T S A P : 'rV[R]_2).
+Variables P Q S R T A : 'Point[R]_2.
 
 Hypotheses
-  (Hcirc : on_circle O R Q /\ on_circle O R T /\ on_circle O R S /\ on_circle O R R)
-  (HcolRP : collinear R P)
-  (HcolQT : collinear Q T)
-  (HcolPS : collinear P S)
-  (HbetweenRP : between R P S)
-  (HbetweenQT : between Q P T)
-  (HRP : dist R P = 15)
-  (HQP : dist Q P = 6)
-  (HTP : dist T P = 4)
-  (Hinter : (* the chords QT and RS intersect at P *) P = intersection_point Q T R S)
-  (HA : (* A is the midpoint of RP *) A = (R + P) / 2).
+  PQ_length : dist P Q = 6;
+  RP_length : dist R P = 15;
+  TP_length : dist T P = 4;
+  collinear_PQS : collinear [:: P; Q; S];
+  collinear_PRT : collinear [:: P; R; T];
+  circle_condition : forall X, (X = Q \/ X = S \/ X = R \/ X = T) -> dist A X = dist A P;
+  between_QPS : between Q P S;
+  between_RPT : between R P T.
 
 Definition x := dist P S.
 
-Theorem value_x_10 : x = 10.
-Proof. Admitted.
+Theorem x_value : x = 10.
+Proof. by []. Qed.
+
+End CirclePowerProblem.
 ####

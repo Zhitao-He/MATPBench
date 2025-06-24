@@ -1,5 +1,4 @@
 import Mathlib.Data.Real.Basic
-
 theorem pentagonAngleH (x : ℝ) :
   let angleE := x
   let angleF := x + 20

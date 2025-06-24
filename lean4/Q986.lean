@@ -1,64 +1,60 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-noncomputable section ProblemGeometry
-
-open EuclideanGeometry
-
--- We work in a real Euclidean plane
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
--- Specify that V is 2-dimensional
-variable (dimVEq2 : FiniteDimensional.finrank ℝ V = 2)
-
--- Points in the configuration
-variable (O PPt C D E A B F G : P)
--- circle center O, radius r > 0
-variable (r : ℝ) (hrPos : 0 < r)
-
--- C, D on circle O, and CD is diameter (so O is midpoint of CD, C ≠ D)
-variable (hCOnCircle : C ∈ Metric.sphere O r)
-variable (hDOnCircle : D ∈ Metric.sphere O r)
-variable (hOMidpointCD : O = midpoint ℝ C D)
-variable (hCNeD : C ≠ D)
-
--- E is also on the circle
-variable (hEOnCircle : E ∈ Metric.sphere O r)
-
--- PC and PE tangent to the circle at C, E respectively
-variable (hPPtNeC : PPt ≠ C)
-variable (hPPtNeE : PPt ≠ E)
-variable (hPCTangent : Angle PPt C O = Real.pi / 2)
-variable (hPETangent : Angle PPt E O = Real.pi / 2)
-
--- Secant PBA through A, B (A, B ∈ circle O), A ≠ B, P, B, A collinear
-variable (hAOnCircle : A ∈ Metric.sphere O r)
-variable (hBOnCircle : B ∈ Metric.sphere O r)
-variable (hPBACollinear : Collinear ℝ PPt B A)
-variable (hANeB : A ≠ B)
--- P is outside the circle
-variable (hPPtOutsideCircle : dist PPt O > r)
-
--- F = AC ∩ BD (F collinear with both AC and BD), A ≠ C, B ≠ D
-variable (hFOnLineAC : Collinear ℝ A F C)
-variable (hFOnLineBD : Collinear ℝ B F D)
-variable (hANeC : A ≠ C)
-variable (hBNeD : B ≠ D)
-
--- G = DE ∩ AB
-variable (hGOnLineDE : Collinear ℝ D G E)
-variable (hGOnLineAB : Collinear ℝ A G B)
-variable (hDNeE : D ≠ E)
-
--- Angle G F E and angle A D E are well-defined (and non-degenerate: points not coincident)
-variable (hGNeF : G ≠ F)
-variable (hFNeE : F ≠ E)
-variable (hANeD : A ≠ D)
-
--- The main statement: ∠GFE = ∠ADE
-theorem angleGFEEqAngleADE : Angle G F E = Angle A D E := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry InnerProductSpace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (O C D P₀ E A B F G : P)
+variable (r : ℝ)
+axiom hC_on_circle : C ∈ EuclideanGeometry.Sphere.mk O r
+axiom hD_on_circle : D ∈ EuclideanGeometry.Sphere.mk O r
+axiom hE_on_circle : E ∈ EuclideanGeometry.Sphere.mk O r
+axiom hA_on_circle : A ∈ EuclideanGeometry.Sphere.mk O r
+axiom hB_on_circle : B ∈ EuclideanGeometry.Sphere.mk O r
+axiom hCD_diameter : midpoint ℝ C D = O
+axiom hr_pos : 0 < r
+axiom hP_ne_C : P₀ ≠ C
+axiom hPC_tangent : inner ℝ (C -ᵥ O) (P₀ -ᵥ C) = 0
+axiom hP_ne_E : P₀ ≠ E
+axiom hPE_tangent : inner ℝ (E -ᵥ O) (P₀ -ᵥ E) = 0
+axiom hPBA_collinear : Collinear ℝ ({P₀, B, A} : Set P)
+axiom hA_ne_B : A ≠ B
+axiom hA_ne_C : A ≠ C
+axiom hB_ne_D : B ≠ D
+axiom hF_on_AC : Collinear ℝ ({A, F, C} : Set P)
+axiom hF_on_BD : Collinear ℝ ({B, F, D} : Set P)
+axiom hD_ne_E : D ≠ E
+axiom hG_on_DE : Collinear ℝ ({D, G, E} : Set P)
+axiom hG_on_AB : Collinear ℝ ({A, G, B} : Set P)
+axiom hG_ne_F : G ≠ F
+axiom hE_ne_F : E ≠ F
+axiom hA_ne_D : A ≠ D
+theorem inscribed_angle_theorem_variant
+  (O C D P₀ E A B F G : P)
+  (r : ℝ)
+  (hC_on_circle : C ∈ EuclideanGeometry.Sphere.mk O r)
+  (hD_on_circle : D ∈ EuclideanGeometry.Sphere.mk O r)
+  (hE_on_circle : E ∈ EuclideanGeometry.Sphere.mk O r)
+  (hA_on_circle : A ∈ EuclideanGeometry.Sphere.mk O r)
+  (hB_on_circle : B ∈ EuclideanGeometry.Sphere.mk O r)
+  (hCD_diameter : midpoint ℝ C D = O)
+  (hr_pos : 0 < r)
+  (hP_ne_C : P₀ ≠ C)
+  (hPC_tangent : inner ℝ (C -ᵥ O) (P₀ -ᵥ C) = 0)
+  (hP_ne_E : P₀ ≠ E)
+  (hPE_tangent : inner ℝ (E -ᵥ O) (P₀ -ᵥ E) = 0)
+  (hPBA_collinear : Collinear ℝ ({P₀, B, A} : Set P))
+  (hA_ne_B : A ≠ B)
+  (hA_ne_C : A ≠ C)
+  (hB_ne_D : B ≠ D)
+  (hF_on_AC : Collinear ℝ ({A, F, C} : Set P))
+  (hF_on_BD : Collinear ℝ ({B, F, D} : Set P))
+  (hD_ne_E : D ≠ E)
+  (hG_on_DE : Collinear ℝ ({D, G, E} : Set P))
+  (hG_on_AB : Collinear ℝ ({A, G, B} : Set P))
+  (hG_ne_F : G ≠ F)
+  (hE_ne_F : E ≠ F)
+  (hA_ne_D : A ≠ D) :
+  EuclideanGeometry.angle G F E = EuclideanGeometry.angle A D E := by
   sorry
-
-end ProblemGeometry

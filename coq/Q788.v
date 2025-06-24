@@ -14,9 +14,12 @@ Variables D C B N E F G : 'rV[R]_2.
 Variable r : R.
 
 Hypotheses
-  norm (D - C) = norm (C - B) /\norm (C - B) = norm (B - D) ->
+  norm (D - C) = norm (C - B) /
+  norm (C - B) = norm (B - D) ->
   r = 3 ->
-  colinear D E F -> norm (E - N) = r -> colinear C F B -> norm (F - N) = r -> colinear B G D -> norm (G - N) = r.
+  colinear D E F -> norm (E - N) = r ->
+  colinear C F B -> norm (F - N) = r ->
+  colinear B G D -> norm (G - N) = r.
 
 Theorem incircle_equilateral : True.
 Proof. by []. Qed.

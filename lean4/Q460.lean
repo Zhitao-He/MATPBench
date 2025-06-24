@@ -1,54 +1,23 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Projection
 import Mathlib.Data.Real.Basic
-
-namespace TriangleProblem
-
-open EuclideanGeometry
-
-variable {EuclideanPlane : Type*} [EuclideanSpace ℝ EuclideanPlane]
-
-/--
-The distance from a point `pt` to the (affine) line determined by distinct points `p₁` and `p₂`.
--/
-noncomputable def distPointLine (pt p₁ p₂ : EuclideanPlane) (h : p₁ ≠ p₂) : ℝ :=
-  dist pt (orthogonalProjection (affineSpan ℝ ({p₁, p₂} : Set EuclideanPlane)) pt)
-
-/--
-Triangle vertices as a map from `Fin 3`.
--/
-def trianglePoints (A B C : EuclideanPlane) : Fin 3 → EuclideanPlane
-  | ⟨0, _⟩ => A
-  | ⟨1, _⟩ => B
-  | ⟨2, _⟩ => C
-
-/--
-Main theorem: If triangle ABC has side lengths 13, 12, and 5, area 30, and D is an interior point,
-let e, f, g be the distances from D to BC, CA, and AB respectively. Then 5e + 12f + 13g = 60.
--/
-theorem triangle_distance_weighted_sum
-    (A B C D : EuclideanPlane)
-    (hAB : dist A B = 13)
-    (hBC : dist B C = 12)
-    (hCA : dist C A = 5)
-    (h_area : Triangle.area A B C = 30)
-    (hDint : Triangle.interiorContains
-               { points := trianglePoints A B C } D) :
-    let e : ℝ := distPointLine D B C (by
-      intro h; subst h
-      rw [dist_self] at hBC
-      norm_num at hBC )
-    let f : ℝ := distPointLine D C A (by
-      intro h; subst h
-      rw [dist_self] at hCA
-      norm_num at hCA )
-    let g : ℝ := distPointLine D A B (by
-      intro h; subst h
-      rw [dist_self] at hAB
-      norm_num at hAB )
-    5 * e + 12 * f + 13 * g = 60 :=
-by
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Triangle 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Defs 
+import Mathlib.Geometry.Euclidean.Projection 
+abbrev P_plane := EuclideanSpace ℝ (Fin 2)
+theorem sum_products_sides_distances_eq_60
+  (A B C D : P_plane)
+  (hA_ne_B : A ≠ B)
+  (hB_ne_C : B ≠ C)
+  (hC_ne_A : C ≠ A)
+  (h_dist_AC : dist A C = 5)
+  (h_dist_BC : dist B C = 12)
+  (h_dist_AB : dist A B = 13)
+  (h_area_ABC : (1/2 : ℝ) * abs (((B -ᵥ A) 0 * (C -ᵥ A) 1) - ((B -ᵥ A) 1 * (C -ᵥ A) 0)) = 30) 
+  (hD_interior : D ∈ interior (convexHull ℝ ({A, B, C} : Set P_plane)))
+  (e f g : ℝ)
+  (he_def : e = dist D (EuclideanGeometry.orthogonalProjection (affineSpan ℝ {A, C}) D))
+  (hf_def : f = dist D (EuclideanGeometry.orthogonalProjection (affineSpan ℝ {B, C}) D))
+  (hg_def : g = dist D (EuclideanGeometry.orthogonalProjection (affineSpan ℝ {A, B}) D))
+  : 5 * e + 12 * f + 13 * g = 60 := by
   sorry
-
-end TriangleProblem

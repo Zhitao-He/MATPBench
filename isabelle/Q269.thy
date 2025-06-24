@@ -1,21 +1,23 @@
-theory TriangularPrism
-  imports Main "HOL-Analysis.Analysis"
+theory Triangular_Prism_Surface_Area
+imports Main
 begin
-
-(* 三角面：底边长12厘米，两条边长10厘米，高为x的等腰三角形。
-   棱柱长度为16厘米。 *)
-
-definition base_length :: real where "base_length = 12"
-definition leg_length :: real where "leg_length = 10"
-definition height :: real where "height = sqrt(leg_length^2 - (base_length/2)^2)"
-definition prism_length :: real where "prism_length = 16"
-
-definition triangle_area :: real where "triangle_area = (base_length * height) / 2"
-definition lateral_area :: real where "lateral_area = (base_length + 2 * leg_length) * prism_length"
-
-definition total_surface_area :: real where "total_surface_area = 2 * triangle_area + lateral_area"
-
-theorem prism_surface_area_608: "total_surface_area = 608"
-  sorry
-
+definition height_of_isosceles_triangle :: "real ⇒ real ⇒ real" where
+  "height_of_isosceles_triangle base side = sqrt (side^2 - (base / 2)^2)"
+definition area_of_triangle :: "real ⇒ real ⇒ real" where
+  "area_of_triangle base height = (base * height) / 2"
+definition perimeter_of_isosceles_triangle :: "real ⇒ real ⇒ real" where
+  "perimeter_of_isosceles_triangle base side = base + 2 * side"
+definition total_surface_area_isosceles_prism :: "real ⇒ real ⇒ real ⇒ real" where
+  "total_surface_area_isosceles_prism base_tri side_tri prism_h =
+    let
+      h_tri = height_of_isosceles_triangle base_tri side_tri;
+      area_base = area_of_triangle base_tri h_tri;
+      perimeter_base = perimeter_of_isosceles_triangle base_tri side_tri
+    in (2 * area_base) + (perimeter_base * prism_h)"
+definition triangle_base_dimension :: real where "triangle_base_dimension = 12.0"
+definition triangle_side_dimension :: real where "triangle_side_dimension = 10.0"
+definition prism_height_dimension :: real where "prism_height_dimension = 16.0"
+definition given_total_surface_area :: real where "given_total_surface_area = 608.0"
+theorem problem_statement:
+  "total_surface_area_isosceles_prism triangle_base_dimension triangle_side_dimension prism_height_dimension = given_total_surface_area"
 end

@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry polyhedra.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -8,31 +8,28 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section RegularOctagonTrapezoid.
+
 Variable R : realType.
 
-Let n := 8%:R.
-Let pi := Num.PI.
+(* Given values *)
 Let side := 12%:R.
-Let theta := 2 * pi / n.
-Let r := side / (2 * sin (pi / n)).
-Definition octagon_vertex (k : 'I_8) : R * R :=
-  (r * cos (2 * pi * k%:R / n), r * sin (2 * pi * k%:R / n)).
-Let A := octagon_vertex ord0.
-Let B := octagon_vertex ord1.
-Let C := octagon_vertex ord2.
-Let D := octagon_vertex ord3.
-Let E := octagon_vertex ord4.
-Let F := octagon_vertex ord5.
-Let G := octagon_vertex ord6.
-Let H := octagon_vertex ord7.
+Let theta := PI / 4%:R. (* 45 degrees in radians for regular octagon *)
 
-Definition area_trapezoid (P Q R S : R * R) : R :=
-  let '(x1,y1) := P in let '(x2,y2) := Q in let '(x3,y3) := R in let '(x4,y4) := S in
-  (x1*y2 - x2*y1 + x2*y3 - x3*y2 + x3*y4 - x4*y3 + x4*y1 - x1*y4) / 2.
+(* Coordinates of points B, C, D, E in a regular octagon with center at origin *)
+Let B := (side * cos (3 * PI / 8), side * sin (3 * PI / 8)).
+Let C := (side * cos (PI / 8), side * sin (PI / 8)).
+Let D := (-side * cos (PI / 8), side * sin (PI / 8)).
+Let E := (-side * cos (3 * PI / 8), side * sin (3 * PI / 8)).
+
+(* Area of trapezoid formula *)
+Definition area_trapezoid (A B C D : R * R) :=
+  let '((x1,y1), (x2,y2), (x3,y3), (x4,y4)) := ((A.1,A.2), (B.1,B.2), (C.1,C.2), (D.1,D.2)) in
+  0.5 * ((x1 + x2) * (y2 - y1) + (x2 + x3) * (y3 - y2) + (x3 + x4) * (y4 - y3)).
 
 Theorem trapezoid_BCDE_area :
-  area_trapezoid B C D E = 6 * side^2.
-Proof.
-admit.
-Qed.
+  area_trapezoid B C D E = (72%:R + 72%:R * sqrt 2%:R).
+Proof. Admitted.
+
+End RegularOctagonTrapezoid.
 ####

@@ -1,23 +1,25 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+namespace CylinderProblem
 
-/-
-A cylinder has a surface area of 54105 mm² and diameter 79 mm.
-Is the height, when rounded to the nearest whole number, 30 mm?
--/
+noncomputable def cylinderSurfaceArea (r h : Real) : Real :=
+  2 * Real.pi * r * r + 2 * Real.pi * r * h
+def targetSurfaceArea : Real := 54105
+def targetRoundedHeight : Int := 30
+structure ProblemCylinder where
+  radius : Real
+  height : Real
+  radius_pos : radius > 0
+  height_pos : height > 0
+  surface_area_eq : cylinderSurfaceArea radius height = targetSurfaceArea
+  height_round_eq : Prop 
 
--- Given values
-def cylinderRadius : ℝ := 79 / 2
-def cylinderSurfaceArea : ℝ := 54105
 
--- Surface area formula for a closed cylinder:
--- S = 2 * π * r^2 + 2 * π * r * h
--- Solve for h:
-def cylinderHeight (S r : ℝ) : ℝ :=
-  (S - 2 * Real.pi * r ^ 2) / (2 * Real.pi * r)
-
-def computedHeight : ℝ :=
-  cylinderHeight cylinderSurfaceArea cylinderRadius
-
-theorem roundedHeight_is_30 :
-    Real.round computedHeight = 30 := by sorry
+theorem problem_cylinder_exists : Nonempty ProblemCylinder := by sorry
+theorem exists_r_h_satisfying_conditions :
+  ∃ (r h : Real),
+    r > 0 ∧
+    h > 0 ∧
+    cylinderSurfaceArea r h = targetSurfaceArea ∧
+    True := by sorry
+end CylinderProblem

@@ -1,18 +1,15 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open EuclideanGeometry
-
-/--
-Given triangle ABC with AC = 5, ∠ABC = 60° (π/3 radians), ∠CAB = 30° (π/6 radians),
-then BC = 5 * sqrt 3 / 3.
--/
-theorem triangle_side_length_BC_from_AC_angles
-    {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-    (A B C : P)
-    (h_AC : dist A C = 5)
-    (h_angle_ABC : ∠ A B C = π / 3)
-    (h_angle_CAB : ∠ C A B = π / 6) :
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem length_BC_is_five_sqrt_three_div_three (A B C : PPoint)
+    (h_noncollinear : ¬Collinear ℝ ({A, B, C} : Set PPoint))
+    (hAC : dist A C = 5)
+    (hAngleABC : EuclideanGeometry.angle A B C = (Real.pi / 3))
+    (hAngleCAB : EuclideanGeometry.angle C A B = (Real.pi / 6)) :
     dist B C = 5 * (sqrt 3) / 3 := by
   sorry

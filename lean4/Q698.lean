@@ -1,28 +1,12 @@
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.Geometry.Euclidean.Basic
-
-namespace ProblemDescription
-
--- Let P be a Euclidean point space
-variable (P : Type*) [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-
--- Points C, D, N in P
-variable {C D N : P}
-
--- S is a sphere in P with center N
-variable (S : Euclidean.Sphere P) (hN : S.center = N)
-
--- C and D are on S
-variable (hC : C ∈ S) (hD : D ∈ S)
-
--- Given CN = 8
-variable (hCN : dist C N = 8)
-
--- Conclusion: DN = 8
-theorem DN_eq_8 : dist D N = 8 := by
-  -- Since both C and D are on S, their distances to center N equal S.radius
-  -- From hN and hCN, we know S.radius = 8
-  -- Therefore dist D N = 8
-  sorry
-
-end ProblemDescription
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+variable (N C D : PPoint)
+variable (Ω : EuclideanGeometry.Sphere PPoint)
+variable (h_center_is_N : Ω.center = N)
+variable (h_C_on_Ω : C ∈ Ω)
+variable (h_D_on_Ω : D ∈ Ω)
+variable (h_CN_eq_8 : dist C N = 8)
+theorem length_DN_eq_8 : dist D N = 8 := by sorry

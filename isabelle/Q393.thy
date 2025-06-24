@@ -1,34 +1,16 @@
-theory GeometryProblem
-imports Complex_Main "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem_BD_Length
+imports
+  "HOL-Analysis.Cartesian_Euclidean_Space"
+  "HOL-Analysis.Convex"
 begin
-
-(* 我们使用二维欧几里得空间 *)
-type_synonym point = "real × real"
-
-(* 计算两点之间的距离 *)
-definition distance :: "point ⇒ point ⇒ real" where
-  "distance p q = sqrt((fst p - fst q)² + (snd p - snd q)²)"
-
-(* 定义点 *)
-definition A :: point where "A = (0, 0)"
-definition C :: point where "C = (13, 0)"
-definition D :: point where "D = (13, 2)"
-definition B :: point where "B = (0, b)" for b
-
-(* 问题条件 *)
-lemma "distance A C = 13" 
-  unfolding distance_def A_def C_def
-  by simp
-
-lemma "distance D C = 2"
-  unfolding distance_def D_def C_def
-  by simp
-
-(* 计算BD的长度 *)
-theorem BD_length:
-  assumes "b > 0"
-  shows "distance B D = sqrt 22"
-  unfolding distance_def B_def D_def
-  by (simp add: assms power2_eq_square)
-
+locale geometry_setup =
+  fixes A B C D :: "real^2" 
+  assumes AC_length: "dist A C = 13"
+  assumes DC_length: "dist D C = 2"
+  assumes D_on_segment_AC: "D ∈ segment A C"
+  assumes angle_ABC_is_right: "orthogonal (A - B) (C - B)"
+  assumes BD_is_perpendicular_to_AC: "orthogonal (B - D) (A - C)"
+theorem (in geometry_setup) BD_length_is_sqrt_22:
+  "dist B D = sqrt 22"
+oops
 end

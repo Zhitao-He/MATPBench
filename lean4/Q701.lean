@@ -2,13 +2,9 @@ import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
 import Mathlib.Data.Real.Basic
-
 namespace ProblemFormalization
-
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-
 theorem find_AC_length
     (A B C D : P)
     (x : ℝ)
@@ -22,5 +18,4 @@ theorem find_AC_length
     (h_C_ne_D : C ≠ D)
     : dist A C = 38 := by
   sorry
-
 end ProblemFormalization

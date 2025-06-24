@@ -12,12 +12,11 @@ Variable R : realType.
 
 Variables A B C D O K : 'rV[R]_2.
 
+(* Rectangle ABCD is inscribed in circle O *)
 Hypothesis rect_ABCD : rectangle A B C D.
 Hypothesis cyclic_ABCD : on_circle O A /\ on_circle O B /\ on_circle O C /\ on_circle O D.
-Hypothesis A_neq_B : A != B.
-Hypothesis B_neq_C : B != C.
-Hypothesis C_neq_D : C != D.
-Hypothesis D_neq_A : D != A.
+
+(* Point K lies inside the rectangle ABCD *)
 Hypothesis K_in_rect : in_interior_rect K A B C D.
 
 (* Define E as intersection of BK with CD *)
@@ -36,6 +35,7 @@ Hypothesis L_on_circle : on_circle O L.
 Hypothesis L_neq_A : L != A.
 Hypothesis L_on_AK : colinear A K L.
 
+(* Prove that angle FLE is 90 degrees *)
 Theorem rectangle_circumcircle_right_angle :
   angle F L E = pi/2.
 Proof. Admitted.

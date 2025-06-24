@@ -1,18 +1,25 @@
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-variable (V_pt A_pt W_pt : P)
-variable (h_VA : V_pt ≠ A_pt)
-variable (h_WA : W_pt ≠ A_pt)
-
-variable (θ_degrees : ℝ)
-
--- Hypothesis: the unoriented angle at A between V and W is θ_degrees
-variable (h_angle_VAW : 
-  Real.Angle.toDegrees (Angle.unoriented (V_pt -ᵥ A_pt) (W_pt -ᵥ A_pt)) = θ_degrees)
-
-theorem theta_value_is_68_34 : θ_degrees = 68.34 := by
-  sorry
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+namespace ProblemVAW
+open Real 
+open scoped EuclideanGeometry 
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def AngleVAWIsThetaDegreesHypothesis (v_point a_point w_point : P) (θ : ℝ)
+  (_ : v_point ≠ a_point) (_ : w_point ≠ a_point) : Prop :=
+  ∠ v_point a_point w_point = θ * (Real.pi / 180)
+def targetThetaValue : ℝ := 68.34
+noncomputable def roundToTwoDecimalPlaces (x : ℝ) : ℝ :=
+  (round (x * 100)) / 100
+def ThetaRoundedIsTargetValueConclusion (θ : ℝ) : Prop :=
+  roundToTwoDecimalPlaces θ = targetThetaValue
+theorem findThetaValue
+    (v_point a_point w_point : P)
+    (hAV : v_point ≠ a_point) (hAW : w_point ≠ a_point)
+    (θ : ℝ)
+    (hypothesis : AngleVAWIsThetaDegreesHypothesis v_point a_point w_point θ hAV hAW) :
+  ThetaRoundedIsTargetValueConclusion θ := by
+  sorry 
+end ProblemVAW

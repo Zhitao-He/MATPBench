@@ -1,32 +1,37 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry euclidean.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Parallelogram_Angles.
+Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Variables E F M A Y Q : 'Point[R]_2.
+Variables E F M A Y Q : 'rV[R]_2.
+Variable x y : R.
 
-Hypothesis parallelogram_EFMA : is_parallelogram E F M A.
-Hypothesis Y_on_EM : on_line Y (Line E M).
-Hypothesis Q_on_FA : on_line Q (Line F A).
-Hypothesis YQ_parallel_EF : parallel (Line Y Q) (Line E F).
-Hypothesis YQ_parallel_MA : parallel (Line Y Q) (Line M A).
+Hypothesis H_EYQ : angle E Y Q = 3 * y + 1.
+Hypothesis H_MAQ : angle M A Q = 3 * x + 11.
+Hypothesis H_YQF : angle Y Q F = 4 * x - 5.
+Hypothesis H_EF_parallel_YQ : parallel (E - F) (Y - Q).
+Hypothesis H_QA_parallel_YM : parallel (Q - A) (Y - M).
+Hypothesis H_YQ_parallel_MA : parallel (Y - Q) (M - A).
 
-Variables x y : R.
-
-(* Angle measure in degrees *)
-Hypothesis angle_Y : angle_deg (M, Y, Q) = 3 * y + 1.
-Hypothesis angle_Q : angle_deg (Y, Q, A) = 4 * x - 5.
-Hypothesis angle_A : angle_deg (Q, A, M) = 3 * x + 11.
-
-Theorem value_of_y_eq_40 : y = 40.
-Proof. Admitted.
-
-End Parallelogram_Angles.
+Theorem find_y_value : y = 40.
+Proof.
+  (* Using angle relationships from parallel lines *)
+  have H_corr_angle : angle E Y Q = angle M A Q by apply: parallel_property_corresponding_angle.
+  rewrite H_EYQ H_MAQ in H_corr_angle.
+  (* Solve for y *)
+  have H_eq : 3 * y + 1 = 3 * x + 11 by move/eqP in H_corr_angle; rewrite H_corr_angle.
+  (* Further angle relationships from parallelogram properties *)
+  have H_opp_angle : angle Y Q F = angle M A Q by apply: parallelogram_property_opposite_angle_equal.
+  rewrite H_YQF H_MAQ in H_opp_angle.
+  (* Solve for x *)
+  have H_x_eq : 4 * x - 5 = 3 * x + 11 by move/eqP in H_opp_angle; rewrite H_opp_angle.
+  by move: H_x_eq => /eqP ->; field.
+Qed.
 ####

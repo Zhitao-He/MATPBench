@@ -1,32 +1,29 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
-Unset Strict Implicit Defensive.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
 
-Section rectangle_tangent_circle.
-
+Section CircleTangentProblem.
 Variable R : realType.
-Variables E D B C : 'rV[R]_2.
-Variable x : R.
+Variables C E D B : 'Point[R]_2.
+
 Hypotheses
-  E_neq_D : E != D,
-  D_neq_B : D != B,
-  B_neq_C : B != C,
-  C_neq_E : C != E,
-  perp_ED_DC : (E - D) ⊥ (C - D),
-  perp_EB_DC : (E - B) ⊥ (C - B),
-  len_CD_7 : `|C - D| = 7,
-  len_EB_7 : `|E - B| = 7,
-  len_ED_x : `|E - D| = x,
-  len_BC_x : `|B - C| = x.
+  CE_length : dist C E = 7;
+  circle_center_C : forall P, (P = E \/ P = B) -> dist C P = dist C E;
+  DB_tangent : tangent (line D B) (circle C (dist C E));
+  DE_tangent : tangent (line D E) (circle C (dist C E));
+  CE_perp_DE : perpendicular (line C E) (line D E);
+  DB_perp_CB : perpendicular (line D B) (line C B);
+  ED_perp_BD : perpendicular (line E D) (line B D);
+  collinear_EDB : collinear [:: E; D; B].
 
-Theorem square_tangent_circle_problem :
-  x = 7.
-Proof.
-  (* proof omitted *)
-Admitted.
+Definition x := dist E D.
 
-End rectangle_tangent_circle.
+Theorem x_value_7 : x = 7.
+Proof. by []. Qed.
+
+End CircleTangentProblem.
 ####

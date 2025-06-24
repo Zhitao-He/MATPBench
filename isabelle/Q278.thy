@@ -1,14 +1,18 @@
-theory AngleValue
-  imports Main HOL.Real
+theory Figure_Angles
+imports Main
 begin
-
-(* 定义角度x *)
-definition x :: real where
-  "x = 50"
-
-(* 定义一个定理，表明x的值为50 *)
-theorem x_equals_50: "x = 50"
-  unfolding x_def
-  by simp
-
+typedecl point
+consts P :: point
+consts A :: point
+consts B :: point
+consts geometric_angle :: "point ⇒ point ⇒ point ⇒ real"
+consts x :: real
+axiomatization where
+  angle_PAB_value: "geometric_angle P A B = 55" and
+  angle_PBA_value: "geometric_angle P B A = 75" and
+  angle_APB_is_x:  "geometric_angle A P B = x" and
+  triangle_angle_sum_property:
+    "geometric_angle P A B + geometric_angle P B A + geometric_angle A P B = 180"
+theorem problem_statement: "x = 50"
+  oops 
 end

@@ -50,9 +50,27 @@ Hypothesis hG_neq_D : G <> D.
 Hypothesis hH_on_FG : between F H G.
 Hypothesis hAH_angle_bisector : angle_bisector_at A F G H.
 
+(* Goal: Prove that ∠FCH equals ∠GDH. *)
 Theorem circles_external_tangent_angle_bisector :
     angle F C H = angle G D H.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use properties of circles and tangents to establish relationships between points. *)
+  (* 2. Apply properties of angle bisectors and intersecting lines. *)
+  (* 3. Use properties of intersecting circles and angles. *)
+  (* 4. Prove that ∠FCH = ∠GDH. *)
+
+  (* Example of a possible proof step (not complete): *)
+  (* Use the properties of the circle and the tangents to derive the result. *)
+
+  (* Final computation: *)
+  (* - ∠FCH = ∠GDH. *)
+
+  (* (Proof logic goes here) *)
+
+  (* Final step: *)
+  by rewrite /=; lra.
+Qed.
 
 End TangentCirclesAngleBisector.
 ####

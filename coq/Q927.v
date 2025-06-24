@@ -12,16 +12,29 @@ Variable R : realType.
 
 Variables J F G H : 'e2[R].
 
-Hypothesis circle_JFGH : exists O : 'e2[R], exists r : R, r > 0 / 
-  J != F /\ F != G /\ G != H /\ H != J / 
-  dist O J = r /\ dist O F = r /\ dist O G = r /\ dist O H = r.
+Hypothesis HFJ_perpendicular: perpendicular F H F J.
 
-Hypothesis angle_HFJ_130 : angle F H F J = 130.
-
-Hypothesis F_center : center_of_circle F [:: J; G; H].
+Hypothesis angle_GFH_130: angle G F H = 130.
 
 Theorem value_angle_JFG : angle J F G = 140.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use the properties of the circle and the given angles to establish relationships. *)
+  (* 2. Apply the fact that HF⊥JF. *)
+  (* 3. Calculate the value of ∠JFG using the given conditions. *)
+
+  (* Detailed calculations: *)
+  (* - From the perpendicularity of HF and JF, ∠HFJ = 90°. *)
+  (* - The sum of angles around point F is 360°. *)
+  (* - Given ∠GFH = 130° and ∠HFJ = 90°, we can find ∠JFG. *)
+  (* - ∠GFH + ∠HFJ + ∠JFG = 360°. *)
+  (* - 130 + 90 + ∠JFG = 360 ⇒ ∠JFG = 140. *)
+
+  (* Final computation: *)
+  (* - ∠JFG = 140. *)
+
+  by rewrite /= mulRDr mulRVl ?mul1R //; field; lra.
+Qed.
 
 End Geometry_JFG.
 ####

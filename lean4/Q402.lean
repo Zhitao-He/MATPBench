@@ -2,11 +2,8 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-
-
 local notation "EucPl" => EuclideanSpace ℝ (Fin 2)
 open EuclideanGeometry
-
 theorem triangle_sides_angle_condition_implies_x_eq_3
     (A B C : EucPl)
     (x : ℝ)

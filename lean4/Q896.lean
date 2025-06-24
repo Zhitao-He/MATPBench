@@ -1,33 +1,20 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Triangle
-open Real
-open EuclideanSpace
-
-namespace QuadrilateralAreaProblem
-
-
-axiom E : EuclideanSpace ℝ (Fin 2)
-axiom H : EuclideanSpace ℝ (Fin 2)
-axiom G : EuclideanSpace ℝ (Fin 2)
-axiom F : EuclideanSpace ℝ (Fin 2)
-
-
-def vecDet (v w : EuclideanSpace ℝ (Fin 2)) : ℝ :=
-  v 0 * w 1 - v 1 * w 0
-
-
-noncomputable def triangleArea (p1 p2 p3 : EuclideanSpace ℝ (Fin 2)) : ℝ :=
-  (1 / 2) * |vecDet (p2 -ᵥ p1) (p3 -ᵥ p1)|
-
-
-noncomputable def areaOfQuadrilateral (p1 p2 p3 p4 : EuclideanSpace ℝ (Fin 2)) : ℝ :=
-  triangleArea p1 p2 p3 + triangleArea p1 p3 p4
-
-
-theorem specific_quadrilateral_area_EHGF :
-  areaOfQuadrilateral E H G F = 135 * sqrt 2 / 2 := by sorry
-
-end QuadrilateralAreaProblem
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem area_of_parallelogram_EHGF
+  (E H G F D : P)
+  (eh_dist : dist E H = 9)
+  (hg_dist : dist H G = 15)
+  (angle_EHD_is_45_degrees : ∠ E H D = Real.pi / 4)
+  (is_parallelogram_EHGF : H -ᵥ E = G -ᵥ F)
+  (angle_EDG_is_right_angle : ∠ E D G = Real.pi / 2)
+  (points_H_D_G_collinear : Collinear ℝ ({H, D, G} : Set P))
+  : (dist H G) * (dist E D) = 135 * Real.sqrt 2 / 2 := by
+  sorry

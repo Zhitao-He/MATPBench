@@ -7,13 +7,9 @@ import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 namespace CircleProblemSetup
-
 abbrev P := EuclideanSpace ℝ (Fin 2)
 open EuclideanGeometry
 open Real
-
-
-
 theorem sin_angle_SRT_of_right_triangle
     (S R T : P)
     (hSR : dist S R = 5)

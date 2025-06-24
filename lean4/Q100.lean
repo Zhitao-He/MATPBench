@@ -1,57 +1,65 @@
-import Mathlib.Data.Fintype.Basic
-import Mathlib.Data.Fintype.Pi
 import Mathlib.Data.Fin.Basic
-import Mathlib.Data.Finset.Basic
-import Mathlib.Algebra.BigOperators.Finset
-
-namespace Putnam1994A5
-
-/-- Number of rows in the triangle, also the width of the bottom row. -/
-def numRows : ℕ := 11
-
-/-- A bottom row configuration (mapping each slot to 0 or 1). -/
-abbrev BottomRowDistribution := Fin numRows → Fin 2
-
-/--
-Recursively computes the value of the entry at a given row and column,
-according to the rule: each entry is the sum of the two just below it,
-starting from a given bottom row.
-Rows and columns are 0-based, with rows indexed from 0 (top) to numRows-1 (bottom).
+import Mathlib.Data.Fintype.Pi
+import Mathlib.Data.Nat.Choose.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
+open scoped BigOperators
+namespace TriangularArrayProblem
+/
+    The k-th row (1-indexed from the top) has k squares. The bottom row is row `numRowsTotal`. -/
+def numRowsTotal : Nat := 11
+/
+    The bottom row has `numRowsTotal` squares.
+    The function maps the 0-indexed column `j` (from `0` to `numRowsTotal - 1`)
+    in the bottom row to a value in `Fin 2` (representing 0 or 1). -/
+abbrev BottomRowConfig := Fin numRowsTotal → Fin 2
+/
+Computes the value in a square of the pyramid.
+The pyramid structure is:
+- Row 0 (top) has 1 square.
+- Row `r` (0-indexed from top) has `r+1` squares.
+- Row `numRowsTotal - 1` (bottom) has `numRowsTotal` squares.
+Parameters:
+- `bottomRowConfig`: The configuration of 0s and 1s in the bottom row.
+- `r`: The row index, 0-indexed from the top (0 is the top row, `numRowsTotal - 1` is the bottom row).
+- `c`: The column index within row `r`, 0-indexed (from `0` to `r`).
+- `hrLtNumRowsTotal`: Proof that `r < numRowsTotal`.
+- `hcLeR`: Proof that `c ≤ r`.
 -/
-def triangleValue
-    (dist : BottomRowDistribution)
-    : (r c : ℕ) → Option ℕ
-  | r, c =>
-    if h1 : r < numRows ∧ c ≤ r then
-      if r = numRows - 1 then
-        -- bottom row, get distribution
-        if h : c < numRows then
-          some (dist ⟨c, h⟩).val
-        else
-          none
-      else
-        -- otherwise sum of below entries
-        match triangleValue dist (r+1) c, triangleValue dist (r+1) (c+1) with
-        | some a, some b => some (a + b)
-        | _,     _       => none
-    else
-      none
-
-/-- The value in the top square (row 0, col 0). -/
-def topValue (dist : BottomRowDistribution) : ℕ :=
-  (triangleValue dist 0 0).getD 0
-
-/-- "n is a multiple of 3". -/
-def multipleOfThree (n : ℕ) : Prop := n % 3 = 0
-
-/-- The set of valid bottom row assignments making the top value a multiple of 3. -/
-def validDistributions : Finset BottomRowDistribution :=
-  Finset.univ.filter (fun dist => multipleOfThree (topValue dist))
-
-/-- The number of such valid distributions. -/
-def numValidDistributions : ℕ := validDistributions.card
-
-/-- The answer is 640 (per the problem statement). -/
-theorem solution : numValidDistributions = 640 := by sorry
-
-end Putnam1994A5
+def pyramidSquareValue (bottomRowConfig : BottomRowConfig)
+  (r : Nat) (c : Nat) (hrLtNumRowsTotal : r < numRowsTotal) (hcLeR : c ≤ r) : Nat :=
+  if hIsBottomRow : r = numRowsTotal - 1 then
+    have hcLtNumRowsTotal : c < numRowsTotal := sorry
+    (bottomRowConfig ⟨c, hcLtNumRowsTotal⟩).val
+  else
+    let rNext := r + 1
+    have hrNextLtNumRowsTotal : rNext < numRowsTotal := sorry
+    let valBelowLeft := pyramidSquareValue bottomRowConfig rNext c
+      hrNextLtNumRowsTotal (Nat.le_trans hcLeR (Nat.le_succ r))
+    let valBelowRight := pyramidSquareValue bottomRowConfig rNext (c+1)
+      hrNextLtNumRowsTotal (Nat.succ_le_succ hcLeR)
+    valBelowLeft + valBelowRight
+termination_by numRowsTotal - 1 - r
+def topSquareValue (config : BottomRowConfig) : Nat :=
+  pyramidSquareValue config 0 0
+    (by decide) 
+    (by decide) 
+/
+This lemma states that the value in the top square can be calculated as a weighted sum
+of the bottom row values, where weights are binomial coefficients `C(numRowsTotal - 1, i)`.
+This is a standard result for Pascal-like triangles.
+`Nat.choose n k` is `C(n,k)`.
+-/
+lemma topSquareValueEqBinomialSum (config : BottomRowConfig) :
+  topSquareValue config =
+    ∑ i in Finset.univ, (Nat.choose (numRowsTotal - 1) i.val) * (config i).val := by sorry
+/
+    This is `Finset.univ`, which represents the set of all functions `Fin numRowsTotal → Fin 2`.
+    Requires `Fintype (Fin numRowsTotal → Fin 2)`, which is provided by `Mathlib.Data.Fintype.Pi`. -/
+def allBottomRowConfigs : Finset BottomRowConfig := Finset.univ
+def validConfigs : Finset BottomRowConfig :=
+  Finset.filter (fun config => topSquareValue config % 3 = 0) allBottomRowConfigs
+/
+    The statement claims this number is 640. -/
+theorem numValidConfigsIs640 :
+  Finset.card validConfigs = 640 := by sorry
+end TriangularArrayProblem

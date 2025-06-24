@@ -1,32 +1,32 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Pi.Notation
-
-open Real EuclideanGeometry
-
-section InscribedPentagon
-
-variable (O A B C D E : EuclideanPlane)
-
--- All points are distinct
-variable (hA_ne_B : A ≠ B) (hA_ne_C : A ≠ C) (hA_ne_D : A ≠ D) (hA_ne_E : A ≠ E)
-variable (hB_ne_C : B ≠ C) (hB_ne_D : B ≠ D) (hB_ne_E : B ≠ E)
-variable (hC_ne_D : C ≠ D) (hC_ne_E : C ≠ E)
-variable (hD_ne_E : D ≠ E)
-variable (hO_ne_A : O ≠ A)
-
--- All points lie on the same circle centered at O
-variable (hB_on_circle : dist B O = dist A O)
-variable (hC_on_circle : dist C O = dist A O)
-variable (hD_on_circle : dist D O = dist A O)
-variable (hE_on_circle : dist E O = dist A O)
-
--- Given angle measures in degrees converted to radians
-variable (h_angle_EDA : ∠ E D A = (115 : ℝ) * π / 180)
-variable (h_angle_DAE : ∠ D A E = (30 : ℝ) * π / 180)
-
-theorem inscribedPentagon_angle_ABC :
-    ∠ A B C = (100 : ℝ) * π / 180 := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real
+open scoped EuclideanGeometry
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
+namespace InscribedPentagonProblem
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem angle_ABC_is_100_degrees
+  (A B C D E O : P)
+  (Ω : EuclideanGeometry.Sphere P)
+  (h_center : Ω.center = O)
+  (hA_on_Ω : A ∈ Ω)
+  (hB_on_Ω : B ∈ Ω)
+  (hC_on_Ω : C ∈ Ω)
+  (hD_on_Ω : D ∈ Ω)
+  (hE_on_Ω : E ∈ Ω)
+  (h_C_ne_A : C ≠ A)
+  (h_D_ne_A : D ≠ A)
+  (h_A_ne_E : A ≠ E)
+  (h_D_ne_E : D ≠ E)
+  (h_A_ne_B : A ≠ B)
+  (h_C_ne_B : C ≠ B)
+  (h_angle_CAD : ∠ C A D = ↑(degToRad 30))
+  (h_angle_AED : ∠ A E D = ↑(degToRad 115))
+  : ∠ A B C = ↑(degToRad 100) := by
   sorry
-
-end InscribedPentagon
+end InscribedPentagonProblem

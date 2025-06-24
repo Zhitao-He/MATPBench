@@ -1,64 +1,44 @@
-theory RegularHexagonPartition
-  imports Complex_Main "HOL-Analysis.Analysis"
+theory HexagonGoldFraction
+  imports Main
+          "HOL-Library.List_Index" 
+          "HOL-Analysis.Real"      
+          "HOL-Analysis.Sqrt"        
 begin
-
-(* 定义一个正六边形的顶点，边长为1 *)
-definition hex_vertex :: "nat ⇒ complex" where
-  "hex_vertex k = complex_of_real (cos (real k * (pi/3))) 
-                 + complex_of_real (sin (real k * (pi/3))) * \<i>"
-
-(* 定义六边形的各个顶点 *)
-definition A :: "complex" where "A = hex_vertex 0"
-definition B :: "complex" where "B = hex_vertex 1"
-definition C :: "complex" where "C = hex_vertex 2"
-definition D :: "complex" where "D = hex_vertex 3"
-definition E :: "complex" where "E = hex_vertex 4"
-definition F :: "complex" where "F = hex_vertex 5"
-
-(* 定义中点函数 *)
-definition midpoint :: "complex ⇒ complex ⇒ complex" where
-  "midpoint p q = (p + q) / 2"
-
-(* 特定的中点 *)
-definition R :: "complex" where "R = midpoint F A"
-definition S :: "complex" where "S = midpoint B C"
-definition T :: "complex" where "T = midpoint C D"
-definition U :: "complex" where "U = midpoint E F"
-
-(* 定义四个区域 *)
-definition region1 :: "complex list" where "region1 = [A, B, S, R]"
-definition region2 :: "complex list" where "region2 = [R, S, C, F]"
-definition region3 :: "complex list" where "region3 = [F, C, T, U]"
-definition region4 :: "complex list" where "region4 = [U, T, D, E]"
-
-(* 定义多边形面积 *)
-definition polygon_area :: "complex list ⇒ real" where
-  "polygon_area vertices = 
-    let n = length vertices in
-    if n < 3 then 0
-    else
-      abs (1/2 * (\<Sum>i=0..<n. 
-        let v1 = vertices ! i;
-            v2 = vertices ! ((i + 1) mod n)
-        in Re v1 * Im v2 - Re v2 * Im v1))"
-
-(* 定义六边形的所有顶点列表 *)
-definition hexagon :: "complex list" where "hexagon = [A, B, C, D, E, F]"
-
-(* 计算六边形的总面积 *)
-definition hexagon_area :: "real" where "hexagon_area = polygon_area hexagon"
-
-(* 计算金色区域的面积比例 *)
-definition gold_fraction :: "real" where 
-  "gold_fraction = (polygon_area region2 + polygon_area region3) / hexagon_area"
-
-(* 计算答案 *)
-theorem gold_fraction_is_13_over_6:
-  "gold_fraction = 13/19"
-  sorry
-
-theorem answer_is_19:
-  "let m = 13; n = 19 in gcd m n = 1 ∧ gold_fraction = real m / real n ∧ m + n = 32"
-  sorry
-
+type_synonym point = "real × real"
+definition x_coord :: "point ⇒ real" where "x_coord p = fst p"
+definition y_coord :: "point ⇒ real" where "y_coord p = snd p"
+definition midpoint :: "point ⇒ point ⇒ point" where
+  "midpoint P Q = ((x_coord P + x_coord Q) / 2, (y_coord P + y_coord Q) / 2)"
+definition val_s :: real where "val_s = 1.0"
+definition hex_A :: point where "hex_A = (-val_s/2, val_s * sqrt 3 / 2)"
+definition hex_B :: point where "hex_B = ( val_s/2, val_s * sqrt 3 / 2)"
+definition hex_C :: point where "hex_C = ( val_s, 0)"
+definition hex_D :: point where "hex_D = ( val_s/2, -(val_s * sqrt 3 / 2))"
+definition hex_E :: point where "hex_E = (-val_s/2, -(val_s * sqrt 3 / 2))"
+definition hex_F :: point where "hex_F = (-val_s, 0)"
+definition R :: point where "R = midpoint hex_F hex_A" 
+definition S :: point where "S = midpoint hex_B hex_C" 
+definition T :: point where "T = midpoint hex_C hex_D" 
+definition U :: point where "U = midpoint hex_E hex_F" 
+definition shoelace_term :: "point ⇒ point ⇒ real" where
+  "shoelace_term p1 p2 = x_coord p1 * y_coord p2 - y_coord p1 * x_coord p2"
+definition shoelace_sum :: "point list ⇒ real" where
+  "shoelace_sum ps =
+    (if length ps < 3 then 0 
+     else
+       let n = length ps in
+       let pts_cycle = ps @ [List.hd ps] in
+       sum_list (map (λi. shoelace_term (pts_cycle ! i) (pts_cycle ! (i+1))) [0..<n]))"
+definition polygon_area :: "point list ⇒ real" where
+  "polygon_area ps = 0.5 * abs (shoelace_sum ps)"
+definition hexagon_ABCDEF_vertices :: "point list" where
+  "hexagon_ABCDEF_vertices = [hex_A, hex_B, hex_C, hex_D, hex_E, hex_F]"
+definition area_hexagon_ABCDEF :: real where
+  "area_hexagon_ABCDEF = polygon_area hexagon_ABCDEF_vertices"
+definition gold_region_vertices :: "point list" where
+  "gold_region_vertices = [R, S, hex_C, T, U, hex_F]" 
+definition area_gold_region :: real where
+  "area_gold_region = polygon_area gold_region_vertices"
+definition gold_fraction :: real where
+  "gold_fraction = area_gold_region / area_hexagon_ABCDEF"
 end

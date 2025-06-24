@@ -21,30 +21,28 @@ Let O := center circumscribed_circle.
 Let H := orthocenter A B C.
 
 (* D: foot of the altitude from B to AC *)
-Definition D : 'rV[R]_2 :=
-  foot (vec B) (vec A) (vec C).
+Definition D : 'rV[R]_2 := foot (vec B) (vec A) (vec C).
 
 (* E: foot of the altitude from C to AB *)
-Definition E : 'rV[R]_2 :=
-  foot (vec C) (vec A) (vec B).
+Definition E : 'rV[R]_2 := foot (vec C) (vec A) (vec B).
 
-(* G: intersection of AG with BC, where AG is perpendicular to OH *)
-Definition G : 'rV[R]_2.
-Proof.
-pose OH_line := Line (vec O) (vec H).
-pose AG_dir := rot90 (vec H - vec O). (* rotated OH to get perpendicular direction *)
-pose AG_line := Line (vec A) AG_dir.
-exact: (@line_intersection R _ (Line (vec A) AG_dir) (Line (vec B) (vec C - vec B))).
-Defined.
+(* OH: line through O and H *)
+Definition OH_line := Line (vec O) (vec H).
+
+(* AG_dir: direction perpendicular to OH (rotated by 90 degrees) *)
+Definition AG_dir := rot90 (vec H - vec O).
+
+(* AG_line: line through A with direction AG_dir *)
+Definition AG_line := Line (vec A) AG_dir.
+
+(* G: intersection of AG with BC *)
+Definition G := line_intersection AG_line (Line (vec B) (vec C - vec B)).
+
+(* DE_line: line through D and E *)
+Definition DE_line := Line D (E - D).
 
 (* F: intersection of DE and AG *)
-Definition F : 'rV[R]_2.
-Proof.
-pose DE_line := Line (D) (E - D).
-pose AG_dir := rot90 (vec H - vec O).
-pose AG_line := Line (vec A) AG_dir.
-exact: (@line_intersection R _ DE_line AG_line).
-Defined.
+Definition F := line_intersection DE_line AG_line.
 
 Theorem triangle_F_midpoint_AG :
   F = (A + G) / 2.

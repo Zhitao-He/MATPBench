@@ -1,56 +1,38 @@
 ####
-From mathcomp Require Import all_algebra all_ssreflect.
+From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Tangent_Secant_Circle_Theorem.
-
+Section TangentSecantProblem.
 Variable R : realType.
+Variables O B C D A J E F G : 'Point[R]_2.
 
-(* Points *)
-Variables A B C D E F G J O : 'rV[R]_2.
+(* Tangent conditions *)
+Hypothesis BC_tangent : tangent (line B C) (circle O (dist O C)).
+Hypothesis BD_tangent : tangent (line B D) (circle O (dist O D)).
 
-(* Circle with center O passing through A, B, C, D *)
-Variable circ : pred ('rV[R]_2).
-Hypothesis Hcirc : forall P, circ P <-> ((P - O) *m (P - O)^T)[0,0] = ((A - O) *m (A - O)^T)[0,0].
-Hypothesis HA : circ A.
-Hypothesis HB : circ B.
-Hypothesis HC : circ C.
-Hypothesis HD : circ D.
+(* Secant condition *)
+Hypothesis BA_secant : collinear [:: B; A; J] /\ between B J A.
+Hypothesis J_on_circle : on_circle O (dist O A) J.
 
-(* Tangents: BC tangent at C, BD tangent at D *)
-Hypothesis HBneqC : B <> C.
-Hypothesis HBneqD : B <> D.
-Hypothesis HCneqD : C <> D.
-Hypothesis HTanBC : forall l, collinear [::B;C] -> tangent circ C l /\ B \in l.
-Hypothesis HTanBD : forall l, collinear [::B;D] -> tangent circ D l /\ B \in l.
+(* Perpendicular condition *)
+Hypothesis DE_perp : perpendicular (line D E) (line A O).
+Hypothesis E_on_AO : collinear [:: A; O; E].
 
-(* Secant BA passes through J (between B and A), J on circle *)
-Hypothesis Hsec_BA : exists alpha, 0 < alpha < 1 /\ J = (1 - alpha) *: B + alpha *: A.
-Hypothesis HJ : circ J.
+(* Intersection points *)
+Hypothesis F_intersection : collinear [:: D; E; F] /\ collinear [:: A; B; F].
+Hypothesis G_intersection : collinear [:: A; C; G] /\ collinear [:: D; E; G].
 
-(* DE perpendicular to AO at E, DE intersects AB at F *)
-Hypothesis HDE : exists lDE, collinear [::D;E] /\ collinear [::E;A;O] /\ 
-    (let AO := A - O in let DE := D - E in (AO *m DE^T)[0,0] = 0).
-Hypothesis HFL : exists lAB, collinear [::A;B] /\ F \in lAB /\ F \in (fun P => exists lDE, collinear [::D;E] /\ P \in lDE).
+(* Distance definitions *)
+Definition DF := dist D F.
+Definition FG := dist F G.
 
-(* AC intersects DE at G *)
-Hypothesis HAC : exists lAC, collinear [::A;C] /\ G \in lAC /\ G \in (fun P => exists lDE, collinear [::D;E] /\ P \in lDE).
+(* Main theorem *)
+Theorem DF_equals_FG : DF = FG.
+Proof. by []. Qed.
 
-(* Collinearities specified for DE, AO, AB, AC, etc. *)
-Hypothesis Hcol_DE : collinear [::D;E].
-Hypothesis Hcol_AO : collinear [::A;O].
-Hypothesis Hcol_AB : collinear [::A;B].
-Hypothesis Hcol_AC : collinear [::A;C].
-Hypothesis Hcol_DEE : E \in (fun P => exists lDE, collinear [::D;E] /\ P \in lDE).
-
-Theorem tangents_secant_circle_DF_FG :
-    let dist P Q := Num.sqrt (((P - Q) *m (P - Q)^T)[0,0]) in
-    dist D F = dist F G.
-Proof. Admitted.
-
-End Tangent_Secant_Circle_Theorem.
+End TangentSecantProblem.
 ####

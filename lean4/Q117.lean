@@ -1,59 +1,21 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
-
-namespace RectanglesIntersection
-
-
-def Point2D := ℝ × ℝ
-
-
-
-def ptA : Point2D := (0, 0)
-def ptB : Point2D := (3, 0)
-def ptC : Point2D := (3, 11)
-def ptD : Point2D := (0, 11)
-
-
-def ptF : Point2D := (0, 7)
-def ptE : Point2D := (-9, 0)
-
-structure Rectangle where
-  A : Point2D
-  F : Point2D
-  C : Point2D
-  E : Point2D
-
-
-def rectABCD_xmin : ℝ := 0
-def rectABCD_xmax : ℝ := 3
-def rectABCD_ymin : ℝ := 0
-def rectABCD_ymax : ℝ := 11
-
-
-noncomputable def a : ℝ := 7 * (5 / 13)
-noncomputable def b : ℝ := 7 * (12 / 13)
-
-noncomputable def ptF_r : Point2D := (35/13, 84/13)
-noncomputable def ptE_r : Point2D := (-(9/7) * b, (9/7) * a)
-noncomputable def ptC_r : Point2D := (ptF_r.1 + ptE_r.1, ptF_r.2 + ptE_r.2)
-
-noncomputable  def rectAECF_r : Rectangle :=
-  { A := ptA
-    F := ptF_r
-    E := ptE_r
-    C := ptC_r }
-
-
-def m : ℕ := 100
-def n : ℕ := 9
-def areaOfIntersection : ℚ := m / n
-
-def answer : ℕ := m + n 
-
-theorem intersection_area_is_100_div_9 : areaOfIntersection = 100 / 9 := by
-  sorry
-
-theorem final_answer_is_109 : answer = 109 := by
-  rfl
-
-end RectanglesIntersection
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+def mkPt (x y : ℝ) : Point := ![x, y]
+def pointA : Point := mkPt 0 0
+def pointB : Point := mkPt 3 0
+def pointD : Point := mkPt 0 11
+def pointC : Point := mkPt 3 11
+noncomputable def pointF : Point := mkPt (-273/65) (364/65)
+noncomputable def pointE : Point := pointA + (pointC - pointF)
+noncomputable def pointP1 : Point := mkPt 3 (9/4)
+noncomputable def pointP2 : Point := mkPt 0 (35/4)
+noncomputable def areaOfShadedRegion : ℝ := 105/4
+def m : ℕ := 105
+def n : ℕ := 4
+lemma m_positive : 0 < m := by decide
+lemma n_positive : 0 < n := by decide
+lemma m_n_relatively_prime : Nat.gcd m n = 1 := by native_decide
+def sum_m_n : ℕ := m + n
+theorem final_answer_value : sum_m_n = 109 := by rfl

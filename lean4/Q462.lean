@@ -1,27 +1,22 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-
--- Euclidean plane abbreviation
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+open EuclideanGeometry
 abbrev P := EuclideanSpace ℝ (Fin 2)
-
--- Declare points
-variable (A B C D E F : P)
-
--- Rectangle definition
-hypothesis hB_def : B = A + ![0, 16]
-hypothesis hC_def : C = A + ![12, 16]
-hypothesis hD_def : D = A + ![12, 0]
-
--- Point E conditions
-hypothesis h_AC_perp_CE : inner (A -ᵥ C) (E -ᵥ C) = 0
-hypothesis h_CE_len : dist C E = 15
-
--- Point F as intersection of AE and CD
-hypothesis hF_def : ∃ s t : ℝ,
-  s ∈ Set.Ioc (0:ℝ) 1 ∧ F = (1 - s) • A + s • E ∧
-  t ∈ Set.Ioc (0:ℝ) 1 ∧ F = (1 - t) • C + t • D
-
--- Main theorem
-theorem area_triangle_ACF_eq_75 : Triangle.area A C F = 75 := by sorry
+noncomputable def triangleArea (p1 p2 p3 : P) : ℝ :=
+  (1/2 : ℝ) * abs ( ((p2 -ᵥ p1) 0 * (p3 -ᵥ p1) 1) - ((p2 -ᵥ p1) 1 * (p3 -ᵥ p1) 0) )
+def isRectangle (A B C D : P) : Prop :=
+  (B -ᵥ A) = (C -ᵥ D) ∧ (D -ᵥ A) = (C -ᵥ B) ∧
+  inner ℝ (B -ᵥ A) (D -ᵥ A) = 0 
+theorem area_of_triangle_ACF_is_75
+    (A B C D E F : P)
+    (h_rect : isRectangle A B C D)
+    (h_AB : dist A B = 16)
+    (h_BC : dist B C = 12)
+    (h_AC_perp_CE : inner ℝ (A -ᵥ C) (E -ᵥ C) = 0) 
+    (h_CE : dist C E = 15)
+    (h_F_on_AE : F ∈ segment ℝ A E)
+    (h_F_on_CD : F ∈ segment ℝ C D) :
+    triangleArea A C F = 75 := 
+  by sorry

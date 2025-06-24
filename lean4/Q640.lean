@@ -6,8 +6,6 @@ import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 abbrev P := EuclideanSpace ℝ (Fin 2)
 open EuclideanGeometry
-
-
 theorem find_h_value
     (A B C : P)
     (h : ℝ)

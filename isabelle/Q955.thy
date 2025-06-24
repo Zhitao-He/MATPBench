@@ -1,71 +1,35 @@
-theory Circles_Tangent_Midpoint
-imports Complex_Main "HOL-Algebra.Real_Vector_Spaces"
+theory Geometry_Problem_F_Midpoint_DE
+  imports "HOL-Analysis.Euclidean_Space"
 begin
-
-type_synonym point = "real × real"
-
-definition px :: "point ⇒ real" where "px p = fst p"
-definition py :: "point ⇒ real" where "py p = snd p"
-
-definition collinear :: "point ⇒ point ⇒ point ⇒ bool" where
-  "collinear A B C = ((px B - px A) * (py C - py A) = (py B - py A) * (px C - px A))"
-
-definition midpoint :: "point ⇒ point ⇒ point ⇒ bool" where
-  "midpoint F D E = (px F = (px D + px E) / 2 ∧ py F = (py D + py E) / 2)"
-
-definition on_circle :: "point ⇒ real ⇒ point ⇒ bool" where
-  "on_circle O r X = ((px X - px O)^2 + (py X - py O)^2 = r^2)"
-
-definition tangent :: "point ⇒ real ⇒ point ⇒ point ⇒ bool" where
-  "tangent O r A X = (
-    on_circle O r X ∧
-    let v1 = (px X - px O, py X - py O);
-        v2 = (px X - px A, py X - py A)
-    in fst v1 * fst v2 + snd v1 * snd v2 = 0)"
-
-definition line_intersect :: "point ⇒ point ⇒ point ⇒ point ⇒ point option" where
-  "line_intersect A B C D = (
-    let 
-      x1 = px A; y1 = py A;
-      x2 = px B; y2 = py B;
-      x3 = px C; y3 = py C;
-      x4 = px D; y4 = py D;
-      
-      den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-    in
-      if den = 0 then None
-      else 
-        let
-          t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
-          x = x1 + t * (x2 - x1);
-          y = y1 + t * (y2 - y1)
-        in Some (x, y))"
-
-theorem circles_tangent_midpoint:
-  fixes O P A B C D E F :: point
-  fixes rO rP :: real
-  assumes rO_pos: "rO > 0"
-  and rP_pos: "rP > 0"
-  and A_on_O: "on_circle O rO A"
-  and A_on_P: "on_circle P rP A"
-  and B_on_O: "on_circle O rO B"
-  and B_on_P: "on_circle P rP B"
-  and A_neq_B: "A ≠ B"
-  and C_on_BO_ext: "∃l1. l1 ≠ 0 ∧ 
-                       px C = px B + l1 * (px O - px B) ∧
-                       py C = py B + l1 * (py O - py B)"
-  and C_on_PA_ext: "∃l2. l2 ≠ 0 ∧
-                       px C = px P + l2 * (px A - px P) ∧
-                       py C = py P + l2 * (py A - py P)"
-  and D_tangent_to_O: "tangent O rO C D"
-  and E_tangent_to_P: "tangent P rP C E"
-  and F_on_DE: "∃t. 0 < t ∧ t < 1 ∧
-                   px F = px D + t * (px E - px D) ∧
-                   py F = py D + t * (py E - py D)"
-  and F_on_AB: "∃s. 0 < s ∧ s < 1 ∧
-                   px F = px A + s * (px B - px A) ∧
-                   py F = py A + s * (py B - py A)"
-  shows "midpoint F D E"
-  sorry
-
+type_synonym point = "real^2"
+definition is_midpoint :: "point ⇒ point ⇒ point ⇒ bool" where
+  "is_midpoint M A B ≡ M = (A + B) / (2::real)"
+locale two_intersecting_circles_tangents =
+  fixes O P A B C D E F :: point 
+  fixes rO rP :: real            
+  assumes
+    rO_gt_0: "rO > 0" and
+    rP_gt_0: "rP > 0" and
+    A_neq_B: "A ≠ B" and
+    on_circle_O_A: "dist O A = rO" and 
+    on_circle_O_B: "dist O B = rO" and 
+    on_circle_P_A: "dist P A = rP" and 
+    on_circle_P_B: "dist P B = rP" and 
+    C_on_line_BO: "collinear O B C" and
+    C_on_line_PA: "collinear P A C" and
+    lines_BO_PA_not_parallel: "linear_independent real {B - O, A - P}" and
+    C_distinct_O: "C ≠ O" and
+    C_distinct_B: "C ≠ B" and
+    C_distinct_P: "C ≠ P" and
+    C_distinct_A: "C ≠ A" and
+    D_on_circle_O: "dist O D = rO" and
+    E_on_circle_P: "dist P E = rP" and
+    C_neq_D_tangent: "C ≠ D" and
+    C_neq_E_tangent: "C ≠ E" and
+    tangent_CD_O: "(O - D) ⋅ (C - D) = 0" and 
+    tangent_CE_P: "(P - E) ⋅ (C - E) = 0" and 
+    F_on_line_DE: "collinear D E F" and
+    F_on_line_AB: "collinear A B F" and
+    lines_DE_AB_not_parallel: "linear_independent real {E - D, B - A}"
+  shows "is_midpoint F D E"
 end

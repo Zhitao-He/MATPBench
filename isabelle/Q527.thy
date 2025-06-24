@@ -1,45 +1,37 @@
-theory GeometryProblem
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Rectangle_Sector_Area
+  imports Complex_Main
 begin
-
-(* 定义点和基本几何对象 *)
-locale geometry_problem =
-  fixes O :: "real^2" (* 圆心 *)
-  fixes B C D H :: "real^2" (* 矩形的顶点 *)
-  
-  (* 给定条件 *)
-  assumes BC_length: "dist B C = 8"
-  assumes BH_length: "dist B H = 12"
-  assumes rect_DCBH: "quadrilateral_is_rectangle D C B H"
-  assumes O_is_center: "O is_center_of circle_O"
-  assumes D_H_on_circle: "D on circle_O ∧ H on circle_O"
-  
-  (* 辅助定义 *)
-  where
-    "quadrilateral_is_rectangle A B C D ≡ 
-      (vector_angle (A - D) (B - A) = pi/2) ∧
-      (vector_angle (B - A) (C - B) = pi/2) ∧
-      (vector_angle (C - B) (D - C) = pi/2) ∧
-      (vector_angle (D - C) (A - D) = pi/2)"
-    
-    "X is_center_of C ≡ ∀Y. Y on C ⟶ dist X Y = radius C"
-    
-    "X on C ≡ dist X (center C) = radius C"
-
-  (* 计算面积 *)
-  definition "area_of_rectangle A B C D = dist A B * dist B C"
-  
-  definition "area_of_sector center P Q = 
-    (vector_angle (P - center) (Q - center) / (2*pi)) * pi * (dist center P)^2"
-    
-  (* 待求解的定理 *)
-  theorem area_difference:
-    "area_of_rectangle D C B H - area_of_sector O D H = 96 - 8*pi"
-  proof -
-    (* 此处为证明过程，但根据要求我们只需给出形式化定义 *)
-    sorry
-  qed
-
+type_synonym point = "real × real"
+definition D :: point where "D = (0, 12)"
+definition C :: point where "C = (0, 0)"
+definition B :: point where "B = (8, 0)"
+definition H :: point where "H = (8, 12)"
+definition O :: point where "O = ((0 + 8) / 2, 12) = (4, 12)"
+definition area_rectangle :: "point ⇒ point ⇒ point ⇒ point ⇒ real" where
+  "area_rectangle A B C D = 
+    abs ((fst B - fst A) * (snd D - snd A))"
+definition length_DH :: real where
+  "length_DH = sqrt ((fst H - fst D)^2 + (snd H - snd D)^2)"
+definition r :: real where
+  "r = length_DH / 2"
+definition area_sector_ODH :: real where
+  "area_sector_ODH = (pi * r^2) / 2"
+lemma "D = (0, 12)" by (simp add: D_def)
+lemma "C = (0, 0)" by (simp add: C_def)
+lemma "B = (8, 0)" by (simp add: B_def)
+lemma "H = (8, 12)" by (simp add: H_def)
+lemma "O = (4, 12)" by (simp add: O_def)
+lemma "length_DH = 8"
+  unfolding length_DH_def D_def H_def by simp
+lemma "r = 4"
+  unfolding r_def length_DH_def D_def H_def by simp
+lemma "area_rectangle D C B H = 8 * 12"
+  unfolding area_rectangle_def D_def C_def B_def H_def by simp
+lemma "area_sector_ODH = (pi * 16) / 2"
+  unfolding area_sector_ODH_def r_def length_DH_def D_def H_def by simp
+definition result :: real where
+  "result = area_rectangle D C B H - area_sector_ODH"
+lemma "result = 96 - 8 * pi"
+  unfolding result_def area_rectangle_def area_sector_ODH_def r_def length_DH_def
+  by (simp add: D_def C_def B_def H_def)
 end

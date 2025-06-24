@@ -1,47 +1,28 @@
-theory OI_perp_AI_theorem
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Triangle_OI
+  imports Complex_Main
 begin
-
-locale triangle =
-  fixes A B C :: "complex"
-  assumes non_collinear: "A ≠ B ∧ B ≠ C ∧ A ≠ C ∧ Im((B - A) * cnj(C - A)) ≠ 0"
-
-context triangle begin
-
-definition circumcenter :: "complex" where
-  "circumcenter = 
-    let 
-      a = norm(B - C)^2;
-      b = norm(C - A)^2;
-      c = norm(A - B)^2;
-      factor = 1 / (a * (b + c - a) + b * c);
-      wA = a * (b + c - a);
-      wB = b * (c + a - b);
-      wC = c * (a + b - c)
-    in
-      factor * (wA * A + wB * B + wC * C)"
-
-definition incenter :: "complex" where
-  "incenter = 
-    let 
-      a = norm(B - C);
-      b = norm(C - A);
-      c = norm(A - B)
-    in
-      (a * A + b * B + c * C) / (a + b + c)"
-
-lemma perp_vectors_inner_prod:
-  "x ⊥ y ⟷ Re(x * cnj(y)) = 0" for x y :: "complex"
-  by (simp add: complex_inner_eq_complex_cone complex_is_real_def inner_eq_zero_iff)
-
-theorem OI_perp_AI_implies_side_sum:
-  assumes "O = circumcenter"
-  and "I = incenter"
-  and "Re((O - I) * cnj(A - I)) = 0" (* perpendicular condition *)
-  shows "norm(A - B) + norm(A - C) = 2 * norm(B - C)"
-  sorry
-
+type_synonym point = complex
+locale triangle_geom =
+  fixes A B C :: point
+  assumes non_collinear: "A ≠ B" "B ≠ C" "C ≠ A" "¬ collinear {A, B, C}"
+begin
+definition circumcenter :: point where
+  "circumcenter = (SOME O. dist O A = dist O B ∧ dist O B = dist O C)"
+definition incenter :: point where
+  "incenter = (SOME I. 
+      let d = dist I (line_through B C) in
+      d = dist I (line_through A C) ∧ d = dist I (line_through A B))"
+abbreviation len_AB :: real where "len_AB ≡ dist A B"
+abbreviation len_AC :: real where "len_AC ≡ dist A C"
+abbreviation len_BC :: real where "len_BC ≡ dist B C"
+definition perpendicular :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
+  "perpendicular P Q R S ⟷ 
+    let v1 = Q - P; v2 = S - R in
+    Re (v1 * cnj v2) = 0"
+assumes O_def: "O = circumcenter"
+    and I_def: "I = incenter"
+    and perp: "perpendicular O I A I"
+definition problem_conclusion :: bool where
+  "problem_conclusion ⟷ (len_AB + len_AC = 2 * len_BC)"
 end
 end

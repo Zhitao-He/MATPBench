@@ -8,24 +8,19 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Section RectangleTrisectPerimeter.
-
 Variable R : realType.
-Let A := (0,1).
-Let B := (b,1).
-Let C := (b,0).
-Let D := (0,0).
+Variables A B C X : 'rV[R]_2.
 
-Variables b p : R.
 Hypotheses
-  b_gt : 0 < b /\p_gt : 0 < p < b.
-Definition angleADC := atan2 (D.2 - C.2) (D.1 - C.1) - atan2 (A.2 - D.2) (A.1 - D.1).
-Hypothesis trisect : (* Rays DC, DB, DP trisect angle ADC *) True.
+  (bisector : forall P, on_line P (line B C) ->
+     let d1 := `|P - B|` in let d2 := `|P - C|` in
+     let dX := `|X - B|` in let dXC := `|X - C|` in
+     d1 * `|X - C|` = d2 * `|X - B|`)
+  (AC_length : `|A - C|` = 21)
+  (AB_length : `|A - B|` = 45).
 
-Theorem find_b_p : True.
-Proof.
-admit.
-Qed.
-
-End RectangleTrisectPerimeter.
+Theorem find_AX : 
+  let AX := `|A - X|` in
+  AX = 14.
+Proof. Admitted.
 ####

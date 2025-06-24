@@ -6,8 +6,6 @@ import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 open EuclideanGeometry
 open scoped EuclideanGeometry
-
-
 theorem value_of_x_in_isosceles_right_triangle
     (A B C : EuclideanSpace ℝ (Fin 2))
     (x : ℝ)

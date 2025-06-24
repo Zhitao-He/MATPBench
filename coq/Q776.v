@@ -19,7 +19,7 @@ Theorem trapezoid_x_value :
     let P := (x, -k) in
     let M := (5 * x, -k) in
     0 < x ->
-    (exists k h, 0 < h /\0 < k < h /\dist P M = 20 /\dist Q Rpt = 6 * x /\dist T S = 2 * x) ->
+    (exists k h, 0 < h /\ 0 < k < h /\ dist P M = 20 /\ dist Q Rpt = 6 * x /\ dist T S = 2 * x) ->
     x = 5.
 Proof. by []. Qed.
 ####

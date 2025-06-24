@@ -15,7 +15,7 @@ Variables A B C D E F G : Point.
 
 Hypothesis collinear_A_C_G_E : collinear [:: A; C; G; E].
 Hypothesis collinear_B_G_D : collinear [:: B; G; D].
-Hypothesis collinear_F_C : collinear [:: F; C].
+Hypothesis collinear_F_C_G : collinear [:: F; C; G].
 Hypothesis C_between_A_G : bet A C G.
 Hypothesis G_between_C_E : bet C G E.
 Hypothesis D_G_intersects_A_F : exists K : Point, bet D K F /\ collinear [:: A; K; F].

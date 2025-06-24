@@ -1,35 +1,24 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-namespace EuclideanGeometryProblem
-
-variable {P : Type*} [EuclideanPlane P]
-
--- Points
-variable (A B C D : P)
-
--- Given segment lengths
-variable (h_AB : dist A B = y)
-variable (h_AD : dist A D = z)
-variable (h_BC : dist B C = x)
-variable (h_BD : dist B D = 4)
-variable (h_CD : dist C D = 10)
-
--- Collinearity and between relationship
-variable (h_Sbtw : Sbtw ℝ A B D)
-
--- Right angles
-variable (h_angle_ABC : Angle.value A B C = Real.pi / 2)
-variable (h_angle_DCA : Angle.value D C A = Real.pi / 2)
-
--- Lengths positive
-variable (h_x_pos : 0 < x)
-variable (h_y_pos : 0 < y)
-
-theorem value_of_x : x = 2 * Real.sqrt 21 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open EuclideanGeometry Real
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemGeo
+theorem find_x
+  (A B C D : P)
+  (x y z : ℝ)
+  (hAB : dist A B = y)
+  (hAD : dist A D = z)
+  (hBC : dist B C = x)
+  (hBD : dist B D = 4)
+  (hCD : dist C D = 10)
+  (hABperpCB : ∠ A B C = π / 2)
+  (hDCperpAC : ∠ D C A = π / 2)
+  (hColinear : ∠ A B D = π)
+  : x = 2 * sqrt 21 := by
   sorry
-
-end EuclideanGeometryProblem
+end ProblemGeo

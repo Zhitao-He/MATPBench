@@ -1,43 +1,20 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
--- Let P be the Euclidean plane ℝ²
-local notation "P" => EuclideanSpace ℝ (Fin 2)
-
-section BCAD_Problem
-
-/--
-Let BCAD be a quadrilateral in the Euclidean plane such that sides CA and DB are parallel, 
-with |AC| = 8, |DB| = 4, and the distance (height) between lines CA and DB is 14. 
-Then the area of BCAD is 84.
--/
-variable (A B C D : P)
-
-def lengthAC : ℝ := 8
-def lengthDB : ℝ := 4
-def heightBCAD : ℝ := 14
-def expectedArea : ℝ := 84
-
-/-- Area formula for a trapezoid given parallel sides of length base₁, base₂ and height. -/
-def trapezoidArea (base₁ base₂ height : ℝ) : ℝ :=
-  (base₁ + base₂) * height / 2
-
-/--
-Formal statement of the problem: If a quadrilateral BCAD in the Euclidean plane 
-satisfies the following:
-- |AC| = 8,
-- |DB| = 4,
-- Sides CA and DB are parallel,
-- The (perpendicular) distance between lines CA and DB is 14
-
-then the area of BCAD is 84.
--/
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+open EuclideanGeometry
+open Real
+open Affine AffineSubspace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def trapezoidArea (base1 base2 height : ℝ) : ℝ :=
+  (base1 + base2) * height / 2
 theorem area_of_BCAD
-  (h_AC : dist A C = lengthAC)
-  (h_DB : dist D B = lengthDB)
-  (h_parallel : (affineSpan ℝ {C, A}).Parallel (affineSpan ℝ {D, B}))
-  (h_height : dist (affineSpan ℝ {C, A}) (affineSpan ℝ {D, B}) = heightBCAD) :
-  trapezoidArea (dist D B) (dist A C) heightBCAD = expectedArea :=
-by sorry
-
-end BCAD_Problem
+  (A B C D : P)
+  (h_AC_len : dist A C = 8)
+  (h_DB_len : dist D B = 4)
+  (h_trapezoid : ℝ)
+  (h_trapezoid_val : h_trapezoid = 14)
+  (h_parallel_sides : (affineSpan ℝ {D, B}).direction = (affineSpan ℝ {C, A}).direction) :
+  trapezoidArea (dist A C) (dist D B) h_trapezoid = 84 :=
+by
+  sorry

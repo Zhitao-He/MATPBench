@@ -19,7 +19,7 @@ Hypotheses
   (A_on_O : on_circle O C A)
   (B_on_O : on_circle O C B)
   (C_on_O : on_circle O C C)
-  (* AC ≠ BC *)
+  (* AC ≠ BC (as given in the problem) *)
   (AC_neq_BC : dist A C <> dist B C)
   (* CH is angle bisector of angle ACB and passes through H on O *)
   (H_on_O : on_circle O C H)

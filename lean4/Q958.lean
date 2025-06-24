@@ -1,52 +1,40 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.LinearAlgebra.AffineSpace.Midpoint
-
-namespace IncircleMidpointTheorem
-
-open EuclideanGeometry
-
--- Work in a real 2-dimensional Euclidean affine space
-variable {P : Type*} [EuclideanSpace ℝ P] [Fact (finrank ℝ P = 2)]
-
--- Triangle vertices
-variable (A B C : P)
-variable (h_noncollinear : ¬ Collinear ℝ A B C)
-
--- Define the triangle
-def t (A B C : P) : Triangle ℝ P := Triangle.mk A B C
-
--- Let I be the incenter, and ω the incircle
-def I (A B C : P) : P := Triangle.incenter (t A B C)
-def r (A B C : P) : ℝ := Triangle.inradius (t A B C)
-def ω (A B C : P) : Sphere P := Triangle.incircle (t A B C)
-
--- D is the tangency point of incircle and BC
-variable (D : P)
-variable (hD_on_BC : D ∈ affineSpan ℝ {B, C})
-variable (hD_on_inc : D ∈ ω A B C)
-variable (hD_tangent : (ω A B C).IsTangentAt (affineSpan ℝ {B, C}) D)
-
--- The cevian AD
--- The line IE passes through I, is parallel to AD, and meets BC at E
-variable (E : P)
-variable (hE_on_BC : E ∈ affineSpan ℝ {B, C})
-variable (hI_ne_E : I A B C ≠ E)
-variable (hA_ne_D : A ≠ D)
-variable (hIE_parallel_AD : Parallel ℝ (affineSpan ℝ {I A B C, E}) (affineSpan ℝ {A, D}))
-
--- E lies on the incircle (can be derived, but included as hyp for clarity)
-variable (hE_on_inc : E ∈ ω A B C)
-
--- The tangent to ω at E meets AB at F and AC at G
-variable (F G : P)
-variable (hF_on_AB : F ∈ affineSpan ℝ {A, B})
-variable (hG_on_AC : G ∈ affineSpan ℝ {A, C})
-variable (hF_ne_G : F ≠ G)
-variable (hFG_tangent_at_E : (ω A B C).IsTangentAt (affineSpan ℝ {F, G}) E)
-
--- Conclusion: E is the midpoint of FG
-theorem E_is_midpoint_of_FG : midpoint ℝ F G = E := by sorry
-
-end IncircleMidpointTheorem
+import Mathlib.Data.Real.Basic
+open EuclideanGeometry AffineSubspace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem E_is_midpoint_FG
+  (A B C D E F G I : P)
+  (ω : EuclideanGeometry.Sphere P)
+  (h_noncol : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (hω_center : ω.center = I)
+  (hA_on_ω : A ∉ ω) 
+  (hB_on_ω : B ∉ ω)
+  (hC_on_ω : C ∉ ω)
+  (hD_on_BC : D ∈ line[ℝ, B, C])
+  (hD_on_ω : D ∈ ω)
+  (lID lBC : AffineSubspace ℝ P)
+  (hD_on_lID : D ∈ lID) (hI_on_lID : I ∈ lID)
+  (hB_on_lBC : B ∈ lBC) (hC_on_lBC : C ∈ lBC)
+  (hID_perp_BC : direction lID ⟂ direction lBC)
+  (hI_ne_D : I ≠ D)
+  (hE_on_BC : E ∈ line[ℝ, B, C])
+  (hI_ne_E : I ≠ E)
+  (hA_ne_D : A ≠ D)
+  (lIE lAD : AffineSubspace ℝ P)
+  (hI_on_lIE : I ∈ lIE) (hE_on_lIE : E ∈ lIE)
+  (hA_on_lAD : A ∈ lAD) (hD_on_lAD : D ∈ lAD)
+  (hIE_parallel_AD : AffineSubspace.Parallel lIE lAD)
+  (hF_on_AB : F ∈ line[ℝ, A, B])
+  (hG_on_AC : G ∈ line[ℝ, A, C])
+  (hF_ne_G : F ≠ G)
+  (h_tangent_E : E ∈ ω)
+  (lFG : AffineSubspace ℝ P)
+  (hE_on_lFG : E ∈ lFG)
+  (h_tangent_FG : True) 
+  (hF_on_lFG : F ∈ lFG) (hG_on_lFG : G ∈ lFG) :
+  E = midpoint ℝ F G :=
+by
+  sorry

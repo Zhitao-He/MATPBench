@@ -23,6 +23,6 @@ Theorem triangle_sine_ABC_12_13 :
     let v := (B - C) in
     '[u, v] = 0 /\
     (* sine of angle ABC equals 12/13 *)
-    sin (Vector.angle (C - B) (A - B)) = 12%:R / 13%:R.
+    sin (Vector.angle (B - A) (C - A)) = 12%:R / 13%:R.
 Proof. Admitted.
 ####

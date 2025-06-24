@@ -1,66 +1,33 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open Real EuclideanSpace Affine IsROrC
-
-namespace PutnamGeometryProblem
-
--- We work in the Euclidean plane P2: points are of type EuclideanSpace ℝ (Fin 2).
-local notation "P2" => EuclideanSpace ℝ (Fin 2)
-
--- Define the rectangle ABCD with AB = 8, BC = 9.
-def A : P2 := ![(0 : ℝ), 9]
-def B : P2 := ![8, 9]
-def C : P2 := ![8, 0]
-def D : P2 := ![0, 0]
-
--- Point H on segment BC with BH = 6.
-def H : P2 := ![8, 3]
-
--- Point E on segment AD with DE = 4.
-def E : P2 := ![0, 4]
-
--- G is the intersection of line EC and line AH.
-def G : P2 := ![20, -6]
-
--- F is on line AD with GF ⟂ AF.
-def F : P2 := ![0, -6]
-
--- Rectangle properties
-lemma ab_length_is_8 : dist A B = 8 := by sorry
-lemma bc_length_is_9 : dist B C = 9 := by sorry
-lemma cd_length_is_8 : dist C D = 8 := by sorry
-lemma da_length_is_9 : dist D A = 9 := by sorry
-
--- Right angles at vertices.
-lemma angle_DAB_is_right : ∠ D A B = (π / 2 : ℝ) := by sorry
-lemma angle_ABC_is_right : ∠ A B C = (π / 2 : ℝ) := by sorry
-lemma angle_BCD_is_right : ∠ B C D = (π / 2 : ℝ) := by sorry
-lemma angle_CDA_is_right : ∠ C D A = (π / 2 : ℝ) := by sorry
-
--- Point H properties:
-lemma H_is_on_segment_BC : H ∈ openSegment ℝ B C := by sorry
-lemma BH_length_is_6 : dist B H = 6 := by sorry
-
--- Point E properties:
-lemma E_is_on_segment_AD : E ∈ openSegment ℝ A D := by sorry
-lemma DE_length_is_4 : dist D E = 4 := by sorry
-
--- Point G properties:
-lemma G_is_on_line_EC : G ∈ AffineSubspace.span ℝ ({E, C} : Set P2) := by sorry
-lemma G_is_on_line_AH : G ∈ AffineSubspace.span ℝ ({A, H} : Set P2) := by sorry
-
--- F lies on line AD, and GF ⟂ AF at F
-lemma F_is_on_line_AD : F ∈ AffineSubspace.span ℝ ({A, D} : Set P2) := by sorry
-lemma GF_is_perp_to_AF : ∠ G F A = (π / 2 : ℝ) := by sorry
-lemma G_ne_F : G ≠ F := by simp [G, F]
-lemma A_ne_F : A ≠ F := by simp [A, F]
-
--- Quantity to be found: length GF
-def length_GF : ℝ := dist G F
-
--- Final result
-theorem final_length_GF_is_20 : length_GF = 20 := by sorry
-
-end PutnamGeometryProblem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+import Mathlib.Data.Real.Basic
+noncomputable section
+local notation "P" => EuclideanSpace ℝ (Fin 2)
+def A : P := ![0, 0]
+def B : P := ![8, 0]
+def D : P := ![0, 9]
+def C : P := ![8, 9]
+lemma dist_A_B_eq_len_AB : dist A B = 8 := by sorry
+lemma dist_B_C_eq_len_BC : dist B C = 9 := by sorry
+lemma angle_DAB_is_right : EuclideanGeometry.angle D A B = Real.pi / 2 := by sorry
+lemma angle_ABC_is_right : EuclideanGeometry.angle A B C = Real.pi / 2 := by sorry
+lemma angle_BCD_is_right : EuclideanGeometry.angle B C D = Real.pi / 2 := by sorry
+lemma angle_CDA_is_right : EuclideanGeometry.angle C D A = Real.pi / 2 := by sorry
+def H : P := ![8, 6]
+lemma H_on_segment_BC : H ∈ segment ℝ B C := by sorry
+lemma dist_B_H_eq_6 : dist B H = 6 := by sorry
+def E : P := ![0, 5]
+lemma E_on_segment_AD : E ∈ segment ℝ A D := by sorry
+lemma dist_D_E_eq_4 : dist D E = 4 := by sorry
+def G : P := ![20, 15]
+lemma G_collinear_AH : Collinear ℝ ({A, H, G} : Set P) := by sorry
+lemma G_collinear_EC : Collinear ℝ ({E, C, G} : Set P) := by sorry
+def F : P := ![0, 15]
+lemma F_on_line_AD : Collinear ℝ ({A, D, F} : Set P) := by sorry
+lemma F_ne_G_for_angle : F ≠ G := by sorry
+lemma F_ne_A_for_angle : F ≠ A := by sorry
+lemma GF_perp_AF : EuclideanGeometry.angle G F A = Real.pi / 2 := by sorry
+theorem target_length_GF : dist G F = 20 := by sorry
+end

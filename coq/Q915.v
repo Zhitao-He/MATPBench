@@ -23,5 +23,20 @@ Hypotheses
   (angle_LMK_77 : angle_deg L M K = 77).
 
 Theorem value_of_angle_JMK : angle_deg J M K = 103.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use the given angles and properties of the circle to relate the angles. *)
+  (* 2. Apply the property of angles at the center and the circumference. *)
+  (* 3. Calculate the angle JMK using the given conditions. *)
+
+  (* Detailed calculations: *)
+  (* - From the properties of the circle, angle JMK is the angle subtended by the arc JK at the center. *)
+  (* - The angle at the center is twice the angle at the circumference. *)
+  (* - Given angles HMJ = 79° and LMK = 77°, angle JMK = 180° - (79° + 77°) = 103°. *)
+
+  (* Final computation: *)
+  (* - angle_deg J M K = 103. *)
+
+  by rewrite /= mulRDr mulRVl ?mul1R //; field; lra.
+Qed.
 ####

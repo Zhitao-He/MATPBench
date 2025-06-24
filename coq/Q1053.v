@@ -1,42 +1,30 @@
 ####
-From mathcomp.geometry Require Import all_geometry.
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section IsoscelesAngleEquality.
+Section IsoscelesTriangleAngle.
 
 Variable R : realType.
-Variable plane : finType.
+Let point := 'rV[R]_2.
 
-Variables A B C : R^2.
+Variables A B C E D F : point.
 
-Hypothesis ABC_noncol : ~ colinear A B C.
-Hypothesis AB_eq_AC : `|B - A| = `|C - A|.
+Hypothesis ABC_isosceles : dist A B = dist A C.
+Hypothesis ABC_noncolinear : ~colinear A B C.
+Hypothesis E_midpoint : E = midpoint A C.
+Hypothesis D_on_BC : on_line D B C.
+Hypothesis BD_ratio : dist B D = 2 * dist C D.
 
-Let E := midpoint A C.
+(* DF perpendicular to BE at F *)
+Hypothesis DF_perp_BE : perpendicular (seg D F) (seg B E).
+Hypothesis F_on_BE : on_line F B E.
 
-Variable D : R^2.
-Hypothesis D_on_BC : on_line D [B, C].
-Hypothesis BD_2CD : `|B - D| = 2 * `|C - D|.
-
-Let BE := [B, E].
-Let DF := [D, ?F]. (* F is yet to be determined *)
-Let BE_line := line B E.
-
-(* F is the intersection of DF (with unknown direction, so perpendicular to BE at F) and BE, i.e., F = BE ∩ (the line through D perpendicular to BE). *)
-Definition F : R^2 :=
-  let l_perp := perpendicular_through D BE in
-  proj_point (intersect_lines l_perp BE_line).
-
-Let CF := [C, F].
-
-Theorem isosceles_midpoint_angle :
-  angle E F C = angle B A C.
+Theorem angle_equality : angle E F C = angle A B C.
 Proof. Admitted.
 
-End IsoscelesAngleEquality.
+End IsoscelesTriangleAngle.
 ####

@@ -1,32 +1,26 @@
-theory InscribedPentagon
-imports Complex_Main HOL.Real
+theory Pentagon_Problem
+  imports Main "HOL-Analysis.Euclidean_Space"
 begin
-
-(* 定义圆周角相关概念 *)
-definition circle :: "real × real ⇒ real ⇒ (real × real) set" where
-  "circle center radius = {p. dist p center = radius}"
-
-definition on_circle :: "real × real ⇒ real ⇒ real × real ⇒ bool" where
-  "on_circle center radius point = (dist point center = radius)"
-
-(* 角度计算 *)
-definition angle :: "real × real ⇒ real × real ⇒ real × real ⇒ real" where
-  "angle A B C = (
-    let v1 = (fst A - fst B, snd A - snd B);
-        v2 = (fst C - fst B, snd C - snd B);
-        dot_product = fst v1 * fst v2 + snd v1 * snd v2;
-        magnitude1 = sqrt((fst v1)^2 + (snd v1)^2);
-        magnitude2 = sqrt((fst v2)^2 + (snd v2)^2)
-    in
-      acos(dot_product / (magnitude1 * magnitude2)) * (180 / pi)
+type_synonym point = "real^2"
+definition angle_degrees :: "point => point => point => real" where
+  "angle_degrees P Q R = (
+    let vec1 = P - Q; vec2 = R - Q in
+    if vec1 = (0::point) V vec2 = (0::point) then 0 
+    else
+      let cos_val = (vec1 inner vec2) / (norm vec1 * norm vec2) in
+      let clamped_cos_val = max (-1) (min 1 cos_val) in
+      acos clamped_cos_val * (180 / pi)
   )"
-
-(* 问题的形式化表述 *)
-theorem pentagon_angle_B:
-  fixes O A B C D E :: "real × real"
-  assumes "∃r. r > 0 ∧ on_circle O r A ∧ on_circle O r B ∧ on_circle O r C ∧ on_circle O r D ∧ on_circle O r E"
-      and "distinct [A, B, C, D, E]" 
-      and "convex [A, B, C, D, E]"
-  shows "angle A B C = 100"
-  
+lemma inscribed_pentagon_angle_ABC:
+  fixes O A B C D E :: point 
+  fixes r :: real 
+  assumes
+    r_is_positive: "r > 0" and
+    all_points_on_circle:
+      "dist A O = r ∧ dist B O = r ∧ dist C O = r ∧ dist D O = r ∧ dist E O = r" and
+    points_are_distinct: "distinct [A, B, C, D, E]" and
+    angle_CAD_is_30: "angle_degrees C A D = 30" and
+    angle_AED_is_115: "angle_degrees A E D = 115"
+  shows
+    "angle_degrees A B C = 100"
 end

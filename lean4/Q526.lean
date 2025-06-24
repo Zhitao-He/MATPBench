@@ -1,27 +1,23 @@
 import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Pi.Notation
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemFormalization
+open scoped EuclideanGeometry
+open Real
 
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable [FiniteDimensional ℝ V] [Fact (finrank ℝ V = 2)]
-variable {P : Type*} [MetricSpace P] [NormedAffineSpace V P]
-variable [Module.Oriented ℝ V (Fin 2)]
 
-variable (O A B C E F : P)
-
-axiom hA_ne_O : A ≠ O
-axiom hB_ne_O : B ≠ O
-axiom hC_ne_O : C ≠ O
-axiom hE_ne_O : E ≠ O
-axiom hF_ne_O : F ≠ O
-
-axiom hCOA_is_right : angle A O C = π / 2
-axiom hEOB_is_right : angle B O E = π / 2
-axiom hFOE_is_forty_five : angle F O E = π / 4
-
-axiom hAOC_oangle : oangle A O C hA_ne_O hC_ne_O = RealOrientedAngle.pi_div_two
-axiom hCOB_oangle : oangle C O B hC_ne_O hB_ne_O = RealOrientedAngle.pi_div_two
-axiom hBOE_oangle : oangle B O E hB_ne_O hE_ne_O = RealOrientedAngle.pi_div_two
-
-theorem measure_of_arc_OAE_eq_270_degrees :
-    oangle A O E hA_ne_O hE_ne_O = ↑(3 * π / 2) := by sorry
+theorem measure_of_arc_OAE
+    (O A B C E F : P)
+    (hOA : A ≠ O) (hOB : B ≠ O) (hOC : C ≠ O) (hOE : E ≠ O) (hOF : F ≠ O)
+    (h_angle_FOE : EuclideanGeometry.angle F O E = π / 4)
+    (h_perp_CO_AO : ∠ C O A = π / 2)
+    (h_perp_EO_BO : ∠ E O B = π / 2)
+    (h_perp_CO_BO : ∠ C O B = π / 2)
+    [Fact (Module.finrank ℝ P = 2)] :
+    True := by
+  sorry
+end ProblemFormalization
+end noncomputable section

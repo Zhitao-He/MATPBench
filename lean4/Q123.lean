@@ -1,39 +1,31 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
-
-open EuclideanSpace Real
-
-namespace SquareAndTwoCircles
-
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 noncomputable section
-
-/-- Side length of the square -/
-def s : ℝ := 10
-
-/-- Structure representing a circle with center and radius -/
-structure Circle where
-  center : EuclideanSpace ℝ (Fin 2)
-  radius : ℝ
-
-/-- The large circle centered at origin with radius s -/
-def bigCircle : Circle :=
-  { center := ![0, 0],
-    radius := s }
-
-/-- Radius of the small circle: s * (3 - 2√2) -/
-def smallRadius : ℝ := s * (3 - 2 * sqrt 2)
-
-/-- The small circle centered at (s - r, s - r) -/
-def smallCircle : Circle :=
-  { center := ![s - smallRadius, s - smallRadius],
-    radius := smallRadius }
-
-/-- Integers a and b such that radius = a - b * sqrt(2) -/
-def a : ℤ := 30
-def b : ℤ := 20
-
-/-- The main theorem: a + b = 50 -/
-theorem answer : a + b = 50 := by sorry
-
-end SquareAndTwoCircles
+namespace TwoCirclesSquareProblem
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+abbrev Circle := EuclideanGeometry.Sphere Point
+def sVal : ℝ := 10
+def oSqVertex : Point := ![0, 0]
+def isTangentToVerticalLine (circ : Circle) (val : ℝ) : Prop :=
+  abs (circ.center 0 - val) = circ.radius
+def isTangentToHorizontalLine (circ : Circle) (val : ℝ) : Prop :=
+  abs (circ.center 1 - val) = circ.radius
+def circlesTouchExternally (c1 c2 : Circle) : Prop :=
+  dist c1.center c2.center = c1.radius + c2.radius
+theorem sumOfCoeffsIs50
+    (CL : Circle)
+    (hClCenterIsOSq : CL.center = oSqVertex)
+    (hClTangentToXEqSVal : isTangentToVerticalLine CL sVal)
+    (hClTangentToYEqSVal : isTangentToHorizontalLine CL sVal)
+    (CS : Circle)
+    (hCsTangentToXEqSVal : isTangentToVerticalLine CS sVal)
+    (hCsTangentToYEqSVal : isTangentToHorizontalLine CS sVal)
+    (hCsCenterQuadrant : CS.center 0 < sVal ∧ CS.center 1 < sVal)
+    (hClCsTouch : circlesTouchExternally CL CS)
+    (a b : ℤ)
+    (hCsRadiusForm : CS.radius = (↑a : ℝ) - (↑b : ℝ) * Real.sqrt 2)
+    : (↑a : ℝ) + (↑b : ℝ) = 50 := by sorry
+end TwoCirclesSquareProblem

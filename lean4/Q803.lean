@@ -1,37 +1,15 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open EuclideanGeometry
-open Real
-
-section TriangleProblem
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [Fact (FiniteDimensional.finrank ℝ V = 2)]
-
-variable (A B C D : P)
-
--- Given: DC = DA (distance equality)
+noncomputable section
+abbrev Plane := EuclideanSpace ℝ (Fin 2)
+variable (A B C D : Plane)
 axiom h_dist_eq : dist D C = dist D A
-
--- Given: Angle ACD = 66°
-axiom h_angle_ACD : angle A C D = (66 / 180 : ℝ) * π
-
--- Given: Angle DBA = 24°
-axiom h_angle_DBA : angle D B A = (24 / 180 : ℝ) * π
-
--- Distinctness assumptions
-axiom h_A_ne_C : A ≠ C
-axiom h_D_ne_C : D ≠ C
-axiom h_D_ne_B : D ≠ B
-axiom h_A_ne_B : A ≠ B
-axiom h_D_ne_A : D ≠ A
-
--- Goal: Measure of angle DAC = 66°
-theorem angle_DAC_eq_66_degrees :
-  angle D A C = (66 / 180 : ℝ) * π := by sorry
-
-end TriangleProblem
+axiom h_angle_ACD : EuclideanGeometry.angle A C D = 66 * Real.pi / 180
+axiom h_angle_DBA : EuclideanGeometry.angle D B A = 24 * Real.pi / 180
+theorem target_angle_DAC (A B C D : Plane)
+  (h_dist_eq : dist D C = dist D A)
+  (h_angle_ACD : EuclideanGeometry.angle A C D = 66 * Real.pi / 180)
+  (h_angle_DBA : EuclideanGeometry.angle D B A = 24 * Real.pi / 180) :
+  EuclideanGeometry.angle D A C = 66 * Real.pi / 180 := by sorry
+end

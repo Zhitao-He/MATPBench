@@ -1,46 +1,29 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
-noncomputable section
-
-/-!
-# Formalization of a Circle Geometry Problem
-
-**Problem Statement:**
-Given a circle with diameter AB, chord CD perpendicular to AB, and chord AE bisecting radius OC.
-Prove that DE bisects chord BC.
--/
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-/-- Points on the plane -/
-variable (A B C D E O : P)
-
-/-! ## Hypotheses -/
-
-/-- All points lie on the circle with center O and radius r -/
-variable (hA : dist A O = dist B O)
-variable (hB : dist B O = dist C O)
-variable (hC : dist C O = dist D O)
-variable (hD : dist D O = dist E O)
-
-/-- AB is the diameter (O is midpoint) -/
-variable (h_diam : O = midpoint ℝ A B)
-
-/-- CD is perpendicular to AB -/
-variable (h_perp : (D -ᵥ C) ⟂ (B -ᵥ A))
-
-/-- AE bisects radius OC -/
-variable (h_bisect : 
-  let M := midpoint ℝ O C
-  ∃ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 ∧ M = (1 - t) • A + t • E)
-
-/-! ## Conclusion -/
-
-/-- DE passes through the midpoint of BC -/
-theorem de_bisects_bc :
-    Collinear ℝ D E (midpoint ℝ B C) := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+theorem de_bisects_bc
+  (o a b c d e m f : Point)
+  (r : ℝ) (hr_pos : 0 < r)
+  (ha_on_circle : dist a o = r)
+  (hb_on_circle : dist b o = r)
+  (hc_on_circle : dist c o = r)
+  (hd_on_circle : dist d o = r)
+  (he_on_circle : dist e o = r)
+  (hab_diameter : o = midpoint ℝ a b)
+  (hc_ne_d : c ≠ d)
+  (ha_ne_e : a ≠ e)
+  (hd_ne_e : d ≠ e)
+  (hb_ne_c : b ≠ c)
+  (hcd_perp_ab : inner ℝ (d -ᵥ c) (b -ᵥ a) = 0)
+  (hm_is_midpoint_oc : m = midpoint ℝ o c)
+  (hm_on_line_ae : Collinear ℝ ({a, m, e} : Set Point))
+  (hm_on_segment_ae : m ∈ segment ℝ a e)
+  (hf_on_line_de : Collinear ℝ ({d, f, e} : Set Point))
+  (hf_on_line_bc : Collinear ℝ ({b, f, c} : Set Point))
+  (hf_on_segment_de : f ∈ segment ℝ d e)
+  (hf_on_segment_bc : f ∈ segment ℝ b c)
+  : f = midpoint ℝ b c := by
   sorry
-
-end

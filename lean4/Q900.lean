@@ -1,19 +1,28 @@
-import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-
-theorem value_length_CD_is_9
-    (A B C D E F : P) (x y : ℝ)
-    (h_parallelogram_BCFD : (B -ᵥ C = F -ᵥ D) ∧ (B -ᵥ F = C -ᵥ D))
-    (h_parallelogram_BCDE : (B -ᵥ C = E -ᵥ D) ∧ (B -ᵥ E = C -ᵥ D))
-    (h_dist_AB : dist A B = 6)
-    (h_dist_AF : dist A F = 8)
-    (h_dist_BF : dist B F = 6)
-    (h_dist_CF : dist C F = x)
-    (h_dist_CD : dist C D = y)
-    (h_dist_DE : dist D E = 2 * y - 3)
-    (h_dist_FE : dist F E = x + (10 / 3))
-    : y = 9 := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+open Affine AffineSubspace 
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+theorem find_CD_value
+  (A B C D E F : P)
+  (x y : ℝ)
+  (hAB : dist A B = 6)
+  (hAF : dist A F = 8)
+  (hBC : dist B C = x)
+  (hCD : dist C D = y)
+  (hDE : dist D E = 2 * y - 3)
+  (hFE : dist F E = x + 10 / 3)
+  (hBF_parallel_CD : line[ℝ, B, F] ∥ line[ℝ, C, D])
+  (hCB_parallel_DF : line[ℝ, C, B] ∥ line[ℝ, D, F])
+  (hSbtwABC : Sbtw ℝ A B C)
+  (hSbtwAFE : Sbtw ℝ A F E)
+  (hSbtwCDE : Sbtw ℝ C D E)
+  (h_x_pos : x > 0)
+  (h_y_pos : y > 0)
+  (h_DE_pos : 2 * y - 3 > 0) :
+  y = 9 := by sorry
+end
+end

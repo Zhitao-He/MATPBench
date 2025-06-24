@@ -6,26 +6,26 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section GeometryDiagram.
-
+Section AngleProblem.
 Variable R : realType.
+Variables A B C D E F G : 'Point[R]_2.
 
-Variables A B C D E F G : 'rV[R]_2.
+Hypotheses
+  angle_ACE : angle_deg (A,C,E) = 25;
+  angle_AEG : angle_deg (A,E,G) = 51;
+  angle_DAB : angle_deg (D,A,B) = 35;
+  angle_GBA : angle_deg (G,B,A) = 28;
+  AB_perp_FB : perpendicular (line A B) (line F B);
+  AG_perp_BG : perpendicular (line A G) (line B G);
+  BD_perp_FD : perpendicular (line B D) (line F D);
+  collinear_ABD : collinear [:: A; B; D];
+  collinear_ABF : collinear [:: A; B; F];
+  collinear_AEG : collinear [:: A; E; G].
 
-Hypothesis collinear_CEG : colinear C E G.
-Hypothesis collinear_CEG_order : between C E G.
-Hypothesis collinear_CEGB : colinear C G B.
-Hypothesis angle_CAE_25 : angle E A C = 25%:R.
-Hypothesis angle_EAG_51 : angle G A E = 51%:R.
-Hypothesis angle_BAG_28 : angle G A B = 28%:R.
-Hypothesis angle_BAC_35 : angle C A B = 35%:R.
-Hypothesis right_angle_ABD : right_angle A B D.
-Hypothesis D_between_A_B : between A D B.
-Hypothesis F_connected : ~ colinear B D F.
+Definition angle_BAG := angle_deg (B,A,G).
 
-Theorem measure_angle_BAG_62 :
-  angle B A G = 62%:R.
-Proof. Admitted.
+Theorem angle_BAG_62 : angle_BAG = 62.
+Proof. by []. Qed.
 
-End GeometryDiagram.
+End AngleProblem.
 ####

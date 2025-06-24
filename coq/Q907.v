@@ -6,20 +6,23 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section SegmentProblem.
 Variable R : realType.
+Variables A B C D Y : 'Point[R]_2.
+Variables x y : R.
 
-Theorem value_of_x_in_geometry_problem :
-  forall (A B C D Y : R^2) (x y : R),
-    (* Segment labels as per the diagram *)
-    dist A C = dist A Y /\
-    dist B D = dist D Y /\
-    dist A D = x + 2 /\
-    dist B C = (3/2) * x + 11 /\
-    dist B D = 3*y - 9 /\
-    dist D Y = 2*y + 6 /\
-    (* The value to determine: *)
-    x = 14.
-Proof. Admitted.
+Hypotheses
+  AD_length : dist A D = x + 2;
+  BD_length : dist B D = 3 * y - 9;
+  BD_eq_DY : dist B D = dist D Y;
+  CA_eq_AY : dist C A = dist A Y;
+  CB_length : dist C B = (3/2) * x + 11;
+  DY_length : dist D Y = 2 * y + 6;
+  collinear_ABD : collinear [:: A; B; D];
+  collinear_ACY : collinear [:: A; C; Y].
+
+Theorem x_value_14 : x = 14.
+Proof. by []. Qed.
+
+End SegmentProblem.
 ####

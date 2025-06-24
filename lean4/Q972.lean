@@ -1,43 +1,34 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry
-
-namespace TangentCircleProblem
-
-variable {P : Type*} [EuclideanPlane P]
-
-variable (O : P) (r : ℝ) (hr : 0 < r)
-
--- Circle with center O and radius r
-def Circle := {X : P | dist X O = r}
-
--- Points A and B are diametrically opposite on the circle
-variable (A B : P) (hA : A ∈ Circle O r) (hB : B ∈ Circle O r)
-variable (hAB : midpoint ℝ A B = O)
-
--- Point P outside the circle
-variable (P₀ : P) (hP : P₀ ∉ Circle O r)
-
--- Tangency points E and F
-variable (E F : P) (hE : E ∈ Circle O r) (hF : F ∈ Circle O r)
-variable (hPE : ∠ O E P₀ = Angle.pi_div_two) (hPF : ∠ O F P₀ = Angle.pi_div_two)
-variable (hP_ne_E : P₀ ≠ E) (hP_ne_F : P₀ ≠ F)
-
--- PB meets circle again at C
-variable (C : P) (hC : C ∈ Circle O r) (hPCB : Collinear ℝ P₀ C B)
-variable (hP_ne_B : P₀ ≠ B) (hC_ne_B : C ≠ B)
-
--- AF and BE meet at D
-variable (D : P) (hADF : Collinear ℝ A D F) (hBDE : Collinear ℝ B D E)
-variable (hA_ne_F : A ≠ F) (hB_ne_E : B ≠ E)
-
--- Nondegeneracy conditions
-variable (hP_ne_C : P₀ ≠ C) (hD_ne_C : D ≠ C) (hE_ne_C : E ≠ C)
-
--- Main theorem: angle PCD equals angle PCE
-theorem angle_PCD_eq_PCE : ∠ P₀ C D = ∠ P₀ C E := by sorry
-
-end TangentCircleProblem
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open Affine AffineSubspace
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+namespace EuclideanGeometryProblem
+theorem angle_PCD_eq_angle_PCE
+  (O P E F A B C D : Point)
+  (r : ℝ)
+  (hr_pos : r > 0)
+  (hE_on_Omega : E ∈ EuclideanGeometry.Sphere.mk O r)
+  (hF_on_Omega : F ∈ EuclideanGeometry.Sphere.mk O r)
+  (hP_ne_E : P ≠ E)
+  (hP_ne_F : P ≠ F)
+  (hPE_tangent : inner ℝ (P -ᵥ E) (O -ᵥ E) = 0)
+  (hPF_tangent : inner ℝ (P -ᵥ F) (O -ᵥ F) = 0)
+  (hA_on_Omega : A ∈ EuclideanGeometry.Sphere.mk O r)
+  (hB_on_Omega : B ∈ EuclideanGeometry.Sphere.mk O r)
+  (hAB_diam : B = O +ᵥ (O -ᵥ A))
+  (hC_on_Omega : C ∈ EuclideanGeometry.Sphere.mk O r)
+  (hC_on_line_PB : Collinear ℝ ({P, C, B} : Set Point))
+  (hC_ne_B : C ≠ B)
+  (hD_on_line_AF : Collinear ℝ ({A, D, F} : Set Point))
+  (hD_on_line_BE : Collinear ℝ ({B, D, E} : Set Point))
+  (hA_ne_F : A ≠ F)
+  (hB_ne_E : B ≠ E)
+  (hC_ne_P : C ≠ P)
+  (hC_ne_D : C ≠ D)
+  (hC_ne_E : C ≠ E)
+  : ∠ P C D = ∠ P C E := by sorry
+end EuclideanGeometryProblem

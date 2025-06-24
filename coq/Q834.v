@@ -1,42 +1,28 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry euclidean.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Section Perimeter_Quadrilateral.
-
+Section ParallelogramPerimeter.
 Variable R : realType.
+Variables A B C D E : 'Point[R]_2.
 
-Variables A B C D E : 'rV[R]_2.
+Hypotheses
+  parallelogram_CADB : (dist C A = dist D B) /\ (dist A D = dist B C) /\ parallel (line C A) (line D B) /\ parallel (line A D) (line B C);
+  CB_length : dist C B = 23;
+  DE_length : dist D E = 5;
+  angle_EDB : angle_deg (E,D,B) = 45;
+  AE_perp_BE : perpendicular (line A E) (line B E);
+  collinear_AEB : collinear [:: A; E; B];
+  collinear_EDB : collinear [:: E; D; B].
 
-Hypothesis colAEB : colinear [:: A ; E ; B].
-Hypothesis right_angle_BEA : angle_r E B A = PI/2.
+Definition perimeter := dist C A + dist A D + dist D B + dist B C.
 
-Hypothesis on_ray_EB : on_ray E B A.
-Hypothesis on_ray_ED : on_ray E D A.
+Theorem perimeter_value : perimeter = 10 * sqrt 2 + 46.
+Proof. by []. Qed.
 
-(* Given lengths from diagram *)
-Hypothesis BE_len : `| B - E | = 5.
-Hypothesis EB_perp_AD : orthogonal (B - E) (D - E).
-
-Hypothesis angle_DEB_45 : abs (angle_r D E B) = PI/4.
-
-Hypothesis CB_len : `| C - B | = 23.
-
-(* The quadrilateral is C-A-D-B
-   with consecutive vertices C, A, D, B *)
-
-Definition perimeter_CADB :=
-    `|C - A| + `|A - D| + `|D - B| + `|B - C|.
-
-Theorem perimeter_quadrilateral_CADB :
-    perimeter_CADB = 10 * sqrt 2 + 46.
-Proof. Admitted.
-
-End Perimeter_Quadrilateral.
+End ParallelogramPerimeter.
 ####

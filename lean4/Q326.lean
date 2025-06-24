@@ -1,29 +1,14 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
-open scoped EuclideanSpace
-open Real
-
--- 2D point in Euclidean space
-abbrev Point : Type := EuclideanSpace ℝ (Fin 2)
-
--- Circle center at (3, 1)
-def C_center : Point := ![3, 1]
-
--- Point on the circle at (8, 1)
-def P_on_circumference : Point := ![8, 1]
-
--- The circle: as a 2D sphere with center and radius
-def imageCircle : Sphere Point :=
-  { center := C_center
-    radius := dist C_center P_on_circumference }
-
--- Area of the disk enclosed by a circle of radius r is π * r^2
-def diskArea (s : Sphere Point) : ℝ := pi * (s.radius ^ 2)
-
--- Auxiliary: The radius of the given circle is 5
-lemma given_circle_radius_is_5 : imageCircle.radius = 5 := by sorry
-
--- Area of the circle is 25π
-theorem given_circle_area_is_25_pi : diskArea imageCircle = 25 * pi := by sorry
+def c : EuclideanSpace ℝ (Fin 2) := ![3, 1]
+def pOnCircle : EuclideanSpace ℝ (Fin 2) := ![8, 1]
+noncomputable def rVal : ℝ := dist c pOnCircle
+structure Circle where
+  center : EuclideanSpace ℝ (Fin 2)
+  radius : ℝ
+noncomputable def myCircle : Circle where
+  center := c
+  radius := rVal
+noncomputable def area (circle : Circle) : ℝ := Real.pi * circle.radius ^ 2
+theorem circleAreaIs25Pi : area myCircle = 25 * Real.pi := by sorry

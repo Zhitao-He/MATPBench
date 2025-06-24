@@ -1,52 +1,35 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Data.Real.Basic
-
-open Real Angle
-
-namespace IsoscelesTrapezoidArea
-
--- Working in a finite-dimensional real inner product (Euclidean) space
-variable {P : Type*} [EuclideanSpace ℝ P]
-
--- Declare the six points
-variable (A B C D E F : P)
-
--- Given: AB = 35 (A ≠ B)
-axiom h_AB_length : dist A B = 35
-
--- Given: CD = 19 (C ≠ D)
-axiom h_CD_length : dist C D = 19
-
--- Perimeter of DBAC is 74: DB + BA + AC + CD = 74
-axiom h_perimeter : dist D B + dist B A + dist A C + dist C D = 74
-
--- DBAC is an isosceles trapezoid with BA ∥ CD
-axiom h_BA_parallel_CD : (affineSpan ℝ ({B, A} : Set P)) ∥ (affineSpan ℝ ({C, D} : Set P))
-
--- Isosceles property: DB = AC
-axiom h_isosceles_sides : dist D B = dist A C
-
--- E and F lie on the line containing AB
-axiom h_E_on_line_AB : E ∈ affineSpan ℝ {A, B}
-axiom h_F_on_line_AB : F ∈ affineSpan ℝ {A, B}
-
--- Right angle conditions
-axiom h_CF_perp_AF : IsRight (angle C F A)
-axiom h_DE_perp_AE : IsRight (angle D E A)
-
--- Non-degeneracy conditions
-axiom h_D_not_on_line_AB : D ∉ affineSpan ℝ {A, B}
-axiom h_C_not_on_line_AB : C ∉ affineSpan ℝ {A, B}
-
--- Area formula for trapezoid
-def trapezoidArea (base1 base2 height : ℝ) : ℝ := (1 / 2 : ℝ) * (base1 + base2) * height
-
--- The area of DBAC
-def area_DBAC : ℝ := trapezoidArea (dist A B) (dist C D) (dist D E)
-
--- Theorem to prove: area = 162
-theorem area_DBAC_eq_162 : area_DBAC A B C D E = 162 := by sorry
-
-end IsoscelesTrapezoidArea
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+open EuclideanGeometry
+open Real
+open Affine AffineSubspace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def areaTrapezoid (base1 base2 height : ℝ) : ℝ :=
+  (base1 + base2) * height / 2
+noncomputable def heightDBAC (D E : P) : ℝ := dist D E
+theorem area_DBAC_eq_target
+  (A B C D E F : P)
+  (h_AB : dist A B = 35)
+  (h_CD : dist C D = 19)
+  (h_perimeter : dist D B + dist B A + dist A C + dist C D = 74)
+  (h_bases_distinct : affineSpan ℝ {D, C} ≠ affineSpan ℝ {B, A})
+  (h_bases_parallel : (affineSpan ℝ {D, C}).direction = (affineSpan ℝ {B, A}).direction)
+  (h_legs_equal : dist D B = dist A C)
+  (h_E_on_BA : E ∈ affineSpan ℝ {B, A})
+  (h_F_on_BA : F ∈ affineSpan ℝ {B, A})
+  (h_DE_perp_AE : EuclideanGeometry.angle D E A = Real.pi / 2)
+  (h_CF_perp_AF : EuclideanGeometry.angle C F A = Real.pi / 2)
+  (h_sbtw_B_E_F : Sbtw ℝ B E F)
+  (h_sbtw_E_F_A : Sbtw ℝ E F A)
+  (h_D_C_same_side_BA : (affineSpan ℝ {B, A}).SSameSide D C)
+  (h_B_A_same_side_DC : (affineSpan ℝ {D, C}).SSameSide B A)
+  :
+  areaTrapezoid (dist C D) (dist B A) (heightDBAC D E) = 162 :=
+by
+  sorry

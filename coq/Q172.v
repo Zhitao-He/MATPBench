@@ -19,7 +19,6 @@ Theorem triangle_FGH_FG_length_39 :
       FG = 9 * x - 6 /\
       GH = 7 * x + 4 /\
       FH = 17 /\
-      FG = GH /\
       FG = 39.
 Proof. Admitted.
 ####

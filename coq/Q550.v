@@ -1,2 +1,49 @@
-#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals angle. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. (* Points in the plane *) Variables (O G C D E B : 'rV[R]_2). (* Hypotheses about concyclicity and center *) Hypothesis H_circle : forall P, P \in [::C;D;E;B] -> norm (P - O) = norm (C - O). Hypothesis H_G_center : G = O. (* Rays from center to each point *) Definition ray_C := C - O. Definition ray_D := D - O. Definition ray_E := E - O. Definition ray_B := B - O. (* Given angles at G=O between radii in degrees *) Hypothesis H_angle_COD : angle_between ray_C ray_D = (135%:R * (PI / 180)). Hypothesis H_angle_DOE : angle_between ray_D ray_E = (x%:R * (PI / 180)). Hypothesis H_angle_EOB : angle_between ray_E ray_B = (145%:R * (PI / 180)). Hypothesis H_angle_BOC : angle_between ray_B ray_C = (x%:R * (PI / 180)). (* x is a real number; the value to compute *) Variable x. Lemma compute_x : x = 40%:R. Proof. have Hsum: (135 + x + 145 + x)%:R = 360%:R by rewrite -addnA; field. move: Hsum; rewrite addrC addnA -natrD -natrD -natrA -natrA => /mulIf. by [] Qed. End.
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals angle.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Local Open Scope ring_scope.
+
+Section Compute_Angle_x.
+
+Variable R : realType.
+
+(* Points in the plane *) 
+Variables (O G C D E B : 'rV[R]_2).
+
+(* Hypothesis: All points lie on a circle centered at O (G is the center, so G = O) *)
+Hypothesis H_circle : forall P, P \in [::C;D;E;B] -> norm (P - O) = norm (C - O).
+Hypothesis H_G_center : G = O.
+
+(* Rays from center to each point *)
+Definition ray_C := C - O.
+Definition ray_D := D - O.
+Definition ray_E := E - O.
+Definition ray_B := B - O.
+
+(* Given angles at G=O between radii in degrees *)
+Hypothesis H_angle_COD : angle_between ray_C ray_D = (135%:R * (PI / 180)).
+Hypothesis H_angle_DOE : angle_between ray_D ray_E = (x%:R * (PI / 180)).
+Hypothesis H_angle_EOB : angle_between ray_E ray_B = (145%:R * (PI / 180)).
+Hypothesis H_angle_BOC : angle_between ray_B ray_C = (x%:R * (PI / 180)).
+
+(* x is a real number; the value to compute *)
+Variable x : R.
+
+(* Theorem to prove: x = 40 *)
+Lemma compute_x : x = 40%:R.
+Proof.
+  (* The sum of angles around point O (center of the circle) must be 360° *)
+  have Hsum: (135 + x + 145 + x)%:R = 360%:R.
+    by rewrite -addnA; field.
+  (* Solve for x *)
+  move: Hsum; rewrite addrC addnA -natrD -natrD -natrA -natrA => /mulIf.
+  by [].
+Qed.
+
+End Compute_Angle_x.
 ####

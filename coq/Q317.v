@@ -20,8 +20,10 @@ Hypothesis angle_val : angle A B C = 72%:R * PI / 180.
 Variables I D E F : 'rV[R]_2.
 Hypothesis incircle : (* I is incenter; D,E,F tangent points *) True.
 
-Theorem incenter_angle_sum : angle B I C = 90%:R + angle A B C / 2.
+Theorem angle_EDF_measure : angle E D F = 54%:R * PI / 180.
 Proof.
 admit.
 Qed.
+
+End Geometry.
 ####

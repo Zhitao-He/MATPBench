@@ -1,43 +1,36 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace
-import Mathlib.LinearAlgebra.AffineSpace.Independent
-import Mathlib.Analysis.Convex.Combination
-import Mathlib.Analysis.Convex.Between
+import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Data.Real.Basic
-
-open Set
-open scoped Real
-
--- We work in 2-dimensional Euclidean space over ℝ
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable (fix_dim_eq_2 : FiniteDimensional.finrank ℝ V = 2)
-include fix_dim_eq_2
-
--- Points of the triangle and the interior point
-variable (A B C P : EuclideanSpace ℝ V)
-
--- Assume A, B, C not collinear
-variable (h_nondegenerate : ¬ Collinear ℝ {A, B, C})
-
--- P is in triangle interior
-variable (hP_interior : P ∈ interior (convexHull ℝ {A, B, C}))
-
--- Define the three smaller triangles formed by lines through P parallel to the sides
--- Triangle t₁ (opposite A) with area 4
-def t₁ : Triangle (EuclideanSpace ℝ V) := sorry  -- Should be constructed with P and sides parallel to BC
-variable (h_area_t1 : Triangle.area t₁ = 4)
-
--- Triangle t₂ (opposite B) with area 9
-def t₂ : Triangle (EuclideanSpace ℝ V) := sorry  -- Should be constructed with P and sides parallel to AC
-variable (h_area_t2 : Triangle.area t₂ = 9)
-
--- Triangle t₃ (opposite C) with area 49
-def t₃ : Triangle (EuclideanSpace ℝ V) := sorry  -- Should be constructed with P and sides parallel to AB
-variable (h_area_t3 : Triangle.area t₃ = 49)
-
--- Main triangle
-def triangleABC : Triangle (EuclideanSpace ℝ V) := Triangle.mk A B C
-
--- Prove the area of ABC is 144
-theorem area_ABC_is_144 : Triangle.area (triangleABC A B C) = 144 := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+noncomputable section
+open Real AffineSubspace 
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (A B C : P)
+variable (p_point : P)
+noncomputable def triangleArea (p1 p2 p3 : P) : ℝ :=
+  (1 / 2 : ℝ) * abs (((p2 -ᵥ p1) 0 * (p3 -ᵥ p1) 1) - ((p2 -ᵥ p1) 1 * (p3 -ᵥ p1) 0))
+variable (h_ABC_not_collinear : True := trivial) 
+variable (h_p_in_interior_ABC : True := trivial)
+def line_p_parallel_BC (A B C p_point : P) : AffineSubspace ℝ P := sorry
+def line_p_parallel_AC (A B C p_point : P) : AffineSubspace ℝ P := sorry
+def line_p_parallel_AB (A B C p_point : P) : AffineSubspace ℝ P := sorry
+def D1_t1 (A B C p_point : P) : P := sorry
+def E1_t1 (A B C p_point : P) : P := sorry
+def D2_t2 (A B C p_point : P) : P := sorry
+def E2_t2 (A B C p_point : P) : P := sorry
+def D3_t3 (A B C p_point : P) : P := sorry
+def E3_t3 (A B C p_point : P) : P := sorry
+variable (h_area_t1 : triangleArea A (D1_t1 A B C p_point) (E1_t1 A B C p_point) = 4)
+variable (h_area_t2 : triangleArea B (D2_t2 A B C p_point) (E2_t2 A B C p_point) = 9)
+variable (h_area_t3 : triangleArea C (D3_t3 A B C p_point) (E3_t3 A B C p_point) = 49)
+theorem area_ABC_is_144
+    (A B C p_point : P)
+    (h_ABC_not_collinear : True) 
+    (h_p_in_interior_ABC : True) 
+    (h_area_t1 : triangleArea A (D1_t1 A B C p_point) (E1_t1 A B C p_point) = 4)
+    (h_area_t2 : triangleArea B (D2_t2 A B C p_point) (E2_t2 A B C p_point) = 9)
+    (h_area_t3 : triangleArea C (D3_t3 A B C p_point) (E3_t3 A B C p_point) = 49) :
+  triangleArea A B C = 144 := by
+  sorry
+end noncomputable section

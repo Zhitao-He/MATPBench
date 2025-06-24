@@ -1,28 +1,34 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry angle.
+From mathcomp Require Import reals geometry angles.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section PentagonCircleTangent.
+Local Open Scope ring_scope.
 
 Variable R : realType.
+Variables A B C D E O : 'rV[R]_2.
 
-Record point : Type := mkPoint { px : R; py : R }.
+Hypotheses
+  (regular_pentagon : let side := `|B - A|` in
+     `|B - A| = `|C - B|` /
+     `|C - B| = `|D - C|` /
+     `|D - C| = `|E - D|` /
+     `|E - D| = `|A - E|` /
+     let angle_AB := angle_deg A B C in
+     angle_AB = 108) (* Interior angle of regular pentagon *)
+  (tangent_circle : let center := O in
+     forall P, (P = D / P = A) ->
+       let v := if P = D then D - C else A - B in
+       (O - P) ** v = 0 /
+       `|O - P|` ^+ 2 = `|O - D|` ^+ 2) (* Tangency conditions *)
 
-Definition eqpt (P Q : point) := (px P = px Q) /\ (py P = py Q).
+Definition minor_arc_AD_deg := (* Calculate angle AOD in degrees *)
+  let angle_AOD := angle_deg A O D in
+  if angle_AOD < 180 then angle_AOD else 360 - angle_AOD.
 
-Variable A B C D E : point.
-
-Hypothesis pentagon_regular :
-  let dAB := sqrt ((px B - px A)^+2 + (py B - py A)^+2) in
-  let dBC := sqrt ((px C - px B)^+2 + (py C - py B)^+2) in
-  let dCD := sqrt ((px D - px C)^+2 + (py D - py C)^+2) in
-  let dDE := sqrt ((px E - px D)^+2 + (py E - py D)^+2) in
-  let dEA := sqrt ((px A - px E)^+2 + (py A - py E)^+2) in
-    [/\ dAB = dBC, dBC = dCD, dCD = dDE, dDE = dEA &
-        let vAB := (px B - px A, py B - py A) in
-        let vBC :=
+Theorem minor_arc_AD_is_144 : minor_arc_AD_deg = 144.
+Proof. Admitted.
 ####

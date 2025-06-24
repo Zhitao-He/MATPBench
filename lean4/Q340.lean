@@ -1,24 +1,19 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-
-variable {P : Type*} [EuclideanPlane P]
-
--- Points A, B, C in the plane, with B ≠ C
-variable (A B C : P) (hBC : B ≠ C)
-
--- The point E on the line through A parallel to BC, in the same direction as BC
-def E_point (A B C : P) : P := A +ᵥ (C -ᵥ B)
-
--- AB = BC
-variable (h_eq : dist A B = dist B C)
-
--- ∠ABC = 124° (converted to radians)
-variable (h_angle : ∠ A B C = (124 / 180 : ℝ) * Real.pi)
-
--- The angle x = ∠BAE
-def angle_x (A B C : P) : ℝ := ∠ B A (E_point A B C)
-
-theorem geometry_problem_statement :
-    angle_x A B C = (28 / 180 : ℝ) * Real.pi := by
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+open scoped EuclideanGeometry
+open Affine AffineSubspace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem problem_statement
+  (A B C D E : P)
+  (x_val : ℝ)
+  (h_SbtwDAE : Sbtw ℝ D A E)
+  (h_angle_DAB_value : ∠ D A B = (124 / 180 : ℝ) * Real.pi)
+  (h_angle_CAE_value : ∠ C A E = (x_val / 180 : ℝ) * Real.pi)
+  (h_angle_sum_at_A : ∠ D A B + ∠ B A C + ∠ C A E = Real.pi)
+  (h_B_ne_C : B ≠ C)
+  : (line[ℝ, B, C] ∥ line[ℝ, D, E]) ∧ (dist A B = dist B C) ∧ (x_val = 28) := by
   sorry

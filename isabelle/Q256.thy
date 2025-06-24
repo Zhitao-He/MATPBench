@@ -1,28 +1,30 @@
-theory SurfaceAreaCalculation
-imports 
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Surface_Area_Solid
+  imports Complex_Main
 begin
-
-theorem surface_area_of_composite_solid:
-  fixes s1 s2 s3 r h :: real
-  assumes "s1 = 33" and "s2 = 25" and "s3 = 20"
-          and "r = 6" and "h = 11"
-  defines "π ≡ pi"
-          and "box_area ≡ 2 * (s1 * s2 + s1 * s3 + s2 * s3)"
-          and "cyl_area ≡ 2 * π * r * h + 2 * π * r^2"
-          and "total_area ≡ box_area * 2 - 2 * π * r^2 + cyl_area"
-  shows "∃S. abs (S - total_area) < 0.01 ∧ abs (S - 812850) < 0.01"
-begin
-  have "total_area = box_area * 2 - 2 * π * r^2 + cyl_area" by (simp add: total_area_def)
-  also have "... = 2 * (2 * (s1 * s2 + s1 * s3 + s2 * s3)) - 2 * π * r^2 + (2 * π * r * h + 2 * π * r^2)"
-    by (simp add: box_area_def cyl_area_def)
-  also have "... = 4 * (s1 * s2 + s1 * s3 + s2 * s3) - 2 * π * r^2 + 2 * π * r * h + 2 * π * r^2"
-    by (simp add: algebra_simps)
-  also have "... = 4 * (s1 * s2 + s1 * s3 + s2 * s3) + 2 * π * r * h"
-    by (simp add: algebra_simps)
-  finally show ?thesis
-    using assms by auto
-end
-
+record box =
+  length :: real
+  width :: real
+  height :: real
+definition box1 :: box where
+  "box1 = \<lparr>length = 33, width = 25, height = 20\<rparr>"
+definition box2 :: box where
+  "box2 = \<lparr>length = 33, width = 25, height = 20\<rparr>"
+record cylinder =
+  radius :: real
+  height :: real
+definition connecting_cylinder :: cylinder where
+  "connecting_cylinder = \<lparr>radius = 6, height = 11\<rparr>"
+definition box_surface_area :: "box \<Rightarrow> real" where
+  "box_surface_area b = 2 * (length b * width b + length b * height b + width b * height b)"
+definition cylinder_lateral_area :: "cylinder \<Rightarrow> real" where
+  "cylinder_lateral_area c = 2 * pi * radius c * height c"
+definition cylinder_base_area :: "cylinder \<Rightarrow> real" where
+  "cylinder_base_area c = 2 * pi * (radius c)\<^sup>2"
+definition hole_area :: "cylinder \<Rightarrow> real" where
+  "hole_area c = pi * (radius c)\<^sup>2"
+definition total_surface_area :: real where
+  "total_surface_area = 
+    2 * box_surface_area box1
+    + cylinder_lateral_area connecting_cylinder
+    - 2 * hole_area connecting_cylinder"
 end

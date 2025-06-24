@@ -1,33 +1,21 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
 import Mathlib.Data.Real.Basic
-
-open Real EuclideanSpace Angle
-
-namespace ProblemFormalization
-
--- 欧几里得平面定义
-variable {EuclideanPlane : Type} [NormedAddCommGroup EuclideanPlane]
-  [InnerProductSpace ℝ EuclideanPlane] [FiniteDimensional ℝ EuclideanPlane]
-  [Fact (finrank ℝ EuclideanPlane = 2)]
-
--- 定义圆上的点
-variable (A : EuclideanPlane) (S R T : EuclideanPlane)
-
--- 点S, R, T在圆A上
-variable (hS : S ≠ A) (hR : R ≠ A) (hT : T ≠ A)
-variable (hRS : dist A R = dist A S) (hTS : dist A T = dist A S)
-
--- 弦SR = 弦TS
-variable (hSR : S ≠ R) (hST : S ≠ T) (hRT : R ≠ T)
-variable (h_chord : dist S R = dist S T)
-
--- 角度条件
-variable (h_angle_TAS : angle T A S = (93 : ℝ) * (π / 180))
-variable (x : ℝ) (h_angle_ARS : angle A R S = x * (π / 180))
-
--- 需要证明x = 93
-theorem find_x : x = 93 := by
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+namespace Problem
+theorem prove_x_value (A R S T : PPoint) (x rad : ℝ)
+    (h_rad_pos : rad > 0)
+    (h_AR_eq_rad : dist A R = rad)
+    (h_AS_eq_rad : dist A S = rad)
+    (h_AT_eq_rad : dist A T = rad)
+    (h_SR_eq_TS : dist S R = dist T S)
+    (h_angle_TAS : angle T A S = (93 / 180) * Real.pi)
+    (h_angle_ARS : angle A R S = (x / 180) * Real.pi)
+    (hA_ne_R : A ≠ R) (hA_ne_S : A ≠ S) (hA_ne_T : A ≠ T)
+    (hR_ne_S : R ≠ S) (hS_ne_T : S ≠ T)
+    : x = 93 := by
   sorry
-
-end ProblemFormalization
+end Problem

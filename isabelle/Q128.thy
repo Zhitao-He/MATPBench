@@ -1,22 +1,20 @@
-theory GeometryProblem
-imports Complex_Main "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem
+  imports Main
 begin
-
-locale geometry_setting =
-  fixes A B C D E :: "real^2"
-  assumes C_on_BD: "∃t∈{0..1}. C = B + t *\<^sub>R (D - B)"
-  and C_on_AE: "∃s∈{0..1}. C = A + s *\<^sub>R (E - A)"
-  and AB_BC_eq: "norm (B - A) = norm (C - B)"
-  and BC_CD_eq: "norm (C - B) = norm (D - C)"
-  and CD_CE_eq: "norm (D - C) = norm (E - C)"
-  and angle_A_2_5_B: "angle (B - A) (E - A) = 5/2 * angle (A - B) (C - B)"
-
-context geometry_setting
-begin
-
-theorem angle_D_52_5:
-  "angle (C - D) (E - D) = 52.5 * (pi/180)"
-  sorry
-
+locale geometry_problem =
+  fixes A B C D E :: "'a::euclidean_space"
+  assumes
+    "collinear {B, D, C}" 
+    "collinear {A, E, C}"
+    "C ≠ B" "C ≠ D" "C ≠ A" "C ≠ E"
+    "B ≠ D" "A ≠ E"
+    "dist A B = dist B C"
+    "dist B C = dist C D"
+    "dist C D = dist C E"
+    "let angle_A = angle B A C in
+     let angle_B = angle A B C in
+     angle_A = (5/2) * angle_B"
+    "let angle_D = angle C D E in
+     angle_D = (52.5 * pi) / 180"
 end
 end

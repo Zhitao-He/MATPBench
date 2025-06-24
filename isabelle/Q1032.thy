@@ -1,43 +1,31 @@
-theory ChordIntersection
-  imports Complex_Main "HOL-Analysis.Analysis"
+theory Geometry_Problem_Formalization
+imports Main "HOL-Analysis.Euclidean_Space"
 begin
-
-(* 定义60度角（以弧度表示） *)
-definition deg60 :: real where "deg60 = pi / 3"
-
-(* 点在圆上的条件 *)
-definition on_circle :: "complex ⇒ complex ⇒ real ⇒ bool" where
-  "on_circle P O r ≡ (cmod (P - O) = r)"
-
-(* 三点共线的条件 *)
-definition collinear :: "complex ⇒ complex ⇒ complex ⇒ bool" where
-  "collinear A B C ≡ ∃t::real. (B - A) = t *⇩C (C - A)"
-
-(* 向量之间的角度（以弧度表示） *)
-definition angle :: "complex ⇒ complex ⇒ real" where
-  "angle v w = arg(v/w)"
-
-lemma angle_between_vectors:
-  assumes "v ≠ 0" "w ≠ 0"
-  shows "cmod (arg(v/w)) = acos (Re(v*cnj w) / (cmod v * cmod w))"
-  sorry
-
-(* 主定理 *)
-theorem chord_sum_theorem:
-  fixes O A B C D E F P :: complex
-  fixes r :: real
-  assumes "r > 0"
-          "on_circle A O r" "on_circle B O r" "on_circle C O r" 
-          "on_circle D O r" "on_circle E O r" "on_circle F O r"
-          "collinear A P B" "collinear C P D" "collinear E P F"
-          "P ≠ A" "P ≠ B" "P ≠ C" "P ≠ D" "P ≠ E" "P ≠ F"
-          "cmod (angle (A - P) (C - P)) = deg60"
-          "cmod (angle (A - P) (E - P)) = deg60"
-          "cmod (angle (C - P) (E - P)) = deg60"
-  shows "cmod (A - P) + cmod (E - P) + cmod (D - P) = 
-         cmod (C - P) + cmod (B - P) + cmod (F - P)"
-begin
-  sorry
-end
-
+type_synonym point = "real^2"
+definition cos_vec_angle :: "point => point => real" where
+  "cos_vec_angle v1 v2 = (v1 ⋅ v2) / (norm v1 * norm v2)"
+definition cos_angle_between_lines_at_P :: "point => point => point => real" where
+  "cos_angle_between_lines_at_P P X Y = abs (cos_vec_angle (X - P) (Y - P))"
+definition is_strictly_between :: "point => point => point => bool" where
+  "is_strictly_between P X Y == P ≠ X ∧ P ≠ Y ∧ dist X P + dist P Y = dist X Y"
+lemma three_chords_intersecting_at_P:
+  fixes O P A B C D E F :: point
+  fixes r :: real 
+  assumes
+    r_is_positive: "r > 0" and
+    A_on_circle: "dist A O = r" and
+    B_on_circle: "dist B O = r" and
+    C_on_circle: "dist C O = r" and
+    D_on_circle: "dist D O = r" and
+    E_on_circle: "dist E O = r" and
+    F_on_circle: "dist F O = r" and
+    all_endpoints_distinct: "distinct [A,B,C,D,E,F]" and
+    P_on_chord_AB: "is_strictly_between P A B" and
+    P_on_chord_CD: "is_strictly_between P C D" and
+    P_on_chord_EF: "is_strictly_between P E F" and
+    angle_AB_CD_is_60_deg: "cos_angle_between_lines_at_P P A C = 1/2" and
+    angle_CD_EF_is_60_deg: "cos_angle_between_lines_at_P P C E = 1/2" and
+    angle_EF_AB_is_60_deg: "cos_angle_between_lines_at_P P E A = 1/2"
+  shows "dist A P + dist E P + dist D P = dist C P + dist B P + dist F P"
+  sorry 
 end

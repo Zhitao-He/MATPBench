@@ -1,22 +1,13 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-
--- Let V be a real inner product (Euclidean) space, and P an affine Euclidean space modeled on V
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Declare the four points in the Euclidean plane
-variable (A B C D : P)
-
--- 1. CB = 6 (length of BC is 6)
-axiom hyp_len_BC : dist B C = 6
-
--- 2. ∠CAB = 60°, which is angle at A between points C, A, and B
-axiom hyp_angle_CAB : EuclideanGeometry.angle C A B = Real.pi / 3
-
--- 3. ABCD is a rhombus (parallelogram with all sides equal)
-axiom hyp_is_rhombus : EuclideanGeometry.IsParallelogram A B C D ∧ dist A B = dist B C
-
--- The required conclusion: length of AC is 6
-theorem length_AC_is_6 : dist A C = 6 := by sorry
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem find_AC_length
+  (A B C D : PPoint)
+  (h_CB_len : dist C B = 6)
+  (h_angle_CAB : EuclideanGeometry.angle C A B = Real.pi / 3)
+  (h_is_rhombus : (B -ᵥ A = C -ᵥ D) ∧ (dist A B = dist B C)) :
+  dist A C = 6 := by
+  sorry

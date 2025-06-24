@@ -1,44 +1,50 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Data.Real.Pi.Irrational
-
-open EuclideanGeometry
-
--- Let P be a 3-dimensional real affine space with vector space V
-variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type} [MetricSpace P] [NormedAddTorsor V P]
-variable [Fact (finrank ℝ V = 3)]
-
-/-- The volume of a right prism with triangular base `ABC` and height vector `hv`. -/
-noncomputable def prismVolume (A B C : P) (hv : V) : ℝ :=
-  (1 / (2 : ℝ)) * dist A B * dist B C * ‖hv‖
-
-/--
-Let A, B, C be three points in 3D Euclidean space,
-`hv` a vector perpendicular to the plane of A, B, C,
-and the prism is defined as follows:
-- D = A +ᵥ hv, E = B +ᵥ hv, F = C +ᵥ hv.
-Assume:
-  (1) A, B, C are not collinear,
-  (2) hv is orthogonal to (B -ᵥ A) and (C -ᵥ A),
-  (3) ∠ABC = π/2,
-  (4) ∠EAB = π/3 (where E = B +ᵥ hv),
-  (5) ∠CAB = π/3,
-  (6) dist A E = 2.
-Then the prism volume = m/n where m, n are coprime positive integers, m + n = 5.
--/
-theorem rightTriangularPrismVolume_sum_m_n_is_5 :
-  ∀ (A B C : P) (hv : V),
-    ¬Collinear A B C →
-    hv ⟂ (B -ᵥ A) →
-    hv ⟂ (C -ᵥ A) →
-    ∠ A B C = Real.pi / 2 →
-    ∠ (B +ᵥ hv) A B = Real.pi / 3 →
-    ∠ C A B = Real.pi / 3 →
-    dist A (B +ᵥ hv) = 2 →
-    ∃ (m n : ℕ),
-      0 < m ∧ 0 < n ∧ Nat.Coprime m n ∧
-      prismVolume A B C hv = (m : ℝ) / (n : ℝ) ∧
-      m + n = 5 := by
-  sorry
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+import Mathlib.Data.Real.Basic 
+import Mathlib.Data.Real.Pi.Bounds 
+import Mathlib.Data.Nat.GCD.Basic 
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev P_space := EuclideanSpace ℝ (Fin 3) 
+namespace PrismVolumeProblem
+structure Prism (Points : Type*) where
+  A : Points
+  B : Points
+  C : Points
+  D : Points
+  E : Points
+  F : Points
+structure PrismProblemSetup extends Prism P_space where 
+  h_AE_dist : dist A E = 2
+  h_EAB_angle : ∠ E A B = Real.pi / 3
+  h_CAB_angle : ∠ C A B = Real.pi / 3
+  h_ABC_right_angle : ∠ A B C = Real.pi / 2
+  h_ABE_right_angle : ∠ A B E = Real.pi / 2
+  h_DEF_translation : D = A +ᵥ (E -ᵥ B) ∧ F = C +ᵥ (E -ᵥ B)
+noncomputable def get_len_AB (dist_AE : ℝ) (angle_EAB : ℝ) : ℝ :=
+  dist_AE * Real.cos angle_EAB
+noncomputable def get_len_BE (dist_AE : ℝ) (angle_EAB : ℝ) : ℝ :=
+  dist_AE * Real.sin angle_EAB
+noncomputable def get_len_BC (len_AB : ℝ) (angle_CAB : ℝ) : ℝ :=
+  len_AB * Real.tan angle_CAB
+noncomputable def get_area_ABC (len_AB len_BC : ℝ) : ℝ :=
+  ((1 : ℝ) / (2 : ℝ)) * len_AB * len_BC 
+noncomputable def get_volume_prism (area_ABC len_BE : ℝ) : ℝ :=
+  area_ABC * len_BE
+noncomputable def calculated_volume (_ : PrismProblemSetup) : ℝ :=
+  let dist_AE_val : ℝ := 2
+  let angle_EAB_val : ℝ := Real.pi / 3
+  let angle_CAB_val : ℝ := Real.pi / 3
+  let len_AB := get_len_AB dist_AE_val angle_EAB_val
+  let len_BE := get_len_BE dist_AE_val angle_EAB_val
+  let len_BC := get_len_BC len_AB angle_CAB_val
+  let area_ABC := get_area_ABC len_AB len_BC
+  get_volume_prism area_ABC len_BE
+theorem prism_volume_calculation_result (s : PrismProblemSetup) :
+  ∃ m n : ℕ,
+    m > 0 ∧ n > 0 ∧
+    calculated_volume s = (m : ℝ) / (n : ℝ) ∧
+    Nat.Coprime m n ∧
+    m + n = 5 := by sorry
+end PrismVolumeProblem

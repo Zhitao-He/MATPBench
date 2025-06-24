@@ -1,17 +1,18 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
--- 设 ℝ 上的欧氏空间 E，P 为"点"的类型
-variable {P : Type*} [EuclideanSpace ℝ P]
-
--- F、B 为空间中的两个点
-variable (F B : P)
-
--- 定义两点之间的距离（线段长度）
-def lengthOfLine (p₁ p₂ : P) : ℝ := dist p₁ p₂
-
--- 命题：FB 的长度为 5
-theorem problem_statement : lengthOfLine F B = 5 := by sorry
-
--- 或直接用 dist
-theorem problem_statement_direct : dist F B = 5 := by sorry
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Basic
+open scoped EuclideanGeometry
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
+variable (A B C F : P)
+def diameterA : ℝ := 8
+def diameterB : ℝ := 18
+def diameterC : ℝ := 11
+noncomputable def radiusA : ℝ := diameterA / 2
+noncomputable def radiusB : ℝ := diameterB / 2
+noncomputable def radiusC : ℝ := diameterC / 2
+axiom hF_on_circleA : dist A F = radiusA
+axiom h_collinear : Wbtw ℝ A F B
+axiom h_dist_AB : dist A B = radiusB
+theorem length_FB_eq_5 : dist F B = 5 := by
+  sorry

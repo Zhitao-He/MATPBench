@@ -1,47 +1,27 @@
-theory AngleBisectorTheorem
-imports Main HOL.Euclidean_Geometry
+theory GeometryProblem_Formalization
+  imports "HOL-Analysis.Euclidean_Space"
 begin
-
-text ‹In triangle ABC, AD bisects angle BAC and meets BC at D. 
-      DE bisects angle ADB and meets AB at E, while DF bisects angle ADC and meets AC at F.
-      EF meets AD at G. BG intersects DF at M, and CG intersects DE at N. 
-      Prove that the points M, A, and N are collinear, and MN perpendicular to AD.›
-
-locale angle_bisector_construction =
-  fixes A B C :: "real^2"
-  assumes non_collinear_ABC: "¬collinear {A, B, C}"
-  
-  fixes D :: "real^2"
-  assumes D_on_BC: "between B D C"
-  and AD_bisects_BAC: "angle B A D = angle D A C"
-  
-  fixes E :: "real^2"
-  assumes E_on_AB: "between A E B"
-  and DE_bisects_ADB: "angle A D E = angle E D B"
-  
-  fixes F :: "real^2"
-  assumes F_on_AC: "between A F C"
-  and DF_bisects_ADC: "angle A D F = angle F D C"
-  
-  fixes G :: "real^2"
-  assumes G_on_EF: "on_line_segment E F G"
-  and G_on_AD: "on_line_segment A D G"
-  
-  fixes M :: "real^2"
-  assumes M_on_BG: "on_line_segment B G M"
-  and M_on_DF: "on_line_segment D F M"
-  
-  fixes N :: "real^2"
-  assumes N_on_CG: "on_line_segment C G N"
-  and N_on_DE: "on_line_segment D E N"
-
-context angle_bisector_construction
-begin
-
-theorem M_A_N_collinear_MN_perp_AD:
-  "collinear {M, A, N} ∧ orthogonal (M - N) (A - D)"
-  sorry
-
-end
-
+type_synonym point = "real^2"
+definition on_segment :: "point ⇒ point ⇒ point ⇒ bool" where
+  "on_segment P A B ⇔ P ∈ segment A B"
+definition on_line :: "point ⇒ point ⇒ point ⇒ bool" where
+  "on_line P A B ⇔ collinear A B P"
+definition vec_angle :: "point ⇒ point ⇒ point ⇒ real" where
+  "vec_angle P Q R = (if P=Q ∨ R=Q then 0
+                      else arccos (((P-Q) inner (R-Q)) / (norm(P-Q) * norm(R-Q))))"
+definition perpendicular_lines :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
+  "perpendicular_lines P1 P2 Q1 Q2 ⇔ ((P2 - P1) inner (Q2 - Q1) = 0)"
+theorem geometric_problem_statement:
+  fixes A B C D E F G M N :: point
+  assumes
+    A_B_C_distinct: "A ≠ B ∧ B ≠ C ∧ A ≠ C" and
+    A_B_C_not_collinear: "¬ collinear A B C" and
+    D_properties: "on_segment D B C ∧ D ≠ B ∧ D ≠ C ∧ vec_angle B A D = vec_angle D A C" and
+    E_properties: "on_segment E A B ∧ E ≠ A ∧ E ≠ B ∧ vec_angle A D E = vec_angle E D B" and
+    F_properties: "on_segment F A C ∧ F ≠ A ∧ F ≠ C ∧ vec_angle A D F = vec_angle F D C" and
+    G_intersection: "on_line G E F ∧ on_line G A D" and
+    M_intersection: "on_line M B G ∧ on_line M D F" and
+    N_intersection: "on_line N C G ∧ on_line N D E"
+  shows "collinear A M N ∧ perpendicular_lines M N A D"
+oops
 end

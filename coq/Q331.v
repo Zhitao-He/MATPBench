@@ -8,16 +8,22 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section BeltAroundCircles.
+
 Variable R : realType.
 
-Theorem belt_around_three_circles_length_sum :
-  let r := 10%:R in
-  (* The configuration: three circles each of radius r, arranged in an equilateral triangle, with a belt tightly around all three. *)
+(* Radius of each circle is 10 cm *)
+Definition r := 10%:R.
+
+(* Goal: Belt length in the form a + b\pi, where a + b = 80 *)
+Theorem belt_length_property :
   exists (a b : R),
     (exists belt_length : R,
       belt_length = a + b * PI /\
-      (* belt_length is the length of a belt tightly drawn around three externally tangent circles of radius r *)
-      True) /\ (* diagram constraint placeholder *)
+      (* Belt is tightly drawn around three circles of radius r, arranged in a line or equilateral triangle *)
+      True) /\
     a + b = 80%:R.
 Proof. Admitted.
+
+End BeltAroundCircles.
 ####

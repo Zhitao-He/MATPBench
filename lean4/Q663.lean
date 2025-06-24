@@ -1,28 +1,31 @@
-import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Data.Real.Pi.Bounds
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-/-!
-# Inscribed Angle and Arc Measure Theorem
-
-Given:
-- Points D (center), T, U, V in a 2D Euclidean space P over ℝ
-- A circle Ω centered at D with radius r > 0
-- Points T, U, V lie on Ω
-- ∠UVT = 23° (angle between vectors V→U and V→T)
-
-Conclusion:
-- The central angle ∠TDU = 46°
--/
-
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [Fact (finrank ℝ P = 2)]
-
-variable (D T U V : P) (r : ℝ) (h_r_pos : 0 < r) (Ω : Sphere P D r)
-variable (hT : T ∈ Ω) (hU : U ∈ Ω) (hV : V ∈ Ω)
-variable (hU_ne_V : U ≠ V) (hT_ne_V : T ≠ V)
-
-variable (h_angle_UVT : Angle.Unoriented.angle U V T = (23 / 180) * Real.pi)
-
-theorem central_angle_is_twice_inscribed_angle :
-    Angle.Unoriented.angle T D U = (46 / 180) * Real.pi := by sorry
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+set_option autoImplicit false
+open Real EuclideanGeometry Angle
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (d : ℝ) : ℝ := d * (π / 180)
+namespace ProblemGeoCircleArc
+theorem measure_of_arc_DTU_is_46_degrees
+  (U V T D : P)
+  (C : Sphere P)
+  (h_center_is_D : C.center = D)
+  (hT_on_C : T ∈ C)
+  (hU_on_C : U ∈ C)
+  (hV_on_C : V ∈ C)
+  (hD_ne_V : D ≠ V)
+  (hU_ne_V : U ≠ V)
+  (hT_ne_V : T ≠ V)
+  (hD_ne_U : D ≠ U)
+  (hD_ne_T : D ≠ T)
+  (h_radius_pos : 0 < C.radius)
+  (h_angle_UVT_value : ∠ U V T = degToRad 23) :
+  ∠ T D U = degToRad 46 :=
+by
+  sorry
+end ProblemGeoCircleArc

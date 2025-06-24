@@ -6,30 +6,33 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section CircleDiagram.
+Local Open Scope ring_scope.
+
+Section Circle_Diagram.
 
 Variable R : realType.
 
-Variables A B C D E F G H J K : 'rV[R]_2.
+Record point := Point { px : R; py : R }.
 
-Hypothesis circle_center : forall P : 'rV[R]_2,
-  (exists r : R, r > 0 /\ (norm (P - D) = r <-> P \in [set B; C; J])).
+Variables A B C D : point.
 
-Hypothesis A_on_circle : norm (A - D) = norm (B - D).
+(* Hypothesis: D is the center of the circle, and A, B, C lie on the circle *)
+Hypothesis circle_center :
+  (norm (A - D) = norm (B - D)) /\ (norm (B - D) = norm (C - D)).
 
-Hypothesis B_on_circle : norm (B - D) = norm (C - D).
-
-Hypothesis C_on_circle : norm (C - D) = norm (J - D).
-
-Hypothesis square_vertices :
-  F - A = G - F /\ G - H = H - C /\ F - H = A - C /\ G - C = F - B.
-
+(* Hypothesis: Points A, B, C are distinct from each other and from D *)
 Hypothesis points_distinct :
   A <> B /\ B <> C /\ C <> A /\ D <> A /\ D <> B /\ D <> C.
 
+(* Theorem: Prove that angle ABC is 90 degrees (pi/2 radians) *)
 Theorem angle_ABC_right :
   angleR (A - B) (C - B) = PI / 2.
-Proof. Admitted.
+Proof.
+  (* Proof steps would involve:
+     1. Using the properties of the circle and the fact that D is the center.
+     2. Using the properties of perpendicular lines to show angle ABC is 90 degrees.
+  *)
+  Admitted.
 
-End CircleDiagram.
+End Circle_Diagram.
 ####

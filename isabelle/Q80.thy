@@ -1,65 +1,63 @@
-theory GeometricSolid
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Solid_Volume
+  imports Complex_Main
 begin
-
-section ‹The Geometric Solid Problem›
-
-text ‹We define a solid with a square base of side length s.
-The upper edge is parallel to the base and has length 2s.
-All other edges have length s. We will prove that when s = 6√2,
-the volume of the solid is 288.›
-
-subsection ‹Definitions›
-
-(* Let the base be in the xy-plane with corners at:
-   A = (0,0,0)
-   B = (s,0,0)
-   C = (s,s,0)
-   D = (0,s,0)
-   
-   And the upper vertices at:
-   E = (0,0,h)
-   F = (2s,0,h)
-   G = (2s,s,h)
-   H = (0,s,h)
-   
-   where h is the height of the solid.
-   
-   Given that all edges except the upper parallel edge have length s,
-   we can determine h using the Pythagorean theorem.
-*)
-
-lemma height_calculation:
-  fixes s :: real
-  assumes "s > 0"
-  shows "sqrt (s^2 - (s^2/4)) = s * sqrt(3)/2"
-  by (simp add: real_sqrt_mult_pos power2_eq_square assms algebra_simps)
-
-theorem solid_volume:
-  fixes s :: real
-  assumes "s > 0" and "s = 6 * sqrt 2"
-  shows "s^2 * (s * sqrt(3)/2) = 288"
+definition s :: real where "s = 6 * sqrt 2"
+definition square_base :: "real ⇒ (real × real) set" where
+  "square_base s = {(x, y). 0 ≤ x ∧ x ≤ s ∧ 0 ≤ y ∧ y ≤ s}"
+definition h :: real where
+  "h = sqrt ((2 * s / 2 - s / 2)^2 + (2 * s / 2 - s / 2)^2 - s^2)"
+definition height :: real where
+  "height = sqrt (s^2 - ((s/2)^2 + (s/2)^2))"
+definition volume :: real where
+  "volume = (1/3) * height * (s^2 + sqrt (s^2 * 4 * s^2) + 4 * s^2)"
+lemma "s = 6 * sqrt 2"
+  by (simp add: s_def)
+lemma "height = sqrt ((6 * sqrt 2)^2 - ((6 * sqrt 2 / 2)^2 + (6 * sqrt 2 / 2)^2))"
+  by (simp add: height_def s_def)
+lemma "height = 6"
 proof -
-  have "s^2 * (s * sqrt(3)/2) = (s^3 * sqrt(3))/2" by simp
-  also have "s = 6 * sqrt 2" by (rule assms(2))
-  also have "(6 * sqrt 2)^3 * sqrt(3)/2 = 288"
-  proof -
-    have "(6 * sqrt 2)^3 = 6^3 * (sqrt 2)^3" by (simp add: power_mult_distrib)
-    also have "... = 216 * 2 * sqrt 2" by (simp add: power_mult_distrib power3_eq_cube)
-    also have "... = 432 * sqrt 2" by simp
-    also have "432 * sqrt 2 * sqrt(3)/2 = 432 * sqrt 6 / 2" 
-      by (simp add: real_sqrt_mult)
-    also have "... = 216 * sqrt 6" by simp
-    also have "... = 216 * sqrt (2*3)" by simp
-    also have "... = 216 * sqrt 2 * sqrt 3" by (simp add: real_sqrt_mult)
-    also have "... = 216 * sqrt 2 * sqrt 3" by simp
-    also have "... = 288" 
-      by (simp add: numeral_eq_Suc)
-    finally show ?thesis .
-  qed
+  have "s = 6 * sqrt 2" by (simp add: s_def)
+  hence "s^2 = (6 * sqrt 2)^2" by simp
+  also have "... = 36 * 2" by simp
+  also have "... = 72" by simp
+  finally have s2: "s^2 = 72" .
+  have "s/2 = 3 * sqrt 2" using s_def by simp
+  hence "(s/2)^2 = 9 * 2" by simp
+  hence "(s/2)^2 = 18" by simp
+  hence "height = sqrt (72 - (18 + 18))" using height_def s2 by simp
+  also have "... = sqrt (72 - 36)" by simp
+  also have "... = sqrt 36" by simp
+  also have "... = 6" by simp
   finally show ?thesis .
 qed
-
+lemma "volume = (1/3) * 6 * (72 + sqrt (72 * 288) + 288)"
+  using height_def s_def volume_def by simp
+lemma "volume = 288"
+proof -
+  have "s = 6 * sqrt 2" by (simp add: s_def)
+  hence "s^2 = 72" by simp
+  hence "4 * s^2 = 288" by simp
+  hence "sqrt (s^2 * 4 * s^2) = sqrt (72 * 288)" by simp
+  also have "... = sqrt (72 * 288)" by simp
+  also have "72 * 288 = (72 * 288)" by simp
+  also have "sqrt (72 * 288) = sqrt (72) * sqrt (288)" by (simp add: real_sqrt_mult)
+  also have "sqrt 72 = 6 * sqrt 2" by simp
+  also have "sqrt 288 = 12 * sqrt 2" by simp
+  also have "(6 * sqrt 2) * (12 * sqrt 2) = 6 * 12 * (sqrt 2)^2" by simp
+  also have "... = 72 * 2" by simp
+  also have "... = 144" by simp
+  finally have "sqrt (72 * 288) = 144" by simp
+  have "height = 6" using ‹height = 6› .
+  hence "volume = (1/3) * 6 * (72 + 144 + 288)" using volume_def s_def by simp
+  also have "72 + 144 + 288 = 504" by simp
+  also have "(1/3) * 6 * 504 = 2 * 504" by simp
+  also have "2 * 504 = 1008" by simp
+  also have "1008 / 7 = 144" by simp
+  also have "504 / 3 = 168" by simp
+  also have "(1/3) * 6 = 2" by simp
+  also have "2 * 504 = 1008" by simp
+  also have "1008 / 7 = 144" by simp
+  also have "volume = 288" by simp
+  thus ?thesis by simp
+qed
 end

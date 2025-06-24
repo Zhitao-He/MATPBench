@@ -1,39 +1,29 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-
--- We work in a 2-dimensional Euclidean affine space over ℝ
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [FiniteDimensional ℝ V] [Fact (FiniteDimensional.finrank ℝ V = 2)]
-
-/-- Definition of an axis-aligned square in the plane,
-    given by four points in cyclic order and side length s. -/
-def IsSquare (A B C D : P) (s : ℝ) : Prop :=
-  dist A B = s ∧
-  dist B C = s ∧
-  dist C D = s ∧
-  dist D A = s ∧
-  -- All angles are right angles (π/2)
-  angle D A B = Real.pi / 2 ∧
-  angle A B C = Real.pi / 2 ∧
-  angle B C D = Real.pi / 2 ∧
-  angle C D A = Real.pi / 2
-
-/-- The main theorem about two squares with given conditions. -/
-theorem squares_area_equal
-    (A B C D E F G H J : P)
-    (s₁ s₂ : ℝ)
-    (shadedRegionArea : ℝ)
-    (h_s₁_pos : s₁ > 0)
-    (h_s₂_pos : s₂ > 0)
-    (h_ABCD_sq : IsSquare A B C D s₁)
-    (h_EFGH_sq : IsSquare E F G H s₂)
-    (h_BECH_collinear : Collinear ℝ ({B, E, C, H} : Set P))
-    (h_J_mid_GH : J = midpoint ℝ G H)
-    (h_ACJ_collinear : Collinear ℝ ({A, C, J} : Set P))
-    (h_J_ne_A : J ≠ A)
-    (h_J_ne_C : J ≠ C)
-    (h_shaded_frac : shadedRegionArea / (s₁^2 + s₂^2) = 5/16)
-    (h_shaded_nonneg : shadedRegionArea ≥ 0) :
-    s₁^2 = s₂^2 := by sorry
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.Convex.Between
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry Real
+abbrev P := EuclideanSpace ℝ (Fin 2)
+structure IsSquare' (A B C D : P) : Prop where
+  side_AB_eq_BC : dist A B = dist B C
+  side_BC_eq_CD : dist B C = dist C D
+  side_CD_eq_DA : dist C D = dist D A
+  angle_A : ∠ A B C = (π / 2)
+  side_pos : dist A B > 0
+noncomputable def areaOfSquare (A B _ _ : P) : ℝ :=
+  (dist A B) ^ 2
+noncomputable def triangleArea (p1 p2 p3 : P) : ℝ :=
+  (1/2 : ℝ) * abs (((p2 -ᵥ p1) 0 * (p3 -ᵥ p1) 1) - ((p2 -ᵥ p1) 1 * (p3 -ᵥ p1) 0))
+theorem squares_equal_area
+  (A B C D E F G H J : P)
+  (h_sqABCD : IsSquare' A B C D)
+  (h_sqEFGH : IsSquare' E F G H)
+  (h_bec : Wbtw ℝ B E C)
+  (h_ech : Wbtw ℝ E C H)
+  (h_acj : Wbtw ℝ A C J)
+  (h_j_mid : J = midpoint ℝ G H)
+  (h_shaded : (triangleArea A D C + triangleArea C H J) / (areaOfSquare A B C D + areaOfSquare E F G H) = 5 / 16)
+  : areaOfSquare A B C D = areaOfSquare E F G H := by
+  sorry

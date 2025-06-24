@@ -1,51 +1,19 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Data.Real.Pi.Bounds 
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open Real
-
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
 namespace ArcLengthProblem
-
-/-!
-### Problem Setup:
-
-Given:  
-- Circle with center `O`
-- Points `A` and `B` on the circle, with `OA = 3`
-- ∠AOB = 45°
-- Find the length of the minor arc ⌒OBA.
--/
-
--- The circle's radius
+open Real EuclideanGeometry
+open scoped EuclideanGeometry 
+abbrev P := EuclideanSpace ℝ (Fin 2)
 def radius : ℝ := 3
-
--- Central angle in radians: 45° = π/4
-def centralAngle : ℝ := π / 4
-
--- Euclidean space setup
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Points O (center), A, B on the circle
-variable (O A B : P)
-
--- Geometric configuration
-structure Geometry where
-  dist_AO : dist A O = radius
-  dist_BO : dist B O = radius
-  angle_AOB : ∠ A O B = centralAngle
-  A_ne_O : A ≠ O
-  B_ne_O : B ≠ O
-
-variable (geom : Geometry O A B)
-
--- Arc length formula
-def arcLength : ℝ := radius * centralAngle
-
--- The required arc length is 3π/4
-theorem arc_length_value : arcLength = 3 * π / 4 := by
-  unfold arcLength centralAngle radius
-  ring
-
+noncomputable def angleAOB : ℝ := 45 * (Real.pi / 180)  
+noncomputable def arcLengthOBA (O A B : P) (_ : dist O A = radius)
+    (_ : dist O B = radius) (_ : ∠ A O B = angleAOB) : ℝ :=
+  radius * angleAOB
+theorem arcLengthOBA_eq {O A B : P} (h1 : dist O A = radius)
+    (h2 : dist O B = radius) (h3 : ∠ A O B = angleAOB) :
+    arcLengthOBA O A B h1 h2 h3 = 3 * Real.pi / 4 := by
+  sorry
 end ArcLengthProblem

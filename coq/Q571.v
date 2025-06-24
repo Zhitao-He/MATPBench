@@ -1,2 +1,34 @@
-#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Section Arc_BFA_Theorem. Variable R : realType. Variables A B C D F G : R^2. Hypothesis circle_center_B : forall x : R^2, x \in [set A; C; D; F; G] -> norm (x - B) = norm (A - B). Hypothesis C_between_CG : exists r : R, r > 0 /\ C = B + r * 'e_2 /\ G = B - r * 'e_2. Hypothesis angle_DBC_55 : angle (D - B) (C - B) = 55%:R. Hypothesis angle_FBG_35 : angle (F - B) (G - B) = 35%:R. Hypothesis points_on_circle : uniq [:: A; C; D; F; G] /\ all (fun x => norm (x - B) == norm (A - B)) [:: A; C; D; F; G]. Definition measure_arc (O P Q : R^2) : R := let theta := angle (P - O) (Q - O) in theta * (180 / PI). Lemma arc_BFA : measure_arc B F A = 360 - (55 + 35). Proof. by [] Qed. End Arc_BFA_Theorem.
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry angles.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Local Open Scope ring_scope.
+
+Variable R : realType.
+
+Variables A B C D F G : 'rV[R]_2.
+Variable x : R.
+
+Hypothesis H_CBD : angle C B D = 55%:R.
+Hypothesis H_FBG : angle F B G = 35%:R.
+Hypothesis H_center_B : forall P, on_circle P B -> norm (P - B) = norm (A - B).
+
+Theorem measure_arc_BFA : measure_arc B F A = 270%:R.
+Proof.
+  (* Using vertical angles and angle addition *)
+  have H_vertical : angle C B D = angle G B A by apply: vertical_angle.
+  have H_angle_sum : angle F B G + angle G B A = 180%:R by apply: angle_addition.
+  rewrite H_FBG H_vertical in H_angle_sum.
+  (* Using round angle property *)
+  have H_round : angle F B A + angle A B F = 180%:R by apply: round_angle.
+  (* Using arc property and center angle *)
+  have H_arc_center : measure_arc B F A = 360%:R - (angle C B D + angle F B G) by apply: arc_property_center_angle.
+  rewrite H_CBD H_FBG in H_arc_center.
+  (* Solve for arc BFA *)
+  by rewrite H_arc_center; field.
+Qed.
 ####

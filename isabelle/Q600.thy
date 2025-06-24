@@ -1,28 +1,20 @@
-theory GeometryProblem
-imports 
-  Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem_2024_06_10
+  imports Main
 begin
-
-(* 定义几何场景中的关键点 *)
-locale geometry_diagram =
-  fixes A D G H J K :: "real^2"
-  
-  (* 已知条件：∠ADK=96° *)
-  assumes angle_ADK: "angle (A - D) (K - D) = pi * 96 / 180"
-  
-  (* 已知条件：∠HGJ=42° *)
-  and angle_HGJ: "angle (H - G) (J - G) = pi * 42 / 180"
-  
-  (* 已知条件：GA∥HD *)
-  and GA_parallel_HD: "parallel (G - A) (H - D)"
-
-(* 以下是我们要证明的结果 *)
-theorem (in geometry_diagram) 
-  shows "angle (G - H) (D - H) = pi * 42 / 180"
-  (* 结论：∠GHD = 42° *)
-  using angle_HGJ GA_parallel_HD
-  by (metis angle_alternate_interior_in_parallel)
-  (* 这里应用了平行线的内错角相等性质 *)
-
+typedecl Point
+definition collinear :: "Point ⇒ Point ⇒ Point ⇒ bool" where
+  "collinear A B C ≡ ∃l. (A ≠ B ∧ B ≠ C ∧ A ≠ C) ∧ (A ∈ l ∧ B ∈ l ∧ C ∈ l)"
+locale parallel_lines =
+  fixes A B C D :: Point
+  assumes parallel: "¬ collinear A B C ∧ ¬ collinear B C D ∧ (∃l₁ l₂. (A ∈ l₁ ∧ B ∈ l₁) ∧ (C ∈ l₂ ∧ D ∈ l₂) ∧ (∀P Q. (P ∈ l₁ ∧ Q ∈ l₂) ⟶ (¬ (∃R. collinear P Q R ∧ R ≠ P ∧ R ≠ Q))))"
+consts
+  angle :: "Point ⇒ Point ⇒ Point ⇒ real"  ("∠ _ _ _")
+consts
+  A B C D E F G H I J K L M :: Point
+axiomatization where
+  angle_ADK: "angle A D K = 96" and
+  angle_HGJ: "angle H G J = 42" and
+  parallel_GA_HD: "∃l₁ l₂. (G ∈ l₁ ∧ A ∈ l₁) ∧ (H ∈ l₂ ∧ D ∈ l₂) ∧ (∀P Q. (P ∈ l₁ ∧ Q ∈ l₂) ⟶ (¬ (∃R. collinear P Q R ∧ R ≠ P ∧ R ≠ Q)))"
+definition goal :: "bool" where
+  "goal ≡ angle G H D = 42"
 end

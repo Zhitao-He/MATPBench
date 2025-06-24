@@ -8,30 +8,27 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Section Circle_Chord_Secant.
+Section CirclePowerTheorem.
 
 Variable R : realType.
+Variables A F E : 'rV[R]_2.
+Variable x : R.
 
-Variables A B C D E F : 'rV[R]_2.
+Hypothesis H_FB : `|F - B| = 9.
+Hypothesis H_FC : `|F - C| = 6.
+Hypothesis H_FD : `|F - D| = 6.
+Hypothesis H_FE : `|F - E| = x.
+Hypothesis H_circle_center_A : forall P, on_circle P A <-> `|P - A| = `|F - A|.
 
-Hypothesis on_circle : exists O r,
-    O ≠ B /\ O ≠ C /\ O ≠ D /\ O ≠ E /\
-    dist O B = r /\
-    dist O C = r /\
-    dist O D = r /\
-    dist O E = r.
+Theorem find_x_value : x = 4.
+Proof.
+  (* Using power of a point theorem *)
+  have H_power : `|F - E| * `|F - B| = `|F - C| * `|F - D| by apply: circle_property_circular_power_chord_and_chord.
+  rewrite H_FB H_FC H_FD in H_power.
+  (* Solve for x *)
+  have H_eq : x * 9 = 6 * 6 by field in H_power.
+  by rewrite H_eq; field.
+Qed.
 
-Hypothesis F_on_BE : between E F B.
-Hypothesis F_on_CD : between C F D.
-
-Hypothesis FB_9 : dist F B = 9.
-Hypothesis EF_x : exists x : R, dist E F = x.
-Hypothesis FC_6 : dist F C = 6.
-Hypothesis FD_6 : dist F D = 6.
-
-Theorem value_x_eq_4 :
-  exists x : R, dist E F = x /\ x = 4.
-Proof. Admitted.
-
-End Circle_Chord_Secant.
+End CirclePowerTheorem.
 ####

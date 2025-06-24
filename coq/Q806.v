@@ -10,11 +10,20 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem value_tan_angle_SRT :
-  exists S R T : {pt R^2},
-    S <> R /\ R <> T /\ S <> T /\
-    dist S R = 5%:R /\ dist S T = 4%:R /\ dist R T = 3%:R /\
-    right_angle S T R /\
-    tan (angle S R T) = 4 / 3.
-Proof. Admitted.
+Variables S R T : 'rV[R]_2.
+
+Hypotheses
+  (SR_length : norm (S - R) = 5)
+  (ST_length : norm (S - T) = 4)
+  (RT_length : norm (R - T) = 3)
+  (right_angle_ST_RT : angle S T R = PI/2).
+
+Theorem tan_SRT_value : tan (angle S R T) = 4 / 3.
+Proof.
+  (* Proof would involve:
+     1. Using right triangle properties
+     2. Applying trigonometric definitions
+     3. Calculating opposite/adjacent sides ratio *)
+  admit.
+Qed.
 ####

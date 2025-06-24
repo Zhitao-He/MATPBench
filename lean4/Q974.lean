@@ -1,49 +1,52 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.Geometry.Euclidean.Reflection
-import Mathlib.Geometry.Euclidean.Projection
-
-set_option autoImplicit false
-
-noncomputable section PutnamGeometryProblem
-
-open Real EuclideanGeometry InnerProductSpace
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [FiniteDimensional ℝ V] [Fact (finrank ℝ V = 2)]
-
-variable (A B C D E Y X J : P)
-
-variable (h_ABC_nd : ¬ Collinear ℝ ({A, B, C} : Set P))
-
-def O_ABC_def : P := circumcenter A B C
-def r_ABC_def : ℝ := circumradius A B C
-def circumcircle_ABC_def : Sphere P := Sphere.mk (O_ABC_def A B C) (r_ABC_def A B C)
-
-variable (h_A_right_angle : inner (B -ᵥ A) (C -ᵥ A) = (0 : ℝ))
-variable (h_A_ne_D : A ≠ D)
-variable (h_AD_tangent : line[ℝ, A, D] h_A_ne_D = TangentLine (circumcircle_ABC_def A B C) A)
-variable (h_B_ne_C : B ≠ C)
-variable (h_D_on_BC_ext : Collinear ℝ ({B, C, D} : Set P) ∧ D ∉ segment ℝ B C)
-variable (h_E_reflect : E = reflection (line[ℝ, B, C] h_B_ne_C) A)
-variable (h_B_ne_E : B ≠ E)
-variable (h_AY_perp_BE : Y = orthogonalProjection (line[ℝ, B, E] h_B_ne_E) A)
-variable (h_X_mid_AY : X = midpoint ℝ A Y)
-variable (h_J_on_circ_ABC : J ∈ circumcircle_ABC_def A B C)
-variable (h_B_ne_X : B ≠ X)
-variable (h_J_on_line_BX : Collinear ℝ ({B, X, J} : Set P))
-variable (h_J_ne_B : J ≠ B)
-variable (h_AJD_nd : ¬ Collinear ℝ ({A, J, D} : Set P))
-
-def O_AJD_def : P := circumcenter A J D
-def r_AJD_def : ℝ := circumradius A J D
-def circumcircle_AJD_def : Sphere P := Sphere.mk (O_AJD_def A J D) (r_AJD_def A J D)
-
-variable (h_B_ne_D : B ≠ D)
-theorem putnam_geo_tangent_theorem :
-  line[ℝ, B, D] h_B_ne_D = TangentLine (circumcircle_AJD_def A J D) D := by sorry
-
-end PutnamGeometryProblem
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+open AffineSubspace Affine FiniteDimensional
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def lineThrough (A B : P) : AffineSubspace ℝ P := affineSpan ℝ {A, B}
+def Perpendicular (l₁ l₂ : AffineSubspace ℝ P) : Prop :=
+  ∃ p₁ p₂ q₁ q₂ : P, p₁ ∈ l₁ ∧ p₂ ∈ l₁ ∧ q₁ ∈ l₂ ∧ q₂ ∈ l₂ ∧
+    p₁ ≠ p₂ ∧ q₁ ≠ q₂ ∧ inner ℝ (p₂ -ᵥ p₁) (q₂ -ᵥ q₁) = 0
+noncomputable def circumcenter (A B C : P) : P := sorry
+noncomputable def reflection (l : AffineSubspace ℝ P) (p : P) : P := sorry
+namespace Lean4ProblemFormalization
+def IsTangentToSphere (l : AffineSubspace ℝ P) (S : EuclideanGeometry.Sphere P) (p₀ : P) : Prop :=
+  p₀ ∈ l ∧ p₀ ∈ S ∧ Perpendicular (lineThrough S.center p₀) l
+theorem right_triangle_tangent_circumcircle_problem
+    (A B C D E Y X J : P)
+    (h_ABC_not_collinear : ¬ Collinear ℝ ({A, B, C} : Set P))
+    (h_angle_BAC_is_right : EuclideanGeometry.angle B A C = Real.pi / 2)
+    (h_A_ne_D : A ≠ D)
+    (h_AD_tangent_circABC : IsTangentToSphere
+      (lineThrough A D)
+      (EuclideanGeometry.Sphere.mk
+        (circumcenter A B C)
+        (dist (circumcenter A B C) A)) A)
+    (h_D_on_extension_BC : Sbtw ℝ B C D ∨ Sbtw ℝ C B D)
+    (h_E_is_reflection_A_over_BC : E =
+      reflection (lineThrough B C) A)
+    (h_A_ne_Y : A ≠ Y)
+    (h_B_ne_E : B ≠ E)
+    (h_Y_on_line_BE : Y ∈ lineThrough B E)
+    (h_AY_perpendicular_BE : Perpendicular
+      (lineThrough A Y)
+      (lineThrough B E))
+    (h_X_is_midpoint_AY : X = midpoint ℝ A Y)
+    (h_B_ne_X : B ≠ X)
+    (h_J_on_circABC : J ∈ EuclideanGeometry.Sphere.mk
+      (circumcenter A B C)
+      (dist (circumcenter A B C) A))
+    (h_J_on_line_BX : J ∈ lineThrough B X)
+    (h_J_not_B : J ≠ B)
+    (h_AJD_not_collinear : ¬ Collinear ℝ ({A, J, D} : Set P))
+    : IsTangentToSphere (lineThrough B D)
+        (EuclideanGeometry.Sphere.mk
+          (circumcenter A J D)
+          (dist (circumcenter A J D) A)) D
+    := by sorry
+end Lean4ProblemFormalization

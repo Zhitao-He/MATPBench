@@ -1,63 +1,46 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-open Real EuclideanSpace InnerProductSpace Angle -- For `∠`, `dist`, etc.
-
-namespace InscribedQuadrilateralSymmetry
-
--- Setup: V is a finite-dimensional real inner product space, P is the corresponding affine space.
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Let O be the center and r > 0 the radius of the circle (sphere in general).
-variable {O : P} {r : ℝ}
-variable {A B C D E F G : P}
-
-variable (hr : 0 < r)
-
--- A, B, C, D, F, G lie on the circle centered at O with radius r.
-variable (hA : A ∈ Metric.sphere O r)
-variable (hB : B ∈ Metric.sphere O r)
-variable (hC : C ∈ Metric.sphere O r)
-variable (hD : D ∈ Metric.sphere O r)
-variable (hF : F ∈ Metric.sphere O r)
-variable (hG : G ∈ Metric.sphere O r)
-
--- All vertices of ABCD are distinct; diagonals do not meet at a vertex
-variable (hAB : A ≠ B)
-variable (hBC : B ≠ C)
-variable (hCD : C ≠ D)
-variable (hDA : D ≠ A)
-variable (hAC : A ≠ C)
-variable (hBD : B ≠ D)
-
--- E is inside the (convex hull of) quadrilateral; and not equal to any vertex
-variable (hE_inside : E ∈ interior (convexHull ℝ {A, B, C, D}))
-variable (hEA : E ≠ A)
-variable (hEB : E ≠ B)
-variable (hEC : E ≠ C)
-variable (hED : E ≠ D)
-
--- Angle conditions
-variable (h_angle1 : ∠ E A B = ∠ E C D)
-variable (h_angle2 : ∠ E B A = ∠ E D C)
-
--- B, E, C are not collinear (so angle BEC is defined)
-variable (h_BEC : ¬ Collinear ℝ ({B, E, C} : Set P))
-
--- F, E, G are collinear and E is strictly between F and G
-variable (h_sbtw : Sbtw ℝ F E G)
-
--- The line FG through E bisects angle BEC:
--- that is, EF is along the angle bisector of ∠BEC, so ∠BEF = ∠CEF
-variable (h_bisect : ∠ B E F = ∠ C E F)
-
--- Theorem: EF = EG
-theorem dist_EF_eq_EG
-    [Nonempty P]
-    : dist E F = dist E G :=
-  by
-    sorry
-
-end InscribedQuadrilateralSymmetry
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open EuclideanGeometry Real InnerProductSpace Angle
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable instance : NormedAddTorsor P P := inferInstance
+noncomputable def instEuclid : InnerProductSpace ℝ P := inferInstance
+theorem inscribed_quadrilateral_angle_bisector_property
+  (O A B C D E F G : P)
+  (r : ℝ)
+  (ω : EuclideanGeometry.Sphere P)
+  (hr_pos : 0 < r)
+  (hω_center : ω.center = O)
+  (hω_radius : ω.radius = r)
+  (hA_ne_B : A ≠ B)
+  (hB_ne_C : B ≠ C)
+  (hC_ne_D : C ≠ D)
+  (hD_ne_A : D ≠ A)
+  (hA_ne_C : A ≠ C)
+  (hB_ne_D : B ≠ D)
+  (hA_on_ω : A ∈ ω)
+  (hB_on_ω : B ∈ ω)
+  (hC_on_ω : C ∈ ω)
+  (hD_on_ω : D ∈ ω)
+  (hE_ne_A : E ≠ A)
+  (hE_ne_B : E ≠ B)
+  (hE_ne_C : E ≠ C)
+  (hE_ne_D : E ≠ D)
+  (hE_inside_ω : dist E O < r)
+  (h_angle_EAB_eq_ECD : EuclideanGeometry.angle E A B = EuclideanGeometry.angle E C D)
+  (h_angle_EBA_eq_EDC : EuclideanGeometry.angle E B A = EuclideanGeometry.angle E D C)
+  (h_collinear_FEG : Collinear ℝ ({F, E, G} : Set P))
+  (hF_on_ω : F ∈ ω)
+  (hG_on_ω : G ∈ ω)
+  (hF_ne_E : F ≠ E)
+  (hG_ne_E : G ≠ E)
+  (hF_ne_G : F ≠ G)
+  (h_BEC_non_collinear : ¬ Collinear ℝ ({B, E, C} : Set P))
+  (h_FG_bisects_BEC : EuclideanGeometry.angle B E F = EuclideanGeometry.angle C E F)
+  :
+  dist E F = dist E G :=
+by
+  sorry

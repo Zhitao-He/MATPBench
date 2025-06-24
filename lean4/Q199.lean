@@ -1,29 +1,26 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
-
-open Real
-open AffineSubspace
-
-namespace EuclideanGeometryProblem
-
-variable {P : Type*}
-  [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-  [Fact (FiniteDimensional.finrank ℝ P = 2)]
-
-variable (A B C D : P)
-
-variable (hA_ne_D : A ≠ D)
-variable (hB_ne_C : B ≠ C)
-variable (h_parallel : line[ℝ, A, D] ∥ line[ℝ, B, C])
-variable (hA_ne_B : A ≠ B)
-variable (h_not_collinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
-variable (h_not_collinear_ADC : ¬ Collinear ℝ ({A, D, C} : Set P))
-
-theorem angle_DAB_eq_pi_div_3 :
-    EuclideanGeometry.angle D A B = π / 3 := by
-  sorry
-
-end EuclideanGeometryProblem
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.Convex.Side
+open Real EuclideanGeometry
+open Affine AffineSubspace
+open Convex
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (d : ℝ) : ℝ := d * Real.pi / 180
+theorem angle_2_equals_60_degrees
+  (A B C D X : P)
+  (h_AD_parallel_BC : (affineSpan ℝ {A, D}) ∥ (affineSpan ℝ {B, C}))
+  (h_BAC_angle : EuclideanGeometry.angle B A C = degToRad 78)
+  (h_ACB_angle : EuclideanGeometry.angle A C B = degToRad 42)
+  (h_sbtw_XAB : Sbtw ℝ X A B)
+  (h_A_ne_D : A ≠ D)
+  (h_B_ne_C : B ≠ C)
+  (h_noncollinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (h_noncollinear_XAD : ¬ Collinear ℝ ({X, A, D} : Set P))
+  (h_noncollinear_DAB : ¬ Collinear ℝ ({D, A, B} : Set P))
+  (h_DC_sameside_AB : (affineSpan ℝ {A, B}).SSameSide D C)
+  : EuclideanGeometry.angle X A D = degToRad 60 := by sorry

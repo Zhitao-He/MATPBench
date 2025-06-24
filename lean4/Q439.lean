@@ -1,44 +1,36 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open EuclideanGeometry
-open Real
-
-namespace SohomDarlnimSylviaGeometry
-
-variable (B E R K C A L I T O W N : EuclideanPlane)
-
-def sideLenBERK : ℝ := 10
-
-structure IsSquare (p1 p2 p3 p4 : EuclideanPlane) : Prop where
-  side12_positive : dist p1 p2 > 0
-  side23_eq_side12 : dist p2 p3 = dist p1 p2
-  side34_eq_side12 : dist p3 p4 = dist p1 p2
-  side41_eq_side12 : dist p4 p1 = dist p1 p2
-  angle_at_p1 : Angle.angle p4 p1 p2 = π / 2
-  angle_at_p2 : Angle.angle p1 p2 p3 = π / 2
-  angle_at_p3 : Angle.angle p2 p3 p4 = π / 2
-  angle_at_p4 : Angle.angle p3 p4 p1 = π / 2
-
-hypothesis hBERK_is_square : IsSquare B E R K
-hypothesis hBERK_side_length_is_10 : dist B E = sideLenBERK
-
-hypothesis hT_is_midpoint_BE : T = midpoint ℝ B E
-hypothesis hO_is_midpoint_ER : O = midpoint ℝ E R
-hypothesis hW_is_midpoint_RK : W = midpoint ℝ R K
-hypothesis hN_is_midpoint_KB : N = midpoint ℝ K B
-
-hypothesis hCALI_is_square : IsSquare C A L I
-
-hypothesis hE_on_segment_CA : E ∈ segment ℝ C A
-hypothesis hR_on_segment_AL : R ∈ segment ℝ A L
-hypothesis hK_on_segment_LI : K ∈ segment ℝ L I
-hypothesis hB_on_segment_IC : B ∈ segment ℝ I C
-
-hypothesis hCA_parallel_BO : Angle.Parallel (A -ᵥ C) (O -ᵥ B)
-
-theorem area_of_CALI_is_180 : (dist C A)^2 = 180 := by
+import Mathlib.Data.Real.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+open scoped EuclideanGeometry
+open Affine AffineSubspace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def MyIsSquare (p₁ p₂ p₃ p₄ : P) : Prop :=
+  let side := dist p₁ p₂
+  side > 0 ∧
+  dist p₂ p₃ = side ∧
+  dist p₃ p₄ = side ∧
+  dist p₄ p₁ = side ∧
+  ∠ p₄ p₁ p₂ = Real.pi / 2
+namespace ProblemSohomDarlnimSylvia
+noncomputable def areaSquare (p₁ p₂ p₃ p₄ : P) (_hIsSquare : MyIsSquare p₁ p₂ p₃ p₄) : ℝ :=
+  dist p₁ p₂ ^ 2
+theorem areaOfCALIIs180
+  (B E R K T O W N C A L I : P)
+  (hBerkIsSquare : MyIsSquare B E R K)
+  (hBerkSideLength : dist B E = 10) 
+  (hTMidpoint : T = midpoint ℝ B E)
+  (hOMidpoint : O = midpoint ℝ E R)
+  (hWMidpoint : W = midpoint ℝ R K)
+  (hNMidpoint : N = midpoint ℝ K B)
+  (hCaliIsSquare : MyIsSquare C A L I)
+  (hEOnCA : E ∈ segment ℝ C A)
+  (hROnAL : R ∈ segment ℝ A L)
+  (hKOnLI : K ∈ segment ℝ L I)
+  (hBOnIC : B ∈ segment ℝ I C)
+  (hCaParallelBo : line[ℝ, C, A] ∥ line[ℝ, B, O])
+  : areaSquare C A L I hCaliIsSquare = 180 := by
   sorry
-
-end SohomDarlnimSylviaGeometry
+end ProblemSohomDarlnimSylvia

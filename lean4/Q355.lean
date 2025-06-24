@@ -1,5 +1,4 @@
 import Mathlib.Data.Real.Basic
-
 theorem rightHexagonalPrismLateralArea :
   let height : ℝ := 3        
   let baseEdgeInches : ℝ := 6

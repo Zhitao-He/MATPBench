@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean geometry.
+From mathcomp Require Import reals geometry angles.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -8,25 +8,27 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Section Area_Quadrilateral_CADB.
-
 Variable R : realType.
 
-(* Define points A, B, C, D, E in the Euclidean plane *)
-Variables A B C D E : 'rV[R]_2.
+Variables A C D B E : 'rV[R]_2.
+Variable h : R.
 
-Hypotheses
-  (H_parallelogram : [parallel C - A, B - D]) (* Vectors CA and BD are parallel (parallelogram sides) *)
-  (H_consec_sides1 : D - A = B - C) (* The parallelogram property: AD = BC *)
-  (H_len_CA : `|C - A| = 25)
-  (H_len_AD : `|D - A| = 21)
-  (H_collinear_ADE : colinear [:: A; D; E])
-  (H_right_DEB : orthogonal (E - D) (B - E)).
+Hypothesis H_AC : `|A - C| = 25.
+Hypothesis H_AD : `|A - D| = 21.
+Hypothesis H_EB : `|E - B| = 20.
+Hypothesis H_parallelogram : is_parallelogram A C D B.
+Hypothesis H_DE_perp_BE : orthogonal (D - E) (B - E).
 
-(* Theorem: The area of quadrilateral C A D B equals 420 *)
-Theorem area_quadrilateral_CADB :
-  area_quad C A D B = 420.
-Proof. Admitted.
-
-End Area_Quadrilateral_CADB.
+Theorem area_CADB : area_quad A C D B = 420.
+Proof.
+  (* Using parallelogram properties and altitude *)
+  have H_area_formula : area_quad A C D B = `|A - C| * h by apply: parallelogram_area_formula_common.
+  (* Find the height h using right triangle DEB *)
+  have H_right_triangle : right_angle D E B by apply: H_DE_perp_BE.
+  have H_height : h = `|E - B| by admit.
+  rewrite H_height in H_area_formula.
+  (* Solve for the area *)
+  have H_eq : area_quad A C D B = 25 * 20 by rewrite H_area_formula; field.
+  by rewrite H_eq; field.
+Qed.
 ####

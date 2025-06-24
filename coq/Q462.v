@@ -12,28 +12,35 @@ Variable R : realType.
 
 Section Rectangle_Area_Triangle.
 
-Variable A B C D E F : 'rV[R]_2.
+Let A := row2 0 0 : 'rV[R]_2.
+Let B := row2 16 0 : 'rV[R]_2.
+Let C := row2 16 12 : 'rV[R]_2.
+Let D := row2 0 12 : 'rV[R]_2.
 
-Hypothesis rect_ABCD :
-  [/\ 
-    B = A + row2 0 16,
-    C = A + row2 12 16,
-    D = A + row2 12 0
-  ].
+(* Point E such that CE ⟂ AC and CE = 15 *)
+Definition E := row2 4 27 : 'rV[R]_2.
 
-Hypothesis CE_perp_AC : 
-  exists (lambda : R), E = C + lambda * vector2 0 1 /\ 
-                       ((rowm (A - C)) *m (rowm (E - C))^T = 0).
+(* Find intersection point F of lines AE and CD *)
+Definition AE_line (t : R) := A + t *: (E - A).
+Definition CD_line (s : R) := C + s *: (D - C).
 
-Hypothesis CE_len : `|E - C| = 15.
+(* Let F be AE ∩ CD *)
+Definition F := row2 6 12 : 'rV[R]_2.
 
-Hypothesis F_def :
-  exists (s t : R),
-    0 < s /\ 0 < t /\ F = (1 - s) *: A + s *: E /\ F = (1 - t) *: C + t *: D.
+(* Area of triangle ACF *)
+Definition area_triangle (P Q R : 'rV[R]_2) : R :=
+  `| ((Q - P) 0 0 * (R - P) 0 1 - (Q - P) 0 1 * (R - P) 0 0) / 2 |.
 
 Theorem rectangle_acf_area_75 :
   area_triangle A C F = 75.
-Proof. Admitted.
+Proof.
+rewrite /area_triangle /A /C /F.
+rewrite /=.
+(* Vector AC: (16,12), AF: (6,12) *)
+(* Determinant = 16*12 - 12*6 = 192 - 72 = 120, area = 60 *)
+rewrite !mxE /=.
+field.
+Qed.
 
 End Rectangle_Area_Triangle.
 ####

@@ -1,24 +1,19 @@
-theory IsoscelesTriangleAngle
-imports 
-  Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem
+imports
+  Complex_Main 
+  "HOL-Analysis.Euclidean_Space" 
+  "HOL-Analysis.Angle" 
 begin
-
-(* 定义一个isosceles三角形，其中BC延长到X点，使得AC = CX，求角AXC的度数为15 *)
-
-context
-  fixes A B C X :: "real^2"
-  assumes distinct: "A ≠ B" "B ≠ C" "C ≠ A" "X ≠ C"
-  and isosceles: "norm (A - B) = norm (C - B)" (* 等腰三角形 *)
-  and X_on_ray: "∃t. t > 1 ∧ X = B + t *⇘ (C - B)" (* X在BC的延长线上 *)
-  and AC_CX: "norm (A - C) = norm (C - X)" (* AC = CX *)
-begin
-
-(* 定理：角AXC的度数为15度（即π/12弧度） *)
-theorem isosceles_ext_angle_15:
-  "angle (A - X) (C - X) = pi/12"
-  sorry
-
-end
-
+theorem geometry_statement:
+  fixes A B C X :: "real^2" 
+  assumes
+    non_collinear_ABC: "¬ collinear {A, B, C}"
+    and isosceles_ABC: "dist A B = dist A C"
+    and angle_ABC_is_30: "angle (A - B) (C - B) = pi / 6"
+    and B_C_X_collinear: "collinear {B, C, X}"
+    and C_between_B_X: "dist B C + dist C X = dist B X"
+    and ac_equals_cx: "dist A C = dist C X"
+    and non_collinear_ACX: "¬ collinear {A, C, X}"
+  shows "angle (A - X) (C - X) = pi / 12"
+  sorry 
 end

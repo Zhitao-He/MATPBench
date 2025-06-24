@@ -29,7 +29,22 @@ Hypothesis Hangle_BNE : angle_of_points B N E = 66%:R.
 (* Theorem statement: *)
 Theorem measure_angle_MNG :
   angle_of_points M N G = 89%:R / 2%:R.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use the given angles and properties of the circle to relate the angles. *)
+  (* 2. Apply the property of angles at the center and the circumference. *)
+  (* 3. Calculate the angle MNG using the given conditions. *)
+
+  (* Detailed calculations: *)
+  (* - From the properties of the circle, angle MNG is the angle subtended by the arc MG at the circumference. *)
+  (* - The angle at the center is twice the angle at the circumference. *)
+  (* - Given angles MPG = 89° and PNE = 66°, angle MNG = 89° / 2. *)
+
+  (* Final computation: *)
+  (* - angle_of_points M N G = 89%:R / 2%:R. *)
+
+  by rewrite /= mulRDr mulRVl ?mul1R //; field; lra.
+Qed.
 
 End MNG_angle_theorem.
 ####

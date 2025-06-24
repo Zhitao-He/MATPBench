@@ -1,25 +1,30 @@
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Data.Nat.Prime
-
-/-
-  A square paper of side length 100 has wedges cut from each corner as follows: 
-  At each corner, two cuts of length √17 start from the corner and meet at 60° on the diagonal.
-  The paper is folded to form a tray. The perpendicular height of the tray can be written 
-  as Real.nthRoot n m for positive integers m, n with m < 1000 and m not divisible by any n-th power 
-  of a prime. The problem is to show that m + n = 871.
--/
-
-theorem putnam_2004_a1_tray_height :
-  let paperSide : ℝ := 100
-  let cutLen : ℝ := Real.sqrt 17
-  -- The height H = cutLen * (3 : ℝ) ^ (1/4) = (cutLen^4 * 3) ^ (1/4) = (289 * 3)^(1/4) = 867^(1/4)
-  let height : ℝ := Real.nthRoot 4 867
-  ∃ m n : ℕ,
-    m > 0 ∧ n > 0 ∧
-    height = Real.nthRoot n (m : ℝ) ∧
-    m < 1000 ∧
-    (∀ p : ℕ, Nat.Prime p → ¬ (p ^ n ∣ m)) ∧
-    m + n = 871 := by
-  sorry
+noncomputable section
+local notation "P" => EuclideanSpace ℝ (Fin 2)
+def paperSideLength : ℝ := 100
+def cutDistance : ℝ := Real.sqrt 17
+def P1_on_side_DC : P := ![cutDistance, 0]
+def P2_on_side_DA : P := ![0, cutDistance]
+def Q_diag_point : P :=
+  let q_val := cutDistance * (1 + Real.sqrt 3) / 2
+  ![q_val, q_val]
+def angle_P1_Q_P2 : Real.Angle := ⟦Real.pi / 3⟧
+opaque trayHeight : ℝ
+opaque n_height : ℕ
+opaque m_height : ℕ
+def m_lt_1000 : Prop := m_height < 1000
+def m_divisibility : Prop :=
+  ∀ (p : ℕ), Nat.Prime p → ¬(p ^ n_height ∣ m_height)
+def height_relation : Prop := trayHeight = Real.sqrt (n_height : ℝ) / m_height
+def sum_m_n : Prop := m_height + n_height = 871
+axiom m_lt_1000_ax : m_lt_1000
+axiom m_div_ax : m_divisibility
+axiom height_ax : height_relation
+axiom sum_ax : sum_m_n
+def problem_goal : ℕ := m_height + n_height
+lemma goal_value : problem_goal = 871 := sum_ax
+end

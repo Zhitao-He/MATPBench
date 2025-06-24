@@ -8,17 +8,20 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section Semicircle_Bridge.
+
 Variable R : realType.
 
+Variables O A B C A' B' : 'rV[R]_2.
+
+Hypothesis h_semicircle : arc A C B = 180%:R.
+Hypothesis h_circle : forall P, P \\in [set A; B; C] -> dist P O = 4%:R.
+Hypothesis h_water_surface : colinear A' B' O /\ A'.2 = 1%:R /\ B'.2 = 1%:R.
+
 Theorem semicircle_water_surface_width :
-  let O := (0,0) : R * R in
-  let r := 4%:R in
-  let h := 1%:R in
-  let A' := (- sqrt 15, h) in
-  let B' := (  sqrt 15, h) in
   exists width_water : R,
-    width_water = B'.1 - A'.1 /\width_water = 2 * sqrt 15.
-Proof.
-admit.
-Qed.
+    width_water = B'.1 - A'.1 /\ width_water = 2 * sqrt 15%:R.
+Proof. Admitted.
+
+End Semicircle_Bridge.
 ####

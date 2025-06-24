@@ -1,46 +1,22 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open EuclideanGeometry
-open scoped Real
-
-noncomputable section
-
-variable {P : Type*} [EuclideanPlane P]
-
--- Points on the Euclidean plane P
-variable (O R S T U : P)
-
--- Circle properties
-variable (r : ℝ)
-variable (hr_pos : 0 < r)
-variable (hRO : dist R O = r)
-variable (hTO : dist T O = r)
-variable (hUO : dist U O = r)
-
--- Distinctness conditions
-variable (hO_ne_R : O ≠ R)
-variable (hO_ne_T : O ≠ T)
-variable (hO_ne_U : O ≠ U)
-variable (hR_ne_T : R ≠ T)
-variable (hR_ne_U : R ≠ U)
-variable (hT_ne_U : T ≠ U)
-variable (hR_ne_S : R ≠ S)
-variable (hS_ne_T : S ≠ T)
-
--- Collinearity and tangent conditions
-variable (h_col_STU : Collinear ℝ S T U)
-variable (h_tangent : ∠ O R S = Real.pi / 2)
-
--- Angle conversion and central angle
-def deg_to_rad (d : ℝ) : ℝ := d * Real.pi / 180
-
-variable (hUOT : (Angle.ofPoints U O T).value = deg_to_rad 71)
-
--- Final theorem statement
-theorem measure_angle_RST : (Angle.ofPoints R S T).value = deg_to_rad 55 := by
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2
+namespace EuclideanGeometryProblem
+open Real
+open Affine
+open scoped EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
+variable (O T R U S : PPoint)
+variable (h_dist_OT_eq_dist_OR : dist O T = dist O R)
+variable (h_dist_OU_eq_dist_OR : dist O U = dist O R)
+variable (h_radius_pos : dist O R > 0)
+variable (h_angle_TOR : inner ℝ (T -ᵥ O) (R -ᵥ O) = Real.cos (degToRad 71))
+variable (h_angle_UOR : inner ℝ (U -ᵥ O) (R -ᵥ O) = Real.cos (degToRad 179))
+variable (h_tangent_SR_at_R : inner ℝ (O -ᵥ R) (S -ᵥ R) = 0)
+variable (h_S_T_U_collinear : ∃ (k : ℝ), T -ᵥ S = k • (U -ᵥ S))
+theorem prove_angle_RST_eq_55_deg : inner ℝ (R -ᵥ S) (T -ᵥ S) = Real.cos (degToRad 55) := by
   sorry
-
-end
+end EuclideanGeometryProblem

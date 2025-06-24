@@ -1,32 +1,20 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open Real EuclideanGeometry InnerProductSpace
-
-abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
-
-namespace CircleProblem
-
--- Converts degrees to radians
-def degToRad (d : ℝ) : ℝ := d * (π / 180)
-
-/--
-Let O, P, G : EuclideanPlane.
-Suppose the circle centered at O has radius `radius > 0`, and P, G are points on that circle (i.e., dist P O = dist G O = radius).
-Suppose that PN and GA are diameters of the circle (so N = 2•O - P, A = 2•O - G).
-Given that the measure of angle GOP at the center is 78°, then the angle NGA at the circumference equals 39°.
--/
-theorem inscribedAngleIsHalfCentralAngle_special_case
-    (O P G : EuclideanPlane)
-    (radius : ℝ)
-    (h_radius_pos : 0 < radius)
-    (hP_on_circle : dist P O = radius)
-    (hG_on_circle : dist G O = radius)
-    (h_angle_GOP : Angle.unoriented (G - O) (P - O) = degToRad 78) :
-    let N := 2 • O - P
-    let A := 2 • O - G
-    Angle.unoriented (N - G) (A - G) = degToRad 39 :=
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degreesToRadians (d : ℝ) : ℝ := d * (π / 180)
+theorem inscribedAngle_from_diameter_and_central_angle
+    (O G P N A : EuclideanSpace ℝ (Fin 2))
+    (r : ℝ)
+    (hr_pos : 0 < r)
+    (hG_on_circle : G ∈ Metric.sphere O r)
+    (hP_on_circle : P ∈ Metric.sphere O r)
+    (hN_on_circle : N ∈ Metric.sphere O r)
+    (hA_on_circle : A ∈ Metric.sphere O r)
+    (hPN_diameter : O = midpoint ℝ P N)
+    (hGA_diameter : O = midpoint ℝ G A)
+    (h_angle_GOP : EuclideanGeometry.angle G O P = degreesToRadians 78)
+    : EuclideanGeometry.angle N G A = degreesToRadians 39 := by
   sorry
-
-end CircleProblem

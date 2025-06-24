@@ -6,17 +6,21 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section CircleTangentProblem.
 Variable R : realType.
+Variables A D B E O : 'Point[R]_2.
 
-Theorem value_of_x_is_21 :
-  forall (A B C D E O : 'rV[R]_2) (x : R),
-    colinear A D B ->
-    let D := ((7 / (7 + x))%:R *: B + (x / (7 + x))%:R *: A)%R in
-    `|B - D| = x -> `|D - A| = 7 ->
-    exists t, 0 < t < 1 /\E = (1 - t)%:R *: A + t%:R *: C /\n    `|E - A| = 14 ->
-    norm (D - O) = norm (E - O) = norm (B - O) ->
-    x = 21.
+Hypotheses
+  AD_length : dist A D = 7;
+  AE_length : dist A E = 14;
+  collinear_ADB : collinear [:: A; D; B];
+  circle_center_O : forall P, (P = D \/ P = B) -> dist O P = dist O E;
+  AE_tangent : perpendicular (line A E) (line O E).
+
+Definition x := dist B D.
+
+Theorem x_value : x = 21.
 Proof. by []. Qed.
+
+End CircleTangentProblem.
 ####

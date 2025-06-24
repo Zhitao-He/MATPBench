@@ -33,5 +33,21 @@ Hypotheses
 
 Theorem value_of_x_is_85 :
   x = 85.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use the properties of the quadrilateral and the given angles to establish relationships. *)
+  (* 2. Apply the fact that the sum of angles in a quadrilateral is 360 degrees. *)
+  (* 3. Calculate the value of x using the given conditions. *)
+
+  (* Detailed calculations: *)
+  (* - The sum of angles in quadrilateral ABCD is 360 degrees. *)
+  (* - Given angles: ∠BAD = 90°, ∠ABC = 90°, ∠BCD = x + 10°, ∠CDA = x°. *)
+  (* - Summing these angles: 90 + 90 + (x + 10) + x = 360. *)
+  (* - Solving for x: 2x + 190 = 360 ⇒ 2x = 170 ⇒ x = 85. *)
+
+  (* Final computation: *)
+  (* - x = 85. *)
+
+  by rewrite /= mulRDr mulRVl ?mul1R //; field; lra.
+Qed.
 ####

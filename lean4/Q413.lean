@@ -1,12 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
 namespace SemicircleProblem
-
-
 noncomputable def semiCircleArea (d : ℝ) : ℝ :=
   Real.pi * d^2 / 8
-
-
 theorem shadedArea_div_unshadedArea_eq_11_div_7 :
     ∀ (x : ℝ) (hx : 0 < x),
       let AB := x
@@ -21,5 +16,4 @@ theorem shadedArea_div_unshadedArea_eq_11_div_7 :
       let shadedArea := areaAD - unshadedArea
       shadedArea / unshadedArea = 11 / 7 :=
   by sorry
-
 end SemicircleProblem

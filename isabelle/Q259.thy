@@ -1,21 +1,22 @@
-theory SphericalSurfaceArea
-imports 
-  Complex_Main 
-  "HOL-Analysis.Analysis"
+theory Spherical_Ball_Surface_Area
+  imports 
+    "HOL-Analysis.Complex_Main" 
+    "HOL-Analysis.Floor_Ceil"   
 begin
-
-theorem sphere_surface_area:
-  fixes r :: real
-  assumes "r = 7.85" (* 根据表面积推导出半径 *)
-  shows "4 * pi * (r^2) ≈ 785"
-proof -
-  have "4 * pi * (r^2) = 4 * pi * (7.85^2)" using assms by simp
-  also have "... = 4 * pi * 61.6225" by simp
-  also have "... = 4 * 3.14159265359 * 61.6225" 
-    by (simp add: pi_approx)
-  also have "... ≈ 4 * 193.7035871" by simp
-  also have "... ≈ 774.8143485" by simp
-  finally show ?thesis by (simp add: approximate_eq_def)
-qed
-
+definition D_sphere :: real where
+  "D_sphere = 2.5"
+definition R_sphere :: real where
+  "R_sphere = D_sphere / 2.0"
+definition SA_sphere_formula :: "real => real" where
+  "SA_sphere_formula r = 4.0 * pi * (r * r)"
+definition calculated_SA_ball :: real where
+  "calculated_SA_ball = SA_sphere_formula R_sphere"
+definition given_SA_value :: real where
+  "given_SA_value = 785.0"
+definition round_real_to_nearest_int :: "real => int" where
+  "round_real_to_nearest_int x = floor (x + 0.5)"
+definition round_to_one_decimal :: "real => real" where
+  "round_to_one_decimal x = real_of_integer (round_real_to_nearest_int (x * 10.0)) / 10.0"
+definition rounded_calculated_SA_ball :: real where
+  "rounded_calculated_SA_ball = round_to_one_decimal calculated_SA_ball"
 end

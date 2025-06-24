@@ -1,21 +1,24 @@
-theory Angle_GHF_Theorem
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Angle_GHF
+  imports Main
 begin
-
-locale angle_problem =
-  fixes A C D E F G H :: "real^2"
-  assumes CE_perp_HE: "orthogonal (E - C) (E - H)"
-      and FG_perp_HG: "orthogonal (G - F) (G - H)"
-      and HC_perp_AC: "orthogonal (C - H) (C - A)"
-      and angle_EHC: "angle (E - H) (C - H) = pi/180 * 35"
-      and angle_GCH: "angle (G - C) (H - C) = pi/180 * 28"
-      and angle_HDF: "angle (H - D) (F - D) = pi/180 * 25"
-      and angle_HFG: "angle (H - F) (G - F) = pi/180 * 51"
-
-theorem angle_GHF:
-  shows "angle (G - H) (F - H) = pi/180 * 39"
+typedecl Point
+consts
+  angle :: "Point ⇒ Point ⇒ Point ⇒ real" ("∠ _ _ _")
+  Perpendicular :: "Point ⇒ Point ⇒ Point ⇒ Point ⇒ bool"
+consts A B C D E F G H :: Point
+axiomatization
+where
+  angle_EHC: "angle E H C = 35" and
+  angle_GCH: "angle G C H = 28" and
+  angle_HDF: "angle H D F = 25" and
+  angle_HFG: "angle H F G = 51" and
+  CE_perp_HE: "Perpendicular C E H E" and
+  FG_perp_HG: "Perpendicular F G H G" and
+  HC_perp_AC: "Perpendicular H C A C"
+definition angle_GHF :: real where
+  "angle_GHF = angle G H F"
+theorem angle_GHF_value:
+  "angle_GHF = 39"
+  unfolding angle_GHF_def
   sorry
-
 end

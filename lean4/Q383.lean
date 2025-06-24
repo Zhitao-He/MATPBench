@@ -1,8 +1,5 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Pi.Bounds
-
-
-
 theorem shaded_sector_angle_is_72_degrees
     (r : ℝ) 
     (x : ℝ) 

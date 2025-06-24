@@ -6,16 +6,25 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Definition D := (0,12).
-Definition C := (0,0).
-Definition B := (8,0).
-Definition H := (8,12).
-Definition O := (4,12).
+Section MeasureOfArcOAE.
 
-Theorem area_rect_sector_diff :
-  (* Rectangle area 96, semicircle area (1/2)*pi*16 = 8*pi, shaded = 96 - 8*pi *)
-  True.
-Proof.
-admit.
-Qed.
+Variable R : realType.
+
+Variables O A B C E F : R2.
+
+(* Circle centered at O *)
+Hypothesis circle_O : is_center O.
+
+(* Perpendicularity conditions *)
+Hypothesis CO_perp_AO : is_perpendicular (Line C O) (Line A O).
+Hypothesis EO_perp_BO : is_perpendicular (Line E O) (Line B O).
+
+(* Given angle: ∠FOE = 45° *)
+Hypothesis angle_FOE_45 : MeasureOfAngle F O E = 45.
+
+(* Theorem to prove: Measure of arc OAE = 270° *)
+Theorem measure_of_arc_OAE : MeasureOfArc O A E = 270.
+Proof. Admitted.
+
+End MeasureOfArcOAE.
 ####

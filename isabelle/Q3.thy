@@ -1,22 +1,24 @@
-theory Pentagon_Angle
-  imports Main Real
+theory Pentagon_Angle_Problem
+imports Main
 begin
-
-theorem pentagon_angle_H:
-  fixes x :: real
-  defines "aEF ≡ x"
-  defines "aFG ≡ x + 20"
-  defines "aGH ≡ x + 5"
-  defines "aHJ ≡ x - 5"
-  defines "aJ ≡ x + 10"
-  assumes "aEF + aFG + aGH + aHJ + aJ = 540"
-  shows "aHJ = 97"
-proof -
-  have "5 * x + 30 = 540" using assms unfolding aEF_def aFG_def aGH_def aHJ_def aJ_def
-    by simp
-  hence "5 * x = 510" by simp
-  hence "x = 102" by simp
-  thus "aHJ = 97" unfolding aHJ_def by simp
-qed
-
+definition m_angle_E :: "real => real" where
+  "m_angle_E x = x"
+definition m_angle_F :: "real => real" where
+  "m_angle_F x = x + 20"
+definition m_angle_G :: "real => real" where
+  "m_angle_G x = x + 5"
+definition m_angle_H :: "real => real" where
+  "m_angle_H x = x - 5"
+definition m_angle_J :: "real => real" where
+  "m_angle_J x = x + 10"
+definition sum_interior_angles_pentagon :: real where
+  "sum_interior_angles_pentagon = (5 - 2) * 180"
+definition x_solution :: real where
+  "x_solution = 102"
+lemma x_solution_satisfies_angle_sum_property:
+  "m_angle_E x_solution + m_angle_F x_solution + m_angle_G x_solution + m_angle_H x_solution + m_angle_J x_solution = sum_interior_angles_pentagon"
+  sorry
+theorem measure_of_angle_H_is_97:
+  "m_angle_H x_solution = 97"
+  sorry
 end

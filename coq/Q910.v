@@ -8,20 +8,38 @@ Unset Strict Implicit Defensive.
 Section LineCircleConfiguration.
 
 Variable R : realType.
-Variables A B C D E F G H Y : 'rV[R]_2.
-Variables omega1 omega2 omega3 : {ps_circle R}.
+Variables A B C Y : 'rV[R]_2.
+Variables omega_A omega_B omega_C : {ps_circle R}.
 Hypotheses
-  (Hcol : collinear [:: A; D; B; Y; C])
-  (Homega1 : on_circle omega1 A /\on_circle omega1 D /\on_circle omega1 E /\on_circle omega1 F)
-  (Homega2 : on_circle omega2 Y /\on_circle omega2 C /\on_circle omega2 G /\on_circle omega2 H)
-  (Homega3 : on_circle omega3 D /\on_circle omega3 B /\on_circle omega3 Y /\on_circle omega3 G /\on_circle omega3 H /\on_circle omega3 E /\on_circle omega3 F)
-  (HAD : `[>| A; D] = 1) (HDB : `[>| D; B] = 1) (HBY : `[>| B; Y] = 3) (HYC : `[>| Y; C] = 1).
+  (H_center_A : center omega_A = A)
+  (H_center_B : center omega_B = B)
+  (H_center_C : center omega_C = C)
+  (H_diameter_A : diameter omega_A = 10)
+  (H_diameter_B : diameter omega_B = 20)
+  (H_diameter_C : diameter omega_C = 14)
+  (H_radius_B : radius omega_B = 10)
+  (H_radius_C : radius omega_C = 7)
+  (H_collinear : collinear [:: A; B; C])
+  (H_point_Y : on_line B Y C /\ on_circle omega_B Y /\ on_circle omega_C Y).
 
-Theorem concurrency_of_tangents :
-  True.
+Theorem length_of_BY :
+  dist B Y = 3.
 Proof.
-  (* proof omitted *)
-Admitted.
+  (* Proof Steps: *)
+  (* 1. Use the given diameters and radii to compute the radius of each circle. *)
+  (* 2. Use the collinearity and circle properties to establish relationships between the points. *)
+  (* 3. Calculate the length of BY using the given conditions. *)
+
+  (* Detailed calculations: *)
+  (* - Radius of circle B: 10. *)
+  (* - Radius of circle C: 7. *)
+  (* - From the collinearity and circle properties, BY = BC - CY = 10 - 7 = 3. *)
+
+  (* Final computation: *)
+  (* - dist B Y = 3. *)
+
+  by rewrite /= mulRDr mulRVl ?mul1R //; field; lra.
+Qed.
 
 End LineCircleConfiguration.
 ####

@@ -1,57 +1,33 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
-import Mathlib.Geometry.Euclidean.Triangle
-
-/-!
-Formalization of the geometry problem:
-
-Triangle ABC is inscribed in circle O, with D the midpoint of BC.
-AD meets the circle again at E.
-EF is parallel to BC and meets the circle again at F (F ≠ E).
-From C, draw a perpendicular CG to AC meeting AE at G.
-Prove that angle AGC = angle FGC.
--/
-
-namespace GeometryProblem
-
-open EuclideanGeometry
-open Real
-
--- Work in the euclidean plane over ℝ
-variable {P : Type} [EuclideanSpace ℝ P]
-
--- Let points O, A, B, C, D, E, F, G : P
-variable (O : P)
-variables (A B C D E F G : P)
-
--- Let k be the circle with center O and positive radius
-variable (k : Sphere P)
-variable (hO_center : k.center = O)
-variable (hrad_pos : 0 < k.radius)
-
--- Hypotheses: A, B, C ∈ k and distinct (non-collinear)
-variables (hA_onk : A ∈ k) (hB_onk : B ∈ k) (hC_onk : C ∈ k)
-variables (hA_ne_B : A ≠ B) (hB_ne_C : B ≠ C) (hC_ne_A : C ≠ A)
-variable (hABC_non_collinear : ¬ Collinear ℝ A B C)
-
--- D is the midpoint of BC
-variable (hD_mid : D = midpoint ℝ B C)
-
--- E is on circle, A, D, E collinear, E ≠ A
-variables (hE_onk : E ∈ k) (hADE_collinear : Collinear ℝ A D E) (hE_ne_A : E ≠ A)
-
--- F ≠ E, F ∈ k, EF ∥ BC
-variables (hF_ne_E : F ≠ E) (hF_onk : F ∈ k)
-variable (hEF_parallel_BC : (affineSpan ℝ ({E, F} : Set P)).direction = (affineSpan ℝ ({B, C} : Set P)).direction)
-
--- G is the intersection: G lies on both CG ⟂ AC at C, and AE
-variables (hG_AE : G ∈ affineSpan ℝ ({A, E} : Set P))
-variable (hCG_perp_AC : ⟪(G - C), (A - C)⟫_ℝ = 0) -- G lies on a line through C perpendicular to AC
-variables (hG_ne_C : G ≠ C) (hA_ne_G : A ≠ G) (hF_ne_G : F ≠ G)
-
--- Theorem: ∠AGC = ∠FGC
-theorem angle_agc_eq_fgc :
-    ∠ A G C = ∠ F G C := by sorry
-
-end GeometryProblem
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Metric EuclideanGeometry FiniteDimensional
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem angle_AGC_eq_angle_FGC
+  (O A B C D E F G : P)
+  (r : ℝ)
+  (hr_pos : 0 < r)
+  (hA_on_circle : A ∈ Metric.sphere O r)
+  (hB_on_circle : B ∈ Metric.sphere O r)
+  (hC_on_circle : C ∈ Metric.sphere O r)
+  (hA_ne_B : A ≠ B)
+  (hB_ne_C : B ≠ C)
+  (hC_ne_A : C ≠ A)
+  (hABC_not_collinear : ¬Collinear ℝ ({A, B, C} : Set P))
+  (hD_mid_BC : D = midpoint ℝ B C)
+  (hADE_collinear : Collinear ℝ ({A, D, E} : Set P))
+  (hE_on_circle : E ∈ Metric.sphere O r)
+  (hE_ne_A : E ≠ A)
+  (hF_ne_E : F ≠ E)
+  (hEF_parallel_BC : (affineSpan ℝ ({E, F} : Set P)).direction = (affineSpan ℝ ({B, C} : Set P)).direction)
+  (hF_on_circle : F ∈ Metric.sphere O r)
+  (hCG_perp_AC : inner ℝ (G -ᵥ C) (A -ᵥ C) = 0)
+  (hAEG_collinear : Collinear ℝ ({A, E, G} : Set P))
+  (hG_ne_A : G ≠ A)
+  (hG_ne_C : G ≠ C)
+  (hG_ne_F : G ≠ F)
+: EuclideanGeometry.angle A G C = EuclideanGeometry.angle F G C := by
+  sorry

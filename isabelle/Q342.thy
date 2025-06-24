@@ -1,48 +1,32 @@
-theory RegularPentagonTangentCircle
-imports
-  Complex_Main
-  "HOL-Analysis.Topology_Euclidean_Space"
+theory Pentagon_Arc_Problem
+  imports
+    "HOL-Analysis.Euclidean_Space" 
+    "HOL-Analysis.Angle"          
+    "HOL-Library.List"            
+    "HOL-Library.Pi"              
 begin
-
-(* 定义欧几里得平面上的点 *)
-type_synonym point = "real × real"
-
-(* 定义五边形的点 *)
-definition A :: point where "A ≡ (0, 0)"
-definition B :: point where "B ≡ (1, 0)"
-definition E :: point where "E ≡ (cos(4*pi/5), sin(4*pi/5))"
-definition D :: point where "D ≡ (cos(3*pi/5), sin(3*pi/5))"
-definition C :: point where "C ≡ (cos(2*pi/5), sin(2*pi/5))"
-
-(* 定义正五边形 *)
-definition regular_pentagon :: "point set" where
-  "regular_pentagon ≡ {A, B, C, D, E}"
-
-(* 定义两点之间的距离 *)
-definition dist :: "point ⇒ point ⇒ real" where
-  "dist p1 p2 ≡ sqrt((fst p2 - fst p1)^2 + (snd p2 - snd p1)^2)"
-
-(* 定义线段 *)
-definition segment :: "point ⇒ point ⇒ point set" where
-  "segment p1 p2 ≡ {p. ∃t. 0 ≤ t ∧ t ≤ 1 ∧ p = (fst p1 + t * (fst p2 - fst p1), snd p1 + t * (snd p2 - snd p1))}"
-
-(* 定义圆 *)
-definition circle :: "point ⇒ real ⇒ point set" where
-  "circle center radius ≡ {p. dist center p = radius}"
-
-(* 定义切线关系：如果圆在点p处与线段q1-q2相切，那么p必须在线段上，并且圆心到线段的距离等于半径 *)
-definition is_tangent_at :: "point set ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "is_tangent_at circ p q1 q2 ≡ 
-    p ∈ segment q1 q2 ∧
-    (∃center radius. circ = circle center radius ∧
-     dist center p = radius)"
-
-(* 在正五边形中，存在一个圆与DC在D处相切，与AB在A处相切 *)
-theorem pentagon_circle_tangent:
-  "∃circ. circ = circle center radius ∧
-          is_tangent_at circ D D C ∧
-          is_tangent_at circ A A B ∧
-          angle_measure (minor_arc circ A D) = 144"
-  sorry  (* 这里应该有证明，但题目要求只需要形式化定义 *)
-
+type_synonym point = "real^2"
+theorem regular_pentagon_tangent_circle_arc_measure:
+  fixes A B C D E :: point 
+  fixes O :: point         
+  fixes r :: real           
+  assumes
+    distinct_vertices: "distinct [A,B,C,D,E]" and
+    side_len_pos: "dist A B > 0" and
+    side_AB_eq_BC: "dist A B = dist B C" and
+    side_BC_eq_CD: "dist B C = dist C D" and
+    side_CD_eq_DE: "dist C D = dist D E" and
+    side_DE_eq_EA: "dist D E = dist E A" and
+    angle_EAB: "Angle.angle (E-A) (B-A) = (3 * pi / 5)" and
+    angle_ABC: "Angle.angle (A-B) (C-B) = (3 * pi / 5)" and
+    angle_BCD: "Angle.angle (B-C) (D-C) = (3 * pi / 5)" and
+    angle_CDE: "Angle.angle (C-D) (E-D) = (3 * pi / 5)" and
+    angle_DEA: "Angle.angle (D-E) (A-E) = (3 * pi / 5)" and
+    radius_pos: "r > 0" and
+    A_on_circle: "dist O A = r" and
+    D_on_circle: "dist O D = r" and
+    tangent_DC_at_D: "(O - D) \<cdot> (C - D) = 0" and
+    tangent_AB_at_A: "(O - A) \<cdot> (B - A) = 0"
+  shows "Angle.angle (A-O) (D-O) = (4 * pi / 5)"
+  oops 
 end

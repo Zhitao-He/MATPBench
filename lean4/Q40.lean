@@ -1,38 +1,16 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Oriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
-open Real
-
--- Helper function: convert degrees to radians
-noncomputable def degToRad (d : ℝ) : ℝ := d * (π / 180)
-
-namespace GeometryProblem
-
-variable {P : Type*} [EuclideanPlane P]
-
+import Mathlib.Algebra.AddTorsor.Basic 
+import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional 
+namespace ProblemFormalization
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
+noncomputable def Angle.Unoriented.angle (A B C : P) : ℝ := sorry
 variable (A B C D E : P)
-
--- Distinctness hypotheses for well-definedness
-variable (hC_ne_A : C ≠ A)
-variable (hC_ne_B : C ≠ B)
-variable (hC_ne_D : C ≠ D)
-variable (hC_ne_E : C ≠ E)
-variable (hA_ne_B : A ≠ B)
-
--- Collinearity: A, C, B lie on a straight line
-variable (h_collinear_ACB : Affine.collinear ℝ ({A, C, B} : Set P))
-
--- DC is perpendicular to EC at C
-variable (h_perp : (Affine.Line D C) ⟂ (Affine.Line E C))
-
--- Angle ∠BCD = 40°
-variable (h_angle_BCD : EuclideanPlane.oangle B C D = degToRad 40)
-
--- Claim: ∠ACE = 50°
-theorem angle_ACE_eq_50 : EuclideanPlane.oangle A C E = degToRad 50 := by
-  sorry
-
-end GeometryProblem
+theorem problem_statement :
+    Collinear ℝ ({A, C, B} : Set P) ∧
+    (Angle.Unoriented.angle D C E = Real.pi / 2) ∧
+    (Angle.Unoriented.angle B C D = (40 / 180) * Real.pi → Angle.Unoriented.angle A C E = (50 / 180) * Real.pi) :=
+  by sorry
+end ProblemFormalization

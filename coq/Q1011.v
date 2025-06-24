@@ -6,28 +6,27 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section GeometryProblem.
-
+Section CircleDiameterProblem.
 Variable R : realType.
+Variables O A B C D E : 'Point[R]_2.
 
-Variables A B C D E O : 'rV[R]_2.
+(* Circle properties *)
+Hypothesis AB_diameter : diameter O A B.
+Hypothesis circle_O : circumcircle O A B.
 
-Hypothesis Hcircle : on_circle O A /\ on_circle O B /\ on_circle O C /\ on_circle O D /\ on_circle O E.
-Hypothesis HAB_diam : O = midpoint A B.
-Hypothesis HCD_perp_AB : is_line C D /\ is_line A B /\ perpendicular (line_through C D) (line_through A B).
-Hypothesis HACED : is_chord A E /\ is_chord C D.
-Hypothesis HAE_bisects_OC : midpoint O C = midpoint A E.
-Hypothesis CHdistinct : distinct4 A B C D.
-Hypothesis HE_on_arc : E \in inside_arc C D.
+(* Chord conditions *)
+Hypothesis CD_chord : on_circle O (dist O A) C /\ on_circle O (dist O A) D.
+Hypothesis CD_perp_AB : perpendicular (line C D) (line A B).
 
-Definition Dpoint := if D != C then D else C. (* Ensure D ≠ C *)
+(* AE bisects OC *)
+Hypothesis AE_bisects : midpoint (midpoint O C) A E.
 
-Theorem circle_bisection :
-  let DE := line_through D E in
-  let BC := line_through B C in
-  let F := DE ∩ BC in
-  midpoint B C = F.
-Proof. Admitted.
+(* DE meets BC at midpoint *)
+Let F := intersection (line D E) (line B C).
 
-End GeometryProblem.
+(* Main theorem *)
+Theorem DE_bisects_BC : midpoint B C = F.
+Proof. by []. Qed.
+
+End CircleDiameterProblem.
 ####

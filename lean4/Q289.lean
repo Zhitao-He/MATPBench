@@ -1,32 +1,19 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open Real EuclideanSpace InnerProductSpace
-
--- Define the 2D Euclidean plane ℝ² as P
-abbrev P := EuclideanSpace ℝ (Fin 2)
-
--- Four points in the plane
-variable (X Y Z W : P)
-
--- Side length hypotheses
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic 
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+namespace QuadrilateralAreaProblem
+variable (X Y Z W : Point)
 variable (hXY : dist X Y = 96)
-variable (hXW : dist X W = 104)
 variable (hYZ : dist Y Z = 32)
 variable (hZW : dist Z W = 24)
-
--- Right angle at Z: vectors Y - Z and W - Z are orthogonal
-variable (hRight : ⟪Y - Z, W - Z⟫ = 0)
-
--- Non-collinearity hypotheses: quadrilateral is simple, no three consecutive points are collinear
-variable (hXYZ : ¬ Collinear ℝ ![X, Y, Z])
-variable (hYZW : ¬ Collinear ℝ ![Y, Z, W])
-variable (hZWX : ¬ Collinear ℝ ![Z, W, X])
-variable (hWXY : ¬ Collinear ℝ ![W, X, Y])
-
--- Theorem: The area of quadrilateral XYZW is 2304
-theorem area_XYZW_is_2304 :
-    Triangle.area Y Z W + Triangle.area X Y W = 2304 := by
+variable (hXW : dist X W = 104)
+variable (hAngleYZW_is_right : EuclideanGeometry.angle Y Z W = Real.pi / 2)
+noncomputable def triangleArea (A B C : Point) : ℝ :=
+  (1/2 : ℝ) * abs ((B -ᵥ A) 0 * (C -ᵥ A) 1 - (B -ᵥ A) 1 * (C -ᵥ A) 0)
+noncomputable def quadrilateralArea (X Y Z W : Point) : ℝ :=
+  triangleArea X Y W + triangleArea Y Z W
+theorem area_of_quadrilateral_XYZW_is_2304 :
+  quadrilateralArea X Y Z W = 2304 := by
   sorry
+end QuadrilateralAreaProblem

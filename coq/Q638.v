@@ -1,2 +1,28 @@
-#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Variables G W X N I Y Z K L E M H : 'rV[R]_2. Hypotheses HW1: G != W; HW2: W != X; HW3: I != Y; HW4: Y != Z; HW5: X != N; HW6: Z != K; HW7: colinear G W X; HW8: colinear I Y Z; HW9: colinear W Y; HW10: colinear X Z; HW11: colinear W L; HW12: colinear X E; HW13: colinear Y M; HW14: colinear Z H; HW15: perpendicular (X - Z) (K - Z); HW16: perpendicular (W - X) (E - X); HW17: perpendicular (W - Y) (M - Y). Lemma compute_distances: norm (W - X) = norm (G - W) /\norm (Y - Z) = norm (I - Y). Proof. by []. Qed.
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry angles.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Local Open Scope ring_scope.
+
+Variable R : realType.
+
+Variables W L X N Z K : 'rV[R]_2.
+Variable x : R.
+
+Hypothesis H_angle_LWX : angle L W X = 53%:R.
+Hypothesis H_parallel_WL_XE : parallel W L X E.
+Hypothesis H_parallel_XN_ZK : parallel X N Z K.
+
+Theorem measure_angle_XZK : angle X Z K = 53%:R.
+Proof.
+  (* Using parallel lines and vertical angles properties *)
+  have H_vertical_angles : angle W X E = angle N X Z by apply: vertical_angle.
+  have H_corresponding_angles : angle L W X = angle X Z K by apply: parallel_property_ipsilateral_internal_angle.
+  rewrite H_angle_LWX in H_corresponding_angles.
+  by [].
+Qed.
 ####

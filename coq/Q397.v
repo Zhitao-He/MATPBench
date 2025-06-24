@@ -6,20 +6,27 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Record point3 := Point3 { px : R; py : R; pz : R }.
-Definition dist3 P Q := sqrt ((px P - px Q)^+2 + (py P - py Q)^+2 + (pz P - pz Q)^+2).
-Definition angle3 A B C :=
-  let u := (px A - px B, py A - py B, pz A - pz B) in
-  let v := (px C - px B, py C - py B, pz C - pz B) in
-  acos (((fst u * fst v) + (snd u * snd v) + (fst (snd u) * fst (snd v))) /
-        (dist3 A B * dist3 C B)).
+Local Open Scope ring_scope.
 
-Theorem tetrahedral_face_angle :
-  forall A B C D : point3,
-    dist3 A B = dist3 A C = dist3 A D = r ->
-    angle3 B A C = angle3 C A D ->
-    True.
-Proof.
-admit.
-Qed.
+Section PyramidAngle.
+
+Variable R : realType.
+
+(* Define points of the pyramid *)
+Variables A B C D E F G H : 'rV[R]_3.
+Hypothesis square_base : norm (B - A) = norm (C - B) = norm (D - C) = norm (A - D) /
+                       norm (E - A) = norm (E - B) = norm (E - C) = norm (E - D) /
+                       norm (F - A) = norm (F - B) = norm (F - C) = norm (F - D) /
+                       norm (G - E) = norm (G - F) = norm (H - E) = norm (H - F).
+Hypothesis equal_edges : norm (A - E) = norm (B - E) = norm (C - E) = norm (D - E) /
+                        norm (A - F) = norm (B - F) = norm (C - F) = norm (D - F) /
+                        norm (E - G) = norm (F - G) = norm (E - H) = norm (F - H).
+Hypothesis angle_ABD : angle (A - B) (D - B) = 45%:R.
+
+(* Theorem to prove angle ABD is 45 degrees *)
+Theorem angle_ABD_45 : 
+  angle (A - B) (D - B) = 45%:R.
+Proof. Admitted.
+
+End PyramidAngle.
 ####

@@ -1,30 +1,25 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-namespace ProblemDescription
-
--- Work in the Euclidean plane of dimension 2
-variable {P : Type*} [EuclideanSpace ℝ P] [Fact (finrank ℝ P = 2)]
-
--- Points in the figure
-variable (A B C D E : P)
-
--- Degrees to radians conversion
-noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
-
--- Given angles in triangle BDE
-variable (h_angle_BDE : ∠ B D E = degToRad 35)
-variable (h_angle_EBD : ∠ E B D = degToRad 75)
-
--- Given angle ∠CAE = 28°
-variable (h_C_ne_A : C ≠ A)
-variable (h_C_ne_E : C ≠ E)
-variable (h_angle_CAE : ∠ C A E = degToRad 28)
-
--- The sought value is ∠BEA = 110°
-theorem angle_BEA_eq_110_deg :
-    ∠ B E A = degToRad 110 := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+open EuclideanGeometry
+theorem find_angle_BEA
+  (A B C D E : PPoint)
+  (hB_ne_D : B ≠ D)
+  (hE_ne_D : E ≠ D)
+  (hC_ne_A : C ≠ A)
+  (hA_ne_E : A ≠ E)
+  (hE_ne_B : E ≠ B)
+  (hD_ne_B : D ≠ B)
+  (hA_ne_B : A ≠ B)
+  (hBDE : angle B D E = (35 / 180 : ℝ) * Real.pi)
+  (hCAE : angle C A E = (28 / 180 : ℝ) * Real.pi)
+  (hEBD : angle E B D = (75 / 180 : ℝ) * Real.pi)
+  (hDEA_flat : angle D E A = Real.pi)
+  (hBDE_nondeg : ¬ Collinear ℝ ({B, D, E} : Set PPoint))
+  : angle B E A = (110 / 180 : ℝ) * Real.pi :=
+by
   sorry
-
-end ProblemDescription

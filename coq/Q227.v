@@ -10,11 +10,9 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Theorem ellipse_equation_characterization :
+Theorem ellipse_equation_confirmation :
   forall x y : R,
     ((x + 2)^2 / 4 + (y - 2)^2 / 9 = 1) <->
-    (exists (a b : R), (0 < a) /\ (0 < b) /\
-      (a = 2) /\ (b = 3) /\
-      ((x + 2)^2 / (a^2) + (y - 2)^2 / (b^2) = 1)).
+    ((x + 2)^2 / (2^2) + (y - 2)^2 / (3^2) = 1).
 Proof. Admitted.
 ####

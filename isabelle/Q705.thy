@@ -1,39 +1,38 @@
-theory Finding_DE
-imports
-  Main
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Geometry_DE_Length
+  imports Complex_Main
 begin
-
-(* 使用实数和向量库 *)
 type_synonym point = "real × real"
-
-(* 定义向量的基本操作 *)
-definition vec :: "point ⇒ point ⇒ real × real" where
-  "vec A B = (fst B - fst A, snd B - snd A)"
-
-definition length :: "real × real ⇒ real" where
-  "length v = sqrt((fst v)^2 + (snd v)^2)"
-
-definition dot_product :: "real × real ⇒ real × real ⇒ real" where
-  "dot_product v w = (fst v) * (fst w) + (snd v) * (snd w)"
-
+definition dist :: "point ⇒ point ⇒ real" where
+  "dist A B = sqrt ((fst A - fst B)^2 + (snd A - snd B)^2)"
 definition perpendicular :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "perpendicular A B C D = (dot_product (vec A B) (vec C D) = 0)"
-
-(* 题目中的数学问题形式化 *)
-theorem find_DE:
-  fixes A B C D E :: point
-  assumes 
-    "length (vec A D) = 12"
-    "length (vec B D) = 4"
-    "perpendicular A D C D"  (* AD ⊥ CD *)
-    "perpendicular D E C E"  (* DE ⊥ CE *)
-    "perpendicular E C A C"  (* EC ⊥ AC *)
-  shows "length (vec D E) = 2 * sqrt 3"
+  "perpendicular A B C D ⟷ 
+    ((fst B - fst A) * (fst D - fst C) + (snd B - snd A) * (snd D - snd C) = 0)"
+definition A :: point where "A = (0, 0)"
+definition D :: point where "D = (12, 0)"
+definition B :: point where "B = (16, 0)"
+fixes h :: real
+assumes h_pos: "h > 0"
+definition C :: point where "C = (12, h)"
+fixes y :: real
+definition E :: point where "E = (16, y)"
+lemma AD_perp_CD: "perpendicular A D C D"
+  unfolding perpendicular_def A_def D_def C_def
+  by simp
+lemma DE_perp_CE: "perpendicular D E C E"
+  unfolding perpendicular_def D_def E_def C_def
+  by simp
+lemma EC_perp_AC: "perpendicular E C A C"
+  unfolding perpendicular_def E_def C_def A_def
+  by simp
+theorem DE_value:
+  assumes "A = (0, 0)" "D = (12, 0)" "B = (16, 0)"
+    "C = (12, h)" "h > 0"
+    "E = (16, y)"
+    "perpendicular A D C D"
+    "perpendicular D E C E"
+    "perpendicular E C A C"
+  shows "dist D E = 2 * sqrt 3"
 proof -
-  (* 证明部分省略，根据要求仅需形式化定义 *)
-  sorry
+  show ?thesis sorry
 qed
-
 end

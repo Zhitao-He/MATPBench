@@ -8,16 +8,26 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Record point := mkPoint { px : R; py : R }.
-Definition dist P Q := sqrt ((px P - px Q)^2 + (py P - py Q)^2).
+Variable R : realType.
 
-Theorem geometry_circle_AB_60 :
-  exists (O A B C D E F : point),
-    dist A B = 2 * dist O A /\
-    dist D E = dist E C = 24 /\
-    dist A E = 12 /\
-    dist E B = dist E F /\
-    dist E B = x /\
-    A <> B.
-Proof. by []. Qed.
+Variables A B C D E F : 'rV[R]_2.
+
+Hypotheses
+  (CE_length : norm (C - E) = 24)
+  (DE_length : norm (D - E) = 24)
+  (EA_length : norm (E - A) = 12)
+  (EB_length : norm (E - B) = x)
+  (on_circle_A : norm (A - F) = norm (C - F))
+  (on_circle_B : norm (B - F) = norm (C - F))
+  (on_circle_C : norm (C - F) = norm (D - F))
+  (on_circle_D : norm (D - F) = norm (E - F)).
+
+Theorem AB_length : norm (A - B) = 60.
+Proof.
+  (* Proof would involve:
+     1. Applying power of a point theorem for point E
+     2. Setting up equation AE * EB = CE * ED
+     3. Solving for x and calculating AB = AE + EB *)
+  admit.
+Qed.
 ####

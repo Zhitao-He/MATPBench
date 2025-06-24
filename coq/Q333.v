@@ -8,19 +8,22 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope R_scope.
 
-Section Putnam_Geo_Theorem.
+Section PentagonAreaProblem.
 
 Variable R : realType.
 Variables A B C D E F G H : 'P[R^2].
-Hypotheses
-  isoABC : is_isosceles_triangle A B C /\~ colinear A B C.
-Hypotheses
-  CH : on_line H (Line C B) /\on_line H (Line A B) /\dist C H = 24.
-Hypotheses
-  E F G D : on_line E (Line A B) /\on_line F (Line A B) /\on_line D (Line C A) /\on_line G (Line C B) /\dist D E = dist G F.
 
-Theorem KSEM_area : True.
-Proof.
-admit.
-Qed.
+(* Isosceles triangle ABC with base AB and altitude CH = 24 cm *)
+Hypothesis isoABC : is_isosceles_triangle A B C /\ base_of_triangle A B C /\ altitude C H = 24%:R.
+
+(* Points D, E, F, G are on AC, AB, BC, and AB respectively *)
+Hypothesis DE_GF : dist D E = dist G F.
+Hypothesis HF_length : dist H F = 12%:R.
+Hypothesis FB_length : dist F B = 6%:R.
+
+(* Goal: Area of pentagon CDEFG is 384 cm² *)
+Theorem area_of_CDEFG : exists area : R, area = 384%:R.
+Proof. Admitted.
+
+End PentagonAreaProblem.
 ####

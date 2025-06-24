@@ -1,4 +1,3 @@
-####
 From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals geometry.
 
@@ -10,6 +9,15 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
+(* Define a function to calculate the area of a quadrilateral (for illustration; 
+   in practice, this might be implemented by splitting into triangles) *)
+Definition quadrilateral_area (A B C D : 'rV[R]_2) : R := 
+  (* Implementation would depend on the specific geometry library and 
+     how areas are calculated in that context *)
+  0. (* Placeholder; actual implementation would be more complex *)
+.
+
+(* Theorem: Given the geometric configuration, the area of quadrilateral ABCD is 625 *)
 Theorem quadrilateral_area_625 :
   forall (A B C D E : 'rV[R]_2),
     (* Points are distinct in order *)
@@ -26,5 +34,6 @@ Theorem quadrilateral_area_625 :
     norm (D - E) = 25 ->
     (* Area of ABCD = 625 *)
     quadrilateral_area A B C D = 625.
-Proof. Admitted.
+Proof. Admitted. (* The proof would involve geometric properties and calculations to show 
+                    that the area of ABCD is indeed 625. *)
 ####

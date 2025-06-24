@@ -1,32 +1,25 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.Data.Real.Pi.Bounds
-
-open EuclideanGeometry
-
-/--
-Formalization of the diagram:  
-A, B, C : EuclideanPlane  
-AB = x, AD = 3 * sqrt 3, BD = 9, CD = y  
-∠ABC = 30°, ∠BCA = 60°, AD ⟂ CD, CA ⟂ BA  
-D is strictly between B, C on line BC  
-Find x.
--/
-theorem value_of_x_geometry
-    (A B C D : EuclideanPlane)
-    (x y : ℝ)
-    (h_AB : dist A B = x)
-    (h_AD : dist A D = 3 * Real.sqrt 3)
-    (h_BD : dist B D = 9)
-    (h_CD : dist C D = y)
-    (h_angle_ABC : (angle A B C).value = Real.pi / 6)    -- 30°
-    (h_angle_BCA : (angle B C A).value = Real.pi / 3)    -- 60°
-    (h_angle_ADC : (angle A D C).value = Real.pi / 2)    -- 90°
-    (h_angle_BAC : (angle B A C).value = Real.pi / 2)    -- 90°
-    (h_perp_AD_CD : ∠ A D C = (Real.pi / 2))            -- redundant with above but emphasizes perpendicularity
-    (h_perp_CA_BA : ∠ C A B = (Real.pi / 2))            -- redundant with above but emphasizes right angle at A
-    (h_Sbtw : Sbtw ℝ B D C)
-    : x = 6 * Real.sqrt 3 := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Data.Real.Pi.Bounds 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Data.Real.Basic 
+open Real EuclideanGeometry
+open scoped EuclideanGeometry 
+namespace ProblemDescription
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (A B C D : P)
+variable (x y : ℝ)
+axiom h_AB : dist A B = x
+axiom h_AD : dist A D = 3 * sqrt 3
+axiom h_BD : dist B D = 9
+axiom h_CD : dist C D = y
+axiom h_angle_ABC : ∠ A B C = Real.pi / 6      
+axiom h_angle_BCA : ∠ B C A = Real.pi / 3      
+axiom h_AD_perp_CD : ∠ A D C = Real.pi / 2     
+axiom h_CA_perp_BA : ∠ C A B = Real.pi / 2     
+axiom h_x_pos : x > 0
+axiom h_y_pos : y > 0
+theorem value_of_x_is_6_sqrt_3 : x = 6 * sqrt 3 := by
   sorry
+end ProblemDescription

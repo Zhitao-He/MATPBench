@@ -1,54 +1,24 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
-open Real EuclideanGeometry
-
-noncomputable section
-
--- Let P be the Euclidean plane
-variable {P : Type*} [EuclideanSpace ℝ P]
-
--- Declare the points
-variable (j k l r q s : P)
-
--- Degrees to radians conversion
-def degToRad (d : ℝ) : ℝ := d * (π / 180)
-
--- Side lengths for triangle JKL
-axiom dist_kj : dist k j = 6
-axiom dist_kl : dist k l = 12
-
--- Side lengths for triangle RQS
-axiom dist_rq : dist r q = 4
-axiom dist_rs : dist r s = 8
-
--- Angles of triangle JKL
-axiom angle_jlk : ∠ j l k = degToRad 30
-axiom angle_lkj : ∠ l k j = degToRad y_deg
-axiom angle_kjl : ∠ k j l = degToRad a_deg
-
--- Angles of triangle RQS
-axiom angle_rqs : ∠ r q s = degToRad 80
-axiom angle_qsr : ∠ q s r = degToRad x_deg
-axiom angle_srq : ∠ s r q = degToRad b_deg
-
--- Angle correspondences between triangles
-axiom angle_jlk_eq_qsr : ∠ j l k = ∠ q s r
-axiom angle_kjl_eq_rqs : ∠ k j l = ∠ r q s
-axiom angle_lkj_eq_srq : ∠ l k j = ∠ s r q
-
--- Noncollinearity assumptions for triangles
-axiom affine_ind_jkl : AffineIndependent ℝ ![j, k, l]
-axiom affine_ind_rqs : AffineIndependent ℝ ![r, q, s]
-
--- Variables for the degree measures
-variable (x_deg y_deg a_deg b_deg : ℝ)
-
--- "Find the value of y_deg"
-theorem value_of_y_deg : y_deg = 70 := by
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
+theorem prove_value_of_y
+  (J K L Q R S : P)
+  (x y : ℝ)
+  (h_KJ : dist K J = 6)
+  (h_KL : dist K L = 12)
+  (h_RQ : dist R Q = 4)
+  (h_RS : dist R S = 8)
+  (h_angle_JLK_val : EuclideanGeometry.angle J L K = degToRad 30)
+  (h_angle_RQS_val : EuclideanGeometry.angle R Q S = degToRad 80)
+  (h_angle_JLK_eq_QSR : EuclideanGeometry.angle J L K = EuclideanGeometry.angle Q S R)
+  (h_angle_KJL_eq_RQS : EuclideanGeometry.angle K J L = EuclideanGeometry.angle R Q S)
+  (h_angle_LKJ_eq_SRQ : EuclideanGeometry.angle L K J = EuclideanGeometry.angle S R Q)
+  (h_angle_LKJ_y : EuclideanGeometry.angle L K J = degToRad y)
+  (h_angle_QSR_x : EuclideanGeometry.angle Q S R = degToRad x)
+  (h_JKL_not_collinear : ¬ Collinear ℝ ({J, K, L} : Set P))
+  (h_RQS_not_collinear : ¬ Collinear ℝ ({R, Q, S} : Set P))
+  : y = 70 := by
   sorry
-
-end noncomputable

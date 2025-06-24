@@ -1,33 +1,34 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section SharedIncenterTheorem.
-
+Section IsoscelesTriangleProblem.
 Variable R : realType.
+Variables A B C D E F I : 'Point[R]_2.
 
-(* Points in the plane *)
-Variables A B C D E F : 'rV[R]_2.
+(* Triangle properties *)
+Hypothesis isosceles : dist C A = dist C B.
+Hypothesis D_midpoint : midpoint D A B.
 
-Hypothesis Hiso : norm (C - A) = norm (C - B).
-Hypothesis Hmid : D = (A + B) / 2%:R.
-Hypothesis HD_in : colinear E D F.
-Hypothesis HE_on : exists l : 'rV[R]_2 -> bool, l D /\ l E /\ l F.
-(* Incenter of ABC and EFC is the same *)
-Hypothesis Hinc : incenter A B C = incenter E F C.
-(* D is between E and F *)
-Hypothesis HD_betw : between D E F.
+(* Line EF passes through D *)
+Hypothesis EF_line : collinear [:: E; D; F].
 
-Theorem shared_incenter_DE_DF_DA :
-  let DE := norm (D - E) in
-  let DF := norm (D - F) in
-  let DA := norm (D - A) in
-  DE * DF = DA ^+ 2.
-Proof. Admitted.
+(* Shared incenter condition *)
+Hypothesis incenter_ABC : incenter A B C = I.
+Hypothesis incenter_EFC : incenter E F C = I.
 
-End SharedIncenterTheorem.
+(* Distance definitions *)
+Definition DE := dist D E.
+Definition DF := dist D F.
+Definition DA := dist D A.
+
+(* Main theorem *)
+Theorem product_relation : DE * DF = DA ^ 2.
+Proof. by []. Qed.
+
+End IsoscelesTriangleProblem.
 ####

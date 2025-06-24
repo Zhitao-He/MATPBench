@@ -1,64 +1,48 @@
-theory GeometryProblem
-imports Complex_Main
+theory Geometry_Problem
+  imports Main "HOL-Analysis.Euclidean_Space"
 begin
-
-(* 定义平面上的点 *)
-type_synonym point = "real × real"
-
-(* 计算两点之间的距离 *)
-definition distance :: "point ⇒ point ⇒ real" where
-  "distance p1 p2 = sqrt((fst p2 - fst p1)^2 + (snd p2 - snd p1)^2)"
-
-(* 定义角度函数 *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A B C = atan2 (snd A - snd B) (fst A - fst B) - atan2 (snd C - snd B) (fst C - fst B)"
-
-(* 问题中的点 *)
-consts A B C D E F G H :: point
-
-(* 问题条件 *)
-axiomatization where
-  cond1: "distance A B = 32" and
-  cond2: "distance A D = distance D C" and
-  cond3: "distance B C = 2 * x - 3" and
-  cond4: "distance E F = 12" and
-  cond5: "distance E H = distance H G" and
-  cond6: "distance F G = x - 5" and
-  cond7: "angle B C D = angle F G H" and
-  cond8: "angle D A B = angle H E F"
-
-(* 解题 *)
-lemma "x = 31/2"
-proof -
-  have "similar_triangles A B C E F G" 
-    by (metis cond7 cond8) (* 由角相等判断三角形相似 *)
-  
-  then have "distance B C / distance F G = distance A B / distance E F"
-    by (simp add: similar_triangles_def)
-    
-  then have "(2 * x - 3) / (x - 5) = 32 / 12"
-    by (simp add: cond1 cond3 cond4 cond6)
-    
-  then have "(2 * x - 3) / (x - 5) = 8/3"
-    by simp
-    
-  then have "(2 * x - 3) * 3 = 8 * (x - 5)"
-    by (simp add: divide_simps)
-    
-  then have "6 * x - 9 = 8 * x - 40"
-    by algebra
-    
-  then have "-6 * x + 8 * x = 9 - 40"
-    by algebra
-    
-  then have "2 * x = -31"
-    by algebra
-    
-  then have "x = -31/2"
-    by simp
-    
+type_synonym point = complex
+axiom AA_similarity_implies_side_ratios:
+  fixes A B C E F G :: point 
+  assumes angle_A_eq_angle_E: "angle C A B = angle G E F" 
+  and angle_C_eq_angle_G: "angle A C B = angle E G F" 
+  and non_collinear_ABC: "\<not>collinear A B C"      
+  and non_collinear_EFG: "\<not>collinear E F G"      
+  shows "(dist E F / dist A B) = (dist F G / dist B C)" 
+theorem solve_for_x:
+  fixes A B C D E F G H :: point
+  fixes x :: real
+  assumes len_AB: "dist A B = 32"
+  and len_AD_eq_DC: "dist A D = dist D C" 
+  and len_BC: "dist B C = (2 * x - 3)"
+  and len_EF: "dist E F = 12"
+  and len_EH_eq_HG: "dist E H = dist H G" 
+  and len_FG: "dist F G = (x - 5)"
+  and angle_CAB_eq_GEF_cond: "angle C A B = angle G E F"
+  and angle_ACB_eq_EGF_cond: "angle A C B = angle E G F"
+  and positive_BC_cond: "dist B C > 0" 
+  and positive_FG_cond: "dist F G > 0" 
+  and non_collinear_ABC_cond: "\<not>collinear A B C"
+  and non_collinear_EFG_cond: "\<not>collinear E F G"
+  shows "x = 31/2"
+proof
+  have side_ratio_eq: "(dist E F / dist A B) = (dist F G / dist B C)"
+    by (rule AA_similarity_implies_side_ratios
+      [OF angle_CAB_eq_GEF_cond angle_ACB_eq_EGF_cond non_collinear_ABC_cond non_collinear_EFG_cond])
+  have concrete_ratio_eq: "12 / 32 = (x - 5) / (2 * x - 3)"
+    using side_ratio_eq len_AB len_BC len_EF len_FG by simp
+  from positive_BC_cond have bc_expression_nonzero: "2 * x - 3 \<noteq> 0"
+    using len_BC by linarith 
+  have ab_const_nonzero: "32 \<noteq> (0::real)" by simp
+  have alg_eq1: "12 * (2 * x - 3) = 32 * (x - 5)"
+    using concrete_ratio_eq real_div_eq_iff[OF ab_const_nonzero bc_expression_nonzero] by simp
+  have alg_eq2: "24 * x - 36 = 32 * x - 160"
+    by (simp add: alg_eq1 distrib_left distrib_right) 
+  have alg_eq3: "8 * x = 124"
+    by (linarith add: alg_eq2) 
+  have pre_final_x: "x = 124 / (8::real)"
+    by (simp add: alg_eq3) 
   thus "x = 31/2"
-    sorry (* 需要额外条件证明x为正值，或者有计算错误 *)
+    by (simp add: pre_final_x divide_simps eval_nat_numeral) 
 qed
-
 end

@@ -11,6 +11,6 @@ Local Open Scope ring_scope.
 Variable R : realType.
 Theorem pythagorean_triple_16_30
   (x : R) :
-  sqrt (16^2 + 30^2) = x -> x = 34.
+  16^2 + 30^2 = x^2 -> x = 34.
 Proof. Admitted.
 ####

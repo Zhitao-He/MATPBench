@@ -20,7 +20,7 @@ Hypothesis O_is_circumcenter :
   forall P : 'rV[R]_2, dist O P = dist O A <-> P = A \/ P = B \/ P = C.
 
 Definition area (P Q R : 'rV[R]_2) :=
-  ((Q\c R) - (P\c Q) + (P\c R)) / 2.
+  ((Q.1 * R.2 - Q.2 * R.1) - (P.1 * Q.2 - P.2 * Q.1) + (P.1 * R.2 - P.2 * R.1)) / 2.
 
 Theorem triangle_OBC_area :
   area O B C = 21/8.

@@ -1,44 +1,30 @@
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-
-open scoped Real
-
--- Helper function: degrees to radians
-noncomputable def degreesToRadians (d : ℝ) : ℝ :=
-  d * (Real.pi / 180)
-
--- Working in 2D Euclidean plane
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [Fact (finrank ℝ V = 2)]
-
--- Structure of the geometric setup
-structure ProblemSetup where
-  -- Five points in the plane (rectangle vertices and intersection of diagonals)
-  A B C D F : P
-  x y : ℝ
-  -- Rectangle properties
-  h_parallelogram : VEC A B = VEC D C
-  h_rectangle_angle : ∠ D A B = Real.pi / 2
-  h_A_ne_B : A ≠ B
-  -- F is the intersection of diagonals
-  h_F_midpoint_AC : F = midpoint ℝ A C
-  h_F_midpoint_BD : F = midpoint ℝ B D
-  -- Angle measures (converted from degrees to radians)
-  h_angle_DAF : ∠ D A F = degreesToRadians (4 * x + 5)
-  h_angle_FAB : ∠ F A B = degreesToRadians (9 * x + 20)
-  h_angle_FBC : ∠ F B C = degreesToRadians (4 * y + 4)
-  h_angle_FDA : ∠ F D A = degreesToRadians (y ^ 2 - 1)
-  -- Angle sum at A
-  h_angle_sum_at_A : ∠ D A F + ∠ F A B = ∠ D A B
-  -- Angle range constraints
-  h_DAF_range : 0 < 4 * x + 5 ∧ 4 * x + 5 < 180
-  h_FAB_range : 0 < 9 * x + 20 ∧ 9 * x + 20 < 180
-  h_FBC_range : 0 < 4 * y + 4 ∧ 4 * y + 4 < 180
-  h_FDA_range : 0 < y ^ 2 - 1 ∧ y ^ 2 - 1 < 180
-
--- Theorem: y = 5 is the only solution
-theorem find_y_value (ps : ProblemSetup V P) : ps.y = 5 := by
+open Real EuclideanGeometry Affine AffineSubspace
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (d : ℝ) : ℝ := d * Real.pi / 180
+theorem find_value_of_y
+  (A B C D F : PPoint)
+  (x y : ℝ)
+  (h_is_rectangle :
+    inner ℝ (B -ᵥ A) (D -ᵥ A) = 0 ∧
+    inner ℝ (C -ᵥ B) (A -ᵥ B) = 0 ∧
+    inner ℝ (D -ᵥ C) (B -ᵥ C) = 0 ∧
+    inner ℝ (A -ᵥ D) (C -ᵥ D) = 0 ∧
+    line[ℝ, A, D] ∥ line[ℝ, B, C] ∧
+    line[ℝ, A, B] ∥ line[ℝ, D, C])
+  (h_F_on_AC_diag : Sbtw ℝ A F C)
+  (h_F_on_BD_diag : Sbtw ℝ D F B)
+  (h_angle_DAF_val : EuclideanGeometry.angle D A F = degToRad (4 * x + 5))
+  (h_angle_FAB_val : EuclideanGeometry.angle F A B = degToRad (9 * x + 20))
+  (h_angle_FBC_val : EuclideanGeometry.angle F B C = degToRad (4 * y + 4))
+  (h_angle_FDA_val : EuclideanGeometry.angle F D A = degToRad (y * y - 1))
+  (h_angle_DAF_pos_lt_180 : 0 < 4 * x + 5 ∧ 4 * x + 5 < 180)
+  (h_angle_FAB_pos_lt_180 : 0 < 9 * x + 20 ∧ 9 * x + 20 < 180)
+  (h_angle_FBC_pos_lt_180 : 0 < 4 * y + 4 ∧ 4 * y + 4 < 180)
+  (h_angle_FDA_pos_lt_180 : 0 < y * y - 1 ∧ y * y - 1 < 180) :
+  y = 5 := by
   sorry

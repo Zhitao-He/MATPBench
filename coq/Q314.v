@@ -14,19 +14,15 @@ Let E := 'I_2 -> R.
 Theorem square_diagonal_midpt_perp_eq
   (W X Y Z A B C : E)
   :
-    (* WXYZ is a square with diagonal WX - XZ (order: W-X-Y-Z-W): *)
+    (* WXYZ is a square with diagonal WZ of length 12: *)
     is_square W X Y Z /\
-    norm (W - Y) = 12 /\
+    norm (W - Z) = 12 /\
     (* A is the midpoint of WX *)
     A = ((W + X) / 2) /\
     (* AB perpendicular to AC and AB = AC *)
-    exists (A' B' C' : E),
-      A' = A /\ 
-      B' = B /\ 
-      C' = C /\
-      ((B' - A') ⊥ (C' - A')) /\
-      norm (B' - A') = norm (C' - A') /\
-    (* B and C determined by these conditions, now conclude: *)
+    (B - A) ⊥ (C - A) /\
+    norm (B - A) = norm (C - A) /\
+    (* Conclusion: length of BC is 18 *)
     norm (B - C) = 18.
 Proof. Admitted.
 ####

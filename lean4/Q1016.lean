@@ -1,44 +1,23 @@
 import Mathlib.Geometry.Euclidean.Basic
-
-open EuclideanGeometry
-
-/-!
-# Midpoint-Parallel Theorem in Quadrilateral
-
-Let ABCD be a quadrilateral in the Euclidean plane.
-- E is the midpoint of segment AD.
-- F is the midpoint of segment BC.
-- The diagonals AC and BD intersect at H.
-- G is a point in the plane such that GB is parallel to CD and GC is parallel to AB.
-
-**Claim:** EF is parallel to GH.
--/
-
-section QuadrilateralMidpointParallel
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Fact (finrank ℝ V = 2)]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-variable (A B C D E F G H : P)
-
--- E is the midpoint of AD
-axiom hE_mid_AD : E = midpoint ℝ A D
-
--- F is the midpoint of BC
-axiom hF_mid_BC : F = midpoint ℝ B C
-
--- H is the intersection of diagonals AC and BD
-axiom hH_in_AC : H ∈ openSegment ℝ A C
-axiom hH_in_BD : H ∈ openSegment ℝ B D
-
--- G is such that GB ∥ CD
-axiom hGB_parallel_CD : ∃ r : ℝ, r ≠ 0 ∧ vsub B G = r • (vsub D C)
-
--- G is such that GC ∥ AB
-axiom hGC_parallel_AB : ∃ s : ℝ, s ≠ 0 ∧ vsub C G = s • (vsub B A)
-
--- Conclusion: EF ∥ GH
-theorem quadrilateral_midpoint_parallel : ∃ t : ℝ, t ≠ 0 ∧ vsub F E = t • (vsub H G) := by
-  sorry
-
-end QuadrilateralMidpointParallel
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+open scoped EuclideanGeometry
+open Affine AffineSubspace
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+theorem prove_EF_parallel_GH
+  (A B C D E F G H : Point)
+  (hE_midpoint : E = midpoint ℝ A D)
+  (hF_midpoint : F = midpoint ℝ B C)
+  (hA_ne_C : A ≠ C)
+  (hB_ne_D : B ≠ D)
+  (hAC_BD_not_parallel : ¬(AffineSubspace.Parallel (line[ℝ, A, C]) (line[ℝ, B, D])))
+  (hH_on_segment_AC : H ∈ segment ℝ A C)
+  (hH_on_segment_BD : H ∈ segment ℝ B D)
+  (hC_ne_D : C ≠ D)
+  (hG_ne_B : G ≠ B)
+  (hGB_parallel_CD : AffineSubspace.Parallel (line[ℝ, G, B]) (line[ℝ, C, D]))
+  (hA_ne_B : A ≠ B)
+  (hG_ne_C : G ≠ C)
+  (hGC_parallel_AB : AffineSubspace.Parallel (line[ℝ, G, C]) (line[ℝ, A, B]))
+  : AffineSubspace.Parallel (line[ℝ, E, F]) (line[ℝ, G, H]) := by sorry

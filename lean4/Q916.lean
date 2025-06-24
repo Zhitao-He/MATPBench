@@ -1,21 +1,22 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic 
 import Mathlib.Data.Real.Basic
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-open scoped Real EuclideanGeometry
-
-
-abbrev EucPlane := EuclideanSpace ℝ (Fin 2)
-
-
-theorem value_of_angle_ACD_is_170_degrees
-    (O A B C D : EucPlane)
-    (hAB : A ≠ B) (hBC : B ≠ C) (hCD : C ≠ D) (hDA : D ≠ A) (hAC : A ≠ C) (hBD : B ≠ D)
-    (hA_circ : dist A O = dist B O)
-    (hB_circ : dist B O = dist C O)
-    (hC_circ : dist C O = dist D O)
-    (h_angle_BCA : ∠ B C A = (130 * Real.pi) / 180)
-    (h_angle_DCB : ∠ D C B = (60 * Real.pi) / 180)
-    : ∠ A C D = (170 * Real.pi) / 180 := by
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (a b c d : P)
+variable (x : ℝ)
+noncomputable def degree : ℝ := Real.pi / 180
+variable (r : ℝ)
+def circle_c (c : P) (r : ℝ) : Set P := {p : P | dist p c = r}
+variable (h_a_on_circle : dist a c = r)
+variable (h_b_on_circle : dist b c = r)
+variable (h_d_on_circle : dist d c = r)
+variable (h_radius_pos : r > 0)
+variable (ha_ne_c : a ≠ c) (hb_ne_c : b ≠ c) (hd_ne_c : d ≠ c)
+variable (h_angle_acd_is_x : EuclideanGeometry.angle a c d = x * Real.pi / 180)
+variable (h_angle_bca_is_130 : EuclideanGeometry.angle b c a = 130 * Real.pi / 180)
+variable (h_angle_dcb_is_60 : EuclideanGeometry.angle d c b = 60 * Real.pi / 180)
+variable (h_x_range : 0 ≤ x ∧ x ≤ 180)
+theorem find_x_value : x = 170 := by
   sorry

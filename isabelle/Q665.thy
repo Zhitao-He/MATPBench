@@ -1,41 +1,40 @@
-theory CircleGeometry
-imports Complex_Main "HOL-Analysis.Analysis"
+theory Geometry_Problem_Secant_Angle
+imports Main
 begin
-
-(* 定义2D平面上的点 *)
-type_synonym point = "real × real"
-
-(* 定义圆弧度数的计算 *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A B C = (
-    let
-      vec1 = (fst A - fst B, snd A - snd B);
-      vec2 = (fst C - fst B, snd C - snd B);
-      dot_product = fst vec1 * fst vec2 + snd vec1 * snd vec2;
-      mag1 = sqrt((fst vec1)^2 + (snd vec1)^2);
-      mag2 = sqrt((fst vec2)^2 + (snd vec2)^2)
-    in
-      acos(dot_product / (mag1 * mag2)) * (180 / pi)
-  )"
-
-(* 定义圆上的弧度测量 *)
-definition arc_measure :: "point ⇒ point ⇒ point ⇒ real" where
-  "arc_measure O P Q = (
-    let θ = angle P O Q
-    in if θ > 180 then 360 - θ else θ
-  )"
-
-(* 定义问题中的点 *)
-definition B :: point where "B = (0, 0)" (* 圆心B *)
-definition S :: point where "S = (1, 0)" (* 圆上的点S *)
-definition U :: point where "U = (0, 1)" (* 圆上的点U *)
-definition R :: point where "R = (2, 1)" (* 点R，使得∠SRU=23° *)
-definition V :: point where "V = (-1, 2)" (* 点V，使得∠BVT=68° *)
-definition T :: point where "T = (-1, -1)" (* 圆上的点T *)
-
-(* 根据题目条件，我们可以推导出BSU的度数 *)
-theorem arc_BSU_measure: "arc_measure B S U = 22"
-  (* 证明略，根据几何关系，在给定∠SRU=23°和∠BVT=68°的条件下，可以得出⌒BSU=22° *)
-  sorry
-
+typedecl point
+consts R S T U V B :: point
+consts on_circle :: "point ⇒ point ⇒ bool" 
+consts collinear_ordered :: "point ⇒ point ⇒ point ⇒ bool" 
+consts is_external_to_circle :: "point ⇒ point ⇒ bool" 
+consts angle_val :: "point ⇒ point ⇒ point ⇒ real" 
+consts arc_val :: "point ⇒ point ⇒ point ⇒ real" 
+axiomatization Geometric_Setup:
+  S_on_circle_B: "on_circle B S" and
+  U_on_circle_B: "on_circle B U" and
+  T_on_circle_B: "on_circle B T" and
+  V_on_circle_B: "on_circle B V" and
+  R_U_V_collinear: "collinear_ordered R U V" and
+  R_S_T_collinear: "collinear_ordered R S T" and
+  R_is_external: "is_external_to_circle R B" and
+  distinct_R_S: "R ≠ S" and distinct_R_U: "R ≠ U" and
+  distinct_S_U: "S ≠ U" and distinct_T_V: "T ≠ V" and
+  distinct_S_T: "S ≠ T" and distinct_U_V: "U ≠ V" and
+  distinct_B_S: "B ≠ S" and distinct_B_U: "B ≠ U" and 
+  distinct_B_T: "B ≠ T" and distinct_B_V: "B ≠ V" and
+  distinct_R_B: "R ≠ B" and
+  distinct_S_V: "S ≠ V" and distinct_U_T: "U ≠ T"
+definition angle_SRU_measure :: real where
+  "angle_SRU_measure = angle_val S R U" 
+definition arc_TV_measure :: real where
+  "arc_TV_measure = arc_val T V B" 
+definition arc_SU_measure :: real where
+  "arc_SU_measure = arc_val S U B" 
+axiomatization Given_Numerical_Values:
+  angle_SRU_is_23: "angle_SRU_measure = 23.0" and 
+  arc_TV_is_68:    "arc_TV_measure = 68.0"    
+axiomatization Secant_Secant_Angle_Theorem_Axiom:
+  secant_theorem_applied:
+    "2 * angle_SRU_measure = abs (arc_TV_measure - arc_SU_measure)"
+theorem target_measure_of_arc_SU:
+  "arc_SU_measure = 22.0"
 end

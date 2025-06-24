@@ -1,42 +1,31 @@
-theory HexagonInscribedInCircle
-imports 
-  Complex_Main 
-  "HOL-Analysis.Analysis"
+theory Hexagon_Angle_Problem
+  imports "HOL-Analysis.Euclidean_Space"
 begin
-
-(* 定义点和圆 *)
-type_synonym point = "real × real"
-
-(* 定义一个点是否在圆上 *)
-definition on_circle :: "point ⇒ point ⇒ real ⇒ bool" where
-  "on_circle p c r ≡ (fst p - fst c)² + (snd p - snd c)² = r²"
-
-(* 定义六边形是否内接于圆 *)
-definition hexagon_inscribed_in_circle :: "point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ real ⇒ bool" where
-  "hexagon_inscribed_in_circle c r A B C D E F ≡ 
-    on_circle A c r ∧ on_circle B c r ∧ on_circle C c r ∧ 
-    on_circle D c r ∧ on_circle E c r ∧ on_circle F c r"
-
-(* 计算向量之间的角度（弧度） *)
-definition angle_between_vectors :: "point ⇒ point ⇒ real" where
-  "angle_between_vectors v1 v2 = 
-    acos ((fst v1 * fst v2 + snd v1 * snd v2) / 
-         (sqrt ((fst v1)² + (snd v1)²) * sqrt ((fst v2)² + (snd v2)²)))"
-
-(* 计算三点形成的角度（弧度） *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A B C = 
-    angle_between_vectors (fst A - fst B, snd A - snd B) (fst C - fst B, snd C - snd B)"
-
-(* 将弧度转换为度数 *)
-definition rad_to_deg :: "real ⇒ real" where
-  "rad_to_deg α = α * 180 / pi"
-
-(* 定理：六边形内接于圆，角α为145度 *)
-theorem hexagon_inscribed_angle:
-  "∃c r A B C D E F. 
-    hexagon_inscribed_in_circle c r A B C D E F ∧ 
-    rad_to_deg (angle A B C) = 145"
+type_synonym point = "real^2"
+definition degrees_to_radians :: "real \<Rightarrow> real" where
+  "degrees_to_radians d = (d / 180) * pi"
+definition on_circle :: "point \<Rightarrow> point \<Rightarrow> real \<Rightarrow> bool" where
+  "on_circle P O r \<equiv> r > 0 \<and> dist P O = r"
+locale cyclic_hexagon_with_given_angles =
+  fixes O :: point   
+  fixes r :: real     
+  fixes V1 V2 V3 V4 V5 V6 :: point 
+  assumes r_is_positive: "r > 0"
+  assumes vertices_are_distinct: "distinct [V1, V2, V3, V4, V5, V6]"
+  assumes all_vertices_lie_on_the_circle:
+    "\<forall> P \<in> {V1, V2, V3, V4, V5, V6}. on_circle P O r"
+  defines
+    alpha:   "alpha \<equiv> angle V6 V1 V2"   
+    angle_V2: "angle_V2 \<equiv> angle V1 V2 V3"
+    angle_V3: "angle_V3 \<equiv> angle V2 V3 V4"   
+    angle_V4: "angle_V4 \<equiv> angle V3 V4 V5"
+    angle_V5: "angle_V5 \<equiv> angle V4 V5 V6"   
+    angle_V6: "angle_V6 \<equiv> angle V5 V6 V1"
+  assumes angle_V3_is_110_degrees: "angle_V3 = degrees_to_radians 110"
+  assumes angle_V5_is_105_degrees: "angle_V5 = degrees_to_radians 105"
+begin
+lemma alpha_measure_is_145_degrees:
+  "alpha = degrees_to_radians 145"
   sorry
-
+end
 end

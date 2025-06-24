@@ -1,49 +1,38 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
-open Real
-open EuclideanGeometry
-
-/--
-  Formalization of the geometric configuration:
-  - Points C, D, E, F lie on circle Ω
-  - Point B lies outside Ω
-  - Given angles:
-    ∠ D C F = 89°
-    ∠ E B F = 26°
-  - The value to find is ∠ E F B = 37°
--/
-noncomputable def degToRad (deg : ℝ) : ℝ := deg * π / 180
-
-section GeometryProblem
-
-variable {P : Type*} [EuclideanPlane P]
-variable (Ω : Circle P)
-variable (C D E F B : P)
-
--- Points C, D, E, F lie on the circle
-axiom hC_on_Ω : C ∈ Ω
-axiom hD_on_Ω : D ∈ Ω
-axiom hE_on_Ω : E ∈ Ω
-axiom hF_on_Ω : F ∈ Ω
-
--- Point B is not on the circle
-axiom hB_not_on_Ω : B ∉ Ω
-
--- Non-degeneracy conditions
-axiom hD_ne_C : D ≠ C
-axiom hF_ne_C : F ≠ C
-axiom hE_ne_B : E ≠ B
-axiom hF_ne_B : F ≠ B
-axiom hE_ne_F : E ≠ F
-axiom hB_ne_F : B ≠ F
-
--- Given angles
-axiom h_angle_DCF : ∠ D C F = degToRad 89
-axiom h_angle_EBF : ∠ E B F = degToRad 26
-
--- The value of x is ∠ E F B
-theorem value_of_x : ∠ E F B = degToRad 37 := by sorry
-
-end GeometryProblem
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (A B C D E F : P)
+variable (Ω : EuclideanGeometry.Sphere P)
+variable (x : ℝ)
+noncomputable def degToRad (d : ℝ) : ℝ := d * Real.pi / 180
+variable (h_center_A : Ω.center = A)
+variable (hC_on_Ω : C ∈ Ω)
+variable (hD_on_Ω : D ∈ Ω)
+variable (hE_on_Ω : E ∈ Ω)
+variable (hF_on_Ω : F ∈ Ω)
+variable (h_radius_pos : Ω.radius > 0)
+variable (h_angle_EBF : EuclideanGeometry.angle E B F = degToRad 26)
+variable (h_angle_ACD : EuclideanGeometry.angle A C D = degToRad 89)
+variable (h_angle_AEF : EuclideanGeometry.angle A E F = degToRad x)
+variable (h_collinear_BFC : Collinear ℝ ({B, F, C} : Set P))
+variable (h_collinear_BED : Collinear ℝ ({B, E, D} : Set P))
+theorem prove_value_of_x
+  (A B C D E F : P)
+  (Ω : EuclideanGeometry.Sphere P)
+  (x : ℝ)
+  (h_center_A : Ω.center = A)
+  (hC_on_Ω : C ∈ Ω)
+  (hD_on_Ω : D ∈ Ω)
+  (hE_on_Ω : E ∈ Ω)
+  (hF_on_Ω : F ∈ Ω)
+  (h_radius_pos : Ω.radius > 0)
+  (h_angle_EBF : EuclideanGeometry.angle E B F = degToRad 26)
+  (h_angle_ACD : EuclideanGeometry.angle A C D = degToRad 89)
+  (h_angle_AEF : EuclideanGeometry.angle A E F = degToRad x)
+  (h_collinear_BFC : Collinear ℝ ({B, F, C} : Set P))
+  (h_collinear_BED : Collinear ℝ ({B, E, D} : Set P)) :
+  x = 37 := by sorry
+end

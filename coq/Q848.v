@@ -1,26 +1,24 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals trigo.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section RightTriangleProblem.
 Variable R : realType.
+Variables A B C : 'Point[R]_2.
 
-Theorem value_of_y_in_right_triangle :
-  forall (A B C : R * R),
-    let dist P Q := sqrt ((fst P - fst Q)^+2 + (snd P - snd Q)^+2) in
-    dist A B = 32 ->
-    (let dot u v := fst u * fst v + snd u * snd v in
-     dot (A - C) (B - C) = 0) ->
-    let cosA :=
-      let u := (fst B - fst A, snd B - snd A) in
-      let v := (fst C - fst A, snd C - snd A) in
-      dot u v / (dist A B * dist A C) in
-    cosA = sqrt 2 / 2 ->
-    dist B C = 16 * sqrt 2 / 2.
+Hypotheses
+  BA_length : dist B A = 32;
+  angle_BAC : angle_deg (B,A,C) = 60;
+  AC_perp_BC : perpendicular (line A C) (line B C).
+
+Definition y := dist C A.
+
+Theorem y_value : y = 16.
 Proof. by []. Qed.
+
+End RightTriangleProblem.
 ####

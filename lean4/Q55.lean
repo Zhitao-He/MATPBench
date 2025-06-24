@@ -1,5 +1,4 @@
 import Mathlib.Data.Real.Basic
-
 theorem x_eq_3 (x : ℝ) :
   let ab := 6 * x + 2
   let ac := 9 * x - 2

@@ -1,30 +1,38 @@
-theory SquareSemicircleArea
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Shaded_Area
+  imports
+    Main
+    "HOL-Analysis.Analysis" 
+    "HOL-Analysis.Cartesian_Euclidean_Space" 
+    "HOL-Analysis.Jordan_Measure" 
 begin
-
-(* 定义正方形和半圆 *)
-definition square_ABCD :: "real × real set" where
-  "square_ABCD = {(x, y). 0 ≤ x ∧ x ≤ 2 ∧ 0 ≤ y ∧ y ≤ 2}"
-
-definition A :: "real × real" where "A = (0, 0)"
-definition B :: "real × real" where "B = (2, 0)"
-definition C :: "real × real" where "C = (2, 2)"
-definition D :: "real × real" where "D = (0, 2)"
-
-definition semicircle_AB :: "real × real set" where
-  "semicircle_AB = {(x, y). (x - 1)^2 + y^2 ≤ 1 ∧ y ≥ 0}"
-
-definition semicircle_AD :: "real × real set" where
-  "semicircle_AD = {(x, y). x^2 + (y - 1)^2 ≤ 1 ∧ x ≥ 0}"
-
-(* 定义阴影区域为正方形减去两个半圆 *)
-definition shaded_region :: "real × real set" where
-  "shaded_region = square_ABCD - semicircle_AB - semicircle_AD"
-
-(* 定义阴影区域的面积 *)
-theorem shaded_area: "measure lebesgue (shaded_region) = 8"
-  sorry (* 这里需要完整的证明，但题目要求只需给出定义 *)
-
+type_synonym point = "real^2"
+definition s :: real where
+  "s = 2.0" 
+definition A :: point where "A = (0.0, 0.0)"
+definition B :: point where "B = (s, 0.0)"
+definition D :: point where "D = (0.0, s)"
+definition C :: point where "C = (s, s)" 
+definition Square_ABCD :: "point set" where
+  "Square_ABCD = {p. let x = p$1, y = p$2 in 0.0 <= x & x <= s & 0.0 <= y & y <= s}"
+definition r_semi :: real where
+  "r_semi = s / 2.0" 
+definition M_AB :: point where
+  "M_AB = (s / 2.0, 0.0)" 
+definition Semicircle_AB :: "point set" where
+  "Semicircle_AB = {p. inner (p - M_AB) (p - M_AB) <= r_semi*r_semi & p$2 >= 0.0}"
+definition M_AD :: point where
+  "M_AD = (0.0, s / 2.0)" 
+definition Semicircle_AD :: "point set" where
+  "Semicircle_AD = {p. inner (p - M_AD) (p - M_AD) <= r_semi*r_semi & p$1 >= 0.0}"
+definition Lens_A :: "point set" where
+  "Lens_A = Semicircle_AB INTER Semicircle_AD" 
+definition Union_Semicircles :: "point set" where
+  "Union_Semicircles = Semicircle_AB UNION Semicircle_AD"
+definition Region_C :: "point set" where
+  "Region_C = Square_ABCD DIFF Union_Semicircles" 
+definition Shaded_Region :: "point set" where
+  "Shaded_Region = Lens_A UNION Region_C"
+lemma problem_claim:
+  "area Shaded_Region = 8.0"
+oops 
 end

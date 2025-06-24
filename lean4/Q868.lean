@@ -1,38 +1,21 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
 import Mathlib.Data.Real.Basic
-
-namespace Lean4GeomProblems
-
-open EuclideanGeometry
-
-variable {P : Type*} [EuclideanSpace ℝ P]
-
-/--
-Given:
-- Points A, B, C, T, E in a Euclidean space.
-- AB = 16.
-- E is the midpoint of CT.
-- ET = x > 0.
-- CE is perpendicular to AE.
-- E is strictly between A and B (i.e., E ∈ openSegment ℝ A B).
-- The area of quadrilateral CBTA is 104 (i.e., Triangle A C T + Triangle B C T = 104).
-
-Goal: Show x = 13 / 2.
--/
-theorem find_length_x_of_quadrilateral_area
-    (A B C T E : P)
-    (x : ℝ)
-    (h_x_pos : 0 < x)
-    (h_AB_len : dist A B = 16)
-    (h_E_midpoint_CT : E = midpoint ℝ C T)
-    (h_ET_is_x : dist E T = x)
-    (h_CE_perp_AE : ∠ C E A = (π / 2))
-    (h_E_in_openSegment_AB : E ∈ openSegment ℝ A B)
-    (h_area_CBTA : Triangle.area A C T + Triangle.area B C T = 104)
-    : x = 13 / 2 :=
-  by sorry
-
-end Lean4GeomProblems
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open EuclideanGeometry Real
+namespace ProblemSolution
+abbrev Plane := EuclideanSpace ℝ (Fin 2)
+noncomputable def target_x : ℝ := 13 / 2 
+theorem x_value
+  (A B C T E : Plane) (x : ℝ)
+  (h_CE_eq_ET : dist C E = dist E T)
+  (h_ET_eq_x : dist E T = x)
+  (h_angle_AEC_right : EuclideanGeometry.angle A E C = π / 2)
+  (h_AB_eq_16 : dist A B = 16)
+  (h_E_mid_CT : Wbtw ℝ C E T)
+  (h_E_between_AB : Wbtw ℝ A E B)
+  (h_area_CBTA_104 : (1/2 : ℝ) * (dist A B) * (dist C T) = 104)
+  (h_x_pos : 0 < x)
+  : x = target_x := by
+  sorry
+end ProblemSolution

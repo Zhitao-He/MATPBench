@@ -1,25 +1,15 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-
-namespace GeoProblem
-
--- Setup: 2D Euclidean affine space P over ℝ
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Fact (finrank ℝ V = 2)]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Points
-variable (j k l : P)
-
--- Hypotheses
-variable (x : ℝ)
-axiom hJK : dist j k = x + 7
-axiom hJL : dist j l = 4 * x - 8
-axiom hKL : dist k l = dist j k
-axiom h_noncollinear : ¬ Collinear ℝ ({j, k, l} : Set P)
-
--- The conclusion: angle KJL = π/3
-theorem angle_KJL_eq_sixty_degrees : ∠ k j l = π / 3 := by sorry
-
-end GeoProblem
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem angle_KJL_eq_pi_div_three
+  (J K L : PPoint)
+  (x : ℝ)
+  (h_JK_eq_JL : dist J K = dist J L)
+  (h_JK_eq_KL : dist J K = dist K L)
+  (h_JK_expr : dist J K = x + 7)
+  (h_JL_expr : dist J L = 4 * x - 8) :
+  EuclideanGeometry.angle K J L = Real.pi / 3 := by
+  sorry

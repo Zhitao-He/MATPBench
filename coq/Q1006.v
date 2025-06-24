@@ -27,15 +27,16 @@ Variable F : plane.
 Hypothesis F_on_AB : on_line F (Line A B).
 Hypothesis CF_perp_AB : perpendicular (Line C F) (Line A B).
 
-(* Orthocenter *)
+(* Orthocenter H *)
 Variable H : plane.
-Hypothesis H_is_orthocenter : 
-  H = intersection_point3 (Line A D) (Line B E) (Line C F).
+Hypothesis H_on_AD : on_line H (Line A D).
+Hypothesis H_on_BE : on_line H (Line B E).
+Hypothesis H_on_CF : on_line H (Line C F).
 
-(* Circumcenter *)
+(* Circumcenter O *)
 Variable O : plane.
 Hypothesis O_is_circumcenter :
-  O = circumcenter A B C.
+  is_circumcenter O A B C.
 
 (* Construct M: intersection of ED and AB *)
 Variable M : plane.

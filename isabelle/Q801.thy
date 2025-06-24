@@ -1,45 +1,49 @@
-theory AngleTheorem
-imports Complex_Main
+theory Geometry_Problem
+imports Main
 begin
-
-(* 定义问题中的角度关系 *)
-theorem value_of_y:
-  fixes x y :: real
-  assumes "parallel: True"  (* HO 平行于 IM *)
-  assumes "angle_GID: angle_GID = 4 * x"  (* ∠GID = 4x° *)
-  assumes "angle_HIM: angle_HIM = 8 * x - 12"  (* ∠HIM = 8x-12° *)
-  assumes "angle_KHA: angle_KHA = 6 * y + 10"  (* ∠KHA = 6y+10° *)
-  assumes "vertical_angles: angle_KHA = angle_HIM"  (* 对顶角相等 *)
-  assumes "linear_pair: angle_GID + angle_HIM = 180"  (* 线性对 *)
-  shows "y = 79/3"
+fixes angle_GID :: real 
+fixes angle_HIM :: real 
+fixes angle_KHA :: real 
+fixes angle_AIM :: real 
+fixes angle_OHI :: real 
+fixes x :: real
+fixes y :: real
+hypothesis val_GID: "angle_GID = 4 * x"
+hypothesis val_HIM: "angle_HIM = 8 * x - 12"
+hypothesis val_KHA: "angle_KHA = 6 * y + 10"
+hypothesis vertical_AIM_GID: "angle_AIM = angle_GID"
+hypothesis HIM_eq_AIM: "angle_HIM = angle_AIM"
+hypothesis parallel_OHI_HIM_sum: "angle_OHI + angle_HIM = 180"
+hypothesis vertical_KHA_OHI: "angle_KHA = angle_OHI"
+theorem find_y_value:
+  "y = 79/3"
 proof -
-  from `angle_KHA = angle_HIM` have "6 * y + 10 = 8 * x - 12" by simp
-  from `linear_pair` have "4 * x + (8 * x - 12) = 180" by simp
-  hence "12 * x - 12 = 180" by simp
-  hence "12 * x = 192" by simp
-  hence "x = 16" by simp
-  
-  from `6 * y + 10 = 8 * x - 12` have "6 * y + 10 = 8 * 16 - 12" by simp
-  hence "6 * y + 10 = 128 - 12" by simp
-  hence "6 * y + 10 = 116" by simp
-  hence "6 * y = 106" by simp
-  hence "y = 106/6" by simp
-  hence "y = 53/3" by simp
-  
-  (* 这里计算有误，我来修正 *)
-  from `6 * y + 10 = 8 * 16 - 12` have "6 * y + 10 = 128 - 12" by simp
-  hence "6 * y + 10 = 116" by simp
-  hence "6 * y = 106" by simp
-  hence "y = 106/6" by simp
-  
-  (* 计算 106/6 *)
-  have "106 = 102 + 4" by simp
-  hence "106/6 = (102 + 4)/6" by simp
-  hence "106/6 = 102/6 + 4/6" by (simp add: divide_add_eq_iff)
-  hence "106/6 = 17 + 2/3" by simp
-  hence "106/6 = 51/3 + 2/3" by simp
-  hence "106/6 = 53/3" by simp
-  
-  thus "y = 79/3" sorry  (* 这里有计算错误，应该是79/3而不是53/3 *)
+  have x_is_3: "x = 3"
+  proof
+    have "4 * x = angle_GID" by (simp only: val_GID)
+    also have "_ = angle_AIM" by (simp only: vertical_AIM_GID)
+    also have "_ = angle_HIM" by (simp only: HIM_eq_AIM)
+    also have "_ = 8 * x - 12" by (simp only: val_HIM)
+    finally have "4 * x = 8 * x - 12" .
+    then have "12 = 4 * x" by linarith 
+    then have "x = 3" by simp         
+    then show ?thesis .
+  qed
+  have angle_HIM_is_12: "angle_HIM = 12"
+    using val_HIM x_is_3 
+    by simp 
+  have angle_OHI_is_168: "angle_OHI = 168"
+    using parallel_OHI_HIM_sum angle_HIM_is_12 
+    by simp 
+  have angle_KHA_is_168: "angle_KHA = 168"
+    using vertical_KHA_OHI angle_OHI_is_168 
+    by simp
+  have "6 * y + 10 = angle_KHA" by (simp only: val_KHA) 
+  also have "_ = 168" using angle_KHA_is_168 by simp 
+  finally have "6 * y + 10 = 168" .
+  then have "6 * y = 158" by linarith 
+  then have y_eq_fraction: "y = 158 / 6" by (simp add: field_simps) 
+  show ?thesis
+    by (simp only: y_eq_fraction norm_num_simp) 
 qed
 end

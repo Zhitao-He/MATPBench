@@ -9,19 +9,30 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
-Variable w : R.
-Hypothesis hw : 0 < w.
-Let l := 4 * w.
-Let A := (0, w).
-Let B := (0, 0).
-Let C := (l, 0).
-Let D := (l, w).
-Let E := (l / 2, 0).
-Definition area_rect := l * w.
-Definition area_white := (1%:R/2) * `|fst A * (snd E - snd C) + fst E * (snd C - snd A) + fst C * (snd A - snd E)|.
 
-Theorem shaded_area : area_rect - area_white = 7 * w^+2.
-Proof.
-admit.
-Qed.
+(* Rectangle dimensions *)
+Variable width : R.
+Hypothesis width_pos : 0 < width.
+Definition length := 4 * width.
+
+(* Rectangle vertices *)
+Definition A := point2 0 width.
+Definition B := point2 0 0.
+Definition C := point2 length 0.
+Definition D := point2 length width.
+
+(* Midpoint E of BC *)
+Definition E := midpoint B C.
+
+(* Total rectangle area *)
+Definition total_area := length * width.
+
+(* Area of unshaded triangle ABE *)
+Definition triangle_area := (1/2) * (distance A B) * (distance B E).
+
+(* Shaded area percentage *)
+Definition shaded_percent := 100 * (total_area - triangle_area) / total_area.
+
+Theorem shaded_area_75_percent : shaded_percent = 75.
+Proof. Admitted.
 ####

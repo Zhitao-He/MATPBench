@@ -1,78 +1,51 @@
-theory SquareQuadrilaterals
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Square_Quadrilaterals
+  imports Complex_Main
 begin
-
-(* 定义二维平面上的点 *)
 type_synonym point = "real × real"
-
-(* 点的坐标访问函数 *)
-definition x :: "point ⇒ real" where "x p = fst p"
-definition y :: "point ⇒ real" where "y p = snd p"
-
-(* 两点之间的距离 *)
-definition distance :: "point ⇒ point ⇒ real" where
-"distance p q = sqrt((x p - x q)^2 + (y p - y q)^2)"
-
-(* 两个向量的点积 *)
-definition dot_product :: "point ⇒ point ⇒ point ⇒ point ⇒ real" where
-"dot_product a b c d = 
-   (x b - x a) * (x d - x c) + (y b - y a) * (y d - y c)"
-
-(* 两条线段垂直 *)
-definition perpendicular :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-"perpendicular a b c d = (dot_product a b c d = 0)"
-
-(* 三角形面积 *)
-definition triangle_area :: "point ⇒ point ⇒ point ⇒ real" where
-"triangle_area a b c = 
-   abs((x a * (y b - y c) + x b * (y c - y a) + x c * (y a - y b))/2)"
-
-(* 四边形面积，通过将四边形分为两个三角形 *)
-definition quadrilateral_area :: "point ⇒ point ⇒ point ⇒ point ⇒ real" where
-"quadrilateral_area a b c d = triangle_area a b c + triangle_area a c d"
-
-(* 定义问题 *)
-locale square_problem =
+locale square =
   fixes A B C D :: point
-  fixes E F G H P :: point
-  
-  (* A, B, C, D形成正方形 *)
-  assumes square: "distance A B = distance B C" "distance B C = distance C D"
-                  "distance C D = distance D A" "distance A C = distance B D"
-                  "perpendicular A B B C" "perpendicular B C C D"
-                  "perpendicular C D D A" "perpendicular D A A B"
-  
-  (* E, F, G, H分别在正方形的边上 *)
-  assumes E_on_AB: "∃t::real. t ∈ {0..1} ∧ E = (x A + t * (x B - x A), y A + t * (y B - y A))"
-  assumes F_on_BC: "∃t::real. t ∈ {0..1} ∧ F = (x B + t * (x C - x B), y B + t * (y C - y B))"
-  assumes G_on_CD: "∃t::real. t ∈ {0..1} ∧ G = (x C + t * (x D - x C), y C + t * (y D - y C))"
-  assumes H_on_DA: "∃t::real. t ∈ {0..1} ∧ H = (x D + t * (x A - x D), y D + t * (y A - y D))"
-  
-  (* EG 垂直于 FH *)
-  assumes perp_EG_FH: "perpendicular E G F H"
-  
-  (* EG 和 FH 的长度都是 34 *)
-  assumes len_EG: "distance E G = 34"
-  assumes len_FH: "distance F H = 34"
-  
-  (* P 是 EG 和 FH 的交点 *)
-  assumes P_intersect: "∃s t::real. s ∈ {0..1} ∧ t ∈ {0..1} ∧
-                         P = (x E + s * (x G - x E), y E + s * (y G - y E)) ∧
-                         P = (x F + t * (x H - x F), y F + t * (y H - y F))"
-  
-  (* 四个四边形的面积比例 *)
-  assumes area_ratio: "quadrilateral_area A E P H : quadrilateral_area B F P E : 
-                       quadrilateral_area C G P F : quadrilateral_area D H P G = 269 : 275 : 405 : 411"
-  
-  (* 正方形面积为 850 *)
-  assumes square_area: "distance A B^2 = 850"
-
-(* 定理陈述：根据给定条件，正方形ABCD的面积是850 *)
-theorem square_area_is_850:
-  assumes "locale square_problem"
-  shows "distance A B^2 = 850"
-  using assms square_area by simp
-
+  assumes AB: "A = (0, s)" "B = (0, 0)" "C = (s, 0)" "D = (s, s)"
+    and s_pos: "s > 0"
+definition on_segment :: "point ⇒ point ⇒ point ⇒ bool" where
+  "on_segment P Q X ⟷ (∃t::real. 0 < t ∧ t < 1 ∧ X = ((1-t)*fst P + t*fst Q, (1-t)*snd P + t*snd Q))"
+locale square_with_points =
+  square A B C D for A B C D :: point +
+  fixes E F G H :: point
+  assumes E_on_AB: "on_segment A B E"
+    and F_on_BC: "on_segment B C F"
+    and G_on_CD: "on_segment C D G"
+    and H_on_DA: "on_segment D A H"
+definition segment_length :: "point ⇒ point ⇒ real" where
+  "segment_length P Q = sqrt ((fst P - fst Q)^2 + (snd P - snd Q)^2)"
+definition perpendicular :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
+  "perpendicular P Q R S ⟷ 
+    let v1 = (fst Q - fst P, snd Q - snd P);
+        v2 = (fst S - fst R, snd S - snd R)
+    in v1⋅v2 = 0"
+  where "v1⋅v2 ≡ fst v1 * fst v2 + snd v1 * snd v2"
+locale square_with_quads =
+  square_with_points A B C D E F G H +
+  fixes P :: point
+  assumes EG_len: "segment_length E G = 34"
+    and FH_len: "segment_length F H = 34"
+    and EG_FH_perp: "∃P. (∃t1 t2. 0 < t1 ∧ t1 < 1 ∧ 0 < t2 ∧ t2 < 1 ∧ 
+                        P = ((1-t1)*fst E + t1*fst G, (1-t1)*snd E + t1*snd G) ∧
+                        P = ((1-t2)*fst F + t2*fst H, (1-t2)*snd F + t2*snd H)) ∧
+                        perpendicular E G F H"
+    and P_on_EG: "∃t1. 0 < t1 ∧ t1 < 1 ∧ P = ((1-t1)*fst E + t1*fst G, (1-t1)*snd E + t1*snd G)"
+    and P_on_FH: "∃t2. 0 < t2 ∧ t2 < 1 ∧ P = ((1-t2)*fst F + t2*fst H, (1-t2)*snd F + t2*snd H)"
+definition area_quadrilateral :: "point ⇒ point ⇒ point ⇒ point ⇒ real" where
+  "area_quadrilateral A B C D = 
+    0.5 * abs ((fst A * snd B + fst B * snd C + fst C * snd D + fst D * snd A)
+             - (snd A * fst B + snd B * fst C + snd C * fst D + snd D * fst A))"
+definition quad1 where "quad1 = area_quadrilateral A E P H"
+definition quad2 where "quad2 = area_quadrilateral B F P E"
+definition quad3 where "quad3 = area_quadrilateral C G P F"
+definition quad4 where "quad4 = area_quadrilateral D H P G"
+definition area_ratio where
+  "area_ratio = [quad1, quad2, quad3, quad4]"
+definition given_ratio where
+  "given_ratio = [269, 275, 405, 411]"
+definition square_area where
+  "square_area = 850"
 end

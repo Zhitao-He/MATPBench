@@ -1,54 +1,30 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
-import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Definition
-
-open EuclideanGeometry Affine Submodule Real
-
-variable {V P : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-  [MetricSpace P] [NormedAddTorsor V P]
-
-namespace GeometryProblem
-
--- Points in the plane
-variable (A B G H J : P)
--- Given a real positive radius and angle parameter (in radians)
-variable (r x_val : ℝ)
-
--- The circle S centered at A with radius r
-def S : Metric.sphere P := Metric.sphere A r
-
--- Hypotheses:
-
--- Points lie on the circle
-variable (hG_on_S : G ∈ S)
-variable (hH_on_S : H ∈ S)
-variable (hJ_on_S : J ∈ S)
-
--- Circle has positive radius
-variable (hr_pos : r > 0)
-
--- Angle constraints
-variable (hx_val_pos : x_val > 0)
-variable (hx_val_lt_pi_div_4 : x_val < π / 4)
-
--- A is the midpoint of JG (so JG is diameter)
-variable (hA_midpoint_JG : A = midpoint ℝ J G)
-
--- B lies between J and G, distinct from both
-variable (hB_on_segment_JG : B ∈ segment ℝ J G)
-variable (hB_ne_J : B ≠ J)
-variable (hB_ne_G : B ≠ G)
-
--- Angle conditions
-variable (h_angle_AJH : (Angle.value ∠ A J H) = x_val)
-variable (h_angle_HGB : (Angle.value ∠ H G B) = 2 * x_val)
-variable (h_GB_perp_HB : (Angle.value ∠ G B H) = π / 2)
-variable (h_JH_perp_GH : (Angle.value ∠ J H G) = π / 2)
-
--- Theorem: ∠BHG = π/6 (30 degrees)
-theorem angle_BHG_eq_pi_div_6 : (Angle.value ∠ B H G) = π / 6 := by sorry
-
-end GeometryProblem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev P := EuclideanSpace ℝ (Fin 2)
+open scoped EuclideanGeometry
+open scoped Real
+open Real
+noncomputable def deg_to_rad (deg : ℝ) : ℝ := deg * (π / 180)
+theorem problem_statement
+  (A J H G B : P)
+  (x_val : ℝ)
+  (h_AJH_eq_x_deg : ∠ A J H = deg_to_rad x_val)
+  (h_HGB_eq_2x_deg : ∠ H G B = deg_to_rad (2 * x_val))
+  (h_A_is_midpoint_JG : A = midpoint ℝ J G)
+  (h_dist_AH_eq_dist_AJ : dist A H = dist A J)
+  (h_GBH_is_right_angle : ∠ G B H = π / 2)
+  (h_JHG_is_right_angle : ∠ J H G = π / 2)
+  (h_B_on_segment_JG : B ∈ segment ℝ J G)
+  (h_J_ne_H : J ≠ H)
+  (h_G_ne_H : G ≠ H)
+  (h_J_ne_G : J ≠ G)
+  (h_G_ne_B : G ≠ B)
+  (h_H_ne_B : H ≠ B)
+  (h_B_ne_J : B ≠ J)
+  (h_x_val_sensible : x_val > 0 ∧ x_val < 90) :
+  ∠ B H G = deg_to_rad 30 := by
+  sorry

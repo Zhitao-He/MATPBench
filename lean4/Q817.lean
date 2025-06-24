@@ -1,48 +1,23 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry Real
-
-variable {P : Type*} [EuclideanPlane P]
-variable (O G E I H B : P)
-variable (x y : ℝ)
-
--- Distinctness of points
-axiom h_O_ne_G : O ≠ G
-axiom h_O_ne_I : O ≠ I
-axiom h_B_ne_H : B ≠ H
-axiom h_B_ne_I : B ≠ I
-axiom h_I_ne_E : I ≠ E
-axiom h_G_ne_E : G ≠ E
-axiom h_H_ne_O : H ≠ O
-
--- Angle measures in degrees
-axiom h_angle_GOI : (unorientAngle G O I).toDegrees = 3 * y + 1
-axiom h_angle_HBI : (unorientAngle H B I).toDegrees = 3 * x + 11
-axiom h_angle_OIE : (unorientAngle O I E).toDegrees = 4 * x - 5
-
--- Parallel lines
-axiom h_GE_parallel_OI : Line.parallel (Line.mk G E) (Line.mk O I)
-axiom h_HG_parallel_BE : Line.parallel (Line.mk H G) (Line.mk B E)
-axiom h_OI_parallel_HB : Line.parallel (Line.mk O I) (Line.mk H B)
-
--- Collinearity and betweenness
-axiom h_GOH_collinear : Collinear ℝ ({G, O, H} : Set P)
-axiom h_O_between_G_H : SameRay ℝ (O -ᵥ G) (H -ᵥ O)
-
-axiom h_EIB_collinear : Collinear ℝ ({E, I, B} : Set P)
-axiom h_I_between_E_B : SameRay ℝ (I -ᵥ E) (B -ᵥ I)
-
--- Angle constraints (0° < angle < 180°)
-axiom h_angle_GOI_pos : 0 < 3 * y + 1
-axiom h_angle_GOI_lt_180 : 3 * y + 1 < 180
-
-axiom h_angle_HBI_pos : 0 < 3 * x + 11
-axiom h_angle_HBI_lt_180 : 3 * x + 11 < 180
-
-axiom h_angle_OIE_pos : 0 < 4 * x - 5
-axiom h_angle_OIE_lt_180 : 4 * x - 5 < 180
-
--- Target theorem
-theorem find_y_value : y = 40 := by sorry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem find_y_value_from_geometry (
+  G O I H B E : P) (x y : ℝ)
+  (h_G_ne_O : G ≠ O) (h_I_ne_O : I ≠ O)
+  (h_H_ne_B : H ≠ B) (h_I_ne_B : I ≠ B)
+  (h_O_ne_I : O ≠ I) (h_E_ne_I : E ≠ I)
+  (h_G_ne_E : G ≠ E)
+  (h_H_ne_G : H ≠ G)
+  (h_B_ne_E : B ≠ E)
+  (h_angle_GOI : EuclideanGeometry.angle G O I = (3 * y + 1) * (Real.pi / 180))
+  (h_angle_HBI : EuclideanGeometry.angle H B I = (3 * x + 11) * (Real.pi / 180))
+  (h_angle_OIE : EuclideanGeometry.angle O I E = (4 * x - 5) * (Real.pi / 180))
+  (h_GOI_pos : 0 < 3 * y + 1) (h_GOI_lt_180 : 3 * y + 1 < 180)
+  (h_HBI_pos : 0 < 3 * x + 11) (h_HBI_lt_180 : 3 * x + 11 < 180)
+  (h_OIE_pos : 0 < 4 * x - 5) (h_OIE_lt_180 : 4 * x - 5 < 180)
+  (h_HBI_eq_OIE : EuclideanGeometry.angle H B I = EuclideanGeometry.angle O I E)
+  (h_GOI_plus_OIE_eq_180 : EuclideanGeometry.angle G O I + EuclideanGeometry.angle O I E = Real.pi)
+  : y = 40 := by sorry

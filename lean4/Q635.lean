@@ -1,45 +1,32 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-
-open Real EuclideanGeometry Angle
-
-section GeometryProblem
-
-variable {P : Type*} [EuclideanSpace ℝ P]
-
--- Points in the Euclidean plane
-variable (A N E C B F J : P)
-
--- Point separation and distinctness to ensure angles are well-defined
-axiom h_A_ne_N : A ≠ N
-axiom h_E_ne_N : E ≠ N
-axiom h_C_ne_E : C ≠ E
-axiom h_B_ne_E : B ≠ E
-axiom h_E_ne_C : E ≠ C
-axiom h_A_ne_C : A ≠ C
-axiom h_A_ne_F : A ≠ F
-axiom h_N_ne_F : N ≠ F
-axiom h_J_ne_N : J ≠ N
-
--- Given angle measures (angles in radians)
-axiom h_angle_ANE : value (∠ A N E) = π / 6                   -- 30°
-axiom h_angle_CEB : value (∠ C E B) = (11 * π) / 18            -- 110°
-axiom h_angle_ECA_eq_AFN : value (∠ E C A) = value (∠ A F N)
-axiom h_angle_ENJ : value (∠ E N J) = (13 * π) / 18            -- 130°
-
--- Supplementary (adjacent) angle conditions and non-collinearity
-axiom h_sbtw_AEB : Sbtw ℝ A E B
-axiom h_C_not_on_line_AEB : ¬ Collinear ℝ ({A, B, C} : Set P)
-axiom h_sbtw_FNJ : Sbtw ℝ F N J
-axiom h_E_not_on_line_FNJ : ¬ Collinear ℝ ({F, J, E} : Set P)
-
--- Non-degenerate triangles to use angle sum property
-axiom h_nd_CFN : ¬ Collinear ℝ ({C, F, N} : Set P)
-axiom h_nd_CAE : ¬ Collinear ℝ ({C, A, E} : Set P)
-
--- The desired result: ∠CAE = 45°, i.e. π / 4 radians
-theorem measure_of_angle_CAE_is_45_degrees : value (∠ C A E) = π / 4 := by sorry
-
-end GeometryProblem
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry Angle Affine
+variable (A B C E F J N : EuclideanSpace ℝ (Fin 2))
+noncomputable def degToRad (d : ℝ) : ℝ := d * (π / 180)
+noncomputable def angle_ANE_val : ℝ := degToRad 30
+noncomputable def angle_CEB_val : ℝ := degToRad 110
+noncomputable def angle_ENJ_val : ℝ := degToRad 130
+noncomputable def angle_CAE_target_val : ℝ := degToRad 45
+variable (hAN : A ≠ N) (hEN : E ≠ N)
+variable (hCE : C ≠ E) (hBE : B ≠ E)
+variable (hJN : J ≠ N)
+variable (hEA : E ≠ A)
+variable (hNC : N ≠ C)
+variable (h_angle_ANE : ∠ A N E = angle_ANE_val)
+variable (h_angle_CEB : ∠ C E B = angle_CEB_val)
+variable (h_angle_ENJ : ∠ E N J = angle_ENJ_val)
+variable (h_angle_ECA_eq_AFN : ∠ E C A = ∠ A F N)
+variable (h_AEC_add_CEB_eq_pi : ∠ A E C + ∠ C E B = π)
+variable (h_FNE_add_ENJ_eq_pi : ∠ F N E + ∠ E N J = π)
+variable (h_A_F_C_collinear : Collinear ℝ ({A, F, C} : Set (EuclideanSpace ℝ (Fin 2))))
+variable (h_F_between_A_C : Sbtw ℝ A F C)
+variable (h_N_not_on_line_AC : ¬ Collinear ℝ ({A, F, N} : Set (EuclideanSpace ℝ (Fin 2))))
+variable (h_triangle_CAE_nondegenerate : ¬ Collinear ℝ ({C, A, E} : Set (EuclideanSpace ℝ (Fin 2))))
+variable (h_triangle_CFN_nondegenerate : ¬ Collinear ℝ ({C, F, N} : Set (EuclideanSpace ℝ (Fin 2))))
+theorem find_angle_CAE : ∠ C A E = angle_CAE_target_val := by
+  sorry

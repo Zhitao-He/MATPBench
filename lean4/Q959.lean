@@ -1,64 +1,22 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Projection
-import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-
-noncomputable section
-
-namespace EuclideanGeometryProblem
-
-open EuclideanGeometry
-open scoped Real
-
--- V is the real vector space associated to the Euclidean plane P
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable [FiniteDimensional ℝ V] [Fact (finrank ℝ V = 2)]
-
--- P is the Euclidean plane as an affine space
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- The triangle vertices
-variables (A B C : P)
-
--- F: midpoint of BC
-def F : P := midpoint ℝ B C
-
--- D: foot of the altitude from C to AB
-def D : P := orthogonalProjection (affineLine ℝ A B) C
-
--- E: foot of the altitude from B to AC
-def E : P := orthogonalProjection (affineLine ℝ A C) B
-
--- G: midpoint of FD
-def G : P := midpoint ℝ (F) (D)
-
--- H: midpoint of FE
-def H : P := midpoint ℝ (F) (E)
-
--- Line lA: through A, direction parallel to BC
-def lA : Set P := affineLine ℝ A (A +ᵥ (C -ᵥ B))
-
--- Line GH
-def lGH : Set P := affineLine ℝ G H
-
--- Assumptions
-
--- Triangle ABC is not collinear
-variable (h_noncollinear : ¬Collinear ℝ A B C)
-
--- Triangle ABC is acute
-variable (h_acute : Triangle.IsAcute ℝ A B C)
-
--- Angle ABC > angle BCA
-variable (h_B_gt_C : ∠ A B C > ∠ B C A)
-
--- Intersection point I of lA and GH
-variable (I : P) (hI₁ : I ∈ lA) (hI₂ : I ∈ lGH)
-
--- Theorem: AI = FI
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+open Real InnerProductSpace EuclideanGeometry AffineSubspace FiniteDimensional
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+variable (A B C D E F G H I : PPoint)
+variable (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set PPoint))
+variable (h_angle_ABC_acute : EuclideanGeometry.angle A B C < π / 2)
+variable (h_angle_BCA_acute : EuclideanGeometry.angle B C A < π / 2)
+variable (h_angle_CAB_acute : EuclideanGeometry.angle C A B < π / 2)
+variable (h_angle_B_gt_angle_C : EuclideanGeometry.angle A B C > EuclideanGeometry.angle B C A)
+variable (hF : F = midpoint ℝ B C)
+variable (hD : D = (sorry : PPoint)) 
+variable (hE : E = (sorry : PPoint)) 
+variable (hG : G = midpoint ℝ F D)
+variable (hH : H = midpoint ℝ F E)
+variable (h_G_ne_H : G ≠ H)
+variable (hI_on_parallel : (I -ᵥ A) ∈ (affineSpan ℝ ({B, C} : Set PPoint)).direction)
+variable (hI_on_GH : I ∈ affineSpan ℝ ({G, H} : Set PPoint))
 theorem ai_eq_fi : dist A I = dist F I := by
   sorry
-
-end EuclideanGeometryProblem

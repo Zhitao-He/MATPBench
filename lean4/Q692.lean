@@ -1,53 +1,26 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
-
-/-!
-# Geometry Problem Formalization (Lean 4)
-
-Given:
-- Points A, M, P, N, D, B, C in the plane
-- AM = MP
-- AP = √13
-- PD = 3√13
-- PN = ND
-- ∠MAB = ∠NDC
-- Perimeter of △BPA is 12
-- CP is perpendicular to NP
-Find: Perimeter of △CPD (given as 36)
--/
-
-variable (Plane : Type*) [EuclideanPlane Plane]
-
--- Declare points
-variable (A M P N D B C : Plane)
-
--- 1. M is midpoint of AP
-axiom hM_midpoint : M = midpoint ℝ A P
-
--- 2. N is midpoint of PD
-axiom hN_midpoint : N = midpoint ℝ P D
-
--- 3. AP = √13
-axiom hAP_length : dist A P = Real.sqrt 13
-
--- 4. PD = 3√13
-axiom hPD_length : dist P D = 3 * Real.sqrt 13
-
--- 5. Points A, P, D are collinear with P between A and D
-axiom h_collinear : Collinear ℝ ![A, P, D]
-
--- 6. ∠MAB = ∠NDC
-axiom h_angle_eq : ∠ M A B = ∠ N D C
-
--- 7. Perimeter of △BPA is 12
-axiom h_perimeter : (Triangle.mk B P A).perimeter = 12
-
--- 8. CP is perpendicular to NP
-axiom h_perpendicular : ∠ C P N = ∠_right
-
--- Goal: Perimeter of △CPD is 36
-theorem perimeter_CPD : (Triangle.mk C P D).perimeter = 36 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+variable (A B C D M N P : PPoint)
+variable (h_AM_eq_MP : dist A M = dist M P)
+variable (h_AP_len : dist A P = Real.sqrt 13)
+variable (h_PD_len : dist P D = 3 * Real.sqrt 13)
+variable (h_PN_eq_ND : dist P N = dist N D)
+variable (h_angle_MAB_eq_NDC : EuclideanGeometry.angle M A B = EuclideanGeometry.angle N D C)
+noncomputable def perimeter_triangle_coord (p1 p2 p3 : PPoint) : ℝ := dist p1 p2 + dist p2 p3 + dist p3 p1
+variable (h_perimeter_BPA : perimeter_triangle_coord B P A = 12)
+variable (h_CP_perp_NP : EuclideanGeometry.angle C P N = Real.pi / 2)
+variable (h_sbtw_AMP : Sbtw ℝ A M P)
+variable (h_sbtw_PND : Sbtw ℝ P N D)
+variable (h_sbtw_MPN : Sbtw ℝ M P N)
+variable (h_sbtw_BPC : Sbtw ℝ B P C)
+variable (h_BPA_not_collinear : ¬ Collinear ℝ ({B, P, A} : Set PPoint))
+variable (h_CPD_not_collinear : ¬ Collinear ℝ ({C, P, D} : Set PPoint))
+theorem perimeter_CPD_eq_36 : perimeter_triangle_coord C P D = 36 := by
   sorry

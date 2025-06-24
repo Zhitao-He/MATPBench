@@ -6,28 +6,27 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section ParallelogramArea.
+Local Open Scope ring_scope.
 
 Variable R : realType.
-Variable point : Type.
-Variables P Q R' T S U V W : point.
-Hypothesis eq_dec : forall x y, {x = y} + {x <> y}.
-
-Variable area_triangle : point -> point -> point -> R.
-Variable area_parallelogram : point -> point -> point -> point -> R.
-Definition is_midpoint M A B := True.
+Variables P Q R' S T U V W : 'rV[R]_2.
 
 Hypotheses
-  U_mid : is_midpoint U Q R'.
-Hypotheses
-  W_mid : is_midpoint W P Q.
-Hypotheses
-  V_mid : is_midpoint V P R'.
+  (area_PQR : area_triangle P Q R' = 1)
+  (area_STU : area_triangle S T U = 1)
+  (mid_U : U = midpoint Q R')
+  (mid_W : W = midpoint P Q)
+  (mid_V : V = midpoint P R')
+  (mid_R_STU : R = midpoint S T)
+  (mid_V_STU : V = midpoint S U)
+  (mid_W_STU : W = midpoint T U).
 
-Theorem medial_parallelogram : area_parallelogram U V W X = 1/4 * area_triangle P Q R'.
-Proof.
-admit.
-Qed.
+Definition parallelogram_area (A B C D : 'rV[R]_2) :=
+  let AB := B - A in
+  let AD := D - A in
+  `|AB ** AD|`.
 
-End ParallelogramArea.
+Theorem area_UVRW_is_half : 
+  parallelogram_area U V R' W = 1 / 2.
+Proof. Admitted.
 ####

@@ -8,21 +8,22 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section SemicircleCrescents.
+
 Variable R : realType.
 
-Definition leg1 := 6%:R.
-Definition leg2 := 8%:R.
-Definition hyp := sqrt (leg1^+2 + leg2^+2).
+(* Define the legs and hypotenuse of the right triangle *)
+Let leg1 := 6%:R.
+Let leg2 := 8%:R.
+Let hyp := sqrt (leg1^+2 + leg2^+2).
 
-Definition semicircle_area (d : R) := (PI * (d/2)^+2) / 2.
+(* Define the area of a semicircle with diameter d *)
+Definition semicircle_area (d : R) := (PI * (d / 2)^+2) / 2.
 
-(* Let C_tri be the right triangle with legs leg1 and leg2, and hypotenuse hyp.
-   For each side, a semicircle is constructed with diameter equal to that side.
-   The semicircle on the hypotenuse is shaded. The two crescent-shaped regions are the portions of the semicircles on the legs lying outside the shaded semicircle.
-   The total area of the two non-shaded crescent-shaped crescents is to be shown as 24.
-*)
-
-Theorem semicircle_crescents_area :
-  semicircle_area leg1 + semicircle_area leg2 - semicircle_area hyp = 24.
+(* Theorem to prove the total area of the two non-shaded crescent-shaped regions is 24 *)
+Theorem semicircle_crescents_area : 
+  semicircle_area leg1 + semicircle_area leg2 - semicircle_area hyp = 24%:R.
 Proof. Admitted.
+
+End SemicircleCrescents.
 ####

@@ -6,29 +6,23 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section ParallelogramProblem.
 Variable R : realType.
+Variables A B C D E : 'Point[R]_2.
 
-Theorem value_x_36_5 :
-  forall (A B C D E : 'cV[R]_2),
-    (* AB = 15 *)
-    norm (B - A) = 15 /\
+Hypotheses
+  AB_length : dist A B = 15;
+  DA_length : dist D A = 9;
+  DB_length : dist D B = 12;
+  parallelogram_ADCB : (dist A D = dist B C) /\ parallel (line A D) (line B C) /\ parallel (line A B) (line D C);
+  BE_perp_DE : perpendicular (line B E) (line D E);
+  CB_perp_DB : perpendicular (line C B) (line D B);
+  collinear_ABE : collinear [:: A; B; E].
 
-    (* AD = 9 *)
-    norm (D - A) = 9 /\
+Definition x := dist D E.
 
-    (* BD = 12 *)
-    norm (D - B) = 12 /\
+Theorem x_value : x = 36 / 5.
+Proof. by []. Qed.
 
-    (* E is the foot of the perpendicular from D to AB *)
-    (exists k : R, E = (1 - k) *: A + k *: B) /\
-    vect_orthogonal (E - D) (B - A) /\
-
-    (* angle EDB = 90 degrees *)
-    vect_orthogonal (B - D) (E - D) ->
-
-    (* x = length(DC) = 36/5 *)
-    norm (C - D) = 36 / 5.
-Proof. Admitted.
+End ParallelogramProblem.
 ####

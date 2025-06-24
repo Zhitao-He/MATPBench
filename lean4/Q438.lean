@@ -1,31 +1,33 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.List.Basic
-
-def p0 : ℝ × ℝ := (0, 1)
-def p1 : ℝ × ℝ := (1, 3)
-def p2 : ℝ × ℝ := (2, 2)
-def p3 : ℝ × ℝ := (3, 4)
-def p4 : ℝ × ℝ := (4, 3)
-def p5 : ℝ × ℝ := (3, 2)
-def p6 : ℝ × ℝ := (4, 0)
-def p7 : ℝ × ℝ := (1, 1)
-
-def shadedPolygonPoints : List (ℝ × ℝ) := [p0, p1, p2, p3, p4, p5, p6, p7]
-
-def polyAreaSum (pts : List (ℝ × ℝ)) : ℝ :=
-  match pts with
-  | [] => 0
-  | pHead :: pTail =>
-    let (pLast, sumIntermediate) := pTail.foldl
-      (fun (acc : (ℝ × ℝ) × ℝ) (currentPoint : ℝ × ℝ) =>
-        let (prevPoint, currentSum) := acc
-        (currentPoint, currentSum + (prevPoint.1 * currentPoint.2 - currentPoint.1 * prevPoint.2))
-      ) (pHead, 0)
-    sumIntermediate + (pLast.1 * pHead.2 - pHead.1 * pLast.2)
-
-def polyArea (pts : List (ℝ × ℝ)) : ℝ :=
-  if pts.length < 3 then 0
-  else (1/2 : ℝ) * polyAreaSum pts
-
-theorem area_of_shaded_region_bmt_symbol : polyArea shadedPolygonPoints = 6 := by
-  sorry
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+namespace ShadedRegionProblem
+abbrev P2 : Type := EuclideanSpace ℝ (Fin 2)
+def xCoord (p : P2) : ℝ := p 0
+def yCoord (p : P2) : ℝ := p 1
+def v0 : P2 := ![0, 1]
+def v1 : P2 := ![1, 2]
+def v2 : P2 := ![0, 4]
+def v3 : P2 := ![2, 3]
+def v4 : P2 := ![4, 4]
+def v5 : P2 := ![3, 2]
+def v6 : P2 := ![4, 0]
+def v7 : P2 := ![2, 1]
+def shadedPolygonVertices : List P2 := [v0, v1, v2, v3, v4, v5, v6, v7]
+noncomputable def shoelaceArea (vertices : List P2) : ℝ :=
+  if vertices.length < 3 then
+    0
+  else
+    let n := vertices.length
+    let extendedVertices := vertices ++ [vertices.head!]
+    let sumOfTerms : ℝ := Id.run do
+      let mut currentSum : ℝ := 0
+      for i in [:n] do
+        let p_i := extendedVertices[i]!
+        let p_ip1 := extendedVertices[(i+1)]!
+        currentSum := currentSum + (xCoord p_i * yCoord p_ip1 - xCoord p_ip1 * yCoord p_i)
+      return currentSum
+    (1/2) * abs sumOfTerms
+def areaIsSix : Prop := shoelaceArea shadedPolygonVertices = 6
+theorem statedAreaResult : areaIsSix := by sorry
+end ShadedRegionProblem

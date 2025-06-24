@@ -1,12 +1,8 @@
-theory FindX
-  imports Main Real
+theory Geometry_Problem_Triangle
+imports Main
 begin
-
-theorem x_equals_34:
-  fixes x :: real
-  shows "x = 34"
-begin
-  (* 这里应该是证明，但根据要求我们只需要定义问题 *)
-end
-
+definition given_leg_length :: real where
+  "given_leg_length = 17 * sqrt 2"
+definition x :: real where
+  "x = 34"
 end

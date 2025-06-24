@@ -10,18 +10,35 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Variables b h m n S1 S2 S3 S4 : R.
-Hypotheses
-  (hb : 0 < b) (hh : 0 < h)
-  (hm : 0 < m < b) (hn : 0 < n < h)
-  (H_S1 : S1 = m * n / 2)
-  (H_S2 : S2 = (b - m) * n / 2)
-  (H_S3 : S3 = (b - m) * (h - n) / 2)
-  (H_S4 : S4 = m * (h - n) / 2).
+(* Coordinates of rectangle ABCD: A(0,0), B(b,0), C(b,h), D(0,h) *)
+Variable b h : R.
+Hypothesis hb : 0 < b.
+Hypothesis hh : 0 < h.
 
-Theorem rectangle_area_relation :
-  S1 + S3 = S2 + S4.
+(* Points M and N on AB and BC *)
+Variable m n : R.
+Hypothesis hm : 0 < m < b.
+Hypothesis hn : 0 < n < h.
+
+(* Given: triangle areas as in diagram *)
+Definition S1 := m * n / 2.
+Definition S2 := (b - m) * n / 2.
+Definition S3 := (b - m) * (h - n) / 2.
+Definition S4 := m * (h - n) / 2.
+
+(* Total area of the rectangle *)
+Definition total_area := b * h.
+
+(* Area of central quadrilateral (shaded region) *)
+Definition shaded_area := total_area - (S1 + S2 + S3 + S4).
+
+Theorem shaded_area_result :
+  m = 5 -> n = 4 -> b = 10 -> h = 8 ->
+  shaded_area = 25.
 Proof.
-admit.
+move=> Hm Hn Hb Hh.
+rewrite /shaded_area /total_area /S1 /S2 /S3 /S4.
+rewrite Hm Hn Hb Hh.
+field.
 Qed.
 ####

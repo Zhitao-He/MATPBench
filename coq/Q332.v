@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry euclidean.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -9,15 +9,19 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
-Variables A B C D E : 'rV[R]_2.
-Hypotheses
-  HA : A = row2 0 0 /\HB : B = row2 4 0 /\HC : C = row2 0 5 /\HD : D = row2 4 4.
-Hypothesis Hright1 : angle_at A B C = PI/2.
-Hypothesis Hright2 : angle_at B A D = PI/2.
-Hypothesis HE : exists t s, 0 <= t <= 1 /\ 0 <= s <= 1 /\ E = D + t *: (C - D) /\ E = A + s *: (B - A).
+Variables A B E : 'rV[R]_2.
 
-Theorem intersection_properties : True.
-Proof.
-admit.
-Qed.
+Hypotheses
+  (HA : A = [:: 0; 0 ::])
+  (HB : B = [:: 4; 0 ::])
+  (HE : exists k : R, E = [:: 4 * k; 4 * (1 - k) ::])
+  (Hright_ABE : angle_deg A B E + angle_deg B E A = 90).
+
+Definition triangle_area (P Q R : 'rV[R]_2) :=
+  (1%:R / 2) * `| (Q - P) ** (R - P) |.
+
+Theorem area_triangle_ABE : 
+  let area := triangle_area A B E in
+  area = 40%:R / 9%:R.
+Proof. Admitted.
 ####

@@ -9,12 +9,11 @@ Unset Printing Implicit Defensive.
 Section Angle_MDF_eq_NDE.
 
 Variable R : realType.
-Variable plane : Type.
 Variable Point : Type.
-Variable line : Type.
+Variable Line : Type.
 Variable Circle : Type.
 
-Variable A B C O E F H D L M N : Point.
+Variables A B C O E F H D L M N : Point.
 Variable circO : Circle.
 
 Hypotheses
@@ -37,7 +36,7 @@ Hypotheses
   .
 
 Theorem triangle_parallel_chord_angles :
-  angle M D F = angle N D E.
+  angle (M, D, F) = angle (N, D, E).
 Proof. Admitted.
 
 End Angle_MDF_eq_NDE.

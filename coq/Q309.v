@@ -9,15 +9,18 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
-Variables A B C D E F G : 'rV[R]_2.
 
-Hypotheses
-  ABC_isosceles_right : [/\B 0 0 = 0, B 0 1 = 0 & C 0 1 = 0] /\norm (B - C) = norm (A - B) /\norm (C - A)^+2 = norm (A - B)^+2 + norm (B - C)^+2.
-Hypotheses
-  DEF_isosceles_right : [/\E 0 0 = 0, E 0 1 = 0 & F 0 1 = 0] /\norm (E - F) = norm (D - E) /\norm (F - D)^+2 = norm (E - F)^+2 + norm (F - D)^+2.
+(* Define congruent isosceles right triangles *)
+Definition ABC_triangle : 'rV[R]_2 := \row_(i < 2) (if i == 0 then 1 else 0).
+Definition DEF_triangle := ABC_triangle. (* Congruent triangles *)
 
-Theorem areas_equal : area_triangle A B C = area_triangle D E F.
-Proof.
-admit.
-Qed.
+(* Square area calculation functions *)
+Definition square_area (side : R) : R := side * side.
+
+(* Inscribed square properties *)
+Hypothesis ABC_square_area : square_area (inscribed_square_side ABC_triangle) = 15.
+
+Theorem DEF_square_area :
+  square_area (inscribed_square_side DEF_triangle) = (40%:R / 3%:R).
+Proof. Admitted.
 ####

@@ -1,65 +1,25 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-abbrev Point := EuclideanSpace ℝ (Fin 2)
-open Real
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Data.Nat.Squarefree
 
 
-
-
-noncomputable def mkPoint (x y : ℝ) : Point := ![x, y]
-
-
-noncomputable def v₁  : Point := mkPoint 1 (-sqrt 3)
-noncomputable def v₂  : Point := mkPoint (3/2) (-sqrt 3 / 2)
-noncomputable def v₃  : Point := mkPoint (1 + sqrt 3 / 2) (-1/2)
-noncomputable def v₄  : Point := mkPoint (1 + sqrt 3 / 2) (3/2)
-noncomputable def v₅  : Point := mkPoint (3/2) (1 + sqrt 3 / 2)
-noncomputable def v₆  : Point := mkPoint 1 (1 + sqrt 3)
-noncomputable def v₇  : Point := mkPoint (-1/2) (1 + sqrt 3 / 2)
-noncomputable def v₈  : Point := mkPoint (-sqrt 3 / 2) (3/2)
-noncomputable def v₉  : Point := mkPoint 0 (1 + sqrt 3)
-noncomputable def v₁₀ : Point := mkPoint (-sqrt 3 / 2) (-1/2)
-noncomputable def v₁₁ : Point := mkPoint (-1/2) (-sqrt 3 / 2)
-noncomputable def v₁₂ : Point := mkPoint 0 (-sqrt 3)
-
-noncomputable def outerPolygonVertices : List Point :=
-  [v₁, v₂, v₃, v₄, v₅, v₆, v₇, v₈, v₉, v₁₀, v₁₁, v₁₂]
-
-
-noncomputable def polygonArea : ℝ := 6 * sqrt 3
-
-
-opaque IsSquareFree (n : Nat) : Prop
-
-
-structure AreaRepresentation where
-  m : ℤ
-  n : Nat
-  p : ℤ
-  n_pos : n > 0
-  n_squarefree : IsSquareFree n
-  area_relation : (m : ℝ) * sqrt (n : ℝ) + (p : ℝ) = polygonArea
-
-
-noncomputable def m_val : ℤ := 6
-noncomputable def n_val : Nat := 3
-noncomputable def p_val : ℤ := 0
-
-axiom n3_squarefree : IsSquareFree n_val
-axiom n3_pos : n_val > 0
-
-noncomputable def problemAreaRep : AreaRepresentation :=
-  { m := m_val
-    n := n_val
-    p := p_val
-    n_pos := n3_pos
-    n_squarefree := n3_squarefree
-    area_relation := by sorry
-  }
-
-
-theorem problem_claim : problemAreaRep.m + problemAreaRep.n + problemAreaRep.p = 9 := by
-  sorry
+noncomputable def areaRegularHexagon (s : ℝ) : ℝ :=
+  (3 * Real.sqrt 3 / 2) * s^2
+noncomputable def areaSquare (s : ℝ) : ℝ :=
+  s^2
+noncomputable def areaEquilateralTriangle (s : ℝ) : ℝ :=
+  (Real.sqrt 3 / 4) * s^2
+private noncomputable abbrev side_length_val : ℝ := 1
+private noncomputable def polygonArea_val : ℝ :=
+  let centralSquareArea := areaSquare side_length_val
+  let singleHexagonArea := areaRegularHexagon side_length_val
+  let singleOverlapArea := areaEquilateralTriangle side_length_val
+  centralSquareArea + 4 * singleHexagonArea - 4 * singleOverlapArea
+theorem fourHexagonsSurroundSquare_AreaSumIsMinusFour :
+  ∀ m p : ℤ, ∀ n : ℕ,
+    ( (n > 0) ∧
+      Squarefree n ∧
+      (polygonArea_val = (m : ℝ) * Real.sqrt (n : ℝ) + (p : ℝ))
+    ) →
+    (m + (n : ℤ) + p = -4)
+  := by sorry

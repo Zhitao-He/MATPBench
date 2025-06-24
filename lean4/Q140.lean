@@ -1,37 +1,29 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-
-/-!
-# Putnam 1991 A3 (formalization in Lean 4)
-
-The Euclidean plane is modeled as `P2`.
-Points A, B, C, E are defined by coordinates.
-Point D is the intersection of lines AC and BE.
-The theorem expresses the area difference is 4.
--/
-
-/-- Notation for the Euclidean plane over ℝ -/
-abbrev P2 := EuclideanSpace ℝ (Fin 2)
-
-/-- Coordinates for the relevant points -/
-def pointA : P2 := ![0, 0]
-def pointB : P2 := ![4, 0]
-def pointC : P2 := ![4, 6]
-def pointE : P2 := ![0, 8]
-
-/-- 
-Point D is the intersection of lines AC and BE, computed algebraically:
-AC: y = (3/2)x
-BE: y = -2x + 8
-Solving, D = (16/7, 24/7)
--/
-def pointD : P2 := ![16/7, 24/7]
-
-/-- The corresponding triangle areas -/
-def areaADE : ℝ := Triangle.area pointA pointD pointE
-def areaBDC : ℝ := Triangle.area pointB pointD pointC
-
-/-- The desired area difference is 4 -/
-theorem putnam1991_a3_area_difference : areaADE - areaBDC = 4 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+noncomputable def triangleArea (A B C : P) : ℝ :=
+  (1 / 2 : ℝ) * abs ((B -ᵥ A) 0 * (C -ᵥ A) 1 - (B -ᵥ A) 1 * (C -ᵥ A) 0)
+variable (A B C D E : P)
+variable (hAB : dist A B = 4)
+variable (hBC : dist B C = 6)
+variable (hAE : dist A E = 8)
+variable (hEAB_right : EuclideanGeometry.angle E A B = Real.pi / 2)
+variable (hABC_right : EuclideanGeometry.angle A B C = Real.pi / 2)
+variable (hD_on_AC : D ∈ segment ℝ A C)
+variable (hD_on_BE : D ∈ segment ℝ B E)
+theorem area_difference_ADE_BDC_is_4
+  (A B C D E : P)
+  (hAB : dist A B = 4)
+  (hBC : dist B C = 6)
+  (hAE : dist A E = 8)
+  (hEAB_right : EuclideanGeometry.angle E A B = Real.pi / 2)
+  (hABC_right : EuclideanGeometry.angle A B C = Real.pi / 2)
+  (hD_on_AC : D ∈ segment ℝ A C)
+  (hD_on_BE : D ∈ segment ℝ B E) :
+  triangleArea A D E - triangleArea B D C = 4 := by
   sorry
+end
+end

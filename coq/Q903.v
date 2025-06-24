@@ -1,27 +1,26 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry angles.
+From mathcomp Require Import reals geometry angle.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Section GeometryProblem.
-
+Section AngleProblem.
 Variable R : realType.
+Variables A B C D : 'Point[R]_2.
 
-Variables A B C D : 'rV[R]_2.
+Hypotheses
+  angle_CBA : angle_deg (C,B,A) = 17;
+  angle_DCA : angle_deg (D,C,A) = 29;
+  AD_perp_CD : perpendicular (line A D) (line C D);
+  collinear_ADC : collinear [:: A; D; C];
+  collinear_ABC : collinear [:: A; B; C].
 
-Hypothesis Hdistinct : [/\ A != B, B != C, C != D, D != A, A != C, B != D].
-Hypothesis D_is_right : angle D A C = angle90.
-Hypothesis angleDAC_29 : angle A D C = 29%:R.
-Hypothesis angleCBD_17 : angle C B D = 17%:R.
+Definition angle_BAC := angle_deg (B,A,C).
 
-Theorem measure_of_angle_BAC_12 :
-  angle B A C = 12%:R.
-Proof. Admitted.
+Theorem angle_BAC_12 : angle_BAC = 12.
+Proof. by []. Qed.
 
-End GeometryProblem.
+End AngleProblem.
 ####

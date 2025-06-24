@@ -1,20 +1,12 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-
-namespace ProblemFormalization
-
-variable (PointType : Type*) [EuclideanSpace ℝ PointType]
-variable (s q p r t : PointType)
-
--- Hypotheses based on the geometric diagram
-axiom hQR : dist q r = 12
-axiom hPS : dist p s = 4
-axiom hPT : dist p t = 6
-axiom hTOnSR : dist s t + dist t r = dist s r
-
--- Distinctness assertions
-axiom hDistinctPoints : s ≠ q ∧ q ≠ p ∧ p ≠ r ∧ r ≠ s ∧ t ≠ s ∧ t ≠ r
-
--- The theorem to be proven: "Value(LengthOfLine(SQ))=8"
-theorem length_sq_is_8 : dist s q = 8 := by sorry
-
-end ProblemFormalization
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (P_pt Q R S T : P)
+variable (hPT : dist P_pt T = 6)
+variable (hQR : dist Q R = 12)
+variable (hSP : dist S P_pt = 4)
+theorem find_length_SQ : dist S Q = 8 := by sorry
+end

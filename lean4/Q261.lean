@@ -1,25 +1,18 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-namespace ProblemDefinition
-
--- Define the type for points in 3D Euclidean space
-abbrev Point3D := EuclideanSpace ℝ (Fin 3)
-
--- Define the coordinates of points A, G, H in a 7×7×7 cube
-def A : Point3D := ![(0 : ℝ), (0 : ℝ), (7 : ℝ)]
-def G : Point3D := ![(7 : ℝ), (0 : ℝ), (0 : ℝ)]
-def H : Point3D := ![(0 : ℝ), (0 : ℝ), (0 : ℝ)]
-
--- The angle AGH at vertex G, with arms AG and HG
-def angleAGH_radians : ℝ := EuclideanGeometry.angle A G H
-
--- Convert the angle from radians to degrees
-def z : ℝ := angleAGH_radians * (180 / Real.pi)
-
--- Theorem: angle AGH in degrees is approximately 54.74 within a 0.01 tolerance
-theorem angle_AGH_is_approximately_54_74 : |z - 54.74| < 0.01 := by sorry
-
-end ProblemDefinition
+abbrev E3 := EuclideanSpace ℝ (Fin 3)
+namespace ProblemAGH
+def A (s : ℝ) : E3 := ![0, s, s]
+def G (s : ℝ) : E3 := ![s, 0, 0]
+def H (_ : ℝ) : E3 := ![0, 0, 0]
+noncomputable def distAG (s : ℝ) : ℝ := dist (A s) (G s)
+noncomputable def distGH (s : ℝ) : ℝ := dist (G s) (H s)
+noncomputable def distAH (s : ℝ) : ℝ := dist (A s) (H s)
+noncomputable def radiansToDegrees (r : ℝ) : ℝ := r * 180 / Real.pi
+noncomputable def angleAGH_deg (s : ℝ) : ℝ := radiansToDegrees (EuclideanGeometry.angle (A s) (G s) (H s))
+noncomputable def angleGAH_deg (s : ℝ) : ℝ := radiansToDegrees (EuclideanGeometry.angle (G s) (A s) (H s))
+noncomputable def angleHGA_deg (s : ℝ) : ℝ := radiansToDegrees (EuclideanGeometry.angle (H s) (G s) (A s))
+theorem sum_of_angles_is_180 (s : ℝ) :
+  angleAGH_deg s + angleGAH_deg s + angleHGA_deg s = 180 := by sorry
+end ProblemAGH

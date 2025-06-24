@@ -3,33 +3,28 @@ import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
-
-open Real EuclideanSpace AffineSubspace
-
--- 设 E₂ 是二维欧氏平面
-abbrev E₂ := EuclideanSpace ℝ (Fin 2)
-
--- Putnam 2011 A2 题目形式化
-theorem putnam_2011_a2
-    (A B C D M : E₂)
-    -- A, B, C 不共线（非退化三角形）
-    (h_nondegenerate : ¬ Collinear ℝ ({A, B, C} : Set E₂))
-    -- ABC 为等腰三角形, AB = AC
-    (h_isosceles : dist A B = dist A C)
-    -- M 是 BC 的中点
-    (h_M_midpoint : M = midpoint ℝ B C)
-    -- AM 对 BC 垂直
-    (h_AM_perp_BC : ⟪A -ᵥ M, B -ᵥ C⟫ = 0)
-    -- 高 AM = 11
-    (h_AM_length : dist A M = 11)
-    -- D ∈ AM (线段)
-    (h_D_on_AM : D ∈ segment ℝ A M)
-    -- AD = 10
-    (h_AD_length : dist A D = 10)
-    -- 角关系: ∠BDC = 3 * ∠BAC
-    (h_angle_relation : ∠ B D C = 3 * ∠ B A C)
-    -- 结论: 存在整数 a, b ≥ 0, (ABC的周长) = a + √b, 且 a + b = 616
-    : ∃ (a b : ℤ), b ≥ 0 ∧
-        (dist A B + dist B C + dist C A) = (a : ℝ) + Real.sqrt (b : ℝ) ∧
-        a + b = 616 := by
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+open EuclideanGeometry
+open Real
+theorem final_answer_is_616
+  (A B C M D : P)
+  (h_A_ne_B : A ≠ B)
+  (h_A_ne_C : A ≠ C)
+  (h_B_ne_C : B ≠ C)
+  (h_noncollinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (h_AB_eq_AC : dist A B = dist A C)
+  (h_M_midpoint : M = midpoint ℝ B C)
+  (h_AM_len : dist A M = 11)
+  (h_D_on_AM : D ∈ segment ℝ A M)
+  (h_AD_len : dist A D = 10)
+  (h_angle_relation : angle B D C = 3 * angle B A C)
+  (a b : ℤ)
+  (h_perimeter_form : dist A B + dist B C + dist C A = (a : ℝ) + Real.sqrt (b : ℝ))
+  (h_b_nonneg : b ≥ 0)
+  : a + b = 616 := by
   sorry
+end noncomputable section

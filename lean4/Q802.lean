@@ -1,42 +1,29 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry
-open RealAngle
-
-namespace EuclidGeomProblem
-
-/-!
-Given:
-- Points A D E F I J L O : EuclideanPlane
-- ∠FOE = 118°
-- ∠LDA = 104°
-- O D E collinear and O is between D E
-- A D O collinear and D is between A O
-- OD ∥ FI
-- J is on the ray from F through O (J ≠ F)
-Required: ∠IFJ = 62°
--/
-
-variable (A D E F I J L O : EuclideanPlane)
-
--- Helper: degrees to radians
-def degreesToRadians (d : ℝ) : ℝ := d * (Real.pi / 180)
-
--- Given assumptions
-axiom h_OD_parallel_FI : (affineSpan ℝ {O, D}) ∥ (affineSpan ℝ {F, I})
-axiom h_Sbtw_DOE : Sbtw ℝ D O E
-axiom h_Sbtw_ADO : Sbtw ℝ A D O
-
-axiom h_angle_FOE : Angle.Unoriented.angle F O E = degreesToRadians 118
-axiom h_angle_LDA : Angle.Unoriented.angle L D A = degreesToRadians 104
-
-axiom h_J_on_ray_FO : SameRay ℝ (J -ᵥ F) (O -ᵥ F) ∧ J ≠ F
-
--- Theorem: The required angle value
-theorem value_of_angle_IFJ : Angle.Unoriented.angle I F J = degreesToRadians 62 := by
+open scoped Real
+abbrev Plane := EuclideanSpace ℝ (Fin 2)
+namespace ProblemFormalization
+noncomputable def degreesToRadians (d : ℝ) : ℝ := d * Real.pi / 180
+variable (A D E F I J L O K : Plane)
+variable (h_FOE_value : EuclideanGeometry.angle F O E = degreesToRadians 118)
+variable (h_LDA_value : EuclideanGeometry.angle L D A = degreesToRadians 104)
+variable (h_OD_parallel_FI : (affineSpan ℝ ({O, D} : Set Plane)).Parallel (affineSpan ℝ ({F, I} : Set Plane)))
+variable (hK_on_OE : K ∈ affineSpan ℝ ({O, E} : Set Plane))
+variable (hK_on_FI : K ∈ affineSpan ℝ ({F, I} : Set Plane))
+variable (h_IFK_collinear : Collinear ℝ ({I, F, K} : Set Plane))
+variable (h_IFJ_JFK_supplementary : EuclideanGeometry.angle I F J + EuclideanGeometry.angle J F K = Real.pi)
+variable (h_JFK_eq_FOE : EuclideanGeometry.angle J F K = EuclideanGeometry.angle F O E)
+theorem target_angle_IFJ_is_62_degrees (A D E F I J L O K : Plane)
+  (h_FOE_value : EuclideanGeometry.angle F O E = degreesToRadians 118)
+  (h_LDA_value : EuclideanGeometry.angle L D A = degreesToRadians 104)
+  (h_OD_parallel_FI : (affineSpan ℝ ({O, D} : Set Plane)).Parallel (affineSpan ℝ ({F, I} : Set Plane)))
+  (hK_on_OE : K ∈ affineSpan ℝ ({O, E} : Set Plane))
+  (hK_on_FI : K ∈ affineSpan ℝ ({F, I} : Set Plane))
+  (h_IFK_collinear : Collinear ℝ ({I, F, K} : Set Plane))
+  (h_IFJ_JFK_supplementary : EuclideanGeometry.angle I F J + EuclideanGeometry.angle J F K = Real.pi)
+  (h_JFK_eq_FOE : EuclideanGeometry.angle J F K = EuclideanGeometry.angle F O E) :
+  EuclideanGeometry.angle I F J = degreesToRadians 62 := by
   sorry
-
-end EuclidGeomProblem
+end ProblemFormalization

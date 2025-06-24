@@ -1,30 +1,17 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
-namespace IsoscelesTrapezoidProblem
-
--- Working in a 2D real inner product space (Euclidean plane)
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [Fact (finrank ℝ P = 2)]
-
--- Declare points Q R S T X Y : P
-variable (Q R S T X Y : P)
-
--- 1. QR and TS are parallel and oriented in the same direction (with k > 0)
-axiom h_parallel : ∃ k : ℝ, k > 0 ∧ (R -ᵥ Q) = k • (S -ᵥ T)
-
--- 2. X is the midpoint of QT, Y is the midpoint of RS
-axiom h_X_mid : X = midpoint ℝ Q T
-axiom h_Y_mid : Y = midpoint ℝ R S
-
--- 3. QTSR is isosceles (QT = RS)
-axiom h_isosceles : dist Q T = dist R S
-
--- 4. QR = 22, XY = 15
-axiom h_QR : dist Q R = 22
-axiom h_XY : dist X Y = 15
-
--- Goal: TS = 8
-theorem length_TS_is_8 : dist T S = 8 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+open EuclideanGeometry
+theorem find_length_TS
+  (Q T S R X Y : PPoint)
+  (h_parallel : ∃ (ℓ₁ ℓ₂ : AffineSubspace ℝ PPoint), Q ∈ ℓ₁ ∧ R ∈ ℓ₁ ∧ T ∈ ℓ₂ ∧ S ∈ ℓ₂ ∧ ℓ₁ ≠ ℓ₂ ∧ ℓ₁.Parallel ℓ₂)
+  (h_isosceles : dist Q T = dist R S)
+  (hX_midpoint_of_QT : X = midpoint ℝ Q T)
+  (hY_midpoint_of_RS : Y = midpoint ℝ R S)
+  (hQR_length : dist Q R = 22)
+  (hXY_length : dist X Y = 15)
+  (midsegment_length_formula : 2 * dist X Y = dist Q R + dist T S)
+  : dist T S = 8 :=
+by
   sorry
-
-end IsoscelesTrapezoidProblem

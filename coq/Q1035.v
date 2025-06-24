@@ -1,30 +1,29 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section PutnamGeom.
+Section QuadrilateralAngle.
 
 Variable R : realType.
-Variable plane : euclidean_plane R.
+Let point := 'rV[R]_2.
 
-Let Point := plane#point.
+Variables A B F D C E G : point.
 
-Variables A B C D E F G : Point.
+Hypothesis quadrilateral : ~colinear A B F /\ ~colinear A D F.
+Hypothesis C_on_BF : on_line C (line_through B F).
+Hypothesis E_on_DF : on_line E (line_through D F).
+Hypothesis angle_condition : angle B A C = angle D A E.
+Hypothesis G_intersection : exists l1 l2,
+    l1 = line_through B E /\
+    l2 = line_through C D /\
+    intersects_at l1 l2 G.
 
-Hypotheses
-  (quad : collinear A B F = false /\ collinear A D F = false /\ collinear B F D = false)
-  (on_BF : on_line C (Line B F))
-  (on_DF : on_line E (Line D F))
-  (BAC_eq_DAE : angle A B C = angle A D E)
-  (G_be_CD : exists l1 l2, l1 = Line B E /\ l2 = Line C D /\ intersection l1 l2 = Some G).
-
-Theorem putnam_geom_quadrilateral_angle :
-  angle F A C = angle G A E.
+Theorem angle_equality : angle F A C = angle G A E.
 Proof. Admitted.
 
-End PutnamGeom.
+End QuadrilateralAngle.
 ####

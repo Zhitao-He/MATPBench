@@ -1,8 +1,10 @@
 import Mathlib.Data.Real.Basic
-
--- 最大整数函数（floor函数）
-def greatestIntegerFunction (x : ℝ) : ℤ := Int.floor x
-
--- 修正后的命题：floor函数在所有整数点不连续
-theorem greatestIntegerFunction_notContinuousAtIntegers :
-    ∀ x₀ : ℝ, (∃ n : ℤ, x₀ = n) → ¬ContinuousAt greatestIntegerFunction x₀ := by sorry
+import Mathlib.Topology.MetricSpace.Basic
+open Classical
+noncomputable section
+def dirichletFunction (x : ℝ) : ℝ :=
+  if _ : ∃ (r : ℚ), x = r then 1 else 0
+def IsNowhereContinuous (f : ℝ → ℝ) : Prop :=
+  ∀ (x₀ : ℝ), ¬ ContinuousAt f x₀
+theorem dirichlet_function_is_nowhere_continuous :
+  IsNowhereContinuous dirichletFunction := by sorry

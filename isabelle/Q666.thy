@@ -1,24 +1,24 @@
-theory GeometryProblem
-imports 
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Geometry_Problem_Formalization
+imports Complex_Main 
 begin
-
-text ‹As shown in the diagram, AB=12, AC=y, AD=4, BC=x, CD=z, BA is perpendicular to CA, DC⊥BC. 
-      Find the value of x.›
-
-theorem value_of_x:
-  fixes B :: "real × real" and A :: "real × real" and D :: "real × real"
-  defines "B ≡ (-12, 0)"
-  defines "A ≡ (0, 0)"
-  defines "D ≡ (4, 0)"
-  shows "∃a b. 
-    let C = (a, b);
-        y = sqrt ((a - 0)^2 + (b - 0)^2);
-        z = sqrt ((a - 4)^2 + (b - 0)^2);
-        x = sqrt ((a - (-12))^2 + (b - 0)^2)
-    in (a - 0) * (4 - (-12)) + (b - 0) * (0 - 0) = 0 ∧
-       (a - 4) * ((a - (-12)) - (4 - (-12))) + (b - 0) * ((b - 0) - (0 - 0)) = 0 ∧
-       x = 8 * sqrt 3"
-
+type_synonym point = "real^2"
+fixes A :: point
+fixes B :: point
+fixes C :: point
+fixes D :: point
+fixes x :: real
+fixes y :: real
+fixes z :: real
+axiomatize
+  len_AB: "dist A B = 12" and
+  len_AC: "dist A C = y" and
+  len_AD: "dist A D = 4" and
+  len_BC: "dist B C = x" and
+  len_CD: "dist C D = z" and
+  positive_lengths: "x > 0 \<and> y > 0 \<and> z > 0" and
+  collinear_B_A_D: "dist B D = dist A B + dist A D" and
+  perpendicular_BAC: "(B - A) \<cdot> (C - A) = 0" and
+  perpendicular_BCD: "(B - C) \<cdot> (D - C) = 0"
+lemma value_of_x: "x = 8 * sqrt 3"
+  oops 
 end

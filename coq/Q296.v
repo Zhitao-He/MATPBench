@@ -14,18 +14,14 @@ Variable R : realType.
 Variables A B C D : 'rV[R]_2.
 
 Hypotheses
-  (* The points A, B, C are non-collinear (form triangle) *)
-  (ABC_noncol : ~ colinear A B C)
-  (* D is in the plane of ABC *)
-  (D_plane : coplanar4 A B C D)
   (* Triangle BDC is isosceles: |BD| = |DC| *)
   (isos_BDC : norm (B - D) = norm (D - C))
-  (* Triangle ACD is isosceles: |AC| = |AD| *)
-  (isos_ACD : norm (A - C) = norm (A - D))
+  (* Triangle ACD is isosceles: |AC| = |CD| *)
+  (isos_ACD : norm (A - C) = norm (C - D))
   (* m∠ABC = 70° *)
-  (ang_ABC : angle_deg B A C = 70).
+  (ang_ABC : angle_deg A B C = 70).
 
-Theorem triangle_angle_BAC_35 :
-  angle_deg A B C = 35.
+Theorem angle_BAC_35 :
+  angle_deg B A C = 35.
 Proof. Admitted.
 ####

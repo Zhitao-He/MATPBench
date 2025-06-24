@@ -1,28 +1,19 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
--- We work in the Euclidean plane
-variable {P : Type} [EuclideanPlane P]
-
--- Points of the quadrilateral
-variable (W X Y Z : P)
-
--- Angle measures
-variable (x : ℝ) (hx : 0 < x)
-
--- Convert degrees to radians
-noncomputable def degreesToRadians (deg : ℝ) : ℝ := deg * (Real.pi / 180)
-
--- Angle hypotheses
-variable (h_WZY : ∠ W Z Y = degreesToRadians (4 * x))
-variable (h_XWZ : ∠ X W Z = degreesToRadians (3 * x))
-variable (h_YXW : ∠ Y X W = degreesToRadians x)
-variable (h_ZYX : ∠ Z Y X = degreesToRadians (2 * x))
-
--- Angle sum property for quadrilateral
-variable (h_angles_sum : ∠ X W Z + ∠ Y X W + ∠ Z Y X + ∠ W Z Y = 2 * Real.pi)
-
--- The theorem statement
-theorem measure_of_angle_ZYX_72_degrees :
-    ∠ Z Y X = degreesToRadians 72 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Data.Real.Basic
+open Real EuclideanGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def degreesToRadians (d : ℝ) : ℝ := d * (Real.pi / 180)
+theorem measure_of_angle_ZYX_in_degrees_eq_72
+  (W X Y Z : PPoint)
+  (x_deg : ℝ)
+  (h_angle_WZY : EuclideanGeometry.angle W Z Y = (4 * x_deg) * Real.pi / 180)
+  (h_angle_XWZ : EuclideanGeometry.angle Z W X = (3 * x_deg) * Real.pi / 180)
+  (h_angle_YXW : EuclideanGeometry.angle Y X W = (x_deg) * Real.pi / 180)
+  (h_angle_ZYX : EuclideanGeometry.angle X Y Z = (2 * x_deg) * Real.pi / 180)
+  (h_sum_of_angles :
+    (4 * x_deg + 3 * x_deg + x_deg + 2 * x_deg) * Real.pi / 180 = 2 * Real.pi)
+  (h_x_deg_positive : x_deg > 0) :
+  2 * x_deg = 72 := by
   sorry

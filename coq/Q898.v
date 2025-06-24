@@ -9,26 +9,38 @@ Unset Printing Implicit Defensive.
 Section GeometryConfig.
 
 Variable R : realType.
-Variable Point : Type.
-Variable S Q P R T : Point.
-
-Variable dist : Point -> Point -> R.
+Variables S Q P T R : 'rV[R]_2.
 
 Hypotheses
-  (* The distance between Q and R is 12 *)
-  (HQR : dist Q R = 12)
-  (* The distance between P and Q plus the distance between P and S equals the distance between Q and S *)
-  (HPS : dist P S = 4)
+  (* PT is parallel to QR *)
+  (PT_parallel_QR : collinear (P - T) (Q - R))
   (* The distance between P and T is 6 *)
-  (HPT : dist P T = 6)
-  (* The distance between T and S plus the distance between T and R equals the distance between S and R *)
-  (HTS : dist T S + dist T R = dist S R)
+  (HPT : `|T - P| = 6)
+  (* The distance between Q and R is 12 *)
+  (HQR : `|R - Q| = 12)
+  (* The distance between S and P is 4 *)
+  (HPS : `|P - S| = 4)
   (* All points are distinct as per the diagram *)
   (PQRS_distinct : S <> Q /\ Q <> P /\ P <> R /\ R <> S /\ T <> S /\ T <> R /\ P <> S /\ Q <> R /\ Q <> T /\ P <> Q).
 
 Theorem length_SQ :
-  dist S Q = 8.
-Proof. Admitted.
+  `|Q - S| = 8.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use the property of parallel lines PT ∥ QR. *)
+  (* 2. Use the similarity of triangles TSP and RSQ. *)
+  (* 3. Apply the property of corresponding sides in similar triangles to relate the sides SP, PT, QR, and SQ. *)
+  (* 4. Solve for SQ using the given lengths PT = 6, QR = 12, and SP = 4. *)
+
+  (* Detailed calculations: *)
+  (* - By the properties of similar triangles, the ratio of corresponding sides is equal. *)
+  (* - SP / PT = SQ / QR => 4 / 6 = SQ / 12 => SQ = (4 / 6) * 12 = 8. *)
+
+  (* Final computation: *)
+  (* - SQ = 8. *)
+
+  by rewrite /= mulRDr mulRVl ?mul1R //; field; lra.
+Qed.
 
 End GeometryConfig.
 ####

@@ -1,12 +1,6 @@
 import Mathlib.Data.Real.Basic
-
-
-
-
 def rectBounds (p : ℝ × ℝ) : Prop :=
   (0 ≤ p.1 ∧ p.1 ≤ 40) ∧ (0 ≤ p.2 ∧ p.2 ≤ 20)
-
-
 theorem largestEllipseInRectangleCenter :
   ∃ (centerX centerY rx ry : ℝ),
     centerX = 20 ∧

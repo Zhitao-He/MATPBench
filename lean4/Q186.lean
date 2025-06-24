@@ -1,37 +1,28 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2 
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open EuclideanGeometry
-open scoped Real
-
-abbrev Point := EuclideanSpace ℝ (Fin 2)
-
-noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
-
-namespace InscribedQuadrilateral
-
-variables (A B C D Z : Point) (r : ℝ)
-
-variable (hr_pos : r > 0)
-variable (hA_on_circle : dist A Z = r)
-variable (hB_on_circle : dist B Z = r)
-variable (hC_on_circle : dist C Z = r)
-variable (hD_on_circle : dist D Z = r)
-
-variable (hA_ne_B : A ≠ B)
-variable (hB_ne_C : B ≠ C)
-variable (hC_ne_D : C ≠ D)
-variable (hD_ne_A : D ≠ A)
-
-variable (h_angle_BZA : ∠ B Z A = Real.Angle.coe (degToRad 104))
-variable (h_angle_CZB : ∠ C Z B = Real.Angle.coe (degToRad 94))
-
-variable (h_parallel_AB_DC : ¬ LinearIndependent ℝ ![B -ᵥ A, C -ᵥ D])
-
-theorem measure_arc_ADC_is_162_degrees :
-    (∠ A Z D) + (∠ D Z C) = Real.Angle.coe (degToRad 162) := by
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+open Real EuclideanGeometry Affine AffineSubspace
+abbrev Point := EuclideanSpace ℝ (Fin 2) 
+namespace QuadrilateralInscribedInCircle
+variable (A B C D Z : Point)
+variable (Ω : EuclideanGeometry.Sphere Point) 
+variable (h_center_Z : Ω.center = Z)
+variable (hA_on_Ω : A ∈ Ω)
+variable (hB_on_Ω : B ∈ Ω)
+variable (hC_on_Ω : C ∈ Ω)
+variable (hD_on_Ω : D ∈ Ω)
+variable (h_distinct_A_B : A ≠ B)
+variable (h_distinct_B_C : B ≠ C)
+variable (h_distinct_C_D : C ≠ D)
+variable (h_distinct_D_A : D ≠ A)
+variable (mArcAB mArcBC mArcCD mArcDA : ℝ)
+variable (h_mArcAB_val : mArcAB = 104)
+variable (h_mArcBC_val : mArcBC = 94)
+variable (h_sum_arcs : mArcAB + mArcBC + mArcCD + mArcDA = 360)
+variable (h_parallel_AB_DC : AffineSubspace.Parallel (affineSpan ℝ {A, B}) (affineSpan ℝ {D, C}))
+variable (h_parallel_implies_equal_arcs : mArcDA = mArcBC)
+theorem target_arc_measure : mArcDA + mArcCD = 162 := by
   sorry
-
-end InscribedQuadrilateral
+end QuadrilateralInscribedInCircle

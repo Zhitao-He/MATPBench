@@ -1,6 +1,4 @@
 import Mathlib.Data.Real.Basic
-
-
 theorem transversal_parallel_angles_find_x
   (x y z : ℝ)
   (h_x_nonneg : 0 ≤ x)

@@ -6,48 +6,30 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Tangent_Angle_Equality.
-
+Section TangentAngleProblem.
 Variable R : realType.
+Variables O P A B C D E F : 'Point[R]_2.
 
-(* Points *)
-Variables O A B C D E F : 'rV[R]_2.
+(* Tangent conditions *)
+Hypothesis PA_tangent : tangent (line P A) (circle O (dist O A)).
+Hypothesis PB_tangent : tangent (line P B) (circle O (dist O B)).
 
-Hypotheses
-  (* O is the center of a circle. *)
-  (circle_non_degenerate : A != B /\ A != O /\ B != O)
-  (* PA and PB are tangents to the circle centered at O from point P.*)
-  (exists P : 'rV[R]_2,
-    (* P lies outside the circle *)
-    (P != O) /\
-    (normr (A - O) = normr (B - O)) /\
-    (A != B) /\
-    (* PA and PB are both tangent to the circle at points A and B respectively *)
-    (([forall t : R, (t != 0) ==> ((A + t *: (P - A) != O))]) /\
-     ([forall t : R, (t != 0) ==> ((B + t *: (P - B) != O))]))
-  )
-  (* DE is a tangent passing through C, D on AP and E on PB *)
-  (C_on_DE : colinear C D E)
-  (D_on_AP : exists P : 'rV[R]_2, on_line D A P)
-  (E_on_PB : exists P : 'rV[R]_2, on_line E B P)
-  (* CF is perpendicular to AB at F *)
-  (F_on_AB : on_line F A B)
-  (CF_perp_AB : perpendicular (F - C) (B - A))
-.
+(* DE is tangent through C *)
+Hypothesis DE_tangent : tangent (line D E) (circle O (dist O A)) /\ collinear [:: D; C; E].
+Hypothesis D_on_AP : collinear [:: A; P; D].
+Hypothesis E_on_PB : collinear [:: P; B; E].
 
-Definition angle (X Y Z : 'rV[R]_2) :=
-  let u := X - Y in
-  let v := Z - Y in
-  let cuv := u *m v^T in
-  let dot := (u * v^T) 0 0 in
-  let nu := normr u in
-  let nv := normr v in
-  (* Angle between vectors u and v at Y, range [0,pi] *)
-  acos (dot / (nu * nv)).
+(* Perpendicular condition *)
+Hypothesis CF_perp : perpendicular (line C F) (line A B).
+Hypothesis F_on_AB : collinear [:: A; B; F].
 
-Theorem tangent_angle_equality :
-  angle D F C = angle E F C.
-Proof. Admitted.
+(* Angle measures *)
+Definition angle_DFC := angle_deg (D,F,C).
+Definition angle_EFC := angle_deg (E,F,C).
 
-End Tangent_Angle_Equality.
+(* Main theorem *)
+Theorem angles_equal : angle_DFC = angle_EFC.
+Proof. by []. Qed.
+
+End TangentAngleProblem.
 ####

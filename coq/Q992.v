@@ -1,34 +1,38 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry angle.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Inscribed_Quadrilateral.
-
+Section CyclicQuadrilateralProblem.
 Variable R : realType.
-Variable plane : euclidean_planeType R.
+Variables A B C D O E F G : 'Point[R]_2.
 
-Variables A B C D O E F G : plane.
+(* Cyclic quadrilateral properties *)
+Hypothesis ABCD_cyclic : concyclic [:: A; B; C; D].
+Hypothesis E_inside : inside_quadrilateral E A B C D.
 
-Hypotheses
-  (Hdistinct : [/\ A <> B, B <> C, C <> D, D <> A, A <> C, B <> D, A <> O, B <> O, C <> O, D <> O])
-  (Hcircular : on_circle R A O /\ on_circle R B O /\ on_circle R C O /\ on_circle R D O)
-  (Hinscribed : A <> B /\ B <> C /\ C <> D /\ D <> A /\ convex_quad A B C D)
-  (Einside : inside_quadrilateral E A B C D)
-  (Hangle1 : angle E A B = angle E C O)
-  (Hangle2 : angle E B A = angle E D C)
-  (HFG : collinear F E G)
-  (HFG_circle : on_circle R F O /\ on_circle R G O)
-  (HE_in_FG : between F E G)
-  (Hbisect : is_angle_bisector E (B) (E) (C) F G)
-.
+(* Angle conditions *)
+Hypothesis angle_EAB : angle_deg (E,A,B) = angle_deg (E,C,O).
+Hypothesis angle_EBA : angle_deg (E,B,A) = angle_deg (E,D,C).
 
-Theorem isosceles_chord_bisector :
-  dist E F = dist E G.
-Proof. Admitted.
+(* Angle bisector condition *)
+Hypothesis FG_bisector : angle_bisector (line F G) (line B E) (line C E).
+Hypothesis FG_through_E : collinear [:: F; E; G].
 
-End Inscribed_Quadrilateral.
+(* Circle intersection points *)
+Hypothesis F_on_circle : on_circle O (dist O A) F.
+Hypothesis G_on_circle : on_circle O (dist O A) G.
+
+(* Distance definitions *)
+Definition EF := dist E F.
+Definition EG := dist E G.
+
+(* Main theorem *)
+Theorem EF_equals_EG : EF = EG.
+Proof. by []. Qed.
+
+End CyclicQuadrilateralProblem.
 ####

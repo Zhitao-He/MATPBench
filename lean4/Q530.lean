@@ -1,35 +1,28 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Data.Real.Basic
-import Mathlib.LinearAlgebra.AffineSpace.Midpoint
-
-open Real EuclideanGeometry Angle
-
--- Let V be a real inner product space, and P the associated metric affine space.
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-/--
-Let A, B, C, D, and P_pt be points in a 2-dimensional Euclidean space, with the following properties:
-- AB = 14,
-- angle A D B = π/6 (30°),
-- DP perpendicular to AP (i.e., angle D P_pt A = π/2),
-- ADCB is a rhombus; i.e., sides AD = DC = CB = BA,
-- P_pt is the intersection point of the diagonals AC and DB, hence the midpoint of both AC and DB.
-
-Then, the length CP = 7.
--/
-theorem find_length_CP
-    (A B C D P_pt : P)
-    (h_AB_length : dist A B = 14)
-    (h_angle_ADB : Angle.value A D B = π / 6)
-    (h_angle_DPA : Angle.value D P_pt A = π / 2)
-    (h_rhombus_side_AD_eq_DC : dist A D = dist D C)
-    (h_rhombus_side_DC_eq_CB : dist D C = dist C B)
-    (h_rhombus_side_CB_eq_BA : dist C B = dist B A)
-    (h_P_pt_midpoint_AC : P_pt = midpoint ℝ A C)
-    (h_P_pt_midpoint_DB : P_pt = midpoint ℝ D B)
-  : dist C P_pt = 7 := by
+import Mathlib.Data.Real.Pi.Bounds 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+open Real EuclideanGeometry
+open scoped EuclideanGeometry 
+namespace MathematicalProblem
+abbrev P := EuclideanSpace ℝ (Fin 2) 
+def IsRhombus (A D C B : P) : Prop := 
+  dist A D = dist D C ∧
+  dist D C = dist C B ∧
+  dist C B = dist B A
+theorem find_CP_value
+    (A B C D P_pt : P) 
+    (h_AB : dist A B = 14)
+    (h_rhombus : IsRhombus A D C B)
+    (h_A_ne_D : A ≠ D) (h_B_ne_D : B ≠ D)
+    (h_angle_ADB : ∠ A D B = Real.pi / 6) 
+    (h_A_ne_P_pt : A ≠ P_pt) (h_D_ne_P_pt : D ≠ P_pt)
+    (h_perp : ∠ A P_pt D = Real.pi / 2) 
+    (h_P_mid_AC : dist A P_pt = dist C P_pt)
+    (h_angle_ADP_eq_ADB : ∠ A D P_pt = ∠ A D B) : 
+  dist C P_pt = 7 :=
+by
   sorry
+end MathematicalProblem

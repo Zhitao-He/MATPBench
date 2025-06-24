@@ -1,25 +1,18 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
--- Let P be a Euclidean space
-variable (P : Type*) [MetricSpace P] [NormedAddTorsor ℝ P]
-
--- Points R, S, T in Euclidean space P
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Data.Real.Basic 
+import Mathlib.Data.Real.Pi.Bounds 
+open Real EuclideanGeometry
+open scoped EuclideanGeometry 
+abbrev P := EuclideanSpace ℝ (Fin 2)
 variable (R S T : P)
-
--- Definition of the angle at R in degrees
-def angle_at_R_deg (R S T : P) : ℝ :=
-  (∠ S R T) * (180 / Real.pi)
-
--- The value of x is 180 * arccos(13/15) / pi degrees
-theorem value_of_x
-    (R S T : P) (hRS : dist R S = 5) (hTR : dist T R = 6) (hTS : dist T S = 3) :
-  angle_at_R_deg R S T = (180 / Real.pi) * Real.arccos (13 / 15) := by
-  sorry
-
--- In radians, the angle at R is arccos(13/15)
-theorem value_of_angle_SRT_radians
-    (R S T : P) (hRS : dist R S = 5) (hTR : dist T R = 6) (hTS : dist T S = 3) :
-  ∠ S R T = Real.arccos (13 / 15) := by
+variable (h_RS : dist R S = 5)
+variable (h_TR : dist T R = 6)
+variable (h_TS : dist T S = 3)
+variable (x : ℝ)
+variable (h_angle_SRT_eq_x_degrees : (∠ S R T) * (180 / Real.pi) = x)
+theorem find_value_of_x : x = 180 * Real.arccos (13 / 15) / Real.pi := by
   sorry

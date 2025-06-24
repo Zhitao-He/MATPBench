@@ -1,63 +1,35 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Affine
 import Mathlib.Data.Real.Basic
-
-variable {P : Type*} [EuclideanSpace ℝ P]
-
-/-- A quadrilateral is given by its four vertices. -/
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+@[ext]
 structure Quadrilateral where
-  p₁ : P
-  p₂ : P
-  p₃ : P
-  p₄ : P
-
-/-- Opaque area function for a quadrilateral. -/
-opaque areaQuadrilateral (q : Quadrilateral P) : ℝ
-
-/-- 
-Homothety scales area by ratio squared: 
-If q_image is image of q_orig under homothety of center and ratio,
-its area is (scale^2) * area of q_orig.
--/
-axiom areaHomothetyScaling
-  (q_orig : Quadrilateral P) (center : P) (scale : ℝ) :
-  let q_image : Quadrilateral P :=
-    { p₁ := AffineMap.homothety center scale q_orig.p₁,
-      p₂ := AffineMap.homothety center scale q_orig.p₂,
-      p₃ := AffineMap.homothety center scale q_orig.p₃,
-      p₄ := AffineMap.homothety center scale q_orig.p₄ }
-  areaQuadrilateral q_image = scale ^ 2 * areaQuadrilateral q_orig
-
-namespace ProblemStatement
-
-variable (O A B C D A' B' C' D' : P)
-variable (k_h : ℝ)
-
-/-- The original and image quadrilaterals. -/
-def quad_ABCD : Quadrilateral P := ⟨A, B, C, D⟩
-def quad_A'B'C'D' : Quadrilateral P := ⟨A', B', C', D'⟩
-
-/-- H1: The image points are the homothety images of the original vertices. -/
-variable
-  (hA' : A' = AffineMap.homothety O k_h A)
-  (hB' : B' = AffineMap.homothety O k_h B)
-  (hC' : C' = AffineMap.homothety O k_h C)
-  (hD' : D' = AffineMap.homothety O k_h D)
-
-/-- H2: The scale factor is nonzero (non-degenerate). -/
-variable (hk : k_h ≠ 0)
-
-/-- H3: OA' : A'A = 20 : 10 -/
-variable (hratio : Euclidean.dist O A' / Euclidean.dist A' A = (20 : ℝ) / (10 : ℝ))
-
-/-- H4: The area of A'B'C'D' is 120^2. -/
-variable (hAreaImage : areaQuadrilateral (quad_A'B'C'D' O A B C D A' B' C' D') = (120 : ℝ) ^ 2)
-
-/--
-Conclusion: The area of quadrilateral ABCD is 27.
--/
-theorem result_area_ABCD :
-    areaQuadrilateral (quad_ABCD O A B C D A' B' C' D') = 27 := by
-  sorry
-
-end ProblemStatement
+  p1 : P
+  p2 : P
+  p3 : P
+  p4 : P
+def Quadrilateral.map_points (f : P → P) (q : Quadrilateral) : Quadrilateral :=
+  ⟨f q.p1, f q.p2, f q.p3, f q.p4⟩
+noncomputable def area_of_quadrilateral (q : Quadrilateral) : ℝ := sorry
+noncomputable def point_homothety (center : P) (scale : ℝ) (point : P) : P :=
+  center +ᵥ (scale • (point -ᵥ center))
+lemma area_scaling_under_homothety (q : Quadrilateral) (center : P) (scale : ℝ) :
+  area_of_quadrilateral (Quadrilateral.map_points (point_homothety center scale ·) q) = scale * scale * area_of_quadrilateral q := by sorry
+noncomputable def const_ratio_OA'_div_A'A : ℝ := 20 / 10
+noncomputable def const_homothety_scale_factor : ℝ := const_ratio_OA'_div_A'A / (1 + const_ratio_OA'_div_A'A)
+noncomputable def const_area_A_prime_B_prime_C_prime_D_prime : ℝ := (120 : ℝ) * (120 : ℝ)
+noncomputable def const_target_area_ABCD : ℝ := 27
+theorem given_geometry_problem
+    (O A B C D A_prime B_prime C_prime D_prime : P)
+    (q_ABCD : Quadrilateral)
+    (h_q_ABCD_points : q_ABCD = ⟨A, B, C, D⟩)
+    (q_A_prime_B_prime_C_prime_D_prime : Quadrilateral)
+    (h_q_A_prime_points : q_A_prime_B_prime_C_prime_D_prime = ⟨A_prime, B_prime, C_prime, D_prime⟩)
+    (h_A_prime_is_image : A_prime = point_homothety O const_homothety_scale_factor A)
+    (h_B_prime_is_image : B_prime = point_homothety O const_homothety_scale_factor B)
+    (h_C_prime_is_image : C_prime = point_homothety O const_homothety_scale_factor C)
+    (h_D_prime_is_image : D_prime = point_homothety O const_homothety_scale_factor D)
+    (h_area_A_prime_B_prime_C_prime_D_prime : area_of_quadrilateral q_A_prime_B_prime_C_prime_D_prime = const_area_A_prime_B_prime_C_prime_D_prime)
+  : area_of_quadrilateral q_ABCD = const_target_area_ABCD := by sorry

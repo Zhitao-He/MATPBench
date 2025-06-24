@@ -1,66 +1,35 @@
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Data.Real.Basic
-
--- Define E as 2-dimensional Euclidean space over ℝ
-abbrev E := EuclideanSpace ℝ (Fin 2)
-
--- Points O (origin), A (1,0), B (0,1)
-def O : E := ![0, 0]
-def A : E := ![1, 0]
-def B : E := ![0, 1]
-
--- Triangle OAB
-def triangleOAB : Triangle ℝ E := ⟨O, A, B⟩
-
--- Segments OA, OB, AB
-def segmentOA : Segment ℝ E := .mk O A
-def segmentOB : Segment ℝ E := .mk O B
-def segmentAB : Segment ℝ E := .mk A B
-
--- Midpoints of segments
-def midpointOA : E := midpoint ℝ O A
-def midpointOB : E := midpoint ℝ O B
-def midpointAB : E := midpoint ℝ A B
-
--- Radii (length of each segment divided by 2)
-def radiusOA : ℝ := dist O A / 2
-def radiusOB : ℝ := dist O B / 2
-def radiusAB : ℝ := dist A B / 2
-
--- Disk (closed ball) in E
-def disk (center : E) (radius : ℝ) : Set E := Metric.closedBall center radius
-
--- Half-plane determined by point p and normal vNormal: {x | 0 ≤ ⟪x - p, vNormal⟫}
-def halfPlane (p : E) (vNormal : E) : Set E :=
-  { x : E | 0 ≤ ⟪x - p, vNormal⟫ }
-
--- Outward semicircle on OA: center = (1/2, 0), radius = 1/2, y ≤ 0 (normal (0, -1))
-def semicircleOA_outward : Set E :=
-  disk midpointOA radiusOA ∩ halfPlane midpointOA (![0, -1])
-
--- Outward semicircle on OB: center = (0, 1/2), radius = 1/2, x ≤ 0 (normal (-1, 0))
-def semicircleOB_outward : Set E :=
-  disk midpointOB radiusOB ∩ halfPlane midpointOB (![-1, 0])
-
--- Outward semicircle on AB: center = (1/2, 1/2), radius = sqrt(2)/2, normal (from O to midpointAB)
-def semicircleAB_outward : Set E :=
-  disk midpointAB radiusAB ∩ halfPlane midpointAB (midpointAB - O)
-
--- Shaded region (two semicircles on OA and OB minus semicircle on AB)
-def shadedRegion : Set E :=
-  (semicircleOA_outward ∪ semicircleOB_outward) \ semicircleAB_outward
-
--- Axiom: Area function for sets in E
-axiom area (S : Set E) : ℝ
-notation "Area(" S ")" => area S
-
--- Claim: Area of the shaded region is 1/2
-theorem area_of_shadedRegion : Area(shadedRegion) = (1/2 : ℝ) := by sorry
-
--- The area of triangle OAB is 1/2.
-lemma area_triangleOAB : Triangle.area triangleOAB = (1/2 : ℝ) := by sorry
-
--- Hippocrates' theorem: area of the lunes equals area of triangle OAB
-lemma hippocrates_lunes_area : Area(shadedRegion) = Triangle.area triangleOAB := by sorry
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open Real EuclideanSpace
+open scoped EuclideanGeometry
+local notation "P" => EuclideanSpace ℝ (Fin 2)
+structure FigureSetup where
+  O : P
+  A : P
+  B : P
+  h_OA_len : dist A O = 1
+  h_OB_len : dist B O = 1
+  h_angle_AOB : ∠ A O B = Real.pi / 2
+noncomputable def areaSemicircleOnDiameter (p1 p2 : P) : ℝ :=
+  let d := dist p1 p2
+  (Real.pi * (d / 2)^2) / 2
+noncomputable def areaSectorFromPoints (center_pt p1 p2 : P) : ℝ :=
+  let r := dist p1 center_pt
+  let angle_val := ∠ p1 center_pt p2
+  (angle_val / 2) * r^2
+noncomputable def triangleArea (p1 p2 p3 : P) : ℝ :=
+  (1/2 : ℝ) * abs (((p2 -ᵥ p1) 0 * (p3 -ᵥ p1) 1) - ((p2 -ᵥ p1) 1 * (p3 -ᵥ p1) 0))
+noncomputable def calculateShadedArea (s : FigureSetup) : ℝ :=
+  let area_semicircle_OA := areaSemicircleOnDiameter s.O s.A
+  let area_semicircle_OB := areaSemicircleOnDiameter s.O s.B
+  let area_sector_OAB := areaSectorFromPoints s.O s.A s.B
+  let area_triangle_OAB := triangleArea s.O s.A s.B
+  area_semicircle_OA + area_semicircle_OB - (area_sector_OAB - area_triangle_OAB)
+theorem shaded_area_is_one_half (s : FigureSetup) :
+  calculateShadedArea s = 1/2 :=
+by sorry

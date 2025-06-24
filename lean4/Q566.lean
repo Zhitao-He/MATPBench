@@ -1,28 +1,16 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-namespace Problem
-
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs 
+import Mathlib.Data.Real.Basic 
 open Real EuclideanGeometry
-
--- We work in the Euclidean plane.
-variable (A B D F H : EuclideanPlane)
-
--- Given: ∠DHB = 38°
-def angleDHB_val : ℝ := (38 : ℝ) / 180 * Real.pi
-axiom h_angleDHB : ∠ D H B = angleDHB_val
-
--- Given: ∠FDA = 52°
-def angleFDA_val : ℝ := (52 : ℝ) / 180 * Real.pi
-axiom h_angleFDA : ∠ F D A = angleFDA_val
-
--- Given: HB ⟂ DB ↔ ∠HBD = 90°
-def angleHBD_val : ℝ := Real.pi / 2
-axiom h_angleHBD : ∠ H B D = angleHBD_val
-
--- Required: Find ∠HDF = 128°
-def angleHDF_val : ℝ := (128 : ℝ) / 180 * Real.pi
-theorem target : ∠ H D F = angleHDF_val := by sorry
-
-end Problem
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def radiansToDegrees (r : ℝ) : ℝ :=
+  r * (180 / Real.pi)
+theorem problem_to_solve (D H B F A : PPoint)
+  (h_DHB_angle : radiansToDegrees (angle D H B) = 38)
+  (h_FDA_angle : radiansToDegrees (angle F D A) = 52)
+  (h_HBD_is_right : radiansToDegrees (angle H B D) = 90)
+  : radiansToDegrees (angle H D F) = 128 := by
+  sorry

@@ -1,34 +1,24 @@
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Pi.Bounds 
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-/-!
-Formalization of the geometry problem:
-
-Given points L, M, N, P in the Euclidean plane with:
-- Distance NM = 4
-- ∠NLM = ∠PLN
-- ∠PLN = 25°
-- LM is perpendicular to NM (∠LMN = 90°)
-- NP is perpendicular to LP (∠NPL = 90°)
-
-To prove: ∠MNP = 130°
--/
-
-open Real EuclideanGeometry
-
--- Helper function to convert degrees to radians
-def degToRad (d : ℝ) : ℝ := d * (π / 180)
-
-variable (L M N P : EuclideanPlane) -- Points in the Euclidean plane
-
--- Hypotheses
-variable
-  (h_distNM : dist N M = 4)
-  (h_angleNLM_eq_PLN : ∠ N L M = ∠ P L N)
-  (h_anglePLN : ∠ P L N = degToRad 25)
-  (h_perp_LMN : ∠ L M N = π / 2)  -- LM ⟂ NM
-  (h_perp_NPL : ∠ N P L = π / 2)  -- NP ⟂ LP
-
-theorem angle_MNP_is_130 : ∠ M N P = degToRad 130 := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+open Real EuclideanGeometry InnerProductSpace 
+open scoped EuclideanGeometry 
+namespace GeometryProblem
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180) 
+abbrev E := EuclideanSpace ℝ (Fin 2)
+variable (M N L P : E)
+axiom h_NM_dist : dist N M = 4
+axiom h_angle_NLM_eq_PLN : ∠ N L M = ∠ P L N
+axiom h_angle_PLN_val : ∠ P L N = degToRad 25
+axiom h_LM_perp_NM : ∠ L M N = degToRad 90
+axiom h_NP_perp_LP : ∠ L P N = degToRad 90
+axiom h_LMN_noncollinear : ¬ Collinear ℝ ({L, M, N} : Set E)
+axiom h_LNP_noncollinear : ¬ Collinear ℝ ({L, N, P} : Set E)
+axiom h_L_ne_N : L ≠ N
+axiom h_M_ne_N : M ≠ N
+axiom h_P_ne_N : P ≠ N
+theorem target_angle_MNP : ∠ M N P = degToRad 130 := by
   sorry
+end GeometryProblem

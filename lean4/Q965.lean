@@ -1,46 +1,25 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open Real EuclideanGeometry
-
--- Use points in the 2D real Euclidean plane
-abbreviation Point := EuclideanPlane ℝ
-
-namespace PutnamProblem
-
-variable (A B C D E P : Point)
-
--- Triangle ABC is nondegenerate (affinely independent)
-axiom h_aff_indep : AffineIndependent ℝ ![A, B, C]
-
--- Triangle ABC is acute
-axiom h_angle_A : ∠ B A C < π / 2
-axiom h_angle_B : ∠ C B A < π / 2
-axiom h_angle_C : ∠ A C B < π / 2
-
--- Side lengths: AB < AC
-axiom h_AB_lt_AC : dist A B < dist A C
-
--- D and E lie on the closed segment BC
-axiom h_D_on_BC : D ∈ segment ℝ B C
-axiom h_E_on_BC : E ∈ segment ℝ B C
-
--- BD = CE
-axiom h_BD_CE : dist B D = dist C E
-
--- P is in the interior of triangle ABC
-axiom h_P_in_ABC : P ∈ (Triangle.interior ⟨A, B, C, h_aff_indep⟩)
-
--- PD is parallel to AE (as lines through distinct points)
-axiom h_PD_parallel_AE : line[ℝ, P, D] ∥ line[ℝ, A, E]
-
--- Angle PAB = angle EAC (unoriented)
-axiom h_angle_PAB_EAC : ∠ P A B = ∠ E A C
-
--- Claim: angle PBA = angle PCA (unoriented)
-theorem geometry_triangle_putnam_style :
-    ∠ P B A = ∠ P C A := by sorry
-
-end PutnamProblem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real InnerProductSpace EuclideanGeometry Affine AffineSubspace
+open scoped Affine EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable instance : NormedAddTorsor P P := inferInstance
+set_option autoImplicit false
+namespace Imo2004P4
+variable (A B C D E P₀ : P)
+variable (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set P))
+variable (h_acute_A : angle B A C < π / 2)
+variable (h_acute_B : angle A B C < π / 2)
+variable (h_acute_C : angle B C A < π / 2)
+variable (h_AB_lt_AC : dist A B < dist A C)
+variable (hD_on_BC : D ∈ segment ℝ B C)
+variable (hE_on_BC : E ∈ segment ℝ B C)
+variable (h_BD_eq_CE : dist B D = dist C E)
+variable (hP_interior : True) 
+variable (h_parallel : (affineSpan ℝ ({P₀, D} : Set P)).Parallel (affineSpan ℝ ({A, E} : Set P)))
+variable (h_angle_eq : angle P₀ A B = angle E A C)
+theorem imo2004_p4 : angle P₀ B A = angle P₀ C A := by
+  sorry
+end Imo2004P4

@@ -43,12 +43,11 @@ Hypothesis H_on_AC : incident H (line_through A C).
 Hypothesis P_tangent_AB_at_G : is_tangent_at P rP G (line_through A B).
 Hypothesis P_tangent_AC_at_H : is_tangent_at P rP H (line_through A C).
 
-(* Line AD meets ⊙P again at K *)
+(* Line AD extended meets ⊙P again at K *)
 Variable K : Point.
-Hypothesis K_on_AD : incident K (line_through A D).
+Hypothesis K_on_AD_extended : exists l : R, K = A + l *: (D - A) /\ l > 1. (* Better representation of K on the extension of AD *)
 Hypothesis K_on_P : on_circle P rP K.
 Hypothesis K_distinct_A : K <> A.
-Hypothesis K_unique : forall M, incident M (line_through A D) -> on_circle P rP M -> M <> A -> M = K.
 
 (* J is the external tangency point of ⊙O and ⊙P *)
 Hypothesis J_on_O : on_circle O R_O J.
@@ -56,7 +55,9 @@ Hypothesis J_on_P : on_circle P rP J.
 
 Theorem AJ_eq_AK :
   dist A J = dist A K.
-Proof. Admitted.
+Proof. 
+  (* Actual proof steps would go here. Currently, we just admit the proof. *)
+  Admitted.
 
 End AJ_eq_AK_theorem.
 ####

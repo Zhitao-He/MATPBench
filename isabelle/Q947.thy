@@ -1,28 +1,37 @@
-theory MidpointGeometryProblem
-imports
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem
+  imports "HOL-Analysis.Euclidean_Space"
 begin
-
-locale circle_tangent_problem = 
-  fixes O A B K P D E F :: "real^2"
-    and r :: real
-  assumes r_pos: "r > 0"
-  assumes on_circle_A: "norm (A - O) = r"
-  assumes on_circle_B: "norm (B - O) = r"
-  assumes on_circle_K: "norm (K - O) = r"
-  assumes distinct_points: "A ≠ B" "A ≠ K" "B ≠ K" "O ≠ K"
-  assumes PA_tangent: "(P - A) • (A - O) = 0"
-  assumes PB_tangent: "(P - B) • (B - O) = 0"
-  assumes D_on_OK: "∃t. D = O + t *R (K - O) ∧ 0 ≤ t ∧ t ≤ 1"
-  assumes BD_perp_OK: "(B - D) • (K - O) = 0"
-  assumes E_on_BD: "∃s. E = B + s *R (D - B) ∧ 0 ≤ s ∧ s ≤ 1"
-  assumes E_on_PK: "∃t. E = P + t *R (K - P) ∧ 0 ≤ t ∧ t ≤ 1"
-  assumes F_on_BD: "∃s. F = B + s *R (D - B) ∧ 0 ≤ s ∧ s ≤ 1"
-  assumes F_on_KA: "∃t. F = K + t *R (A - K) ∧ 0 ≤ t ∧ t ≤ 1"
-
-theorem midpoint_geometry_problem:
-  "E = (B + F) /\<^sub>R 2"
-  oops
-
-end
+type_synonym point = "real^2"
+definition three_collinear :: "point ⇒ point ⇒ point ⇒ bool" where
+  "three_collinear A B C ≡
+    if A = B then C = A
+    else ∃t::real. C - A = t * (B - A)"
+locale Geometry_Problem_Context =
+  fixes P A B O K D E F :: point 
+  fixes r :: real 
+  assumes
+    r_pos: "r > 0" and
+    A_on_circle: "dist(O, A) = r" and
+    B_on_circle: "dist(O, B) = r" and
+    K_on_circle: "dist(O, K) = r" and
+    P_neq_A: "P ≠ A" and
+    PA_tangent_A: "inner (A - O) (P - A) = 0" and 
+    P_neq_B: "P ≠ B" and
+    PB_tangent_B: "inner (B - O) (P - B) = 0" and 
+    D_on_line_OK: "three_collinear O D K" and
+    BD_perp_OK: "inner (D - B) (K - O) = 0" and
+    B_not_on_line_OK: "¬ three_collinear O B K" and
+    E_on_line_BD: "three_collinear B E D" and
+    E_on_line_PK: "three_collinear P E K" and
+    F_on_line_BD: "three_collinear B F D" and
+    F_on_line_KA: "three_collinear K F A" and
+    A_neq_B: "A ≠ B" and 
+    A_neq_K: "A ≠ K" and 
+    B_neq_K: "B ≠ K" and 
+    P_neq_K: "P ≠ K"     
+begin
+theorem E_is_midpoint_of_BF:
+  "E = (B + F) / (2::real)"
+  sorry
+end 
+end 

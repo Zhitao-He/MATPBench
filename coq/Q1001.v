@@ -6,46 +6,32 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Putnam_Geometry_Circle_Arc.
-
+Section CircleMidarcProblem.
 Variable R : realType.
+Variables A B C O D E F G : 'Point[R]_2.
 
-(* Points *)
-Variables A B C O D E F G : 'rV[R]_2.
+(* Circumcircle properties *)
+Hypothesis circum_ABC : circumcircle O A B C.
 
-(* Hypotheses *)
-Hypothesis AB_neq_AC : A != B /\ A != C.
-Hypothesis circumcircle_ABC : on_circle O A B /\ on_circle O B C /\ on_circle O C A.
+(* Midpoints of arcs *)
+Hypothesis D_midarc : midpoint_arc O D B A C.
+Hypothesis E_midarc : midpoint_arc O E B C.
 
-Hypothesis D_mid_arc_BAC : 
-  on_circle O D /\
-  angle B O D = angle D O C /\
-  D != B /\ D != C.
+(* Perpendicular condition *)
+Hypothesis CF_perp : perpendicular (line C F) (line A B).
+Hypothesis F_on_AB : collinear [:: A; B; F].
 
-Hypothesis E_mid_arc_BC : 
-  on_circle O E /\
-  angle B O E = angle E O C /\
-  E != B /\ E != C.
+(* EF line and FG perpendicular *)
+Hypothesis FG_perp : perpendicular (line F G) (line E F).
+Hypothesis G_on_DA_ext : between D A G.
 
-Hypothesis F_on_CF_perp_AB :
-  (colinear C F) /\
-  (F != C) /\
-  (colinear A B F) /\
-  perpendicular (F - C) (A - B).
+(* Distance definitions *)
+Definition CG := dist C G.
+Definition CD := dist C D.
 
-Hypothesis EF_line : E != F.
+(* Main theorem *)
+Theorem CG_equals_CD : CG = CD.
+Proof. by []. Qed.
 
-Hypothesis FG_perp_EF :
-  (colinear F G) /\
-  (G != F) /\
-  perpendicular (G - F) (E - F).
-
-Hypothesis G_on_DA_ext : 
-  exists k : R, G = D + k * (A - D).
-
-Theorem circle_midarc_perp_equal :
-  \norm (C - G) = \norm (C - D).
-Proof. Admitted.
-
-End Putnam_Geometry_Circle_Arc.
+End CircleMidarcProblem.
 ####

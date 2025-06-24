@@ -10,14 +10,12 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-(* Points in the plane *)
-Variables A B C D E : 'e2[R].
+(* Points in the plane representing the vertices of the parallelogram ADCB *)
+Variables A B C D : 'e2[R].
 
-(* Collinearity and convex quadrilateral; label order: A-B-C-D *)
-Hypothesis h_quad : ~ colinear [:: A; B; C] /\ ~ colinear [:: B; C; D] /\ ~ colinear [:: C; D; A] /\ ~ colinear [:: D; A; B].
-
-(* Diagonals intersect at E *)
-Hypothesis h_diag1 : exists u v : R, 0 < u < 1 /\ 0 < v < 1 /\ E = (1-u)*:A + u*:C /\ E = (1-v)*:B + v*:D.
+(* Parallelogram properties: opposite sides are equal *)
+Hypothesis h_parallelogram_AB_CD : `|B - A| = `|D - C|.
+Hypothesis h_parallelogram_AD_BC : `|D - A| = `|C - B|.
 
 (* Side lengths from diagram *)
 Variable x : R.
@@ -25,7 +23,7 @@ Hypothesis hx : 0 < x.
 Hypothesis hAB : `|B - A| = 2 * x + 3.
 Hypothesis hBC : `|C - B| = 5 * x.
 
-(* The value to be determined is x=1 *)
+(* The value to be determined is x=1, based on the properties of the parallelogram *)
 Theorem value_of_x_is_1 : x = 1.
 Proof. Admitted.
 ####

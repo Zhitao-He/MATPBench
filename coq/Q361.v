@@ -8,13 +8,19 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section CubeSphereVolume.
+
 Variable R : realType.
 
-Theorem cube_sphere_volume_difference :
-  let a := 30%:R in
-  let V_cube := a ^+ 3 in
-  let r := a / 2 in
-  let V_sphere := (4%:R / 3%:R) * PI * r ^+ 3 in
-  V_cube - V_sphere = 27000%:R - 4500%:R * PI.
+(* Given values *)
+Let cube_edge := 30%:R.
+Let cube_volume := cube_edge ^+ 3.
+Let sphere_radius := cube_edge / 2%:R.
+Let sphere_volume := (4%:R / 3%:R) * PI * (sphere_radius ^+ 3).
+
+Theorem volume_difference :
+  cube_volume - sphere_volume = 27000%:R - 4500%:R * PI.
 Proof. Admitted.
+
+End CubeSphereVolume.
 ####

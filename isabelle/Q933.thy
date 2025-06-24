@@ -1,36 +1,17 @@
-theory Rectangle_Tangent_Circle
-imports
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Circle_Tangent_Square
+  imports Complex_Main
 begin
-
-text ‹
-  Problem: As shown in the diagram, CE=7, ED=x, the center of circle C is C, 
-  the tangent to ⊙C is DB, DE is the tangent to circle C, CE⊥DE, DB⊥CB, ED is 
-  perpendicular to BD. Find the value of x.
-›
-
-locale rectangle_tangent_circle =
-  fixes E D B C :: "real^2"
-  fixes x :: real
-  assumes E_neq_D: "E ≠ D"
-  and D_neq_B: "D ≠ B"
-  and B_neq_C: "B ≠ C"
-  and C_neq_E: "C ≠ E"
-  and perp_CE_DE: "(C - E) ⊥ (D - E)"  (* CE⊥DE *)
-  and perp_DB_CB: "(D - B) ⊥ (C - B)"  (* DB⊥CB *)
-  and perp_ED_BD: "(E - D) ⊥ (B - D)"  (* ED⊥BD *)
-  and len_CE_7: "norm (C - E) = 7"     (* CE = 7 *)
-  and len_ED_x: "norm (E - D) = x"     (* ED = x *)
-  and C_is_center: "C is center of circle"
-  and DB_is_tangent: "DB is tangent to circle C"
-  and DE_is_tangent: "DE is tangent to circle C"
-
-context rectangle_tangent_circle
+locale geometry_setup =
+  fixes D E C B :: "complex"
+  assumes CE_eq_7: "dist C E = 7"
+    and ED_eq_x:  "dist E D = x"
+    and circle_center: "C = C"  
+    and tangent_DE: "dist C E = dist C B"  
+    and DE_tangent: "let r = dist C E in dist C D > r ∧ dist C E = r"
+    and CE_perp_DE: "Re ((E - C) / (E - D)) = 0"  
+    and DB_perp_CB: "Re ((B - D) / (B - C)) = 0"  
+    and ED_perp_BD: "Re ((D - E) / (D - B)) = 0"  
 begin
-
-theorem "x = 7"
-  oops (* Proof omitted *)
-
+definition value_x :: real where "value_x = x"
 end
 end

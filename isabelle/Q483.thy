@@ -1,37 +1,30 @@
-theory GeometryProblem
-imports
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Tangent_Angle_Problem
+  imports Complex_Main
 begin
-
-(* Points in the plane *)
-typedecl point
-locale plane = 
-  fixes B C D E F :: point
-  
-  (* E is the center of the circle passing through B, D, F *)
-  fixes on_circle :: "point ⇒ point ⇒ bool"
-  assumes Hcircle: "on_circle E B ∧ on_circle E D ∧ on_circle E F"
-  
-  (* Points D and F are between B and C, with F between D and C *)
-  fixes collinear :: "point list ⇒ bool"
-  fixes between :: "point ⇒ point ⇒ point ⇒ bool"
-  assumes Hcollinear_DF_C: "collinear [D, F, C]"
-  assumes Hbetween_DF_C: "between D F C"
-  
-  (* Angle measurements *)
-  fixes angle_at_deg :: "point ⇒ point ⇒ point ⇒ real"
+locale points =
+  fixes B C D E F :: "'a::euclidean_space"
+definition circle :: "'a::euclidean_space ⇒ real ⇒ 'a set" where
+  "circle O r = {P. dist O P = r}"
+definition tangent_at :: "'a::euclidean_space ⇒ 'a ⇒ real ⇒ 'a ⇒ bool" where
+  "tangent_at O r P Q ⟷ P ∈ circle O r ∧ Q ∉ circle O r ∧
+    (∃l. (∀X. X ∈ l ⟷ (∃λ. X = P + λ * (Q - P))) ∧
+         (∀X. X ∈ l ⟶ (dist O X ≥ r)) ∧
+         (∀X. X ∈ l ⟶ (O, X, P) collinear))"
+definition angle_deg :: "'a::euclidean_space ⇒ 'a ⇒ 'a ⇒ real" where
+  "angle_deg A O B = (180 / pi) * angle A O B"
+locale geometry_problem =
+  fixes B C D E F :: "real^2"
   fixes x :: real
-  assumes Hangle_BDF: "angle_at_deg B D F = 10 * x"
-  assumes Hangle_DFC: "angle_at_deg D F C = 40"
-  assumes Hangle_FCB: "angle_at_deg F C B = x"
-  
-  (* CD is tangent to circle E *)
-  fixes is_tangent :: "point ⇒ point ⇒ point ⇒ bool" 
-  assumes Htangent: "is_tangent C D E"
-
-  (* Theorem: Find the value of x *)
-  theorem value_of_x: "x = 5"
-    sorry
-
+  assumes E_center: "E = E"
+    and on_circle_B: "B ∈ circle E (dist E B)"
+    and on_circle_D: "D ∈ circle E (dist E B)"
+    and on_circle_F: "F ∈ circle E (dist E B)"
+    and tangent_CD: "D ∈ line C D ∧ (∀P. P ∈ line C D ⟶ dist E P ≥ dist E D) ∧ dist E D = dist E B"
+    and angle_FCD: "angle_deg F C D = x"
+    and angle_EDB: "angle_deg E D B = 10 * x"
+    and angle_EFD: "angle_deg E F D = 40"
+begin
+definition value_x :: bool where
+  "value_x ⟷ (x = 5)"
+end
 end

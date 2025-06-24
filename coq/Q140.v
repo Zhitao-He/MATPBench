@@ -6,7 +6,7 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section putnam_1991_a3.
+Section TriangleAreaDifference.
 
 Variable R : realType.
 
@@ -26,10 +26,18 @@ Definition D :=
   let: '(a2,b2,c2) := line B E in
   mkPoint ((b1*c2 - b2*c1)/(a1*b2 - a2*b1)) ((c1*a2 - c2*a1)/(a1*b2 - a2*b1)).
 
-Theorem putnam1991_a3 : exists D, collinear A C D /\ collinear B E D /\ area A B E + area B C E = area A B C + area C A E.
-Proof.
-admit.
-Qed.
+(* Compute the difference between the areas of triangles ADE and BDC *)
+Definition area_difference := (area A D E) - (area B D C).
 
-End putnam_1991_a3.
+(* Theorem: The difference between the areas of triangles ADE and BDC is 4 *)
+Theorem area_diff_is_4 : area_difference = 4%:R.
+Proof.
+  (* Proof steps would involve:
+     1. Calculating the coordinates of point D.
+     2. Using the area formula to compute the areas of ADE and BDC.
+     3. Subtracting the areas to find the difference.
+  *)
+  Admitted.
+
+End TriangleAreaDifference.
 ####

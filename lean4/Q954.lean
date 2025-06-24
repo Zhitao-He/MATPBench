@@ -1,58 +1,40 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Circumcenter
-import Mathlib.Data.Real.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Geometry.Euclidean.Circumcenter 
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+namespace ProblemFormalization
 open EuclideanGeometry
-open Real
-open Affine
-
--- 定义二维欧氏空间中的点类型
-abbrev Point := EuclideanSpace ℝ (Fin 2)
-
-section GeometryTheorem
-
--- 给定点
-variable {A B C D E F G O P : Point}
-
--- 三角形ABC非共线
-variable (h_ABC_noncollinear : ¬ Collinear ℝ A B C)
-
--- D ∈ openSegment A B, E ∈ openSegment A C
-variable (hD : D ∈ openSegment ℝ A B)
-variable (hE : E ∈ openSegment ℝ A C)
-
--- DE ∥ BC
-variable (h_parallel : (affineLine ℝ D E) ∥ (affineLine ℝ B C))
-
--- F 为 BE 与 CD 的交点
-variable (hF : F ∈ (affineLine ℝ B E) ∩ (affineLine ℝ C D))
-
--- B, D, F 非共线，O 是△BDF 的外心
-variable (h_BDF_noncollinear : ¬ Collinear ℝ B D F)
-variable (hO : O = circumcenter B D F)
-
--- C, E, F 非共线，P 是△CEF 的外心
-variable (h_CEF_noncollinear : ¬ Collinear ℝ C E F)
-variable (hP : P = circumcenter C E F)
-
--- G ∈ circle O, G ∈ circle P，且 G ≠ F
-variable (hG_O : G ∈ Sphere.mk O (dist O B))
-variable (hG_P : G ∈ Sphere.mk P (dist P C))
+open Affine 
+variable (A B C D E F G : PPoint)
+variable (h_ABC_not_collinear : ¬ Collinear ℝ ({A, B, C} : Set PPoint))
+variable (hD_on_segment_AB : D ∈ segment ℝ A B)
+variable (hD_ne_A : D ≠ A)
+variable (hD_ne_B : D ≠ B)
+variable (hE_on_segment_AC : E ∈ segment ℝ A C)
+variable (hE_ne_A : E ≠ A)
+variable (hE_ne_C : E ≠ C)
+variable (hD_ne_E : D ≠ E)
+variable (hDE_parallel_BC : (affineSpan ℝ ({D, E} : Set PPoint)) ∥ (affineSpan ℝ ({B, C} : Set PPoint))) 
+variable (hB_ne_E : B ≠ E)
+variable (hC_ne_D : C ≠ D)
+variable (hF_on_line_BE : F ∈ affineSpan ℝ ({B, E} : Set PPoint))
+variable (hF_on_line_CD : F ∈ affineSpan ℝ ({C, D} : Set PPoint))
+variable (hBE_not_parallel_CD : ¬ ((affineSpan ℝ ({B, E} : Set PPoint)) ∥ (affineSpan ℝ ({C, D} : Set PPoint)))) 
+variable (h_BDF_not_collinear : ¬ Collinear ℝ ({B, D, F} : Set PPoint))
+variable (h_CEF_not_collinear : ¬ Collinear ℝ ({C, E, F} : Set PPoint))
+variable (O₁ O₂ : PPoint)
+variable (r₁ r₂ : ℝ)
+variable (hO₁_def : ∀ X ∈ ({B, D, F} : Set PPoint), dist X O₁ = r₁)
+variable (hO₂_def : ∀ X ∈ ({C, E, F} : Set PPoint), dist X O₂ = r₂)
+variable (hG_on_circleO : G ∈ EuclideanGeometry.Sphere.mk O₁ r₁)
+variable (hG_on_circleP : G ∈ EuclideanGeometry.Sphere.mk O₂ r₂)
 variable (hG_ne_F : G ≠ F)
-variable (hG_ne_B : G ≠ B)
-variable (hG_ne_D : G ≠ D)
-variable (hG_ne_C : G ≠ C)
-variable (hG_ne_E : G ≠ E)
-
--- 保证角度u∠BAF, u∠CAG有意义
-variable (hA_ne_B : A ≠ B) (hA_ne_F : A ≠ F)
-variable (hA_ne_C : A ≠ C) (hA_ne_G : A ≠ G)
-
--- 结论：u∠ B A F = u∠ C A G
-theorem angle_BAF_eq_angle_CAG :
-  uangle B A F = uangle C A G := by
-  sorry
-
-end GeometryTheorem
+variable (hA_ne_F : A ≠ F)
+variable (hA_ne_G : A ≠ G)
+theorem angles_BAF_CAG_equal :
+    EuclideanGeometry.angle B A F = EuclideanGeometry.angle C A G := by sorry 
+end ProblemFormalization

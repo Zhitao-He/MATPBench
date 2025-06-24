@@ -6,27 +6,26 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section value_a_23.
+Section Find_Value_of_a.
 
 Variable R : realType.
 
-Variables I G L M Y W E X H Z K N : R2.
+Variables L W X E Z K : R2.
 Variable a : R.
+Variable b : R.
 
-Hypotheses
-  (* Collinearity and parallelogram hypotheses from the diagram *)
-  (HYMI : collinear [:: H; Y; M; I])
-  (HGLW : collinear [:: G; L; W])
-  (HENX : collinear [:: E; N; X])
-  (HMZK : collinear [:: H; M; Z; K])
-  (HYZW : parallelogram Y W X Z)
-  (* Angles at W, X, and Z as marked (with indicated orientation) *)
-  (angle_W : angle_at W Y W L = 3 * a + 40)
-  (angle_X : angle_at X Y X E = 3 * a + 40)
-  (angle_Z : angle_at Z Y Z K = 3 * a + 40).
+(* Parallel lines hypotheses *)
+Hypothesis WL_parallel_XE : is_parallel (Line W L) (Line X E).
+Hypothesis XN_parallel_ZK : is_parallel (Line X N) (Line Z K). (* Note: N is not defined in the original, but we assume XN is a line parallel to ZK through X *)
 
-Theorem value_a_23 : a = 23.
+(* Angle hypotheses *)
+Hypothesis angle_LWX : MeasureOfAngle L W X = 3 * a + 40.
+Hypothesis angle_WXE : MeasureOfAngle W X E = 2 * a + 25.
+Hypothesis angle_XZK : MeasureOfAngle X Z K = 5 * b - 26.
+
+(* Theorem to prove: a = 23 *)
+Theorem value_of_a : a = 23.
 Proof. Admitted.
 
-End value_a_23.
+End Find_Value_of_a.
 ####

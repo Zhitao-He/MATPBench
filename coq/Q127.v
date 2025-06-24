@@ -1,2 +1,52 @@
-#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry euclidean. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Section CircleTangentsProblem. Variable R : realType. Record point := Point { px : R; py : R }. Variables O P S T Y Z : point. Variable r : R. Hypothesis H_circle : dist O S = r /\ dist O T = r /\ dist O Y = r. Hypothesis H_tangents : (colinear P T O = false) /\ (colinear P S O = false) /\ (perpendicular (vec O T) (vec T P)) /\ (perpendicular (vec O S) (vec S P)). Hypothesis H_Y_circum : dist O Y = r. Hypothesis H_S_between : exists pt, between S pt O. Hypothesis H_PY_intersect : exists l, (on_line l P Y) /\ (on_line l Z O) /\ (on_line l Z S). Hypothesis H_Z_on_segment : on_line (line P Y) Z /\ on_line (line O S) Z. Hypothesis H_angle_SPZ : angle S P Z = 10%:R. Hypothesis H_angle_TOS : angle T O S = 150%:R. Theorem sum_PT_Y_PY_T : exists sum : R, sum = angle T O S + angle S P Z. Proof. Admitted. End
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry euclidean.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Section CircleTangentsProblem.
+
+Variable R : realType.
+
+Record point := Point { px : R; py : R }.
+
+Variables O P S T Y Z : point.
+Variable r : R.
+
+Hypothesis H_circle : dist O S = r /\ dist O T = r /\ dist O Y = r.
+Hypothesis H_tangents :
+  (colinear P T O = false) /\
+  (colinear P S O = false) /\
+  (perpendicular (vec O T) (vec T P)) /\
+  (perpendicular (vec O S) (vec S P)).
+
+Hypothesis H_Y_circum : dist O Y = r.
+Hypothesis H_S_between : exists pt, between S pt O.
+Hypothesis H_PY_intersect : exists l,
+  (on_line l P Y) /\
+  (on_line l Z O) /\
+  (on_line l Z S).
+
+Hypothesis H_Z_on_segment : on_line (line P Y) Z /\
+                            on_line (line O S) Z.
+
+Hypothesis H_angle_SPZ : angle S P Z = 10%:R.
+Hypothesis H_angle_TOS : angle T O S = 150%:R.
+
+(* Theorem to compute the sum of angles PTY and PYT *)
+Theorem sum_PT_Y_PY_T :
+  exists sum : R,
+    sum = angle P T Y + angle P Y T /\
+    sum = 160%:R.
+Proof.
+  (* Placeholder proof; the actual proof would involve:
+     1. Using the properties of tangents and angles in a circle.
+     2. Applying the given angles (SPZ and TOS) to derive the sum of PTY and PYT.
+     3. Showing that the sum equals 160 degrees.
+  *)
+  Admitted.
+
+End CircleTangentsProblem.
 ####

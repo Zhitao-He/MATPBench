@@ -1,62 +1,40 @@
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-
--- Use ℝ × ℝ as the model for the Euclidean plane.
-local notation "EPlane" => EuclideanSpace ℝ (Fin 2)
-
-namespace RectangleAreaProblem
-
-/-!
-We are given rectangle ABCD.
-- D = (0, 0)
-- A = (0, w)
-- B = (l, w)
-- C = (l, 0)
-
-M is on AB:  AM = x, so M = (x, w)
-N is on BC:  BN = y, so N = (l, w - y)
-Areas:
-- △ADM = 15
-- △MBN = 20
-- △NCD = 25
-
-We are to find the area of △DMN.
--/
-
--- Parameters for rectangle and points
-variable (l w x y : ℝ)
-
--- Rectangle must have positive length & width
-variable (hl : 0 < l) (hw : 0 < w)
--- Points M and N must be strictly inside their respective edges
-variable (hx : 0 < x) (hx' : x < l)
-variable (hy : 0 < y) (hy' : y < w)
-
--- Define vertices
-def D : EPlane := ![0, 0]
-def A (w : ℝ) : EPlane := ![0, w]
-def B (l w : ℝ) : EPlane := ![l, w]
-def C (l : ℝ) : EPlane := ![l, 0]
-
--- Define moving points
-def M (x w : ℝ) : EPlane := ![x, w]          -- On AB, AM = x
-def N (l w y : ℝ) : EPlane := ![l, w - y]    -- On BC, BN = y
-
--- Define regions/triangles as Mathlib triangles
-def tri_ADM (l w x y : ℝ) : Triangle EPlane := ⟨![A w, D, M x w]⟩
-def tri_MBN (l w x y : ℝ) : Triangle EPlane := ⟨![M x w, B l w, N l w y]⟩
-def tri_NCD (l w x y : ℝ) : Triangle EPlane := ⟨![N l w y, C l, D]⟩
-def tri_DMN (l w x y : ℝ) : Triangle EPlane := ⟨![D, M x w, N l w y]⟩
-
--- Area specifications as hypotheses
-variable (hA : tri_ADM l w x y |>.area = 15)
-variable (hB : tri_MBN l w x y |>.area = 20)
-variable (hC : tri_NCD l w x y |>.area = 25)
-
--- Question: Find area of △DMN
-theorem area_DMN_is_10_sqrt_21 :
-  tri_DMN l w x y |>.area = 10 * Real.sqrt 21 := by sorry
-
-end RectangleAreaProblem
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+abbrev P2 := EuclideanSpace ℝ (Fin 2)
+noncomputable def triangleArea (p1 p2 p3 : P2) : ℝ :=
+  (1/2 : ℝ) * abs ( ((p2 -ᵥ p1) 0 * (p3 -ᵥ p1) 1) - ((p2 -ᵥ p1) 1 * (p3 -ᵥ p1) 0) )
+section RectangleProblem
+noncomputable def A_pt : P2 := ![0, 0] 
+variable (b d : ℝ)
+variable (hb_pos : 0 < b) (hd_pos : 0 < d)
+noncomputable def B_pt (b_val : ℝ) : P2 := ![b_val, 0] 
+noncomputable def C_pt (b_val d_val : ℝ) : P2 := ![b_val, d_val] 
+noncomputable def D_pt (d_val : ℝ) : P2 := ![0, d_val] 
+variable (m_coord n_coord : ℝ)
+variable (hm_on_AB_strict : 0 < m_coord ∧ m_coord < b)
+variable (hn_on_BC_strict : 0 < n_coord ∧ n_coord < d)
+noncomputable def M_pt (mc_val : ℝ) : P2 := ![mc_val, 0] 
+noncomputable def N_pt (b_val nc_val : ℝ) : P2 := ![b_val, nc_val] 
+def area_AMN_hyp (A M N : P2) : Prop := triangleArea A M N = 3
+def area_MBN_hyp (M B N : P2) : Prop := triangleArea M B N = 20
+def area_DCN_hyp (D C N : P2) : Prop := triangleArea D C N = 2
+def area_DMN_goal (D M N : P2) : Prop := triangleArea D M N = 25
+end RectangleProblem
+theorem find_area_of_DMN :
+  ∀ (b d : ℝ) (hb_pos : 0 < b) (hd_pos : 0 < d)
+    (m_coord n_coord : ℝ)
+    (hm_on_AB_strict : 0 < m_coord ∧ m_coord < b)
+    (hn_on_BC_strict : 0 < n_coord ∧ n_coord < d),
+    let A : P2 := ![0, 0]
+    let B : P2 := ![b, 0]
+    let C : P2 := ![b, d]
+    let D : P2 := ![0, d]
+    let M : P2 := ![m_coord, 0]
+    let N : P2 := ![b, n_coord]
+    (triangleArea A M N = 3) →
+    (triangleArea M B N = 20) →
+    (triangleArea D C N = 2) →
+    triangleArea D M N = 25 :=
+by
+  sorry

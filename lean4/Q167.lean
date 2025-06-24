@@ -1,22 +1,15 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
-section TriangleProblem
-
--- Points in 2D Euclidean space
-variable (F G H : EuclideanSpace ℝ (Fin 2))
-
--- Real variable
-variable (x : ℝ)
-
--- Hypotheses on side lengths
-variable (h_FG : dist F G = 9 * x - 6)
-variable (h_GH : dist G H = 7 * x + 4)
-variable (h_FH : dist F H = 17)
-variable (h_eq_sides : dist F G = dist G H)
-
--- Theorem: GH = 39
-theorem find_GH_eq_39 : dist G H = 39 := by
-  sorry
-
-end TriangleProblem
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (F G H : P)
+axiom h_fg_eq_gh : dist F G = dist G H
+axiom h_fg_length : ∃ x : ℝ, dist F G = 9 * x - 6 ∧ dist G H = 7 * x + 4
+axiom h_fh_length : dist F H = 17
+theorem length_GH_is_39
+  (x : ℝ)
+  (h_fg : dist F G = 9 * x - 6)
+  (h_gh : dist G H = 7 * x + 4)
+  : dist G H = 39 := by sorry
+end

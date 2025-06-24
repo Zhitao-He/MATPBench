@@ -1,31 +1,18 @@
-theory GeometryProblem
-  imports Main HOL.Real
+theory Geometry_Problem_Find_TX
+imports Main
 begin
-
-(* 定义点和欧几里得距离 *)
-type_synonym point = "real × real"
-
-definition distance :: "point ⇒ point ⇒ real" where
-  "distance p₁ p₂ = sqrt((fst p₂ - fst p₁)² + (snd p₂ - snd p₁)²)"
-
-(* 定义问题中的点 *)
-locale circle_geometry =
-  fixes D :: point
-  fixes E :: point
-  fixes X :: point
-  fixes T :: point
-  
-  (* 给定条件 *)
-  assumes DE_length: "distance D E = 7"
-  assumes EX_length: "distance E X = 24"
-  
-  (* 需要证明的目标 *)
-  assumes collinear: "∃k. X = D + k *⇘ (T - D)"
-  assumes target: "distance T X = 32"
-
-(* 一种可能的证明思路 *)
-lemma (in circle_geometry) TX_value:
-  "distance T X = 32"
-  using target by simp
-
+definition EX :: real where
+  "EX = 24"
+definition DE :: real where
+  "DE = 7"
+definition r :: real where
+  "r = DE"
+definition XD_sq :: real where
+  "XD_sq = EX^2 + DE^2"
+definition XD :: real where
+  "XD = sqrt XD_sq"
+definition DT :: real where
+  "DT = r"
+definition TX :: real where
+  "TX = XD + DT"
 end

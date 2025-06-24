@@ -1,76 +1,45 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Parallelogram
 import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Projection
-import Mathlib.Analysis.NormedSpace.AddTorsor
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Nat.Squarefree
-import Mathlib.Data.PNat.Basic
-
--- Universe and ambient Euclidean plane
-universe u
-variable {P : Type u} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [MetricSpace P]
-variable [FiniteDimensional ℝ P] [Fact (FiniteDimensional.finrank ℝ P = 2)]
-
-namespace Putnam2021A5
-
--- Points A, B, C, D (vertices of parallelogram), O (center), P Q (intersection points)
-variable (a b c d o : P)
-variable (Ω : ℝ)
-
--- Parallelogram condition (from mathlib4)
-variable (h_parallelogram : EuclideanGeometry.IsParallelogram a b c d)
-
--- ∠BAD is acute and nonzero
-variable (h_angle_BAD_acute : (∠ d a b) < Real.pi / 2 ∧ (∠ d a b) > 0)
-
--- The circle Ω with center o and radius Ω is tangent to lines DA, AB, BC
-def circle : EuclideanGeometry.Sphere P ℝ := { center := o, radius := Ω }
-
--- radius Ω is positive
-variable (h_Ω_pos : Ω > 0)
-
--- Tangency to the lines
-variable (h_tan_DA : AffineSubspace.dist_pt_affineSubspace o (affineLine ℝ d a) = Ω)
-variable (h_tan_AB : AffineSubspace.dist_pt_affineSubspace o (affineLine ℝ a b) = Ω)
-variable (h_tan_BC : AffineSubspace.dist_pt_affineSubspace o (affineLine ℝ b c) = Ω)
-
--- Projections are on the corresponding segments
-def T_DA : P := orthogonalProjection (affineLine ℝ d a) o
-def T_AB : P := orthogonalProjection (affineLine ℝ a b) o
-def T_BC : P := orthogonalProjection (affineLine ℝ b c) o
-
-variable (h_T_DA_on : T_DA a o ∈ segment ℝ d a)
-variable (h_T_AB_on : T_AB a b o ∈ segment ℝ a b)
-variable (h_T_BC_on : T_BC b c o ∈ segment ℝ b c)
-
--- Two points P, Q on the circle lying on diagonal AC, ordered A-P-Q-C with the following distances
-variable (p q : P)
-variable (h_p_on_circle : p ∈ circle o Ω)
-variable (h_q_on_circle : q ∈ circle o Ω)
-variable (h_p_on_AC : p ∈ segment ℝ a c)
-variable (h_q_on_AC : q ∈ segment ℝ a c)
-variable (h_dist_AP : dist a p = 3)
-variable (h_dist_PQ : dist p q = 9)
-variable (h_dist_QC : dist q c = 16)
-
--- Strict order A-P-Q-C along AC
-variable (h_sbtw_aPQ : Sbtw ℝ a p q)
-variable (h_sbtw_PQc : Sbtw ℝ p q c)
-
--- Area of parallelogram, for acute ∠BAD
-def areaABCD : ℝ := (dist a b) * (dist a d) * Real.sin (∠ d a b)
-
--- Existence of positive m n (n squarefree), area = m√n, m+n=150
-theorem putnam_2021_a5_solution :
-  ∃ (m n : PNat),
-    Nat.Squarefree n.val ∧
-    areaABCD a b c d h_angle_BAD_acute = (m : ℝ) * Real.sqrt (n : ℝ) ∧
-    m + n = 150 :=
-by
-  sorry
-
-end Putnam2021A5
+import Mathlib.Analysis.InnerProductSpace.Orientation
+abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
+open Real EuclideanGeometry Affine AffineSubspace
+namespace ParallelogramProblem
+variable (A B C D P Q : EuclideanPlane)
+variable (h_is_parallelogram : (B -ᵥ A) = (C -ᵥ D))
+variable (h_A_ne_D : A ≠ D)
+variable (h_A_ne_B : A ≠ B)
+variable (h_angle_acute : EuclideanGeometry.angle D A B < Real.pi / 2)
+variable (K : EuclideanGeometry.Sphere EuclideanPlane)
+noncomputable def T_DA_pt (K : EuclideanGeometry.Sphere EuclideanPlane) (D A : EuclideanPlane) : EuclideanPlane :=
+  orthogonalProjection (affineSpan ℝ {D, A}) K.center
+noncomputable def T_AB_pt (K : EuclideanGeometry.Sphere EuclideanPlane) (A B : EuclideanPlane) : EuclideanPlane :=
+  orthogonalProjection (affineSpan ℝ {A, B}) K.center
+noncomputable def T_BC_pt (K : EuclideanGeometry.Sphere EuclideanPlane) (B C : EuclideanPlane) : EuclideanPlane :=
+  orthogonalProjection (affineSpan ℝ {B, C}) K.center
+variable (h_B_ne_C : B ≠ C)
+variable (h_tan_DA : True)
+variable (h_tan_AB : True)
+variable (h_tan_BC : True)
+variable (h_P_on_circle : P ∈ K)
+variable (h_Q_on_circle : Q ∈ K)
+variable (h_A_ne_C : A ≠ C)
+variable (h_order_APQ : Sbtw ℝ A P Q)
+variable (h_order_PQC : Sbtw ℝ P Q C)
+variable (h_AP_len : dist A P = 3)
+variable (h_PQ_len : dist P Q = 9)
+variable (h_QC_len : dist Q C = 16)
+variable (m n : ℕ)
+variable (h_m_pos : m > 0)
+variable (h_n_pos : n > 0)
+variable (h_n_square_free : True)
+local notation "VEC" => EuclideanSpace ℝ (Fin 2)
+noncomputable def parallelogramArea (A B D : EuclideanPlane) : ℝ :=
+  abs (Matrix.det ![B -ᵥ A, D -ᵥ A])
+variable (h_area_formula : parallelogramArea A B D = m * Real.sqrt n)
+theorem find_m_plus_n : m + n = 150 := by sorry
+end ParallelogramProblem

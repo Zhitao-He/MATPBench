@@ -1,45 +1,21 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-
--- The Euclidean plane P = ℝ²
-abbrev P := EuclideanSpace ℝ (Fin 2)
-
-section RectangleShadedArea
-
-/-!
-A rectangle ABCD is four times as long as it is wide.
-Point E is the midpoint of side BC. The unshaded region is triangle ABE.
-Show that the shaded portion is 75% (i.e., 3/4) of the rectangle's area.
--/
-
--- Let w > 0 be the width
-variable (w : ℝ) (hw : 0 < w)
-
-def l (w : ℝ) : ℝ := 4 * w  -- length
-
--- Rectangle vertices; axis aligned for convenience.
-def A (w : ℝ) : P := ![0, w]
-def B : P := ![0, 0]
-def C (w : ℝ) : P := ![l w, 0]
-def D (w : ℝ) : P := ![l w, w]
-
--- E is the midpoint of BC
-def E (w : ℝ) : P := (B + C w) / 2
-
--- Area of rectangle
-def areaRect (w : ℝ) : ℝ := l w * w
-
--- Area of triangle ABE
-def triangleABE (w : ℝ) : Triangle ℝ P := Triangle.mk (A w) B (E w)
-def areaUnshaded (w : ℝ) : ℝ := (triangleABE w).area
-
--- Shaded area is the difference
-def areaShaded (w : ℝ) : ℝ := areaRect w - areaUnshaded w
-
-def targetFraction : ℝ := 3/4
-
-theorem shaded_is_fraction_of_rectangle (w : ℝ) (hw : 0 < w) :
-    areaShaded w = targetFraction * areaRect w := by sorry
-
-end RectangleShadedArea
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+structure IsRectangle (A B C D : Point) : Prop where
+  is_parallelogram : midpoint ℝ A C = midpoint ℝ B D
+  angle_DAB_is_right : EuclideanGeometry.angle D A B = Real.pi / 2
+noncomputable def area_triangle_of_points (p₁ p₂ p₃ : Point) : ℝ :=
+  abs ((p₂ 0 - p₁ 0) * (p₃ 1 - p₁ 1) - (p₃ 0 - p₁ 0) * (p₂ 1 - p₁ 1)) / 2
+theorem shaded_percentage_of_rectangle
+    (A B C D E : Point)
+    (w : ℝ)
+    (h_w_pos : w > 0)
+    (h_rect : IsRectangle A B C D)
+    (h_AD_is_width : dist A D = w)
+    (h_AB_is_length : dist A B = 4 * w)
+    (h_E_is_midpoint_BC : E = midpoint ℝ B C) :
+    area_triangle_of_points A D E / (dist A B * dist A D) = 3/4 :=
+  by sorry

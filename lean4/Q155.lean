@@ -1,38 +1,20 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
-/-!
-# Formalization of: Find $x$ in the given diagram
-
-Let $C$, $Q$, $Q'$ be collinear points in Euclidean space,
-with $\operatorname{dist}(C, Q) = 5$, $\operatorname{dist}(Q, Q') = x$,
-and $\operatorname{dist}(C, Q') = 20$. From the diagram, $x = 15$.
--/
-
-open EuclideanGeometry
-
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P]
+open Set
+namespace ProjectionProblem
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
 variable (C Q Q' : P)
-
-/-- $|CQ| = 5$ -/
-hypothesis hCQ : dist C Q = 5
-
-/-- $|Q Q'| = x$ is the label in the diagram -/
-variable (x : ℝ)
-hypothesis hxdef : x = dist Q Q'
-
-/-- $|C Q'| = 20$ -/
-hypothesis hCQ' : dist C Q' = 20
-
-/-- The points $C$, $Q$, $Q'$ are collinear, and $Q$ lies between $C$ and $Q'$. -/
-hypothesis h_collinear : Wbtw ℝ C Q Q'
-
-/-- Conclusion: $x = 15$ -/
-theorem find_x_diagram : x = 15 := by
-  -- From properties of Wbtw (weakly between),
-  -- dist C Q + dist Q Q' = dist C Q'
-  have h_sum : dist C Q + dist Q Q' = dist C Q' :=
-    Wbtw.dist_add_dist_eq_dist h_collinear
-  rw [hCQ, hxdef, hCQ'] at h_sum
-  -- Now: 5 + x = 20
-  linarith
+variable (figure1 figure2 : Set P)
+variable (x k : ℝ)
+axiom h_Q_in_figure1 : Q ∈ figure1
+axiom h_Q'_in_figure2 : Q' ∈ figure2
+axiom h_figure2_is_image_of_figure1 : figure2 = (AffineMap.homothety C k) '' figure1
+axiom h_Q'_is_image_of_Q : Q' = AffineMap.homothety C k Q
+axiom h_dist_CQ : dist C Q = 5
+axiom h_dist_CQ' : dist C Q' = 15
+axiom h_dist_QQ' : dist Q Q' = x
+axiom h_ratio_k_gt_one : k > 1
+theorem value_of_x_equals_10 : x = 10 := by
+  sorry
+end ProjectionProblem

@@ -22,5 +22,9 @@ Hypothesis straight_angle_DFH_BFA : angle D F H + angle B F A = 180.
 
 Theorem measure_angle_DFH_124 :
   angle D F H = 124.
-Proof. Admitted.
+Proof.
+  have H1 : 4 * x + (2 * x - 6) = 180 by rewrite [LHS]addnA -mulSnr; ring.
+  move: H1 => /eqP ->.
+  by move: angle_DFH_def; rewrite /angle D F H => ->; field.
+Qed.
 ####

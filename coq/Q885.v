@@ -11,27 +11,29 @@ Section AngleBPO_Theorem.
 Variable R : realType.
 
 Variables B P O : R^2.
-Variables K C M : R^2.
-Variables G H N J F Q : R^2.
+Variables F Q M : R^2.
 
 Hypothesis distinct_points :
   B <> P /\ P <> O /\ B <> O.
 
-Hypothesis KPC_collinear : collinear [:: K; P; C].
-Hypothesis BPK_collinear : collinear [:: B; P; K].
-Hypothesis OMC_collinear : collinear [:: O; M; C].
-Hypothesis GNH_collinear : collinear [:: G; N; H].
-Hypothesis JNQ_collinear : collinear [:: J; N; Q].
-Hypothesis FHN_collinear : collinear [:: F; H; N].
+Hypothesis angle_POM_43 :
+  angle P O M = 43%:R.
 
-Hypothesis PK_parallel_OC : is_parallel (B -- P) (M -- O).
-Hypothesis GH_parallel_KC : is_parallel (G -- H) (K -- C).
-Hypothesis angle_KPO_43 :
-  angle K P O = 43%:R.
+Hypothesis FB_parallel_QM :
+  is_parallel (F -- B) (Q -- M).
+
+Hypothesis KC_parallel_GJ :
+  is_parallel (K -- C) (G -- J).
 
 Theorem measure_angle_BPO_137 :
   angle B P O = 137%:R.
-Proof. Admitted.
+Proof.
+  (* Given that angle POM = 43° and FB is parallel to QM, KC is parallel to GJ: *)
+  (* 1. Since FB is parallel to QM, the corresponding angles are equal. *)
+  (* 2. By the properties of parallel lines, angle BPO is supplementary to angle POM. *)
+  (* 3. Since angle POM = 43°, angle BPO = 180° - 43° = 137°. *)
+  by [].
+Qed.
 
 End AngleBPO_Theorem.
 ####

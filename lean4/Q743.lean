@@ -1,21 +1,17 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Data.Real.Basic
-
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 open Real EuclideanGeometry
-
-abbrev PPoint := EuclideanSpace ℝ (Fin 2)
-
-theorem triangle_CAB_tan_value :
-  let a : ℝ := 14
-  let b : ℝ := 48
-  let c : ℝ := 50
-  let C : PPoint := ![0, 0]
-  let A : PPoint := ![b, 0]
-  let B : PPoint := ![0, a]
-  dist C A = b ∧
-  dist C B = a ∧
-  dist A B = c ∧
-  angle B C A = π / 2 ∧
-  tan (angle C A B) = 7 / 24 := by sorry
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
+variable (A B C : P)
+axiom h_CB_eq : dist B C = 14
+axiom h_AC_eq : dist A C = 48
+axiom h_AB_eq : dist A B = 50
+axiom h_BC_perp_AC : EuclideanGeometry.angle A C B = Real.pi / 2
+theorem value_of_tan_CAB (A B C : P)
+  (h_CB_eq : dist B C = 14) (h_AC_eq : dist A C = 48) (h_AB_eq : dist A B = 50)
+  (h_BC_perp_AC : EuclideanGeometry.angle A C B = Real.pi / 2) :
+  Real.tan (EuclideanGeometry.angle C A B) = 7 / 24 := by
+  sorry

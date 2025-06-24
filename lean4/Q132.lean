@@ -1,30 +1,21 @@
 import Mathlib.Data.Real.Basic
-
-namespace ProblemFormalization
-
-noncomputable section
-
-variable (A B C D E F : EuclideanPlane ℝ)
-
--- Triangle side lengths
-variable (h_AB : dist A B = 28)
-variable (h_AC : dist A C = 28)
-variable (h_BC : dist B C = 20)
-
--- Points on sides
-variable (h_D : dist A D + dist D B = dist A B)
-variable (h_E : dist B E + dist E C = dist B C)
-variable (h_F : dist A F + dist F C = dist A C)
-
--- Parallelism conditions
-variable (h_DE : ∃ k₁ : ℝ, (E -ᵥ D) = k₁ • (C -ᵥ A))
-variable (h_EF : ∃ k₂ : ℝ, (F -ᵥ E) = k₂ • (B -ᵥ A))
-
--- Perimeter conclusion
-theorem perimeter_ADEF_is_56 :
-    dist A D + dist D E + dist E F + dist F A = 56 := by
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev P := EuclideanSpace ℝ (Fin 2)
+open EuclideanGeometry
+noncomputable def quadrilateralPerimeter (p₁ p₂ p₃ p₄ : P) : ℝ :=
+  dist p₁ p₂ + dist p₂ p₃ + dist p₃ p₄ + dist p₄ p₁
+theorem perimeter_of_adef_is_56
+  (a b c d e f : P)
+  (h_abc_not_collinear : ¬ Collinear ℝ ({a, b, c} : Set P))
+  (h_ab_len : dist a b = 28)
+  (h_ac_len : dist a c = 28)
+  (h_bc_len : dist b c = 20)
+  (h_d_on_ab : d ∈ segment ℝ a b)
+  (h_e_on_bc : e ∈ segment ℝ b c)
+  (h_f_on_ac : f ∈ segment ℝ a c)
+  (h_de_parallel_ac : AffineSubspace.Parallel (affineSpan ℝ {d, e}) (affineSpan ℝ {a, c}))
+  (h_ef_parallel_ab : AffineSubspace.Parallel (affineSpan ℝ {e, f}) (affineSpan ℝ {a, b})) :
+  quadrilateralPerimeter a d e f = 56 := by
   sorry
-
-end noncomputable section
-
-end ProblemFormalization

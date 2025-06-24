@@ -1,18 +1,17 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Data.Real.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open Real Real.Angle EuclideanGeometry
-
--- 标准欧几里得几何设置
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-/-- 设 A, B, C, D 是欧氏空间内的点，满足 AC=CB, AD=DC, ∠ADC=92°，则 ∠DCA=44°。 -/
-theorem find_angle_DCA
-    (A B C D : P)
-    (h_AC_eq_CB : dist A C = dist C B)  -- AC = CB
-    (h_AD_eq_DC : dist A D = dist D C)  -- AD = DC
-    (h_angle_ADC : (∠ A D C).toDegrees = 92)  -- ∠ADC = 92°
-    (h_noncollinear : ¬Collinear ℝ ({A, D, C} : Set P)) -- A, D, C 不共线（确保三角形）
-    : (∠ D C A).toDegrees = 44 := by
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+namespace ProblemGeo
+abbrev P := EuclideanSpace ℝ (Fin 2) 
+noncomputable def degreesToRadians (d : ℝ) : ℝ := d * Real.pi / 180 
+theorem angle_DCA_is_44_degrees
+    (A B C D : P) 
+    (h_ac_cb : dist A C = dist C B)
+    (h_ad_dc : dist A D = dist D C)
+    (h_angle_adc_val : EuclideanGeometry.angle A D C = degreesToRadians 92) 
+    (h_noncollinear_adc : ¬ Collinear ℝ ({A, D, C} : Set P)) : 
+    EuclideanGeometry.angle D C A = degreesToRadians 44 := by 
   sorry
+end ProblemGeo

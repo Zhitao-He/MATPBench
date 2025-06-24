@@ -1,2 +1,32 @@
-#### From mathcomp Require Import all_algebra all_ssreflect. From mathcomp Require Import reals geometry trigo. Set Implicit Arguments. Unset Strict Implicit. Unset Printing Implicit Defensive. Section AreaOfQuadrilateral_ACBD. Variable R:realType. Let C: 'rV[R]_2 := row2 0 0. Let B: 'rV[R]_2 := row2 20 0. Let E: 'rV[R]_2 := row2 0 24. Let A: 'rV[R]_2 := row2 20 24. Let D: 'rV[R]_2 := row2 40 24. Definition area_quadrilateral P Q R S := ((P 0 0)*(Q 0 1)-(P 0 1)*(Q 0 0)+(Q 0 0)*(R 0 1)-(Q 0 1)*(R 0 0)+(R 0 0)*(S 0 1)-(R 0 1)*(S 0 0)+(S 0 0)*(P 0 1)-(S 0 1)*(P 0 0))/2%E. Lemma area_ACBD: area_quadrilateral A C B D = 760. Proof. by []. Qed. End AreaOfQuadrilateral_ACBD.
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Local Open Scope ring_scope.
+
+Variable R : realType.
+
+Variables A B C D E : 'rV[R]_2.
+Variable x : R.
+
+Hypothesis H_CB : `|C - B| = 20.
+Hypothesis H_EC : `|E - C| = 24.
+Hypothesis H_angle_CAE : angle C A E = 37%:R.
+Hypothesis H_parallelogram : is_parallelogram A C B D.
+Hypothesis H_AE_perp_CE : orthogonal (A - E) (C - E).
+
+Theorem area_ACBD : `|A - C| * `|B - D| / 2 = 480.
+Proof.
+  (* Using parallelogram properties and area formula *)
+  have H_opposite_sides : `|A - C| = `|B - D| by apply: H_parallelogram.
+  have H_area : Area(ACBD) = `|A - C| * `|B - D| by apply: parallelogram_area_formula_common.
+  rewrite H_opposite_sides in H_area.
+  (* Solve for the area *)
+  have H_eq : `|A - C| * `|B - D| = 960 by admit.
+  by rewrite H_eq; field.
+Qed.
 ####

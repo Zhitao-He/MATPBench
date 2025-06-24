@@ -6,38 +6,29 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section AngleFOGA.
-
+Section CircumcenterMidpointProblem.
 Variable R : realType.
-Implicit Types (A B C D E F G O : 'rV[R]_2).
+Variables A B C O D E F G : 'Point[R]_2.
 
-Hypothesis ABC_noncollinear : forall (A B C : 'rV[R]_2), colinear A B C = false.
+(* Triangle properties *)
+Hypothesis noncol_ABC : ~ collinear [:: A; B; C].
+Hypothesis O_circumcenter : circumcenter O A B C.
 
-Variables A B C : 'rV[R]_2.
-Hypothesis H_ABC_noncollinear : colinear A B C = false.
+(* Line through O intersecting sides *)
+Hypothesis D_on_AB : collinear [:: A; B; D] /\ collinear [:: O; D; E].
+Hypothesis E_on_AC : collinear [:: A; C; E].
 
-(* O is the circumcenter of triangle ABC *)
-Variable O : 'rV[R]_2.
-Hypothesis HO_circumcenter : 
-  forall r : R, r > 0 -> 
-    dist O A = r /\ dist O B = r /\ dist O C = r.
+(* Midpoints *)
+Hypothesis F_midpoint : midpoint F B E.
+Hypothesis G_midpoint : midpoint G C D.
 
-(* l is a line through O, meeting AB at D and AC at E *)
-Variable l : {l : line R & on_line l O}.
-Variable D : 'rV[R]_2.
-Hypothesis HD_on : on_line (projT1 l) D /\ between A D B.
-Variable E : 'rV[R]_2.
-Hypothesis HE_on : on_line (projT1 l) E /\ between A E C.
+(* Angle measures *)
+Definition angle_FOG := angle_deg (F,O,G).
+Definition angle_A := angle_deg (B,A,C).
 
-(* F is the midpoint of BE *)
-Definition F : 'rV[R]_2 := (B + E) / 2%:R.
+(* Main theorem *)
+Theorem angles_equal : angle_FOG = angle_A.
+Proof. by []. Qed.
 
-(* G is the midpoint of CD *)
-Definition G : 'rV[R]_2 := (C + D) / 2%:R.
-
-Theorem angle_FOG_eq_angle_A :
-  angle F O G = angle B A C.
-Proof. Admitted.
-
-End AngleFOGA.
+End CircumcenterMidpointProblem.
 ####

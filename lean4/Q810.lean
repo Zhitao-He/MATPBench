@@ -1,50 +1,34 @@
-
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry Real
-
--- Work in a Euclidean space
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor ℝ P]
-
--- Declare points and unknown value x
-variable (A B C D F H : P)
-variable (x : ℝ)
-
--- Given lengths
-axiom h_DA : dist D A = 8
-axiom h_DH : dist D H = x
-axiom h_HF : dist H F = 6
-
--- Angle measures
-axiom h_angle_DAB : Angle.value (∠ D A B) = π / 6        -- 30°
-axiom h_angle_ABC : Angle.value (∠ A B C) = π / 4        -- 45°
-
--- Right angles
-axiom h_angle_DHA : Angle.value (∠ D H A) = π / 2
-axiom h_angle_CFB : Angle.value (∠ C F B) = π / 2
-
--- Collinearity and betweenness
-axiom h_collinear_AHFB : ∃ (l : Line P), A ∈ l ∧ H ∈ l ∧ F ∈ l ∧ B ∈ l
-axiom h_between_AHF : Sbtw ℝ A H F
-axiom h_between_HFB : Sbtw ℝ H F B
-
--- Parallel lines
-axiom h_parallel_DC_AB : (lineThrough D C).Parallel (lineThrough A B)
-
--- Distinctness conditions
-axiom h_A_ne_H : A ≠ H
-axiom h_D_ne_A : D ≠ A
-axiom h_D_ne_H : D ≠ H
-axiom h_F_ne_B : F ≠ B
-axiom h_C_ne_B : C ≠ B
-axiom h_C_ne_F : C ≠ F
-axiom h_D_ne_C : D ≠ C
-axiom h_A_ne_B : A ≠ B
-
--- x is positive
-axiom h_x_pos : x > 0
-
--- The desired conclusion
-theorem value_of_x_is_4 : x = 4 := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+open Real EuclideanGeometry
+open scoped EuclideanGeometry
+open Affine AffineSubspace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem value_of_x_is_4
+  (A B C D H F : P) (x : ℝ)
+  (h_DA : dist D A = 8)
+  (h_DH : dist D H = x)
+  (h_HF : dist H F = 6)
+  (h_angle_ABC : ∠ A B C = Real.pi / 4)
+  (h_angle_DAB : ∠ D A B = Real.pi / 6)
+  (h_DC_parallel_AB : line[ℝ, D, C] ∥ line[ℝ, A, B])
+  (h_AHD_right_angle : ∠ A H D = Real.pi / 2)
+  (h_CFB_right_angle : ∠ C F B = Real.pi / 2)
+  (h_A_ne_B : A ≠ B)
+  (h_D_ne_C : D ≠ C)
+  (h_A_ne_H : A ≠ H)
+  (h_A_ne_D : A ≠ D)
+  (h_D_ne_H : D ≠ H)
+  (h_H_on_ray_AB : SameRay ℝ (H -ᵥ A) (B -ᵥ A))
+  (h_B_ne_F : B ≠ F)
+  (h_B_ne_C : B ≠ C)
+  (h_F_on_ray_BA : SameRay ℝ (F -ᵥ B) (A -ᵥ B))
+  (h_D_not_on_line_AB : D ∉ affineSpan ℝ {A, B})
+  (h_C_not_on_line_AB : C ∉ affineSpan ℝ {A, B})
+  : x = 4 := by
+  sorry

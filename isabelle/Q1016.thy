@@ -1,41 +1,20 @@
-theory Quadrilateral_Midpoint_Parallel
-imports 
-  Main
-  "HOL-Analysis.Euclidean_Space"
+theory Quadrilateral_EF_GH_Parallel
+  imports Main
 begin
-
-locale affine_geometry =
-  fixes plane :: "real^2 set"
-  assumes "plane ≠ {}"
-
-context affine_geometry
-begin
-
-definition midpoint :: "real^2 ⇒ real^2 ⇒ real^2" where
-  "midpoint A B = (A + B) / 2"
-
-definition is_midpoint :: "real^2 ⇒ real^2 ⇒ real^2 ⇒ bool" where
-  "is_midpoint M A B ⟷ M = midpoint A B"
-
-definition parallel_vectors :: "real^2 ⇒ real^2 ⇒ bool" where
-  "parallel_vectors v w ⟷ (∃k. k ≠ 0 ∧ v = k *R w)"
-
-definition colinear_vectors :: "real^2 ⇒ real^2 ⇒ bool" where
-  "colinear_vectors v w ⟷ (∃k. v = k *R w)"
-
-theorem quadrilateral_midpoint_parallel:
-  fixes A B C D E F G H :: "real^2"
-  assumes "E = midpoint A D"  (* E is the midpoint of AD *)
-    and "F = midpoint B C"    (* F is the midpoint of BC *)
-    and "∃a. 0 < a ∧ a < 1 ∧ H - A = a *R (C - A)"  (* H is on AC *)
-    and "∃b. 0 < b ∧ b < 1 ∧ H - B = b *R (D - B)"  (* H is on BD *)
-    and "colinear_vectors (G - B) (C - D)"  (* GB parallel CD *)
-    and "colinear_vectors (G - C) (A - B)"  (* GC parallel AB *)
-  shows "parallel_vectors (E - F) (G - H)"
-proof -
-  (* The proof would go here *)
+type_synonym point = "real × real"
+locale quadrilateral_setup =
+  fixes A B C D E F G H :: point
+  assumes E_mid_AD: "E = ((fst A + fst D) / 2, (snd A + snd D) / 2)"
+    and F_mid_BC: "F = ((fst B + fst C) / 2, (snd B + snd C) / 2)"
+    and H_inter_AC_BD: "∃ t1 t2. H = (fst A + t1 * (fst C - fst A), snd A + t1 * (snd C - snd A))
+                              ∧ H = (fst B + t2 * (fst D - fst B), snd B + t2 * (snd D - snd B))"
+    and GB_parallel_CD: "∃ λ. (fst G - fst B, snd G - snd B) = λ * (fst D - fst C, snd D - snd C)"
+    and GC_parallel_AB: "∃ μ. (fst G - fst C, snd G - snd C) = μ * (fst B - fst A, snd B - snd A)"
+definition vec :: "point ⇒ point ⇒ point" where
+  "vec P Q = (fst Q - fst P, snd Q - snd P)"
+definition parallel :: "point ⇒ point ⇒ bool" where
+  "parallel v1 v2 ⟷ (∃ k::real. v1 = (k * fst v2, k * snd v2))"
+theorem (in quadrilateral_setup) EF_parallel_GH:
+  "parallel (vec E F) (vec G H)"
   sorry
-qed
-
-end
 end

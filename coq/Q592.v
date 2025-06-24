@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry.
+From mathcomp Require Import reals geometry angles.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -10,23 +10,24 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Variables (X W Y : 'rV[R]_2).
+Variables W X Y : 'rV[R]_2.
+Variable x : R.
 
-Definition side_WX (x : R) := dist W X = 9 * x.
-Definition side_XY (x : R) := dist X Y = 4 * x + 5.
-Definition side_WY (x : R) := dist W Y = 6 * x + 3.
+Hypothesis H_WX : `|W - X| = 9 * x.
+Hypothesis H_WY : `|W - Y| = 6 * x + 3.
+Hypothesis H_YX : `|Y - X| = 4 * x + 5.
+Hypothesis H_WY_eq_YX : `|W - Y| = `|Y - X|.
+Hypothesis H_XW_eq_WY : `|X - W| = `|W - Y|.
 
-Definition triangle_WXY := collinear W X Y = false.
-
-Definition angle_XWY := angle_at W X Y.
-
-Theorem measure_of_angle_XWY_60_degrees :
-  exists x : R,
-    0 < x /\
-    triangle_WXY /\
-    side_WX x /\
-    side_XY x /\
-    side_WY x /\
-    angle_XWY = PI / 3.
-Proof. Admitted.
+Theorem measure_angle_XWY_60 : angle X W Y = 60%:R.
+Proof.
+  (* Using isosceles triangle properties and equilateral triangle judgment *)
+  have H_isosceles_XWY : isosceles_triangle W X Y by apply: isosceles_triangle_judgment_line_equal.
+  have H_isosceles_WYX : isosceles_triangle W Y X by apply: isosceles_triangle_judgment_line_equal.
+  (* Conclude that triangle XWY is equilateral *)
+  have H_equilateral_XWY : equilateral_triangle W X Y by apply: equilateral_triangle_judgment_isosceles_and_isosceles.
+  (* Use equilateral triangle property to find angle XWY *)
+  have H_angle_XWY : angle X W Y = 60%:R by apply: equilateral_triangle_property_angle.
+  by [].
+Qed.
 ####

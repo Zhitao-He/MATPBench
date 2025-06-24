@@ -1,44 +1,30 @@
-import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Data.Real.Sqrt
-
-open EuclideanGeometry
-open Real
-
-namespace ProblemFormalization
-
-variable (P : Type*) [EuclideanPlane P]
-
--- Points in the diagram
-variable {P} (b g e c f d : P)
-
--- Given lengths and radius
-def lengthBG : ℝ := 10
-def lengthEG : ℝ := 10
-def radiusG : ℝ := 26
-
--- BG = 10
-axiom h_BG_length : dist b g = lengthBG
--- EG = 10
-axiom h_EG_length : dist e g = lengthEG
--- F, D ∈ ⊙G, radius 26
-axiom h_F_on_circle_G : dist f g = radiusG
-axiom h_D_on_circle_G : dist d g = radiusG
--- CB ⟂ GB (angle at B, between C,B,G is right)
-axiom h_CB_perp_GB : Angle.IsRight c b g
--- FE ⟂ GE (angle at E, between F,E,G is right)
-axiom h_FE_perp_GE : Angle.IsRight f e g
--- D, E, F collinear with E between D, F
-axiom h_E_between_D_F : Sbtw ℝ d e f
--- GE ⟂ DF at E, and E is the midpoint of DF
-axiom h_E_is_midpoint_DF : e = midpoint ℝ d f
-
--- The required segment
-def lengthDE : ℝ := dist d e
-
--- The answer required by the problem
-theorem find_DE_value : lengthDE = 24 := by
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Data.Real.Basic
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem find_DE_value
+  (A B C D E F G : P)
+  (h_center_G : G = G)
+  (h_radius_G : dist G A = 26)
+  (hA_on_Ω : A ∈ EuclideanGeometry.Sphere.mk G 26)
+  (hC_on_Ω : C ∈ EuclideanGeometry.Sphere.mk G 26)
+  (hD_on_Ω : D ∈ EuclideanGeometry.Sphere.mk G 26)
+  (hF_on_Ω : F ∈ EuclideanGeometry.Sphere.mk G 26)
+  (h_BG_length : dist B G = 10)
+  (h_EG_length : dist E G = 10)
+  (h_CB_perp_GB : EuclideanGeometry.angle C B G = Real.pi / 2)
+  (h_FE_perp_GE : EuclideanGeometry.angle F E G = Real.pi / 2)
+  (h_E_on_segment_FD : Sbtw ℝ F E D)
+  (h_B_on_segment_AC : Sbtw ℝ A B C)
+  (h_F_ne_E : F ≠ E)
+  (h_G_ne_E : G ≠ E)
+  (h_D_ne_E : D ≠ E)
+  (h_C_ne_B : C ≠ B)
+  (h_G_ne_B : G ≠ B)
+  (h_A_ne_B : A ≠ B)
+  (h_F_ne_D : F ≠ D)
+  (h_A_ne_C : A ≠ C)
+  : dist D E = 24 := by
   sorry
-
-end ProblemFormalization

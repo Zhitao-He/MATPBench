@@ -1,49 +1,31 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-
+import Mathlib.Analysis.InnerProductSpace.PiL2
+abbrev P := EuclideanSpace ℝ (Fin 2)
 namespace QuadrilateralProblem
-
--- The Euclidean plane as 2-dimensional Euclidean space over ℝ
-abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
-
--- Side lengths of the quadrilateral
-def ab_len : ℝ := 4
-def bc_len : ℝ := 7
-def cd_len : ℝ := 10
-def da_len : ℝ := 5
-
-/--
-Predicate: integer `k` is a possible length for diagonal AC (i.e., there exists a non-degenerate quadrilateral with the given sides and k as diagonal AC).
--/
-def IsPossibleIntegerAC (k : ℤ) : Prop :=
-  (0 : ℝ) < (k : ℝ) ∧
-  ∃ (A B C D : EuclideanPlane),
-    dist A B = ab_len ∧
-    dist B C = bc_len ∧
-    dist C D = cd_len ∧
-    dist D A = da_len ∧
-    dist A C = (k : ℝ) ∧
-    ¬ Collinear ℝ A B C ∧
-    ¬ Collinear ℝ A D C
-
-/--
-By triangle inequalities for triangles ABC and ADC:
-ABC:   |AB - BC| < AC < AB + BC  →  |4-7| < AC < 4+7  →  3 < AC < 11
-ADC:   |AD - CD| < AC < AD + CD  →  |5-10| < AC < 5+10 →  5 < AC < 15
-Intersect:    5 < AC < 11
-Thus, integer lengths for AC are k ∈ {6, 7, 8, 9, 10}
--/
-def expectedSolutionSetACLengths : List ℤ := [6, 7, 8, 9, 10]
-
-/-- The number of possible integer values for AC -/
-def numberOfPossibleIntegerACLengths : Nat :=
-  expectedSolutionSetACLengths.length
-
-/-- The equivalence between `IsPossibleIntegerAC` and being in the precalculated set -/
-theorem aCLengthsEquivalence (k : ℤ) :
-    IsPossibleIntegerAC k ↔ k ∈ expectedSolutionSetACLengths :=
-  by sorry
-
+structure QuadrilateralWithAcLength (ac_len : ℝ) where
+  A : P
+  B : P
+  C : P
+  D : P
+  h_ab : dist A B = 4
+  h_bc : dist B C = 7
+  h_cd : dist C D = 10
+  h_da : dist D A = 5
+  h_ac : dist A C = ac_len
+  h_abc_not_collinear : ¬∃ (k : ℝ), B -ᵥ A = k • (C -ᵥ A)
+  h_adc_not_collinear : ¬∃ (k : ℝ), D -ᵥ A = k • (C -ᵥ A)
+def IsPossibleAcLengthReal (x : ℝ) : Prop :=
+  Nonempty (QuadrilateralWithAcLength x)
+def IsPossibleAcLengthInt (n : ℤ) : Prop :=
+  IsPossibleAcLengthReal (n : ℝ)
+theorem isPossibleAcLengthReal_iff_bounds (x : ℝ) :
+    IsPossibleAcLengthReal x ↔
+      (x > 0 ∧
+      abs (4 - 7) < x ∧ x < 4 + 7 ∧
+      abs (5 - 10) < x ∧ x < 5 + 10) := by
+  sorry
+def possibleIntegerAcLengths_described_by_bounds : Set ℤ :=
+  { n : ℤ | (5 : ℝ) < (n : ℝ) ∧ (n : ℝ) < (11 : ℝ) }
+def numberOfPossibleIntegerAcLengths : ℕ := 5
 end QuadrilateralProblem
-
--- #eval QuadrilateralProblem.numberOfPossibleIntegerACLengths -- Expected: 5

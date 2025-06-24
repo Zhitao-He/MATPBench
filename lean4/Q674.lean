@@ -1,31 +1,21 @@
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
-import Mathlib.Data.Real.Basic
-
-namespace GeometryProblem
-
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+noncomputable abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (degrees : ℝ) : ℝ := degrees * (Real.pi / 180)
 open EuclideanGeometry
-
--- Use ℝ² as the Euclidean plane
-variable {P : Type*} [EuclideanPlane P]
-variables (A C D E F G H : P)
-
--- Helper: convert degrees to radians (as Lean angles are in radians)
-noncomputable def degreesToRadians (d : ℝ) : ℝ := d / 180 * Real.pi
-
--- Given angles (all angles in radians)
-axiom hDHF : ∠ D H F = degreesToRadians 35
-axiom hGCH : ∠ G C H = degreesToRadians 28
-axiom hHDF : ∠ H D F = degreesToRadians 25
-axiom hHFG : ∠ H F G = degreesToRadians 51
-
--- Right angle information
-axiom hCE_perp_HE : Angle.IsRight (∠ C E H)
-axiom hFG_perp_HG : Angle.IsRight (∠ F G H)
-axiom hHC_perp_AC : Angle.IsRight (∠ H C A)
-
--- Target: ∠ G H F = 39°
-theorem target_angle_GHF : ∠ G H F = degreesToRadians 39 := by sorry
-
-end GeometryProblem
+theorem find_angle_GHF
+  (A C D E F G H : PPoint)
+  (hEHC : angle E H C = degToRad 35)
+  (hGCH : angle G C H = degToRad 28)
+  (hHDF : angle H D F = degToRad 25)
+  (hHFG : angle H F G = degToRad 51)
+  (hCE_perp_HE : angle C E H = Real.pi / 2)
+  (hFG_perp_HG : angle F G H = Real.pi / 2)
+  (hHC_perp_AC : angle H C A = Real.pi / 2)
+  : angle G H F = degToRad 39 :=
+by
+  sorry

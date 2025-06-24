@@ -1,7 +1,5 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
-
 theorem smallCircleArcLength
     (R_large r_small : ℝ)
     (h_pos : 0 < r_small)

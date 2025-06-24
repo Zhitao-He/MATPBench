@@ -1,76 +1,38 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Data.Real.Basic
-
-set_option autoImplicit false
-
-namespace MovingPointQuantities
-
--- This section formalizes the geometric setup and quantities for a problem
--- where point P moves along a line parallel to side AB of triangle PAB.
--- M and N are midpoints of PA and PB, respectively.
-
--- We work in a 2D Euclidean space.
--- EucSpace is the underlying vector space, EPoint is the affine point type.
-abbrev EucSpace := EuclideanSpace ℝ (Fin 2)
-abbrev EPoint := Point ℝ EucSpace
-
-section ProblemSetup
-  -- Fixed points A and B, defining one side of the triangle.
-  variable (A B : EPoint)
-  -- Assumption: A and B are distinct points.
-  variable (hAB_distinct : A ≠ B)
-
-  -- The line passing through A and B.
-  def line_AB_side : AffineSubspace ℝ EPoint := line[ℝ, A, B]
-
-  -- P₀ is a reference point on the line along which P moves.
-  -- This line is parallel to line_AB_side and distinct from it,
-  -- ensuring PAB is always a non-degenerate triangle.
-  variable (P₀ : EPoint)
-  variable (hP₀_not_on_line_AB_side : P₀ ∉ line_AB_side A B)
-
-  -- The vector B -ᵥ A defines the direction of side AB.
-  -- P moves parallel to AB, so P's path has the same direction.
-  def direction_AB : EucSpace := B -ᵥ A
-
-  -- Lemma ensuring direction_AB is not the zero vector (since A and B are distinct).
-  -- The proof is omitted as per problem instructions.
-  lemma direction_AB_ne_zero : direction_AB A B ≠ 0 := by sorry
-
-  -- P_trajectory(t) is the position of point P as a function of a real parameter t.
-  -- P moves along the line starting at P₀ in the direction_AB.
-  def P_trajectory (t : ℝ) : EPoint := P₀ +ᵥ t • direction_AB A B
-
-  -- M_trajectory(t) and N_trajectory(t) are the positions of midpoints M and N.
-  -- M is the midpoint of PA, N is the midpoint of PB.
-  def M_trajectory (t : ℝ) : EPoint := midpoint ℝ (P_trajectory A B P₀ t) A
-  def N_trajectory (t : ℝ) : EPoint := midpoint ℝ (P_trajectory A B P₀ t) B
-
-  -- Quantity a: The length of the segment MN.
-  def length_MN (t : ℝ) : ℝ := dist (M_trajectory A B P₀ t) (N_trajectory A B P₀ t)
-
-  -- Quantity b: The perimeter of triangle PAB.
-  def perimeter_PAB (t : ℝ) : ℝ :=
-    dist (P_trajectory A B P₀ t) A + dist (P_trajectory A B P₀ t) B + dist A B
-
-  -- Quantity c: The area of triangle PAB.
-  -- For Triangle.area, a `Fact (finrank ℝ EucSpace = 2)` is needed.
-  -- This is true by definition for `EuclideanSpace ℝ (Fin 2)`
-  -- and Mathlib provides the necessary instance.
-  def triangle_PAB_shape (t : ℝ) : Triangle ℝ EPoint := ⟨P_trajectory A B P₀ t, A, B⟩
-  def area_PAB (t : ℝ) : ℝ := (triangle_PAB_shape A B P₀ t).area
-
-  -- Quantity d: The area of trapezoid ABNM.
-  -- The vertices are A, B, N_trajectory t, M_trajectory t.
-  -- Side AB is parallel to side MN (a property of midpoints).
-  -- The height of the trapezoid is the perpendicular distance from M_trajectory t
-  -- (or N_trajectory t) to line_AB_side.
-  def height_trapezoid_ABNM (t : ℝ) : ℝ := (line_AB_side A B).dist (M_trajectory A B P₀ t)
-
-  def area_trapezoid_ABNM (t : ℝ) : ℝ :=
-    (1/2 : ℝ) * (dist A B + length_MN A B P₀ t) * (height_trapezoid_ABNM A B P₀ t)
-
-end ProblemSetup
-
-end MovingPointQuantities
+import Mathlib.Data.Real.Basic 
+import Mathlib.Geometry.Euclidean.Basic 
+import Mathlib.Geometry.Euclidean.Triangle 
+namespace EuclideanProblemAMC12
+abbrev PSpace := EuclideanSpace ℝ (Fin 2)
+noncomputable def M_def (P A_pt : PSpace) : PSpace := midpoint ℝ P A_pt
+noncomputable def N_def (P B_pt : PSpace) : PSpace := midpoint ℝ P B_pt
+noncomputable def quantity_a_func (P A_pt B_pt : PSpace) : ℝ := dist (M_def P A_pt) (N_def P B_pt)
+noncomputable def quantity_b_func (P A_pt B_pt : PSpace) : ℝ := dist P A_pt + dist P B_pt + dist A_pt B_pt
+noncomputable def triangleArea (A B C : PSpace) : ℝ :=
+  (1 / 2 : ℝ) * abs ((B -ᵥ A) 0 * (C -ᵥ A) 1 - (B -ᵥ A) 1 * (C -ᵥ A) 0)
+noncomputable def quantity_c_func (P A_pt B_pt : PSpace) : ℝ := triangleArea P A_pt B_pt
+noncomputable def quantity_d_func (P A_pt B_pt : PSpace) : ℝ :=
+  triangleArea P A_pt B_pt - triangleArea P (M_def P A_pt) (N_def P B_pt)
+def FunctionChangesOnLine (lP_line : AffineSubspace ℝ PSpace) (f : PSpace → ℝ) : Prop :=
+  ∃ (P₁ : PSpace) (_ : P₁ ∈ lP_line) (P₂ : PSpace) (_ : P₂ ∈ lP_line), f P₁ ≠ f P₂
+def prop_quantity_a_changes (A B : PSpace) (lP : AffineSubspace ℝ PSpace) : Prop :=
+  FunctionChangesOnLine lP (fun P_dyn => quantity_a_func P_dyn A B)
+def prop_quantity_b_changes (A B : PSpace) (lP : AffineSubspace ℝ PSpace) : Prop :=
+  FunctionChangesOnLine lP (fun P_dyn => quantity_b_func P_dyn A B)
+def prop_quantity_c_changes (A B : PSpace) (lP : AffineSubspace ℝ PSpace) : Prop :=
+  FunctionChangesOnLine lP (fun P_dyn => quantity_c_func P_dyn A B)
+def prop_quantity_d_changes (A B : PSpace) (lP : AffineSubspace ℝ PSpace) : Prop :=
+  FunctionChangesOnLine lP (fun P_dyn => quantity_d_func P_dyn A B)
+noncomputable def num_quantities_that_change_final (A B : PSpace) (lP : AffineSubspace ℝ PSpace) : Nat :=
+  open Classical in
+  (if prop_quantity_a_changes A B lP then 1 else 0) +
+  (if prop_quantity_b_changes A B lP then 1 else 0) +
+  (if prop_quantity_c_changes A B lP then 1 else 0) +
+  (if prop_quantity_d_changes A B lP then 1 else 0)
+theorem final_answer
+  (A B : PSpace)
+  (lP : AffineSubspace ℝ PSpace)
+  (h_AB_distinct : Prop)
+  (h_lP_parallel_AB : Prop)
+  (h_P_not_on_line_AB : Prop) :
+  num_quantities_that_change_final A B lP = 1 := by sorry
+end EuclideanProblemAMC12

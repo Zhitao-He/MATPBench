@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclideangeometry.
+From mathcomp Require Import reals geometry areas.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -10,16 +10,20 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Section ParallelogramProblem.
+Variables W X Y Z : 'rV[R]_2.
+Variable d1 d2 : R.
 
-Variable W X Y Z : 'rV[R]_2.
+Hypothesis H_area : area_rhombus W X Y Z = 100.
+Hypothesis H_diagonal_XZ : `|X - Z| = 10.
+Hypothesis H_rhombus : is_rhombus W X Y Z.
 
-Hypothesis parallelogram_WXYZ : is_parallelogram W X Y Z.
-Hypothesis XZ_length : dist X Z = 10.
-
-Theorem parallelogram_WY_length :
-  dist W Y = 20.
-Proof. Admitted.
-
-End ParallelogramProblem.
+Theorem find_WY_length : `|W - Y| = 20.
+Proof.
+  (* Using rhombus area formula: area = (d1 * d2) / 2 *)
+  have H_area_formula : area_rhombus W X Y Z = (`|X - Z| * `|W - Y|) / 2 by apply: rhombus_area_formula.
+  rewrite H_diagonal_XZ in H_area_formula.
+  (* Solve for |W - Y| *)
+  have H_eq : 100 = (10 * `|W - Y|) / 2 by field in H_area_formula.
+  by rewrite H_eq; field.
+Qed.
 ####

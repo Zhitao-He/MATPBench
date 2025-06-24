@@ -1,7 +1,6 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
 theorem find_L_is_14 :
   let r : ℝ := 3
   let h : ℝ := 13

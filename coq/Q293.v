@@ -19,5 +19,7 @@ Theorem cone_inside_cylinder_volume :
     let V_cone := (1%:R / 3%:R) * pi * r^2 * h in
     let V_space := V_cyl - V_cone in
     V_space = 48 * pi.
-Proof. Admitted.
+Proof.
+  (* Proof would go here *)
+Admitted.
 ####

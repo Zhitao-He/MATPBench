@@ -1,47 +1,31 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
 import Mathlib.Data.Real.Basic
-
-open Real
-
-namespace Geometry.MidpointTangency
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable [FiniteDimensional ℝ V] (hV2 : FiniteDimensional.finrank ℝ V = 2)
-variable {Pt : Type*} [MetricSpace Pt] [NormedAddTorsor V Pt]
-
-variables (O P A B C D E F : Pt)
-variables (rO rP : ℝ)
-
-section Hypotheses
-
-variable (hrO_pos : 0 < rO) (hrP_pos : 0 < rP)
-
-variable (hA_on_O : dist A O = rO) (hA_on_P : dist A P = rP)
-variable (hB_on_O : dist B O = rO) (hB_on_P : dist B P = rP)
-variable (hA_ne_B : A ≠ B)
-
-variable (hB_ne_O : B ≠ O)
-variable (hC_on_BO : ∃ t₁ : ℝ, C = B +ᵥ t₁ • (O -ᵥ B))
-variable (hP_ne_A : P ≠ A)
-variable (hC_on_PA : ∃ t₂ : ℝ, C = P +ᵥ t₂ • (A -ᵥ P))
-variable (hO_ne_P : O ≠ P)
-
-variable (hD_on_circleO : dist D O = rO)
-variable (hC_ne_D : C ≠ D)
-variable (h_CD_tangent : IsRightAngle O D C)
-
-variable (hE_on_circleP : dist E P = rP)
-variable (hC_ne_E : C ≠ E)
-variable (h_CE_tangent : IsRightAngle P E C)
-
-variable (hD_ne_E : D ≠ E)
-variable (hF_on_DE : ∃ s : ℝ, F = D +ᵥ s • (E -ᵥ D))
-variable (hF_on_AB : ∃ t : ℝ, F = A +ᵥ t • (B -ᵥ A))
-
-theorem intersection_tangent_midpoint :
-    F = midpoint ℝ D E := by sorry
-
-end Hypotheses
-
-end Geometry.MidpointTangency
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+abbrev P2 := EuclideanSpace ℝ (Fin 2)
+def collinear (S : Set P2) : Prop := sorry
+def IsTangent (l : Set P2) (ω : EuclideanGeometry.Sphere P2) (pt : P2) : Prop := sorry
+def lineThrough (A B : P2) : Set P2 := sorry
+theorem two_circles_tangents_midpoint
+    (O P : P2)
+    (A B C D E F : P2)
+    (rO rP : ℝ)
+    (hrO_pos : 0 < rO) (hrP_pos : 0 < rP)
+    (ωO : EuclideanGeometry.Sphere P2 := EuclideanGeometry.Sphere.mk O rO)
+    (ωP : EuclideanGeometry.Sphere P2 := EuclideanGeometry.Sphere.mk P rP)
+    (hA_on_ωO : A ∈ ωO) (hB_on_ωO : B ∈ ωO)
+    (hA_on_ωP : A ∈ ωP) (hB_on_ωP : B ∈ ωP)
+    (hA_ne_B : A ≠ B)
+    (hO_ne_P : O ≠ P)
+    (hC_col_BO : collinear ({B, O, C} : Set P2))
+    (hC_col_PA : collinear ({P, A, C} : Set P2))
+    (hC_ne_B : C ≠ B) (hC_ne_O : C ≠ O)
+    (hC_ne_P : C ≠ P) (hC_ne_A : C ≠ A)
+    (hCD_tangent_ωO : IsTangent (lineThrough C D) ωO D)
+    (hCE_tangent_ωP : IsTangent (lineThrough C E) ωP E)
+    (hF_col_DE : collinear ({D, E, F} : Set P2))
+    (hF_col_AB : collinear ({A, B, F} : Set P2))
+    (hD_ne_E : D ≠ E) :
+    F = midpoint ℝ D E := by
+  sorry

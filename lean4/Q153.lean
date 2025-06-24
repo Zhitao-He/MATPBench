@@ -1,25 +1,21 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
+import Mathlib.Data.Real.Basic 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 namespace ShadedRegionProblem
-
--- Rectangle dimensions
-def rectWidth : ℝ := 10
-def rectHeight : ℝ := 5
-
--- Each circle fits vertically within the rectangle
-def circleRadius : ℝ := rectHeight / 2
-
--- Areas calculation
-def rectangleArea : ℝ := rectWidth * rectHeight
-def singleCircleArea : ℝ := Real.pi * (circleRadius ^ 2)
-def shadedArea : ℝ := rectangleArea - 2 * singleCircleArea
-
--- Rounding to the nearest tenth
-def roundToNearestTenth (x : ℝ) : ℝ := (x * 10).round / 10
-
--- Formalized statement
-theorem shadedArea_rounded_statement : roundToNearestTenth shadedArea = 107 := by
-  sorry
-
+structure Rectangle where
+  width : ℝ
+  height : ℝ
+structure Circle where
+  radius : ℝ
+def Rectangle.area (r : Rectangle) : ℝ := r.width * r.height
+noncomputable def Circle.area (c : Circle) : ℝ := Real.pi * c.radius ^ 2
+def mainRectangle : Rectangle := {
+  width := 10,
+  height := 5
+}
+noncomputable def inscribedCircle : Circle := {
+  radius := mainRectangle.height / 2
+}
+noncomputable def pinkLineLength : ℝ := 2 * inscribedCircle.radius
+noncomputable def shadedArea : ℝ :=
+  mainRectangle.area - 2 * inscribedCircle.area
 end ShadedRegionProblem

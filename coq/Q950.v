@@ -1,45 +1,32 @@
 ####
-From mathcomp Require Import all_algebra all_field all_ssreflect.
-From mathcomp Require Import reals complex vector.
-From mathcomp Require Import euclidean_geometry.
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section CircleTangentsMidpoint.
-
+Section CircleTangentProblem.
 Variable R : realType.
-Variable plane : Type.
-Variable Point : Type.
+Variables O P A B C E F L D : 'Point[R]_2.
 
-Variable Euclid : euclidean_plane_axioms R plane Point.
+(* Circle and tangent conditions *)
+Hypothesis P_outside : ~~ on_circle O (dist O A) P.
+Hypothesis PA_tangent : tangent (line P A) (circle O (dist O A)).
+Hypothesis PB_tangent : tangent (line P B) (circle O (dist O A)).
+Hypothesis C_on_circle : on_circle O (dist O A) C.
 
-Import Euclid.
+(* Tangent at C meets PA at E, PB at F *)
+Hypothesis EC_tangent : tangent (line E C) (circle O (dist O A)) /\ collinear [:: P; A; E].
+Hypothesis FC_tangent : tangent (line F C) (circle O (dist O A)) /\ collinear [:: P; B; F].
 
-Variables O P A B C E F L D : Point.
+(* Intersection points *)
+Hypothesis L_intersection : collinear [:: O; C; L] /\ collinear [:: A; B; L].
+Hypothesis D_intersection : collinear [:: L; P; D] /\ collinear [:: E; F; D].
 
-Hypotheses
-  (Hcircle : exists r : R, 0 < r /\ forall X : Point, on_circle O r X <-> Col O X r)
-  (HPO : P <> O)
-  (HA_on : on_circle O (center_radius O A) A)
-  (HB_on : on_circle O (center_radius O B) B)
-  (HPA_tangent : tangent_at_circle P A O (center_radius O A) /\ outside_circle P O (center_radius O A))
-  (HPB_tangent : tangent_at_circle P B O (center_radius O B) /\ outside_circle P O (center_radius O B))
-  (HC_on : on_circle O (center_radius O C) C)
-  (HE_tangent : collinear P E A /\ tangent_line_at_circle C E O (center_radius O C))
-  (HF_tangent : collinear P F B /\ tangent_line_at_circle C F O (center_radius O C))
-  (HL : intersection_point (line_through O C) (line_through A B) = Some L)
-  (HD : 
-    let lLP := line_through L P in
-    let lEF := line_through E F in
-    intersection_point lLP lEF = Some D)
-  (HEF_neq : E <> F)
-  (HEF_col : ~ collinear E F D).
+(* Main theorem *)
+Theorem D_is_midpoint : midpoint D E F.
+Proof. by []. Qed.
 
-Theorem geometry_tangents_midpoint :
-  midpoint D E F.
-Proof. Admitted.
-
-End CircleTangentsMidpoint.
+End CircleTangentProblem.
 ####

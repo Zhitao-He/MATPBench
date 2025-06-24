@@ -6,13 +6,9 @@ import Mathlib.Data.Real.Pi.Bounds
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 open EuclideanGeometry
 set_option autoImplicit false
-
 open Real EuclideanSpace
-
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-
 theorem find_length_x
     (J K L : P)
     (x : ℝ)

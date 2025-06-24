@@ -1,59 +1,36 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Pi
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable instance : MetricSpace P := inferInstance
+noncomputable instance : NormedAddTorsor (EuclideanSpace ℝ (Fin 2)) P := inferInstance
+structure ProblemContext (O A B C D : P) (R : ℝ) where
+  hR_positive : R > 0
+  hR_value : R = 5
+  hA_on_circle : A ∈ Metric.sphere O R
+  hB_on_circle : B ∈ Metric.sphere O R
+  hC_on_circle : C ∈ Metric.sphere O R
+  hD_on_circle : D ∈ Metric.sphere O R
+  h_dist_BC : dist B C = 6
+  h_M_on_BC : midpoint ℝ A D ∈ segment ℝ B C
+  h_angle_AOD_lt_pi : angle A O D < Real.pi
+  h_angle_AOD_gt_zero : angle A O D > 0
+  h_angle_AOB_plus_angle_BOD_eq_angle_AOD :
+    angle A O B + angle B O D = angle A O D
+  h_angle_AOB_gt_zero : angle A O B > 0
+  h_angle_BOD_gt_zero : angle B O D > 0
+  h_AD_unique : ∀ (D' : P),
+    D' ∈ Metric.sphere O R → D' ≠ A → (midpoint ℝ A D') ∈ segment ℝ B C → D' = D
 
-open Real EuclideanGeometry
-
-namespace CircleProblem
-
-/-- The radius of the circle. -/
-def r : ℝ := 5
-
-/--
-Let O, A, B, C, D be points in the Euclidean plane satisfying:
-
-- O is the center of a circle of radius r = 5.
-- Points A, B, C, D all lie on the circle.
-- The chord BC has length 6.
-- The chord AD is bisected by BC: the midpoint M of AD lies strictly between B and C, i.e., lies on the open segment BC.
-- B is on the minor arc AD ("minor arc" via the central angle ∠AOD < π).
-- Apart from D, there is no other point D' ≠ D with A ≠ D', lying on the same circle as O, such that the chord AD' is also bisected by BC at its midpoint.
-- "Sine of the minor arc AB" is defined as (dist A B) / (2*r).
-
-The conclusion is:
-
-- (dist A B) / (2*r) is a positive rational number q = m/n in lowest terms, and m * n = 175.
--/
-theorem sineOfMinorArcABisRationalAndProductMnIs175
-    -- Points in the Euclidean plane
-    (O A B C D : EuclideanPlane)
-    -- All points lie on the circle of radius r centered at O
-    (hA_on_circle : dist A O = r)
-    (hB_on_circle : dist B O = r)
-    (hC_on_circle : dist C O = r)
-    (hD_on_circle : dist D O = r)
-    -- Distinct points for valid chords/arcs
-    (hA_ne_B : A ≠ B)
-    (hA_ne_D : A ≠ D)
-    (hB_ne_C : B ≠ C)
-    (hB_ne_D : B ≠ D)
-    (hO_ne_A : O ≠ A)
-    (hO_ne_B : O ≠ B)
-    (hO_ne_C : O ≠ C)
-    (hO_ne_D : O ≠ D)
-    -- B is on minor arc AD: ∠AOB + ∠BOD = ∠AOD and the central angle ∠AOD < π
-    (h_B_on_minor_arc_AD_angle_sum : ∠ A O B + ∠ B O D = ∠ A O D)
-    (h_minor_arc_AD_angle_lt_pi : (Angle.toReal (∠ A O D)) < π)
-    -- Length of BC
-    (hBC_length : dist B C = 6)
-    -- AD is bisected by BC: midpoint of AD lies on the *open* segment BC
-    (hAD_bisected_by_BC : (midpoint ℝ A D) ∈ openSegment ℝ B C)
-    -- AD is the only chord from A bisected by BC at its midpoint
-    (h_AD_unique :
-      ∀ (D' : EuclideanPlane) (hD'_on_circle : dist D' O = r) (hA_ne_D' : A ≠ D'),
-        (midpoint ℝ A D') ∈ openSegment ℝ B C → D' = D) :
-  let sin_arc_AB := (dist A B) / (2 * r)
-  ∃ (q : ℚ), sin_arc_AB = (q : ℝ) ∧ q > 0 ∧ (q.num.natAbs * q.den = 175) := by
+theorem product_mn_is_175
+  (O A B C D : P) (R : ℝ)
+  (ctx : ProblemContext O A B C D R) :
+  ∃ m n : ℕ, n ≠ 0 ∧ Nat.gcd m n = 1 ∧
+    Real.sin (angle A O B / 2) = (m : ℝ) / (n : ℝ) ∧
+    (m : ℝ) * (n : ℝ) = 175 := by
   sorry
-
-end CircleProblem

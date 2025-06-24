@@ -6,14 +6,22 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Variables A B C D E F x : 'rV[R]_2.
-Hypotheses
-  (Hcircle : True)
-  (Hdist : (norm (A - B) = norm (B - C))).
+Section AngleXZK.
 
-Theorem length_DF_value :
-  norm (D - F) = 3.
-Proof.
-admit.
-Qed.
+Variable R : realType.
+
+(* Points L, W, X, E, N, Z, K in the plane *)
+Variables L W X E N Z K : R^2.
+
+(* Hypotheses *)
+Hypothesis angle_LWX : \angle (L, W, X) = 53%:R * (PI / 180). (* ∠LWX = 53° *)
+Hypothesis WL_parallel_XE : (W - L) \parallel (E - X). (* WL is parallel to XE *)
+Hypothesis XN_parallel_ZK : (N - X) \parallel (K - Z). (* XN is parallel to ZK *)
+
+(* Theorem to prove: Measure of angle XZK = 53° *)
+Theorem measure_of_angle_XZK :
+  \angle (X, Z, K) = 53%:R * (PI / 180).
+Proof. Admitted.
+
+End AngleXZK.
 ####

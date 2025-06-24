@@ -1,43 +1,17 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-/-!
-Formalization of a geometry problem:
-
-Given four points A, B, C, D in a 2D Euclidean space,
-- A, B, C are non-collinear (form a triangle).
-- Triangle BDC is isosceles: dist D B = dist D C.
-- Triangle ACD is isosceles: dist A C = dist A D.
-- The (unoriented) angle ∠ABC = 70 degrees.
-Prove that the (unoriented) angle ∠BAC = 35 degrees (angles are in radians).
--/
-
-namespace EuclideanGeometryProblem
-
--- Let P be a 2-dimensional Euclidean space.
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P]
-variable [FiniteDimensional ℝ P] (dim_eq_two : FiniteDimensional.finrank ℝ P = 2)
-
--- Points in the plane
-variable (A B C D : P)
-
--- A, B, C are non-collinear
-variable (h_ABC_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set P))
-
--- Triangle BDC is isosceles: DB = DC
-variable (h_isos_BDC : dist D B = dist D C)
-
--- Triangle ACD is isosceles: AC = AD
-variable (h_isos_ACD : dist A C = dist A D)
-
--- Unoriented angle at B: ∡ A B C = 70 degrees (in radians)
-variable (h_angle_ABC : ∡ A B C = (70 / 180 : ℝ) * Real.pi)
-
--- Goal: ∡ B A C = 35 degrees (in radians)
-theorem angle_BAC_is_35_degrees :
-    ∡ B A C = (35 / 180 : ℝ) * Real.pi := by
-  sorry
-
-end EuclideanGeometryProblem
+import Mathlib.Data.Real.Basic
+open scoped EuclideanGeometry 
+open Real 
+abbrev P := EuclideanSpace ℝ (Fin 2) 
+noncomputable def degreesToRadians (d : ℝ) : ℝ := d * Real.pi / 180
+theorem geometryProblemIsoscelesTriangleAngles
+    (A B C D : P)
+    (h_D_on_AB : D ∈ segment ℝ A B)
+    (h_isosceles_ACD : dist A D = dist C D)
+    (h_isosceles_BDC : dist B C = dist C D)
+    (h_angle_ABC : ∠ A B C = degreesToRadians 70) 
+    : ∠ B A C = degreesToRadians 35 := 
+by sorry

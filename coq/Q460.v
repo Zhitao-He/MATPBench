@@ -1,4 +1,3 @@
-####
 From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals geometry.
 
@@ -13,7 +12,7 @@ Variable R : realType.
 Theorem triangle_distance_weighted_sum :
   forall (A B C D : 'rV[R]_2)
          (e f g : R),
-    (* AB = 13, BC = 12, CA = 5 *)
+    (* Triangle ABC has sides AB=13, BC=12, CA=5 *)
     norm (B - A) = 13 ->
     norm (C - B) = 12 ->
     norm (A - C) = 5 ->
@@ -25,6 +24,6 @@ Theorem triangle_distance_weighted_sum :
     distance_point_line D A B = g ->
     (* Area of triangle ABC is 30 *)
     area_triangle2D A B C = 30 ->
+    (* The expression to prove *)
     5 * e + 12 * f + 13 * g = 60.
 Proof. Admitted.
-####

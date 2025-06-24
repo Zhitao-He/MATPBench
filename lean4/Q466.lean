@@ -1,6 +1,4 @@
 import Mathlib.Data.Real.Basic
-
-
 theorem chain_of_rings_42
     (outer_radius inner_radius : ℝ)
     (total_length : ℝ)

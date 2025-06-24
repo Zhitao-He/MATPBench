@@ -24,17 +24,14 @@ Definition collinear (A B C : point) : Prop :=
 Definition on_circle (O : point) (r : R) (P : point) : Prop :=
   ((px P - px O)^2 + (py P - py O)^2 = r^2).
 
-Definition tangent_at (C : point) (r : R) (lA lB : point) (P : point) : Prop :=
-  on_circle C r P /\
-  exists Q : point, Q <> P /\ on_line lA lB Q /\
-    (forall t : R, let T := Point (px P + t * (px Q - px P)) (py P + t * (py Q - py P)) in
-      (t = 0)%R \/ (on_circle C r T -> False)).
+Definition tangent_line (O : point) (r : R) (P : point) (lA lB : point) : Prop :=
+  on_circle O r P /\
+  (forall Q : point, on_line lA lB Q -> Q <> P -> ~ on_circle O r Q).
 
 Definition orthogonal (A B C D : point) : Prop :=
   ((px B - px A) * (px D - px C) + (py B - py A) * (py D - py C) = 0).
 
 Variables A B C : point.
-
 Hypothesis non_collinear_ABC : ~ collinear A B C.
 
 Let D := midpoint B C.
@@ -46,7 +43,7 @@ Hypothesis circle_passes_through_A_and_C :
   on_circle O r A /\ on_circle O r C.
 
 Hypothesis circle_tangent_to_DA_at_A :
-  tangent_at O r D A A.
+  tangent_line O r A D A.
 
 (* Define E: the second intersection of the line BA with the circle (other than A) *)
 Variable E : point.

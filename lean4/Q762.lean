@@ -1,31 +1,29 @@
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Data.Real.Pi.Defs
-
-noncomputable section
-
-open EuclideanGeometry Angle Metric Real
-
-variable {V P : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [MetricSpace P] [NormedAddTorsor V P]
-
-variable (A B C D E F G : P)
-
--- Collinearity conditions
-axiom h_collinear_AGE : Collinear ℝ ({A, G, E} : Set P)
-axiom h_collinear_ACD : Collinear ℝ ({A, C, D} : Set P)
-axiom h_collinear_CF : Collinear ℝ ({C, F} : Set P)
-axiom h_noncolinear_ACB : ¬ Collinear ℝ ({A, C, B} : Set P)
-
--- Betweenness conditions
-axiom h_between_ACD : Sbtw ℝ A C D
-
--- Angle measures (converted to radians)
-axiom h_angle_BGC : angle B G C = (100 / 180 : ℝ) * π
-axiom h_angle_DCF : angle D C F = (75 / 180 : ℝ) * π
-
--- The angle to find
-theorem angle_GAC : angle G A C = (25 / 180 : ℝ) * π := by
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open Real EuclideanGeometry
+abbrev Plane := EuclideanSpace ℝ (Fin 2)
+variable (A B C D E F G : Plane)
+variable (hAGD : Collinear ℝ ({A, G, D} : Set Plane))
+variable (hBGE : Collinear ℝ ({B, G, E} : Set Plane))
+variable (hBCD : Collinear ℝ ({B, C, D} : Set Plane))
+variable (hCEF : Collinear ℝ ({C, E, F} : Set Plane))
+variable (hG_ne_B : G ≠ B)
+variable (hG_ne_C : G ≠ C)
+variable (hC_ne_D : C ≠ D)
+variable (hC_ne_F : C ≠ F)
+variable (hGAC_noncollinear : ¬ Collinear ℝ ({G, A, C} : Set Plane))
+variable (hBGC_value : EuclideanGeometry.angle B G C = (100 / 180 * Real.pi))
+variable (hDCF_value : EuclideanGeometry.angle D C F = (75 / 180 * Real.pi))
+theorem problem_statement (A B C D E F G : Plane)
+  (hAGD : Collinear ℝ ({A, G, D} : Set Plane)) (hBGE : Collinear ℝ ({B, G, E} : Set Plane))
+  (hBCD : Collinear ℝ ({B, C, D} : Set Plane)) (hCEF : Collinear ℝ ({C, E, F} : Set Plane))
+  (hG_ne_B : G ≠ B) (hG_ne_C : G ≠ C) (hC_ne_D : C ≠ D) (hC_ne_F : C ≠ F)
+  (hGAC_noncollinear : ¬ Collinear ℝ ({G, A, C} : Set Plane))
+  (hBGC_value : EuclideanGeometry.angle B G C = (100 / 180 * Real.pi))
+  (hDCF_value : EuclideanGeometry.angle D C F = (75 / 180 * Real.pi)) :
+  EuclideanGeometry.angle G A C = (25 / 180 * Real.pi) := by
   sorry
-
-end

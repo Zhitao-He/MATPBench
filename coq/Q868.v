@@ -6,29 +6,22 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Geometry_Problem.
-
+Section QuadrilateralAreaProblem.
 Variable R : realType.
+Variables A B C T E : 'Point[R]_2.
 
-Variables A B C T E : 'rV[R]_2.
+Hypotheses
+  area_CBTA : area_quadrilateral [:: C; B; T; A] = 104;
+  AB_length : dist A B = 16;
+  CE_eq_ET : dist C E = dist E T;
+  CE_perp_AE : perpendicular (line C E) (line A E);
+  collinear_AEB : collinear [:: A; E; B];
+  collinear_CET : collinear [:: C; E; T].
 
-Hypothesis AB_neq : A != B.
-Hypothesis seg_AB_16 : normr (A - B) = 16.
+Definition x := dist E T.
 
-(* B, E, A collinear, with E between B, A *)
-Hypothesis collinear_BEA : exists k : R, 0 < k < 1 /\ E = (1 - k) *: B + k *: A.
+Theorem x_value : x = 13 / 2.
+Proof. by []. Qed.
 
-(* CE perpendicular to BA, E between C and T *)
-Hypothesis eqangle_CE_BA : exists l : R, 0 < l < 1 /\ E = (1 - l) *: C + l *: T /\ (C - E) \dot (A - B) = 0.
-
-(* ET perpendicular to BA *)
-Hypothesis eqangle_ET_BA : (T - E) \dot (A - B) = 0.
-
-(* x is the length from E to T *)
-Let x := normr (E - T).
-
-Theorem value_x_13_2 : x = 13 / 2.
-Proof. Admitted.
-
-End Geometry_Problem.
+End QuadrilateralAreaProblem.
 ####

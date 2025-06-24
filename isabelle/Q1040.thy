@@ -1,78 +1,42 @@
-theory Putnam_Geometry_Theorem
-imports 
-  Main
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Geometry_Problem
+  imports Complex_Main
 begin
-
-section "Triangle with Circle Theorem"
-
-text "In triangle ABC inscribed in circle O, D is the midpoint of BC. 
-      AD intersects circle O again at E. 
-      A line EF is drawn parallel to BC, intersecting circle O at F. 
-      From point C, a line CG is drawn perpendicular to AC, meeting AE at G. 
-      Prove that angle AGC equals angle FGC."
-
-subsection "Definitions and Hypotheses"
-
-locale putnam_geometry =
-  fixes A B C O :: "complex"
-  assumes triangle_cond: "A ≠ B" "B ≠ C" "C ≠ A"
-  and circle_cond: "∣A - O∣ = ∣B - O∣" "∣B - O∣ = ∣C - O∣"
-  and distinct_points: "¬collinear A B C"
-
+text \<open>
+  In triangle ABC inscribed in circle O, D is the midpoint of BC. 
+  AD intersects circle O again at E. A line EF is drawn parallel to BC, 
+  intersecting circle O at F. From point C, a line CG is drawn perpendicular to AC, 
+  meeting AE at G. Prove that angle AGC equals angle FGC.
+\<close>
+locale geometry_setup =
+  fixes A B C O :: "complex"  
+  assumes distinct: "A \<noteq> B" "B \<noteq> C" "C \<noteq> A"
+    and on_circle: "dist O A = dist O B" "dist O B = dist O C"
 begin
-
 definition D :: "complex" where
-  "D = (B + C) / 2"
-
-text "AD meets circle O again at E"
-definition on_circle :: "complex ⇒ bool" where
-  "on_circle P ≡ (∣P - O∣ = ∣A - O∣)"
-
-text "A point is on line through two other points"
-definition collinear3 :: "complex ⇒ complex ⇒ complex ⇒ bool" where
-  "collinear3 P Q R ≡ ∃t. t ∈ ℝ ∧ R = P + t *C (Q - P)"
-
-text "Angle between three points"
-definition angle :: "complex ⇒ complex ⇒ complex ⇒ real" where
-  "angle P Q R = arg((P - Q) / (R - Q))"
-
-lemma angle_eq:
-  assumes "P ≠ Q" "R ≠ Q"
-  shows "angle P Q R = arg((P - Q) / (R - Q))"
-  using assms by (simp add: angle_def)
-
-text "Definition of perpendicular vectors"
-definition perpendicular :: "complex ⇒ complex ⇒ bool" where
-  "perpendicular u v ≡ Re(u * cnj v) = 0"
-
-definition E :: complex where
-  "E = undefined" -- "Will be instantiated with appropriate constraints in theorem"
-
-definition F :: complex where
-  "F = undefined" -- "Will be instantiated with appropriate constraints in theorem"
-
-definition G :: complex where
-  "G = undefined" -- "Will be instantiated with appropriate constraints in theorem"
-
-theorem putnam_geometry:
-  assumes E_on_circle: "on_circle E"
-  and E_on_AD: "collinear3 A D E" 
-  and E_not_A: "E ≠ A"
-  and E_on_other_side: "∃k::real. k > 0 ∧ E = A + of_real k *C (D - A)"
-  
-  and F_on_circle: "on_circle F" 
-  and F_not_E: "F ≠ E"
-  and EF_parallel_BC: "∃t::real. F = E + of_real t *C (C - B)"
-  
-  and G_on_AE: "collinear3 A E G"
-  and CG_perp_AC: "perpendicular (G - C) (C - A)"
-  and G_not_C: "G ≠ C"
-  
+  "D = (B + C) / 2"  
+definition E :: "complex" where
+  "E \<noteq> A \<and> collinear A D E \<and> dist O E = dist O A"  
+definition line_BC :: "complex \<Rightarrow> complex" where
+  "line_BC t = B + t * (C - B)"
+definition line_AD :: "complex \<Rightarrow> complex" where
+  "line_AD t = A + t * (D - A)"
+definition AE :: "complex \<Rightarrow> complex" where
+  "AE t = A + t * (E - A)"
+definition EF :: "complex \<Rightarrow> complex" where
+  "EF t = E + t * (F - E)"
+definition F :: "complex" where
+  "F \<noteq> E \<and> dist O F = dist O A \<and> (\<exists>t. F = E + t * (C - B))" 
+definition G :: "complex" where
+  "G \<noteq> C \<and> collinear C G \<and> (\<exists>t. G = A + t * (E - A)) \<and> 
+    (\<exists>t. G = C + t * (Complexi * (A - C)))"
+definition angle :: "complex \<Rightarrow> complex \<Rightarrow> complex \<Rightarrow> real" where
+  "angle X Y Z = Arg ((X - Y) / (Z - Y))"
+theorem angle_equality:
+  assumes "E \<noteq> A" "F \<noteq> E" "G \<noteq> A" "G \<noteq> F"
+    and "E = (SOME e. e \<noteq> A \<and> collinear A D e \<and> dist O e = dist O A)"
+    and "F = (SOME f. f \<noteq> E \<and> dist O f = dist O A \<and> (\<exists>t. f = E + t * (C - B)))"
+    and "G = (SOME g. g \<noteq> C \<and> (\<exists>t1. g = A + t1 * (E - A)) \<and> (\<exists>t2. g = C + t2 * (Complexi * (A - C))))"
   shows "angle A G C = angle F G C"
-  (* Proof would be added here *)
   sorry
-
 end
 end

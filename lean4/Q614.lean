@@ -1,44 +1,30 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry
-open Metric
-open Set
-open AffineSubspace
-
--- Let P be a Euclidean plane.
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [MetricSpace P] [NormedAddTorsor ℝ P]
-variable (h_dim_P_eq_2 : FiniteDimensional.finrank ℝ P = 2)
-
--- Declare six points and real numbers x, y.
-variable (A B C D E F : P)
-variable (x y : ℝ)
-
--- Distance assignments
-variable (h_AB : dist A B = (1/4 : ℝ) * x + 5)
-variable (h_BC : dist B C = (1/2 : ℝ) * x - 7)
-variable (h_FE : dist F E = (1/3 : ℝ) * y - 6)
-variable (h_ED : dist E D = 66 - (2/3 : ℝ) * y)
-variable (h_fe_eq_ed : dist F E = dist E D)
-
--- Right angle conditions
-variable (h_angle_ABE : angle A B E = Real.pi / 2)
-variable (h_angle_BCD : angle B C D = Real.pi / 2)
-
--- B ∈ openSegment A C, F ∈ openSegment A E
-variable (h_B_on_AC : B ∈ openSegment ℝ A C)
-variable (h_F_on_AE : F ∈ openSegment ℝ A E)
-
--- ACDF is a trapezoid: assume AC ∥ FD, with needed distinctness
-variable (h_F_ne_D : F ≠ D)
-variable (h_AC_parallel_FD :
-  Parallel ℝ (Line.mk A C (openSegment_nonempty_iff_ne.mp ⟨B, h_B_on_AC⟩))
-              (Line.mk F D h_F_ne_D))
-
--- Assuming further necessary bounds for lengths to be positive
-variable (hx_valid : x > 14)
-variable (hy_valid : y > 18 ∧ y < 99)
-
--- The statement to solve for x
-theorem find_value_of_x : x = 48 := by sorry
+open Real EuclideanGeometry Affine AffineSubspace
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem value_of_x_is_48
+  (A B C D E F : PPoint)
+  (x y : ℝ)
+  (h_AB_length : dist A B = (1/4 : ℝ) * x + 5)
+  (h_BC_length : dist B C = (1/2 : ℝ) * x - 7)
+  (h_ED_length : dist E D = 66 - (2/3 : ℝ) * y)
+  (h_FE_length : dist F E = (1/3 : ℝ) * y - 6)
+  (h_FE_eq_ED : dist F E = dist E D)
+  (h_AB_pos : dist A B > 0)
+  (h_BC_pos : dist B C > 0)
+  (h_ED_pos : dist E D > 0)
+  (h_FE_pos : dist F E > 0)
+  (h_B_on_segment_AC : B ∈ segment ℝ A C)
+  (h_E_on_segment_FD : E ∈ segment ℝ F D)
+  (h_angle_ABE_right : EuclideanGeometry.angle A B E = Real.pi / 2)
+  (h_angle_BCD_right : EuclideanGeometry.angle B C D = Real.pi / 2)
+  (h_E_ne_B : E ≠ B)
+  (h_D_ne_C : D ≠ C)
+  (h_A_ne_F : A ≠ F)
+  (h_C_ne_D : C ≠ D)
+  (h_AF_parallel_CD : line[ℝ, A, F] ∥ line[ℝ, C, D]) :
+  x = 48 := by
+  sorry

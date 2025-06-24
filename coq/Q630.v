@@ -1,2 +1,31 @@
-#### From mathcomp Require Import all_ssreflect all_algebra. From mathcomp Require Import reals geometry classical_sets. Set Implicit Arguments. Unset Strict Implicit.Unset Printing Implicit Defensive. Local Open Scope ring_scope. Variable R : realType. Record point := mkPoint { px : R; py : R }. Definition distance A B := sqrt ((px A - px B)^+2 + (py A - py B)^+2). Record circle := mkCircle { center : point; radius : R }. Definition on_circle C P := distance (center C) P = radius C. Definition perimeter C := 2 * PI * radius C. Theorem PerimeterOfCircleD : exists B C E D : circle, on_circle D B /\on_circle D C /\on_circle D E /\distance B C = distance C E /\distance B E = distance B C /\distance B C = 4 * sqrt 2 /\perimeter D = 8 * PI. Proof. by []. Qed.
+####
+From mathcomp Require Import all_ssreflect all_algebra.
+From mathcomp Require Import reals geometry angles.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Local Open Scope ring_scope.
+
+Variable R : realType.
+
+Variables B C E D : 'rV[R]_2.
+Variable r : R.
+
+Hypothesis H_BC_CE : `|B - C| = `|C - E|.
+Hypothesis H_CE : `|C - E| = 4 * sqrt(2).
+Hypothesis H_BE_diameter : `|B - E| = 2 * r.
+Hypothesis H_EC_perp_BC : orthogonal (E - C) (C - B).
+
+Theorem perimeter_circle_D : 2 * PI * r = 8 * PI.
+Proof.
+  (* Using right triangle properties and circle diameter *)
+  have H_right_triangle : right_angle C E B by apply: H_EC_perp_BC.
+  have H_pythagorean : `|B - C|^2 + `|C - E|^2 = `|B - E|^2 by apply: right_triangle_property_pythagorean.
+  rewrite H_CE in H_pythagorean.
+  have H_BE : `|B - E| = 8 by field in H_pythagorean.
+  have H_radius : r = 4 by rewrite /r H_BE /2; field.
+  by rewrite H_radius; field.
+Qed.
 ####

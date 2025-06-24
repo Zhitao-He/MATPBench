@@ -8,16 +8,27 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section RightTriangleMedianAltitude.
+
 Variable R : realType.
 
-Theorem right_triangle_median_altitude_ratio :
-  forall (A B C D E : 'rV[R]_2),
-    [/\A != B, B != C, C != A] ->
-    (* angle ABC = 90° *) (B - A) *d (B - C) = 0 ->
-    (* D on AC median *) exists tD, 0 < tD < 1 /\D = A + tD *: (C - A) /\norm (D - A) = norm (C - D) ->
-    (* E on AC altitude *) exists tE, 0 < tE < 1 /\E = A + tE *: (C - A) /\(B - E) *d (C - A) = 0 ->
-    norm (D - E) = abs (tD - tE) * norm (C - A).
-Proof.
-admit.
-Qed.
+Variables A B C D E : 'rV[R]_2.
+
+(* Right angle at B *)
+Hypothesis H_right_angle : (B - A) *d (C - A) = 0.
+
+(* BD is median *)
+Hypothesis H_median : D = (A + C) / 2%:R.
+
+(* BE is altitude *)
+Hypothesis H_altitude : (B - E) *d (C - A) = 0.
+
+(* BD = 2 * DE *)
+Hypothesis H_ratio : norm (D - B) = 2%:R * norm (B - E).
+
+Theorem AB_EC_ratio :
+  norm (A - B) / norm (E - C) = 2%:R * sqrt 3%:R.
+Proof. Admitted.
+
+End RightTriangleMedianAltitude.
 ####

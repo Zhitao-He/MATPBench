@@ -1,8 +1,5 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-
-
 theorem conicalPaperCapPerimeter :
     let r : ℝ := 6.0
     let θ_deg : ℝ := 120.0

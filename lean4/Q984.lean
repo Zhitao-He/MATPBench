@@ -1,43 +1,42 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Circumcenter
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Projection
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-open Real EuclideanGeometry InnerProductSpace Affine AffineSubspace
-
-noncomputable section GeometryProblem
-
--- Let V be a real 2-dimensional inner product space, and P an affine Euclidean plane modeled on V
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable (dimV : FiniteDimensional.finrank ℝ V = 2)
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Points: vertices of triangle, center, incenter-like point, excenter-like point
-variable (A B C O I E D F G : P)
-
--- A, B, C are not collinear (form a nondegenerate triangle)
-variable (hABC_ind : AffineIndependent ℝ ![A, B, C])
-
--- O is the circumcenter of triangle ABC
-variable (hO_circ : O = circumcenter ℝ A B C)
-
--- D lies on the extension of BC and on the exterior angle bisector of ∠BAC
-variable (hD_ext : 
-  ∃ t : ℝ, (t < 0 ∨ 1 < t) ∧ D = lineMap B C t ∧
-  angle ℝ (V := V) (A -ᵥ I) (D -ᵥ A) = angle ℝ (A -ᵥ I) (B -ᵥ A))
-
--- F is the foot of the perpendicular from I to line DE
-variable (hDE : D ≠ E)
-variable (hF_foot : F = orthogonalProjection (lineThrough ℝ D E) I)
-
--- G is the intersection point of line IF with the circumcircle (not equal to I)
-variable (hG_line : G ∈ lineThrough ℝ I F)
-variable (hG_circ : G ∈ sphere O (dist O A))
-variable (hG_ne_I : G ≠ I)
-
--- Theorem: G is the midpoint of IF
-theorem midpoint_of_IF : G = midpoint ℝ I F := by sorry
-
-end GeometryProblem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry Real
+noncomputable section
+namespace exGeo
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def angleBisectorLine (B A C : P) : AffineSubspace ℝ P := sorry
+noncomputable def incenter (A B C : P) : P := sorry
+noncomputable def excenter (A B C : P) : P := sorry
+noncomputable def orthogonalProjection (l : AffineSubspace ℝ P) (p : P) : P := sorry
+noncomputable def circumcenter (A B C : P) : P := sorry
+noncomputable def Sphere (center : P) (radius : ℝ) : Set P := sorry
+def pointOnExtendedLine (A C : P) : P := A -ᵥ (C -ᵥ A)
+def exteriorAngleBisectorBACLine (A B C : P) : AffineSubspace ℝ P :=
+  angleBisectorLine B A (pointOnExtendedLine A C)
+def circumcircleOfTriangle (A B C O : P) (circumRadius : ℝ) : Set P :=
+  Sphere O circumRadius
+def lineThroughPoints (D E : P) : AffineSubspace ℝ P := affineSpan ℝ {D, E}
+theorem problemStatement
+    (A B C O I E D F G : P)
+    (h_noncollinear : ¬ Collinear ℝ {A, B, C})
+    (hA_ne_B : A ≠ B) (hA_ne_C : A ≠ C) (hB_ne_C : B ≠ C)
+    (hO : O = circumcenter A B C)
+    (circumRadius : ℝ) (hR_circum : circumRadius = dist A O)
+    (hI : I = incenter A B C)
+    (hE : E = excenter A B C)
+    (hD_on_BC : D ∈ affineSpan ℝ {B, C})
+    (hD_on_ext_bisector_A : D ∈ exteriorAngleBisectorBACLine A B C)
+    (hD_on_extension_BC : D ∉ segment ℝ B C)
+    (hD_ne_E : D ≠ E)
+    (hF : F = orthogonalProjection (lineThroughPoints D E) I)
+    (hG_on_line_IF : G ∈ lineThroughPoints I F)
+    (hG_on_circum : G ∈ circumcircleOfTriangle A B C O circumRadius)
+    (hG_sbtw_I_F : Sbtw ℝ I G F)
+    : G = midpoint ℝ I F := by sorry
+end exGeo
+end noncomputable

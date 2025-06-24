@@ -1,26 +1,18 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Data.Real.Basic
-
--- Let P denote points in the Euclidean plane ℝ²
-abbrev P := EuclideanSpace ℝ (Fin 2)
-
--- Explicit coordinates for the points
-def A : P := ![0, 6]
-def B : P := ![0, 0]
-def C : P := ![8, 0]
-
--- D is the midpoint of AB
-def D : P := midpoint ℝ A B
-
--- E is the midpoint of BC
-def E : P := midpoint ℝ B C
-
--- F is the midpoint of AC
-def F : P := midpoint ℝ A C
-
--- The area of quadrilateral DBEF
-def areaDBEF : ℝ :=
-  (Triangle.area D B E) + (Triangle.area D E F)
-
-theorem area_DBEF_is_8 : areaDBEF = 8 := by sorry
+noncomputable section
+open EuclideanGeometry
+def A : Fin 2 → ℝ := ![0, 6]
+def B : Fin 2 → ℝ := ![0, 0]
+def C : Fin 2 → ℝ := ![8, 0]
+def D : Fin 2 → ℝ := fun i => (A i + B i) / 2
+def E : Fin 2 → ℝ := fun i => (B i + C i) / 2
+def F : Fin 2 → ℝ := fun i => (A i + C i) / 2
+def triangleArea (p1 p2 p3 : Fin 2 → ℝ) : ℝ :=
+  0.5 * abs ((p2 0 - p1 0) * (p3 1 - p1 1) - (p3 0 - p1 0) * (p2 1 - p1 1))
+def quadrilateralArea (p1 p2 p3 p4 : Fin 2 → ℝ) : ℝ :=
+  triangleArea p1 p2 p3 + triangleArea p1 p3 p4
+theorem area_DBEF_is_8 :
+    quadrilateralArea D B E F = 8 := by sorry
+end

@@ -1,35 +1,19 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
--- We work in a Euclidean plane
-variable {P : Type*} [EuclideanPlane P]
-
--- Declare points
-variable (a b c d s : P)
-
--- Given lengths
-def cbLen : ℝ := 40
-def dbLen : ℝ := 38
-def sdLen : ℝ := 28
-
--- Hypotheses from problem statement
-axiom h_cb_len : dist c b = cbLen
-axiom h_db_len : dist d b = dbLen
-axiom h_sd_len : dist s d = sdLen
-
--- Parallelogram ACBS: vertices a c b s in cyclic order
-axiom h_is_parallelogram_acbs : IsParallelogram a c b s
-
--- BD ⟂ SD
-axiom h_bd_perp_sd : ∠ s d b = Real.pi / 2
-
--- A, S, D are collinear
-axiom h_collinear_asd : Collinear ℝ ({a, s, d} : Set P)
-
--- Area of parallelogram ACBS (with vertices a, c, b, s)
-def areaParallelogramACBS (a c b s : P) : ℝ :=
-  2 * Triangle.area a c b
-
--- The problem's requested result: area = 1520
-theorem find_area_ACBS : areaParallelogramACBS a c b s = 1520 := by sorry
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
+namespace ParallelogramAreaProblem
+variable (A C B S D : EuclideanPlane)
+axiom h_CB_length : dist C B = 40
+axiom h_DB_length : dist D B = 38
+axiom h_SD_length : dist S D = 28
+axiom h_is_parallelogram_ACBS : (C -ᵥ A) = (B -ᵥ S)
+axiom h_BD_perp_SD : inner ℝ (B -ᵥ D) (S -ᵥ D) = 0
+axiom h_collinear_ASD : Collinear ℝ ({A, S, D} : Set EuclideanPlane)
+noncomputable def areaOfQuadrilateralACBS (A C _ S : EuclideanPlane) : ℝ :=
+  let vecAC := C -ᵥ A
+  let vecAS := S -ᵥ A
+  abs ( (vecAC 0) * (vecAS 1) - (vecAC 1) * (vecAS 0) )
+theorem prove_area_ACBS : areaOfQuadrilateralACBS A C B S = 1520 := by
+  sorry
+end ParallelogramAreaProblem

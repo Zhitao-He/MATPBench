@@ -24,7 +24,7 @@ Hypotheses
 (* Given angle measures *)
 Hypotheses
   (HVCB : angle V C B = (6 * x + 14 * y) * PI / 180)
-  (HZX Y : angle Z X Y = (15 * x - 8 * y) * PI / 180)
+  (HZXY : angle Z X Y = (15 * x - 8 * y) * PI / 180)
   (HVBC : angle V B C = 52 * PI / 180).
 
 Theorem value_y_1 : y = 1.

@@ -1,49 +1,33 @@
-theory TriangleAngle
-imports 
-  Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Problem_Angles
+imports
+  "HOL-Analysis.Elementary_Functions" 
+  "HOL-Analysis.Inner_Product_Space"  
+  "HOL-Analysis.Cartesian_Product"    
 begin
-
-(* 定义二维欧氏空间上的点 *)
-type_synonym point = "real × real"
-
-(* 定义向量 *)
-definition vec :: "point ⇒ point ⇒ real × real" where
-  "vec p q = (fst q - fst p, snd q - snd p)"
-
-(* 定义两个向量的夹角(弧度) *)
-definition angle_between :: "real × real ⇒ real × real ⇒ real" where
-  "angle_between v w = 
-    acos ((fst v * fst w + snd v * snd w) / 
-          (sqrt((fst v)^2 + (snd v)^2) * sqrt((fst w)^2 + (snd w)^2)))"
-
-(* 定义三点形成的角(弧度) *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A B C = angle_between (vec B A) (vec B C)"
-
-(* 弧度转角度 *)
-definition to_degrees :: "real ⇒ real" where
-  "to_degrees rad = (rad * 180) / pi"
-
-(* 两个三角形全等的定义 *)
-definition congruent_triangles :: "point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "congruent_triangles A B C D E F ≡ 
-    norm (vec A B) = norm (vec D E) ∧ 
-    norm (vec B C) = norm (vec E F) ∧ 
-    norm (vec C A) = norm (vec F D) ∧
-    angle A B C = angle D E F ∧
-    angle B C A = angle E F D ∧
-    angle C A B = angle F D E"
-
-(* 问题设定 *)
-locale triangle_problem =
-  fixes A B C D E :: point
-  assumes distinct_points: "A ≠ B" "B ≠ C" "C ≠ A" "A ≠ D" "D ≠ E" "A ≠ E"
-  assumes congruent: "congruent_triangles A B C A D E"
-
-(* 定理：三角形ABC全等于三角形ADE，则角EAC = 45度 *)
-theorem (in triangle_problem) angle_EAC:
-  "to_degrees (angle E A C) = 45"
-  sorry
-
+type_synonym point = "real^2"
+definition degrees_to_radians :: "real \<Rightarrow> real" where
+  "degrees_to_radians d = d * (pi / 180)"
+definition angle_at_vertex :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> real" where
+  "angle_at_vertex P Q R =
+    (let vec_QP = P - Q; vec_QR = R - Q
+     in arccos ((vec_QP \<cdot> vec_QR) / (norm vec_QP * norm vec_QR)))"
+lemma angle_EAC_is_45_degrees:
+  fixes A B C D E :: point 
+  assumes
+    distinct_AB: "A \<noteq> B" and  distinct_AC: "A \<noteq> C" and
+    distinct_AD: "A \<noteq> D" and  distinct_AE: "A \<noteq> E" and
+    distinct_BC: "B \<noteq> C"
+    cong_side_AB_AD: "norm (B - A) = norm (D - A)"
+    cong_side_AC_AE: "norm (C - A) = norm (E - A)"
+    cong_side_BC_DE: "norm (C - B) = norm (E - D)" 
+    cong_angle_BAC_DAE: "angle_at_vertex B A C = angle_at_vertex D A E"
+    cong_angle_ABC_ADE: "angle_at_vertex A B C = angle_at_vertex A D E" 
+    cong_angle_BCA_DEA: "angle_at_vertex B C A = angle_at_vertex D E A" 
+    angle_ABC_val: "angle_at_vertex A B C = degrees_to_radians 70" 
+    angle_BCA_val: "angle_at_vertex B C A = degrees_to_radians 30" 
+    angle_CAD_val: "angle_at_vertex C A D = degrees_to_radians 35" 
+    sum_angles_ABC: "angle_at_vertex B A C + angle_at_vertex A B C + angle_at_vertex B C A = pi"
+    angle_addition_DAE: "angle_at_vertex D A E = angle_at_vertex C A D + angle_at_vertex C A E"
+  shows "angle_at_vertex C A E = degrees_to_radians 45"
+oops 
 end

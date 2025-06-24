@@ -8,22 +8,25 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section TriangleAreaCalculation.
+
 Variable R : realType.
 
-(* Points Q, R, S are collinear in that order, R between Q and S *)
+(* Points *)
 Variables Q R S P : 'rV[R]_2.
 
-Hypothesis collinear_QRS : colinear Q R S.
-Hypothesis between_QRS : between Q R S.
+(* Given conditions *)
+Hypothesis QR_length : norm (Q - R) = 8%:R.
+Hypothesis PR_length : norm (P - R) = 12%:R.
+Hypothesis angle_PRQ : angle (P - R) (Q - R) = 2%:R * PI / 3%:R.
+Hypothesis angle_RPS : angle (S - R) (P - R) = PI / 2%:R.
 
-Hypothesis QR_eq_8 : dist Q R = 8.
-Hypothesis PR_eq_12 : dist P R = 12.
-
-Hypothesis angle_PRQ_120 : angle_at R P Q = (2 * PI / 3).
-Hypothesis angle_RPS_90 : angle_at P R S = (PI / 2).
-
-Theorem area_triangle_QPS_96sqrt3 :
-  let area := 'S[Q;P;S] in
-  area = 96 * sqrt 3.
+(* Theorem to prove *)
+Theorem area_QPS_is_96sqrt3 :
+  let QS := fun t => R + t *: (S - R) in
+  exists t, 0 < t /\ norm (P - QS t) = norm (S - QS t) /\n  let area := 0.5 * norm (Q - P) * norm (S - P) * sin (angle (Q - P) (S - P)) in
+  area = 96%:R * sqrt 3%:R.
 Proof. Admitted.
+
+End TriangleAreaCalculation.
 ####

@@ -1,29 +1,24 @@
-theory ShadedArea
-imports Complex_Main "HOL-Analysis.Analysis"
+theory Shaded_Region_Area_Calculation
+  imports "HOL-Analysis.Analysis"
 begin
-
-(* 定义矩形和圆的参数 *)
-definition rect_width :: real where "rect_width = 10"
-definition rect_height :: real where "rect_height = 5"
-definition circle_radius :: real where "circle_radius = 2.5"
-
-(* 计算矩形面积 *)
-definition rectangle_area :: real where 
+definition rect_width :: real where
+  "rect_width = 10.0"
+definition rect_height :: real where
+  "rect_height = 5.0"
+definition circle_radius :: real where
+  "circle_radius = rect_height / 2.0"
+definition rectangle_area :: real where
   "rectangle_area = rect_width * rect_height"
-
-(* 计算单个圆的面积 *)
-definition circle_area :: real where 
-  "circle_area = pi * (circle_radius^2)"
-
-(* 计算阴影区域面积 *)
-definition shaded_area :: real where 
-  "shaded_area = rectangle_area - 2 * circle_area"
-
-(* 验证约化到最近的十分位是107 *)
-lemma shaded_area_rounded: 
-  "round (shaded_area * 10) / 10 = 107"
-  unfolding shaded_area_def rectangle_area_def circle_area_def
-  rect_width_def rect_height_def circle_radius_def
-  by (simp add: algebra_simps)
-
+definition single_circle_area :: real where
+  "single_circle_area = pi * circle_radius * circle_radius"
+definition two_circles_area :: real where
+  "two_circles_area = 2.0 * single_circle_area"
+definition shaded_area :: real where
+  "shaded_area = rectangle_area - two_circles_area"
+lemma shaded_area_symbolic_value:
+  "shaded_area = 50.0 - 12.5 * pi"
+  unfolding shaded_area_def rectangle_area_def two_circles_area_def
+            single_circle_area_def circle_radius_def
+            rect_width_def rect_height_def
+  by simp
 end

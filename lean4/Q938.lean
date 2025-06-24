@@ -1,49 +1,20 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
-open EuclideanGeometry
-
--- We work in a 2D Euclidean affine space over ℝ
-variable {P : Type*} [NormedAddCommGroup P] [NormedSpace ℝ P] 
-variable [FiniteDimensional ℝ P]
-variable (finrank_P : FiniteDimensional.finrank ℝ P = 2)
-
--- Declare the diagram points as variables
-variable (E H A B Y F J D : P)
-
--- Lines defined by collinearity (as affine spans)
-def lineEHA : AffineSubspace ℝ P := affineSpan ℝ {E, H, A}
-def lineBYF : AffineSubspace ℝ P := affineSpan ℝ {B, Y, F}
-def lineJHD : AffineSubspace ℝ P := affineSpan ℝ {J, H, D}
-def lineJYD : AffineSubspace ℝ P := affineSpan ℝ {J, Y, D}
-
--- Assumptions: points are on lines according to the diagram
-variable (hE_on_EHA : E ∈ lineEHA)
-variable (hH_on_EHA : H ∈ lineEHA)
-variable (hA_on_EHA : A ∈ lineEHA)
-variable (hB_on_BYF : B ∈ lineBYF)
-variable (hY_on_BYF : Y ∈ lineBYF)
-variable (hF_on_BYF : F ∈ lineBYF)
-variable (hJ_on_JHD : J ∈ lineJHD)
-variable (hH_on_JHD : H ∈ lineJHD)
-variable (hD_on_JHD : D ∈ lineJHD)
-variable (hJ_on_JYD : J ∈ lineJYD)
-variable (hY_on_JYD : Y ∈ lineJYD)
-variable (hD_on_JYD : D ∈ lineJYD)
-
--- Parallel and perpendicularity hypotheses
-variable (h_parallel_EHA_BYF : AffineSubspace.Parallel lineEHA lineBYF)
-variable (h_perp_EH_JH : ∠ E H J = Real.pi / 2)
-
--- The angle at Y: ∠F Y D = (4*y + 10)°
-variable (y : ℝ)
-def angleFYD_deg : ℝ := 4 * y + 10
-def angleFYD_rad : ℝ := angleFYD_deg * (Real.pi / 180)
-
-variable (h_angle_FYD : ∠ F Y D = angleFYD_rad)
-
--- The conclusion to be proved
-theorem value_of_y : y = 20 := by sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+namespace ProblemGeometry
+abbrev PPoint := EuclideanSpace ℝ (Fin 2) 
+open Real EuclideanGeometry Affine AffineSubspace 
+theorem value_of_y_is_20
+    (F Y D E H B : PPoint) 
+    (y : ℝ)
+    (hF_ne_Y : F ≠ Y) (hD_ne_Y : D ≠ Y)
+    (hE_ne_H : E ≠ H) (hY_ne_H : Y ≠ H) (hB_ne_Y : B ≠ Y)
+    (h_angle_FYD : EuclideanGeometry.angle F Y D = (4 * y + 10) * (Real.pi / 180)) 
+    (h_EH_parallel_BY : line[ℝ, E, H] ∥ line[ℝ, B, Y]) 
+    (h_angle_EHY_right : EuclideanGeometry.angle E H Y = Real.pi / 2) 
+    (h_angle_FYD_eq_BYH : EuclideanGeometry.angle F Y D = EuclideanGeometry.angle B Y H) : 
+    y = 20 := by
+  sorry
+end ProblemGeometry

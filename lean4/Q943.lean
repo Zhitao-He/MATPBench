@@ -1,74 +1,32 @@
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Geometry.Euclidean.Sphere.Basic 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic 
+import Mathlib.Analysis.Convex.Side 
 import Mathlib.Data.Real.Basic
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Tangent
-
-open EuclideanGeometry
-
--- Define the Euclidean plane ℝ² as EucPlane
-abbrev EucPlane := EuclideanSpace ℝ (Fin 2)
-
-section PutnamGeometryProblem
-
-variable 
-  (A B O C D E F M : EucPlane)
-  (r : ℝ)
-
--- Define the circle centered at O with radius r
-def circleO : Set EucPlane := Sphere O r
-
--- Hypotheses
-
--- 0 < r
-variable (h_r_pos : 0 < r)
-
--- A ∈ circleO
-variable (hA_on_circleO : A ∈ circleO)
--- C ∈ circleO
-variable (hC_on_circleO : C ∈ circleO)
--- D ∈ circleO
-variable (hD_on_circleO : D ∈ circleO)
-
--- O is the midpoint of AB (A ≠ B, AB is diameter)
-variable (hO_midpoint_AB : O = midpoint ℝ A B)
-
--- C ≠ D
-variable (hC_ne_D : C ≠ D)
-
--- Define line AB
-def lineAB : AffineSubspace ℝ EucPlane := affineSpan ℝ ({A, B} : Set EucPlane)
-
--- C, D not on line AB
-variable (hC_not_on_lineAB : C ∉ lineAB)
-variable (hD_not_on_lineAB : D ∉ lineAB)
-
--- C, D are on the same side of line AB
-variable (h_same_side_CD_AB : SameSide lineAB C D)
-
--- Define the tangents at C, D
-def tangentC : AffineSubspace ℝ EucPlane := tangentLine (Sphere O r) C
-def tangentD : AffineSubspace ℝ EucPlane := tangentLine (Sphere O r) D
-
--- E is the intersection of the tangents at C and D
-variable (hE_is_int_of_tangents : {E} = tangentC ⊓ tangentD)
-
--- Define lines BC and AD
-def lineBC : AffineSubspace ℝ EucPlane := affineSpan ℝ ({B, C} : Set EucPlane)
-def lineAD : AffineSubspace ℝ EucPlane := affineSpan ℝ ({A, D} : Set EucPlane)
-
--- F is the intersection of BC and AD
-variable (hF_is_int_BC_AD : {F} = lineBC ⊓ lineAD)
-
--- E ≠ F, so EF is well-defined
-variable (hE_ne_F : E ≠ F)
-
--- Define line EF
-def lineEF : AffineSubspace ℝ EucPlane := affineSpan ℝ ({E, F} : Set EucPlane)
-
--- M is the intersection of EF and AB
-variable (hM_is_int_EF_AB : {M} = lineEF ⊓ lineAB)
-
--- The conclusion: points E, C, M, D are concyclic
-theorem ECMD_concyclic : Concyclic ({E, C, M, D} : Set EucPlane) := by sorry
-
-end PutnamGeometryProblem
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+open EuclideanGeometry Affine AffineSubspace Real 
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem concyclic_ECMD_theorem
+    (O A B C D E F M : PPoint) (r : ℝ)
+    (h_r_pos : r > 0)
+    (hA_on_S : A ∈ EuclideanGeometry.Sphere.mk O r) 
+    (hB_on_S : B ∈ EuclideanGeometry.Sphere.mk O r) 
+    (hAB_diameter : O = midpoint ℝ A B)
+    (hC_on_S : C ∈ EuclideanGeometry.Sphere.mk O r) 
+    (hD_on_S : D ∈ EuclideanGeometry.Sphere.mk O r) 
+    (h_distinct_points : A ≠ B ∧ C ≠ A ∧ C ≠ B ∧ D ≠ A ∧ D ≠ B ∧ C ≠ D)
+    (h_C_D_same_side_AB : (line[ℝ, A, B]).WSameSide C D) 
+    (hE_ne_C : E ≠ C) (hE_ne_D : E ≠ D)
+    (h_tangent_at_C : EuclideanGeometry.angle O C E = Real.pi / 2) 
+    (h_tangent_at_D : EuclideanGeometry.angle O D E = Real.pi / 2) 
+    (hB_ne_C : B ≠ C) (hA_ne_D : A ≠ D)
+    (h_lines_BC_AD_not_parallel : ¬ (line[ℝ, B, C] ∥ line[ℝ, A, D])) 
+    (hF_on_line_BC : F ∈ line[ℝ, B, C]) 
+    (hF_on_line_AD : F ∈ line[ℝ, A, D]) 
+    (hE_ne_F : E ≠ F)
+    (h_lines_EF_AB_not_parallel : ¬ (line[ℝ, E, F] ∥ line[ℝ, A, B])) 
+    (hM_on_line_EF : M ∈ line[ℝ, E, F]) 
+    (hM_on_line_AB : M ∈ line[ℝ, A, B]) : 
+    Concyclic ({E, C, M, D} : Set PPoint) := 
+  sorry

@@ -20,13 +20,5 @@ Hypothesis u1_u2_angle : (exists theta : R, 0 < theta < PI / 2 /\ '[u1, u2] = no
 Definition ray1 := fun t : R => O + t *: u1.
 Definition ray2 := fun t : R => O + t *: u2.
 
-(* Three squares Q1, Q2, Q3 arranged as in the diagram:
-   - Each square has one side lying on r1,
-   - Two adjacent vertices touching r2,
-   - Squares are arranged without overlap, ordered along r1,
-   - The smallest two squares have side lengths 20 and 22.
-*)
-Record square (A : 'rV[R]_2) (s : R) := {
-  v1 : 'rV[R]_2; (* point on r1: base left *)
-  v2 : '
-####
+(* A more complete approach to define the squares and the problem would be needed here. 
+   Below is a conceptual outline of how it could be extended:

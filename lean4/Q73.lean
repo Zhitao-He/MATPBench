@@ -1,17 +1,15 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
 open Real EuclideanGeometry
-
-variable {A B C M N : EuclideanPlane}
-
+abbrev P := EuclideanSpace ℝ (Fin 2) 
 theorem angle_ACB_is_94_degrees
-  (hABC : ¬ Collinear ℝ A B C)
-  (hM : M ∈ openSegment ℝ A B)
-  (hN : N ∈ openSegment ℝ A B)
-  (hAN : dist A N = dist A C)
-  (hBM : dist B M = dist B C)
-  (hMCN : ∠ M C N = (43 / 180 : ℝ) * π) :
-  ∠ A C B = (94 / 180 : ℝ) * π :=
+  (A B C M N : P) 
+  (h_noncollinear_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (h_M_on_AB : M ∈ segment ℝ A B)
+  (h_N_on_AB : N ∈ segment ℝ A B)
+  (h_AN_eq_AC : dist A N = dist A C)
+  (h_BM_eq_BC : dist B M = dist B C)
+  (h_angle_MCN : EuclideanGeometry.angle M C N = (43 / 180 : ℝ) * π) : 
+  EuclideanGeometry.angle A C B = (94 / 180 : ℝ) * π := 
 by sorry

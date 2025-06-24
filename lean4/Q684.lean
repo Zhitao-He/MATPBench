@@ -4,8 +4,6 @@ import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 open EuclideanGeometry
-
-
 theorem value_of_BC_is_sqrt_231
     (A B C : EuclideanSpace ℝ (Fin 2))
     (h_AB : dist A B = 16)

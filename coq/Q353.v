@@ -26,8 +26,10 @@ Definition angle_deg (A B C : point) : R :=
   theta_rad * 180 / PI.
 
 Theorem pentagon_XQS_angle_18_deg :
-  exists (P Q R S T : point),
+  forall (P Q R S T X : point),
     (* PQRST is a regular pentagon with points in order *)
+    (* X is the midpoint of segment ST *)
+    (* angle XQS is 18 degrees *)
     True.
 Proof.
 admit.

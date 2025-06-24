@@ -1,34 +1,26 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.Data.Fin.Basic
-
-abbrev Point := EuclideanSpace ℝ (Fin 2)
-
-namespace SevenCirclesEqualRadiiProblem
-
-variable (r : ℝ) (h_r_positive : r > 0)
-
-def centerCentral : Point := 0
-
-def diskCentral : Set Point := Metric.closedBall centerCentral r
-
-variable (centersSurrounding : Fin 6 → Point)
-
-structure IsStandardArrangement (r_val : ℝ) (cCentral : Point) (csSurrounding : Fin 6 → Point) : Prop where
-  dist_surrounding_to_central : ∀ (i : Fin 6), dist (csSurrounding i) cCentral = 2 * r_val
-  dist_surrounding_to_adjacent : ∀ (i : Fin 6), dist (csSurrounding i) (csSurrounding (i.addNat 1)) = 2 * r_val
-
-variable (h_arrangement : IsStandardArrangement r centerCentral centersSurrounding)
-
-def diskSurrounding (i : Fin 6) : Set Point := Metric.closedBall (centersSurrounding i) r
-
-def shadedPortion : Set Point := diskCentral
-
-noncomputable def areaOfDisk (radius : ℝ) : ℝ := 
-  if radius > 0 then Real.pi * radius ^ 2 else 0
-
-theorem areaOfShadedPortion_equals_areaOfOneSmallCircle :
-  areaOfDisk r = 1 * (areaOfDisk r) := by sorry
-
-end SevenCirclesEqualRadiiProblem
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+open Real InnerProductSpace Angle 
+open scoped EuclideanGeometry 
+abbrev P₂ := EuclideanSpace ℝ (Fin 2)
+section FlowerPatternProblem
+variable (P_sec O₁_sec O₂_sec : P₂) (r_sec : ℝ) 
+variable (h_r_pos_sec : 0 < r_sec)
+variable (h_dist_PO₁_sec : dist P_sec O₁_sec = 2 * r_sec)
+variable (h_dist_PO₂_sec : dist P_sec O₂_sec = 2 * r_sec)
+variable (h_dist_O₁O₂_sec : dist O₁_sec O₂_sec = 2 * r_sec)
+noncomputable def centralSectorAngle (P O₁ O₂ : P₂) : ℝ := ∠ O₁ P O₂
+lemma centralSectorAngle_eq_pi_div_3 : centralSectorAngle P_sec O₁_sec O₂_sec = Real.pi / 3 := by sorry
+noncomputable def topSectorAngle : ℝ := Real.pi / 2
+noncomputable def topRightSectorAngle : ℝ := Real.pi / 2
+noncomputable def sectorArea (r_param angle_rad : ℝ) : ℝ := (1 / 2) * r_param^2 * angle_rad
+noncomputable def shadedCentralArea (P O₁ O₂ : P₂) (r_param : ℝ) : ℝ := sectorArea r_param (centralSectorAngle P O₁ O₂)
+noncomputable def shadedTopArea (r_param : ℝ) : ℝ := sectorArea r_param topSectorAngle
+noncomputable def shadedTopRightArea (r_param : ℝ) : ℝ := sectorArea r_param topRightSectorAngle
+noncomputable def totalShadedArea (P O₁ O₂ : P₂) (r_param : ℝ) : ℝ :=
+  shadedCentralArea P O₁ O₂ r_param + shadedTopArea r_param + shadedTopRightArea r_param
+noncomputable def areaSmallCircle (r_param : ℝ) : ℝ := Real.pi * r_param^2
+theorem problem_to_prove : totalShadedArea P_sec O₁_sec O₂_sec r_sec = 1 * areaSmallCircle r_sec := by sorry
+end FlowerPatternProblem

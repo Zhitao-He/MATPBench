@@ -47,6 +47,7 @@ Variable G : 'rV[R]_2.
 Hypothesis G_on_BC : on_line G (line B C).
 Hypothesis HG_parallel_AD : parallel (line H G) (line A D).
 
+(* BE = GE = GF = CF *)
 Theorem equal_segments_BE_GE_GF_CF :
   dist B E = dist G E /\
   dist G E = dist G F /\

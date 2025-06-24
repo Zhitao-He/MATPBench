@@ -1,50 +1,32 @@
 import Mathlib.Data.Real.Basic
-
-namespace ProblemFormalization
-
--- Use EuclideanSpace ℝ (Fin 2) for points/vectors in 2D
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry Real
+open Set
 abbrev Point := EuclideanSpace ℝ (Fin 2)
-
--- Square sizes
-def largeSquareSide : ℝ := 6
-def smallSquareSide : ℝ := 2
-
--- Points W, X, Y, Z: Each is a specific vertex of a small square in the corners
-def W_pt : Point := ![smallSquareSide, smallSquareSide]  -- (2,2)
-def X_pt : Point := ![largeSquareSide - smallSquareSide, smallSquareSide]  -- (4,2)
-def Y_pt : Point := ![largeSquareSide - smallSquareSide, largeSquareSide - smallSquareSide]  -- (4,4)
-def Z_pt : Point := ![smallSquareSide, largeSquareSide - smallSquareSide]  -- (2,4)
-
--- The reference point P is the origin/corner (0,0) of the large square
-def P_ref : Point := ![0, 0]
-
--- Definition of a square ABCD (A,B,C,D in order, either orientation)
-def isSquare (A B C D : Point) : Prop :=
-  let vAB := B - A
-  let vAD := D - A
-  -- AB and AD have equal, nonzero length, are perpendicular, and C is parallelogram completion
-  ‖vAB‖ ≠ 0 ∧
-  ‖vAB‖ = ‖vAD‖ ∧
-  inner vAB vAD = 0 ∧
-  C = B + vAD
-
--- The (closed) set of all squares such that segment [DA] contains W, [AB] contains X, etc.
-def validSquareConfigurations : Set (Point × Point × Point × Point) :=
-  { S | let (A, B, C, D) := S
-      ; isSquare A B C D
-      ∧ W_pt ∈ segment ℝ D A
-      ∧ X_pt ∈ segment ℝ A B
-      ∧ Y_pt ∈ segment ℝ B C
-      ∧ Z_pt ∈ segment ℝ C D }
-
--- Set of all possible distances from A to P_ref among these squares
-def achievableDistancesAtoP : Set ℝ :=
-  { d | ∃ (S : Point × Point × Point × Point), S ∈ validSquareConfigurations ∧ d = dist S.1 P_ref }
-
--- The maximum possible value of such a distance
-def maxDistAtoP : ℝ := sSup achievableDistancesAtoP
-
--- The main claim to be proved
-theorem maxDistAtoP_eq_six : maxDistAtoP = 6 := by sorry
-
-end ProblemFormalization
+def pt (x y : ℝ) : Point := ![x, y]
+def P_coord : Point := pt 6 0
+def V_TL : Set Point := {pt 0 4, pt 2 4, pt 0 6, pt 2 6}
+def V_TR : Set Point := {pt 4 4, pt 6 4, pt 4 6, pt 6 6}
+def V_BR : Set Point := {pt 4 0, pt 6 0, pt 4 2, pt 6 2}
+def V_BL : Set Point := {pt 0 0, pt 2 0, pt 0 2, pt 2 2}
+structure IsSquare' (A B C D : Point) : Prop where
+  side_pos : dist A B > 0
+  eq_AB_BC : dist A B = dist B C
+  eq_BC_CD : dist B C = dist C D
+  eq_CD_DA : dist C D = dist D A
+  right_angle : inner ℝ (B -ᵥ A) (D -ᵥ A) = 0
+  diag : C = B + (D -ᵥ A)
+def PointOnSegment (p a b : Point) : Prop :=
+  ∃ (t : ℝ), 0 ≤ t ∧ t ≤ 1 ∧ p = (1 - t) • a + t • b
+def distances_A_to_P : Set ℝ :=
+  { d | ∃ (W : Point) (X : Point) (Y : Point) (Z : Point)
+        (_ : W ∈ V_TL) (_ : X ∈ V_TR) (_ : Y ∈ V_BR) (_ : Z ∈ V_BL)
+        (A B C D : Point) (_ : IsSquare' A B C D),
+      PointOnSegment W D A ∧
+      PointOnSegment X A B ∧
+      PointOnSegment Y B C ∧
+      PointOnSegment Z C D ∧
+      d = dist A P_coord }
+theorem max_dist_A_P_is_6 : sSup (distances_A_to_P) = 6 := by sorry

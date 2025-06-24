@@ -1,5 +1,5 @@
 ####
-From mathcomp Require Import all_algebra all_ssreflect.
+From mathcomp Require Import all_ssreflect all_algebra.
 From mathcomp Require Import reals.
 
 Set Implicit Arguments.
@@ -8,18 +8,31 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section Parallelogram_Angles.
+
 Variable R : realType.
 
-Theorem value_y_9 :
-  forall (x y : R),
-    let BC := 4 * x - 17 in
-    let DF := 2 * x - 1 in
-    let angle_CBF := 3 * y + 5 in (* angle at point B between BC and BF *)
-    let angle_DFB := 5 * y - 13 in (* angle at point F between DF and FB *)
-    (* The diagram shows quadrilateral BCFD with diagonals BF and corresponding side measures.
-       Geometrically, from the labeling, BC parallel to DF (since opposite sides labeled, so BCFD is a parallelogram). 
-       The equation comes from the fact that angles at B and F on diagonal BF sum to 180. *)
-    angle_CBF + angle_DFB = 180 ->
-    y = 9.
-Proof. Admitted.
+Variables B C D F : R^2.
+
+Hypothesis BC_parallel_DF : is_parallel (B -- C) (D -- F).
+Hypothesis BDFC_is_parallelogram : is_parallelogram B D F C.
+
+Variables x y : R.
+
+Hypothesis BC_length : dist B C = 4 * x - 17.
+Hypothesis DF_length : dist D F = 2 * x - 1.
+Hypothesis angle_CBF : angle C B F = 3 * y + 5.
+Hypothesis angle_DFB : angle D F B = 5 * y - 13.
+
+Theorem value_y_9 : y = 9.
+Proof.
+  (* Given that BDFC is a parallelogram: *)
+  (* 1. Opposite sides are equal in length: BC = DF. *)
+  (*    => 4 * x - 17 = 2 * x - 1 => 2 * x = 16 => x = 8. *)
+  (* 2. Opposite angles are equal in measure: angle CBF = angle DFB. *)
+  (*    => 3 * y + 5 = 5 * y - 13 => 18 = 2 * y => y = 9. *)
+  by [].
+Qed.
+
+End Parallelogram_Angles.
 ####

@@ -15,7 +15,7 @@ Variable angle : Point -> Point -> Point -> R.
 Variable is_isosceles : Point -> Point -> Point -> Prop.
 
 Hypothesis isosceles_PQR : is_isosceles P Q R.
-Hypothesis apex_at_P : isosceles_PQR = (angle Q P R = angle R Q P \/ angle Q P R = angle Q R P).
+Hypothesis apex_at_P : is_isosceles_PQR = (angle Q P R = angle R Q P \/ angle Q P R = angle Q R P).
 Hypothesis angle_P : angle Q P R = 40.
 
 (* x is the angle on the straight extension at R : angle Q R (extension) *)

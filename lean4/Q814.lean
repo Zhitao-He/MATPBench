@@ -1,47 +1,31 @@
-import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-namespace Problem
-
--- Declare points in the Euclidean plane
-variable {E : Type*} [EuclideanPlane E]
-variable (P Q A Z S R : E)
-
--- Declare real variables for lengths
-variable (x y z : ℝ)
-
--- Given lengths in the diagram
-axiom h_AZ : dist A Z = y
-axiom h_QZ : dist Q Z = z
-axiom h_RQ : dist R Q = 12
-axiom h_RS : dist R S = 10
-axiom h_RZ : dist R Z = x
-
--- Lengths are positive
-axiom h_y_pos : y > 0
-axiom h_z_pos : z > 0
-axiom h_x_pos : x > 0
-
--- Collinearity and order, consistent with the diagram
-axiom h_Sbtw_PAZ : Sbtw ℝ P A Z
-axiom h_Sbtw_AZQ : Sbtw ℝ A Z Q
-
--- Angles (radians)
-axiom h_angle_AQR : ∠ A Q R = (Real.pi / 6 : Real.Angle)  -- 30°
-axiom h_angle_SPA : ∠ S P A = (Real.pi / 4 : Real.Angle)  -- 45°
-
--- SR ∥ AZ (parallel condition)
-axiom h_SR_parallel_AZ : (affineSpan ℝ ({S, R} : Set E)).Parallel (affineSpan ℝ ({A, Z} : Set E))
-
--- PA is perpendicular to SA ⇒ SA ⊥ AZ at A
-axiom h_SA_perp_AZ : ∠ S A Z = (Real.pi / 2 : Real.Angle)
-
--- RZ is perpendicular to QZ ⇒ RZ ⊥ AZ at Z
-axiom h_RZ_perp_AZ : ∠ R Z A = (Real.pi / 2 : Real.Angle)
-
--- Goal: Find y = ?
-theorem value_of_y : y = 10 := by
-  sorry
-
-end Problem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Data.Real.Basic
+noncomputable section
+abbrev P2 := EuclideanSpace ℝ (Fin 2)
+section
+theorem prove_value_of_y
+  (A P Q R S Z : P2)
+  (x y z : ℝ)
+  (h_AZ_eq_y : dist A Z = y)
+  (h_QZ_eq_z : dist Q Z = z)
+  (h_RQ_eq_12 : dist R Q = 12)
+  (h_RS_eq_10 : dist R S = 10)
+  (h_RZ_eq_x : dist R Z = x)
+  (h_angle_AQR : EuclideanGeometry.angle A Q R = Real.pi / 6)
+  (h_angle_SPA : EuclideanGeometry.angle S P A = Real.pi / 4)
+  (h_SR_parallel_AZ : SameRay ℝ (R -ᵥ S) (Z -ᵥ A))
+  (h_SA_perp_AZ : EuclideanGeometry.angle S A Z = Real.pi / 2)
+  (h_RZ_perp_QZ : EuclideanGeometry.angle R Z Q = Real.pi / 2)
+  (h_Sbtw_P_A_Z : Sbtw ℝ P A Z)
+  (h_Sbtw_A_Z_Q : Sbtw ℝ A Z Q)
+  (h_y_pos : y > 0)
+  (h_x_pos : x > 0)
+  (h_z_pos : z > 0)
+  (h_S_ne_P : S ≠ P)
+  (h_S_ne_A : S ≠ A)
+  : y = 10 := by sorry
+end
+end

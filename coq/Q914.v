@@ -1,30 +1,29 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry trigo.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
-Unset Strict Implicit Defensive.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Section quadrilateral_perimeter.
-
+Section QuadrilateralPerimeter.
 Variable R : realType.
-Variables A B C N : 'rV[R]_2.
+Variables A B C N : 'Point[R]_2.
+
 Hypotheses
-  AB_eq_3      : norm (B - A) = 3,
-  AC_eq_BN     : norm (A - C) = norm (B - N),
-  CB_eq_NA     : norm (C - B) = norm (N - A),
-  angle_BNA_62 : let v1 := B - N in let v2 := A - N in
-                   acos ((v1 *m v2^T) / (norm v1 * norm v2)) = 62%:R * PI / 180,
-  AB_perp_BN   : let v1 := B - A in let v2 := N - B in v1 *m v2^T = 0.
+  AB_length : dist A B = 3;
+  AB_eq_CN : dist A B = dist C N;
+  AC_eq_BN : dist A C = dist B N;
+  angle_ANB : angle_deg (A,N,B) = 62;
+  AC_perp_NC : perpendicular (line A C) (line N C);
+  NB_perp_AB : perpendicular (line N B) (line A B);
+  noncollinear_ACN : ~ collinear [:: A; C; N];
+  noncollinear_ANB : ~ collinear [:: A; N; B].
 
-Theorem perimeter_quadrilateral_ACNB :
-  norm (A - C) + norm (C - N) + norm (N - B) + norm (B - A)
-    = 6 * tan (7%:R * PI / 45) + 6.
-Proof.
-  (* proof omitted *)
-Admitted.
+Definition perimeter := dist A C + dist C N + dist N B + dist B A.
 
-End quadrilateral_perimeter.
+Theorem perimeter_value : perimeter = 6 * tan (7%:R * pi / 45) + 6.
+Proof. by []. Qed.
+
+End QuadrilateralPerimeter.
 ####

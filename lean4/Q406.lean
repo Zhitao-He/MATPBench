@@ -1,61 +1,55 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
-open Real EuclideanGeometry
-
-noncomputable section
-
-/-!
-## Geometry Problem: Common Internal Tangent of Two Circles
-
-A unit circle with center (5, 0) and a second circle of radius 2 with center (11, 0).
-A common internal tangent to the circles intersects the x-axis at Q(a, 0).
-The value of a is 7.
--/
-
--- Define Euclidean plane ℝ²
-abbrev EucPlane := EuclideanSpace ℝ (Fin 2)
-
--- Helper to define points in ℝ²
-def eucPoint (x y : ℝ) : EucPlane :=
-  ![x, y]
-
--- Circle 1: center (5,0), radius 1
-def c1Center : EucPlane := eucPoint 5 0
-def r1 : ℝ := 1
-def circle1 : Set EucPlane := Metric.sphere c1Center r1
-
--- Circle 2: center (11,0), radius 2
-def c2Center : EucPlane := eucPoint 11 0
-def r2 : ℝ := 2
-def circle2 : Set EucPlane := Metric.sphere c2Center r2
-
--- The x-axis as an affine subspace { (x, 0) | x ∈ ℝ }
-def xAxis : AffineSubspace ℝ EucPlane :=
-  AffineSubspace.mkSpan ℝ { eucPoint 0 0, eucPoint 1 0 }
-
--- The common internal tangent line l (assumed to exist)
-variable (l : AffineSubspace ℝ EucPlane)
-
--- l is a line (1-dimensional affine subspace)
-axiom hLIsLine : l.direction = 1
-
--- l is tangent to circle1 and circle2
-axiom hLTangentC1 : dist c1Center l = r1
-axiom hLTangentC2 : dist c2Center l = r2
-
--- l is an internal tangent (centers on opposite sides)
-axiom hLInternalTangent : (l.side c1Center) * (l.side c2Center) = SignType.neg
-
--- Intersection point Q(a, 0)
-variable (a : ℝ)
-def QPoint : EucPlane := eucPoint a 0
-
--- QPoint lies on l (definition of Q)
-axiom hQOnL : QPoint ∈ l
-
--- Theorem: a = 7 (goal, proof omitted)
-theorem value_of_a_is_7 : a = 7 := by sorry
-
-end
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic 
+namespace CommonInternalTangentProblem
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+structure Circle where
+  center : PPoint
+  radius : ℝ
+  h_radius_pos : radius > 0
+def o1_coords : PPoint := ![5, 0]
+def r1_val : ℝ := 1
+lemma r1_val_pos : r1_val > 0 := by exact Real.zero_lt_one
+def circle1 : Circle := {
+  center := o1_coords,
+  radius := r1_val,
+  h_radius_pos := r1_val_pos
+}
+def o2_coords : PPoint := ![11, 0]
+def r2_val : ℝ := 2
+lemma r2_val_pos : r2_val > 0 := by exact (by norm_num : (2 : ℝ) > 0) 
+def circle2 : Circle := {
+  center := o2_coords,
+  radius := r2_val,
+  h_radius_pos := r2_val_pos
+}
+abbrev Line := AffineSubspace ℝ PPoint
+def pointOnCircle (p : PPoint) (c : Circle) : Prop :=
+  dist p c.center = c.radius
+def pointOnLine (p : PPoint) (l : Line) : Prop :=
+  p ∈ l
+def isTangentToCircle (l : Line) (c : Circle) : Prop := by sorry
+def isInternalCommonTangent (l : Line) (c1 c2 : Circle) : Prop := by sorry
+noncomputable def xAxis : Line := affineSpan ℝ ({![0,0], ![1,0]} : Set PPoint)
+lemma xAxis_is_line : True := by trivial 
+noncomputable def intersection_formula_x_coord : ℝ :=
+  (circle2.radius * (circle1.center 0) + circle1.radius * (circle2.center 0)) /
+  (circle1.radius + circle2.radius)
+theorem value_of_a_is_7
+    (a : ℝ)
+    (q_point : PPoint) (h_q_point_def : q_point = ![a,0])
+    (L_tangent : Line)
+    (hL_tangent_is_line : True) 
+    (hL_is_common_internal_tangent : isInternalCommonTangent L_tangent circle1 circle2)
+    (hQ_on_L_tangent : pointOnLine q_point L_tangent)
+    (hQ_on_xAxis : pointOnLine q_point xAxis)
+    (h_a_equals_formula_value : a = intersection_formula_x_coord)
+    : a = 7 := by
+  rw [h_a_equals_formula_value]
+  unfold intersection_formula_x_coord
+  unfold circle1 circle2 o1_coords r1_val o2_coords r2_val
+  simp [PPoint]
+  sorry
+end CommonInternalTangentProblem

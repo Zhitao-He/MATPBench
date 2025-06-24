@@ -1,24 +1,15 @@
+import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-
--- 定义二维欧氏空间的平面
-abbrev EucPlane := EuclideanSpace ℝ (Fin 2)
-
--- 三条直线
-def line1 : Set EucPlane :=
-  {p | p 1 = -2 * (p 0) + 8}
-
-def line2 : Set EucPlane :=
-  {p | p 1 = (1/2 : ℝ) * (p 0) - 2}
-
-def line3 : Set EucPlane :=
-  {p | p 0 = -2}
-
--- 三个顶点
-def pointA : EucPlane := ![4, 0]
-def pointB : EucPlane := ![-2, 12]
-def pointC : EucPlane := ![-2, -3]
-
-theorem area_of_triangle_is_45 :
-  Real.abs (Triangle.area pointA pointB pointC) = 45 := by
-  sorry
+import Mathlib.Analysis.InnerProductSpace.PiL2
+namespace ProblemGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+def f1 (x : ℝ) : ℝ := -2 * x + 8
+noncomputable def f2 (x : ℝ) : ℝ := (1 / 2 : ℝ) * x - 2
+def p1 : P := ![4, 0]
+def xCoordLine3 : ℝ := -2
+def p2 : P := ![xCoordLine3, f1 xCoordLine3]
+noncomputable def p3 : P := ![xCoordLine3, f2 xCoordLine3]
+noncomputable def area_triangle (A B C : P) : ℝ :=
+  (1/2 : ℝ) * abs ((B 0 - A 0) * (C 1 - A 1) - (C 0 - A 0) * (B 1 - A 1))
+theorem triangle_area_is_45 : area_triangle p1 p2 p3 = 45 := by sorry
+end ProblemGeometry

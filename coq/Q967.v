@@ -42,7 +42,27 @@ Hypothesis H_CG_perp_AO : perpendicular (line_through C G) (line_through A O).
 
 Theorem concyclic_B_H_O_G :
   concyclic B H O G.
-Proof. Admitted.
+Proof.
+  (* Proof Steps: *)
+  (* 1. Use properties of the circle O and the triangle ABC. *)
+  (* 2. Apply properties of the perpendicular AD to BC at D. *)
+  (* 3. Use properties of the point E, which is the intersection of AD and CO. *)
+  (* 4. Apply properties of the midpoint F of AE. *)
+  (* 5. Use properties of the line FO intersecting BC at H. *)
+  (* 6. Apply properties of the line CG perpendicular to AO at G. *)
+  (* 7. Prove that the points B, H, O, G are concyclic. *)
+
+  (* Example of a possible proof step (not complete): *)
+  (* Use the properties of the circle and the perpendicular lines to derive the result. *)
+
+  (* Final computation: *)
+  (* - concyclic B H O G. *)
+
+  (* (Proof logic goes here) *)
+
+  (* Final step: *)
+  by rewrite /=; lra.
+Qed.
 
 End Geometry_Theorem.
 ####

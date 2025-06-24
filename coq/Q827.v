@@ -12,8 +12,9 @@ Variable R : realType.
 
 Theorem value_of_x_is_2_sqrt_66 :
   forall (A B C D : 'rV[R]_2),
-    (* C is a right angle vertex: angle at C is 90 degrees *)
-    collinear A C B /\
+    (* Corrected to reflect perpendicularity and right angles as per the diagram *)
+    orthogonal (A - C) (B - C) /\
+    orthogonal (B - D) (C - D) /\
     norm (A - D) = 8 /\
     norm (B - D) = 25 /\
     angle_rad (B - C) (A - C) = /2%:R * PI /\

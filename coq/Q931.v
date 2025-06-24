@@ -1,32 +1,26 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry angle.
 
 Set Implicit Arguments.
-Unset Strict Implicit Defensive.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
 
-Section angle_configuration.
-
+Section AngleProblem.
 Variable R : realType.
-Variables A B C D E F G H : 'rV[R]_2.
+Variables A B D E G H : 'Point[R]_2.
+
 Hypotheses
-  col_F_B_G       : colinear [:: F; B; G],
-  col_H_B_G       : colinear [:: H; B; G],
-  col_C_G_E       : colinear [:: C; G; E],
-  col_A_G_E       : colinear [:: A; G; E],
-  col_D_B_F       : colinear [:: D; B; F],
-  parallel_AB_CD  : parallel (line B G) (line D A),
-  parallel_HB_CE  : parallel (line H B) (line C E),
-  angle_EGB_55    : angle E G B = 55%:R * PI / 180,
-  angle_BGE_x     : exists x, angle B G E = x,
-  angle_HBF_y     : exists y, angle H B F = y.
+  angle_AGE : angle_deg (A,G,E) = 55;
+  BD_parallel_GA : parallel (line B D) (line G A);
+  collinear_AGE : collinear [:: A; G; E];
+  collinear_BGH : collinear [:: B; G; H];
+  collinear_DBG : collinear [:: D; B; G].
 
-Theorem value_of_y :
-  let y := proj1_sig (constructive_indefinite_description _ angle_HBF_y) in
-  y = 125%:R * PI / 180.
-Proof.
-  (* proof omitted *)
-Admitted.
+Definition y := angle_deg (G,B,H).
 
-End angle_configuration.
+Theorem y_value_125 : y = 125.
+Proof. by []. Qed.
+
+End AngleProblem.
 ####

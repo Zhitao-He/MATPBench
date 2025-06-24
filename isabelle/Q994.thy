@@ -1,36 +1,37 @@
-theory CircleTangencySimilarity
-imports Complex_Main HOL.Real "HOL-Analysis.Analysis"
+theory GeometryProblem
+  imports "HOL-Analysis.Euclidean_Space"
 begin
-
-locale circles_tangent_similarity =
-  fixes O₁ O₂ A B C D P :: "real × real"
-    and r₁ r₂ :: real
-  assumes r₁_pos: "r₁ > 0"
-    and r₂_pos: "r₂ > 0"
-    and circle1: "dist O₁ A = r₁" "dist O₁ B = r₁" "dist O₁ C = r₁"
-    and circle2: "dist O₂ A = r₂" "dist O₂ B = r₂" "dist O₂ D = r₂"
-    and AB_distinct: "A ≠ B"
-    and P_tangent_C: "dist P C ≠ 0" 
-                     "∀Q. Q ≠ C ∧ dist O₁ Q = r₁ ⟶ angle P C Q = π/2"
-    and P_tangent_D: "dist P D ≠ 0"
-                     "∀Q. Q ≠ D ∧ dist O₂ Q = r₂ ⟶ angle P D Q = π/2"
-    and tangent_ratio: "dist P C / dist P D = r₁ / r₂"
-begin
-
-definition similar_triangle :: "(real × real) × (real × real) × (real × real) ⟶ 
-                                (real × real) × (real × real) × (real × real) ⟶ bool" where
-  "similar_triangle T₁ T₂ ≡ 
-    let (P₁, Q₁, R₁) = T₁; (P₂, Q₂, R₂) = T₂ in
-    (∃k > 0. dist P₁ Q₁ / dist P₂ Q₂ = k ∧ 
-             dist Q₁ R₁ / dist Q₂ R₂ = k ∧ 
-             dist R₁ P₁ / dist R₂ P₂ = k) ∧
-    angle P₁ Q₁ R₁ = angle P₂ Q₂ R₂ ∧
-    angle Q₁ R₁ P₁ = angle Q₂ R₂ P₂ ∧
-    angle R₁ P₁ Q₁ = angle R₂ P₂ Q₂"
-
-theorem circle_tangent_triangle_similarity:
-  "similar_triangle (P, C, A) (P, D, B)"
-  oops
-
-end
+type_synonym point = "real euc_2"
+definition dist :: "point ⇒ point ⇒ real" where
+  "dist A B = norm (A - B)"
+definition circle :: "point ⇒ real ⇒ point set" where
+  "circle O r = {X. dist O X = r}"
+type_synonym triangle = "point × point × point"
+definition sss_similar_k :: "triangle ⇒ triangle ⇒ bool" where
+  "sss_similar_k (P1, C1, A1) (P2, B2, D2) =
+    (∃k > 0. dist P1 C1 = k * dist P2 B2 ∧
+              dist C1 A1 = k * dist B2 D2 ∧
+              dist A1 P1 = k * dist D2 P2)"
+axiomatization
+  O1 :: point and O2 :: point 
+  and r1 :: real and r2 :: real     
+  and A :: point and B :: point     
+  and P :: point                    
+  and C :: point and D :: point     
+where
+  r1_positive: "r1 > 0" and
+  r2_positive: "r2 > 0" and
+  A_on_circle1: "A ∈ circle O1 r1" and
+  A_on_circle2: "A ∈ circle O2 r2" and
+  B_on_circle1: "B ∈ circle O1 r1" and
+  B_on_circle2: "B ∈ circle O2 r2" and
+  A_not_equal_B: "A ≠ B" and
+  C_on_circle1: "C ∈ circle O1 r1" and
+  PC_tangent_to_circle1: "(O1 - C) ⋅ (P - C) = 0" and 
+  D_on_circle2: "D ∈ circle O2 r2" and
+  PD_tangent_to_circle2: "(O2 - D) ⋅ (P - D) = 0" and 
+  tangent_lengths_ratio: "(dist P C) * r2 = (dist P D) * r1"
+lemma problem_statement_to_prove:
+  shows "sss_similar_k (P,C,A) (P,B,D)"
+sorry
 end

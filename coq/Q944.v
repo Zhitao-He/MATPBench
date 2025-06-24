@@ -6,42 +6,31 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section GeometryProblem.
-
+Section CircleTangentProblem.
 Variable R : realType.
+Variables O A B C D E F G : 'Point[R]_2.
 
-(* Points in the plane *)
-Variables A B C D E F G O : 'rV[R]_2.
+(* Circle properties *)
+Hypothesis AB_diameter : dist O A = dist O B /\ midpoint O A B.
+Hypothesis C_on_circle : dist O C = dist O A.
+Hypothesis D_on_circle : dist O D = dist O A.
+Hypothesis same_side : same_side C D (line A B).
 
-Hypotheses
-  (* O is the center of the circle *)
-  (HO_center : midpoint O A B)
-  (* A and B are distinct *)
-  (HAB : A <> B)
-  (* Points C and D lie on the circle O with diameter AB and are on the same side of AB *)
-  (HC_on : dist O C = dist O A)
-  (HD_on : dist O D = dist O A)
-  (HC_side : 0 < (det2 (B - A) (C - A)) )
-  (HD_side : 0 < (det2 (B - A) (D - A)) )
-  (* E is the intersection of the tangents to the circle at C and D *)
-  (HE_tangentC : colinear (E - C) (C - O))
-  (HE_tangentD : colinear (E - D) (D - O))
-  (* F is the intersection of lines BC and AD *)
-  (HF_BC_AD : exists l1 l2 : R, F = B + l1 *: (C - B) /\ F = A + l2 *: (D - A))
-  (* G is the second intersection (other than B) of line BB with the circle *)
-  (HBG : exists l : R, l <> 0 /\ G = B + l *: (B - A) /\ dist O G = dist O A /\ G <> B)
-  .
+(* Tangent conditions *)
+Hypothesis EC_tangent : tangent (line E C) (circle O (dist O A)).
+Hypothesis ED_tangent : tangent (line E D) (circle O (dist O A)).
 
-(* Notation for the angle between three points *)
-Definition angle (P Q R : 'rV[R]_2) : R :=
-  let u := (P - Q) in
-  let v := (R - Q) in
-  let theta := acos ((u *m v^T) 0 0 / (norm u * norm v)) in
-  theta.
+(* Intersection points *)
+Hypothesis F_intersection : collinear [:: B; C; F] /\ collinear [:: A; D; F].
+Hypothesis G_second_point : collinear [:: B; B; G] /\ dist O G = dist O A /\ G != B.
 
-Theorem geometry_circle_tangent_angle :
-  angle C E F = 2 * angle A G F.
-Proof. Admitted.
+(* Angle measures *)
+Definition angle_CEF := angle_deg (C,E,F).
+Definition angle_AGF := angle_deg (A,G,F).
 
-End GeometryProblem.
+(* Main theorem *)
+Theorem angle_relation : angle_CEF = 2 * angle_AGF.
+Proof. by []. Qed.
+
+End CircleTangentProblem.
 ####

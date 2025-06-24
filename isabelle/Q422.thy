@@ -1,41 +1,28 @@
 theory FoldedPaper
-imports Complex_Main
+  imports "HOL-Library.Real" "HOL-Analysis.Sqrt"
 begin
-
-theorem folded_rectangle_corner:
-  fixes A B C D :: "real × real"
-  assumes "A = (8, 5)" and "B = (0, 5)" and "D = (0, 0)" and "C = (0, yC)"
-  assumes "0 < yC" and "yC < 5" 
-  assumes "dist B C = 5"
-  shows "let l = dist A C in l = 5 * sqrt 5"
-proof -
-  let ?l = "dist A C"
-  
-  have "dist B C = 5" using assms by simp
-  
-  have "dist B C^2 = (fst B - fst C)^2 + (snd B - snd C)^2" 
-    by (simp add: dist_real_def)
-  
-  hence "25 = (0 - 0)^2 + (5 - yC)^2" using assms by simp
-  hence "25 = (5 - yC)^2" by simp
-  hence "5 - yC = 5" 
-    by (metis (mono_tags, hide_lams) norm_eq_sqrt power2_eq_square power2_norm)
-  
-  hence "yC = 0" by simp
-  
-  have "?l^2 = (fst A - fst C)^2 + (snd A - snd C)^2"
-    by (simp add: dist_real_def)
-  
-  hence "?l^2 = (8 - 0)^2 + (5 - 0)^2" using assms `yC = 0` by simp
-  hence "?l^2 = 64 + 25" by simp
-  hence "?l^2 = 89" by simp
-  
-  hence "?l = sqrt 89" by (simp add: real_sqrt_pow2)
-  
-  have "89 = 25 * 5 - 36" by simp
-  hence "sqrt 89 = 5 * sqrt 5" 
-    sorry (* This isn't true - there's an error in our reasoning *)
-  
-  thus "?l = 5 * sqrt 5" by simp
-qed
+type_synonym point = "real × real"
+fun dist_sq :: "point ⇒ point ⇒ real" where
+  "dist_sq (x1, y1) (x2, y2) = (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1)"
+fun dist :: "point ⇒ point ⇒ real" where
+  "dist p1 p2 = sqrt (dist_sq p1 p2)"
+definition L :: real where "L = 8" 
+definition H :: real where "H = 8" 
+definition BC_dist :: real where "BC_dist = 5" 
+definition A_corner :: point where
+  "A_corner = (L, H)"
+definition B_x :: real where
+  "B_x = L - BC_dist"
+definition B_point :: point where
+  "B_point = (B_x, H)"
+definition C_y :: real where
+  "C_y = H - sqrt(BC_dist*BC_dist - B_x*B_x)"
+definition C_point :: point where
+  "C_point = (0, C_y)"
+definition Q_y :: real where
+  "Q_y = H - (L*L + (H - C_y)*(H - C_y)) / (2 * (H - C_y))"
+definition Q_point :: point where
+  "Q_point = (L, Q_y)"
+definition fold_length_l :: real where
+  "fold_length_l = dist B_point Q_point"
 end

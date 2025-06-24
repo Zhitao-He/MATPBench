@@ -1,19 +1,19 @@
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Analysis.InnerProductSpace.PiL2
 
+namespace EuclideanGeometryProblem
 open Real EuclideanGeometry
-
--- 设 P 为欧氏空间中的点
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor (Fin 2 → ℝ) P]
-
--- 定义四个点 S, P, Q, R
-variable (S P Q R : P)
-
-theorem angle_problem
-    -- 假设 sin(∠RPQ) = 7/25
-    (h_sin : sin (angle R P Q) = 7/25)
-    -- 结论：cos(∠RPS) = -24/25
-    : cos (angle R P S) = -24/25 := by
+open scoped EuclideanGeometry
+theorem cos_RPS_eq_neg_24_div_25
+  (S P Q R : EuclideanSpace ℝ (Fin 2))
+  (h_collinear_SPQ : Sbtw ℝ S P Q)
+  (h_R_ne_P : R ≠ P)
+  (h_R_not_on_line_SPQ : ¬ Collinear ℝ ({S, P, R} : Set (EuclideanSpace ℝ (Fin 2))))
+  (h_angle_RPQ_acute : ∠ R P Q ≤ Real.pi / 2)
+  (h_sin_RPQ : Real.sin (∠ R P Q) = (7 : ℝ) / 25)
+  : Real.cos (∠ R P S) = -((24 : ℝ) / 25) := by
   sorry
+end EuclideanGeometryProblem

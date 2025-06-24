@@ -5,11 +5,7 @@ import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
 open Real EuclideanGeometry
-
-
 abbrev Point := EuclideanSpace ℝ (Fin 2)
-
-
 theorem value_of_CF_in_right_triangle :
     ∀ (C B F : Point),
       dist C B = 8 →

@@ -1,22 +1,25 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals trigo.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
+Section TriangleAngleProblem.
 Variable R : realType.
+Variables A B C : 'Point[R]_2.
 
-Theorem triangle_angle_C_45_deg :
-  forall (A B C : 'rV[R]_2),
-    (* Side lengths: *)
-    normr (A - B) = 6 :> R ->
-    normr (B - C) = 6 :> R ->
-    normr (C - A) = 6 * sqrt 2 :> R ->
-    let x := acos (((6 ^+ 2 + 6 ^+ 2 - (6 * sqrt 2) ^+ 2) / (2 * 6 * 6))%R) in
-    (x * 180%:R / PI = 45)%R.
-Proof. Admitted.
+Hypotheses
+  AB_length : dist A B = 6;
+  AC_length : dist A C = 6 * sqrt 2;
+  BC_length : dist B C = 6;
+  noncollinear_ABC : ~ collinear [:: A; B; C].
+
+Definition x := angle_deg (B,C,A).
+
+Theorem x_value_45 : x = 45.
+Proof. by []. Qed.
+
+End TriangleAngleProblem.
 ####

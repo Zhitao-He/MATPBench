@@ -1,32 +1,31 @@
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Projection
-
-open EuclideanGeometry Real
-
-variable {P : Type*} [EuclideanSpace ℝ P 2]
-
-/--
-Let ω be a circle with center O and radius 5/2. 
-Points A and B are endpoints of a diameter, with O as midpoint.
-D is a point on the circle distinct from A and B.
-C is the midpoint of arc BD (not containing A).
-E is the foot of the perpendicular from C to line AD.
-Prove: dist C E = 12 / 5.
--/
-theorem circle_arc_midpoint_perpendicular_length
-    (A B C D O : P)
-    (hA_on_circle : dist A O = 5/2)
-    (hB_on_circle : dist B O = 5/2)
-    (hC_on_circle : dist C O = 5/2)
-    (hD_on_circle : dist D O = 5/2)
-    (hO_mid_AB : O = midpoint ℝ A B)
-    (hA_ne_B : A ≠ B)
-    (hB_ne_D : B ≠ D)
-    (hC_ne_B : C ≠ B)
-    (hC_ne_D : C ≠ D)
-    (hC_mid_arc_BD : ∠ B O C = ∠ D O C ∧ (∀ X, X ∈ ({B, D, C} : Set P) → X ≠ A))
-    (hA_ne_D : A ≠ D)
-    (hA_ne_C : A ≠ C) :
-    let E := orthogonalProjection (affineSpan ℝ ({A, D} : Set P)) C
-    dist C E = 12 / 5 := by sorry
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open Real
+open EuclideanGeometry
+open FiniteDimensional
+namespace GeometryProblem
+abbrev P := EuclideanSpace ℝ (Fin 2)
+theorem circle_perpendicular_length
+  (A B C D E O : P)
+  (Ω : EuclideanGeometry.Sphere P)
+  (h_O_center : Ω.center = O)
+  (h_Ω_radius : Ω.radius = (5/2 : ℝ))
+  (hA_on_Ω : A ∈ Ω)
+  (hB_on_Ω : B ∈ Ω)
+  (hC_on_Ω : C ∈ Ω)
+  (hD_on_Ω : D ∈ Ω)
+  (hAOB_collinear : Collinear ℝ ({A, O, B} : Set P))
+  (hAC_length : dist A C = 4)
+  (hC_midpoint_arc_BD : dist B C = dist C D)
+  (hE_on_line_AD : E ∈ affineSpan ℝ ({A, D} : Set P))
+  (hA_ne_D : A ≠ D)
+  (hC_ne_E : C ≠ E)
+  (hA_ne_E : A ≠ E)
+  (hCE_perp_AD : EuclideanGeometry.angle A E C = Real.pi / 2) :
+  dist C E = (12/5 : ℝ) := by
+  sorry
+end GeometryProblem

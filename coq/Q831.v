@@ -19,9 +19,9 @@ Theorem value_of_h_in_triangle :
     let h := normr (A - B) in
     let CA := normr (C - A) in
     let angle_BAC := acos (((B - A) *m (C - A)^T) / (normr (B - A) * normr (C - A))) in
-    [/\ normr (CA) = 3,
-        angle_BAC = PI / 4,
-        ((B - C) *m (A - C)^T = 0) (* right angle at C *)] ->
-    h = 3 * sqrt 2.
+    [/\ normr (CA) = 3%:R,
+        angle_BAC = (PI / 4)%:R,
+        ((B - C) *m (A - C)^T = 0%:M) (* right angle at C *)] ->
+    h = 3%:R * sqrt 2%:R.
 Proof. Admitted.
 ####

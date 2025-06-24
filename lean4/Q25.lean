@@ -1,19 +1,20 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-
-section TriangleMidpointsArea
-
-variable (A B C : EuclideanSpace ℝ (Fin 2))
-
-noncomputable def D : EuclideanSpace ℝ (Fin 2) := midpoint ℝ B C
-
-noncomputable def E : EuclideanSpace ℝ (Fin 2) := midpoint ℝ A D
-
-noncomputable def F : EuclideanSpace ℝ (Fin 2) := midpoint ℝ C E
-
-variable (h_area_ABC : Triangle.area A B C = 4)
-
-theorem triangle_midpoints_area : Triangle.area D E F = (0.5 : ℝ) := by
+import Mathlib.Data.Real.Basic
+import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+namespace ProblemGeometrySetup
+abbrev P₂ := EuclideanSpace ℝ (Fin 2)
+section TriangleDefinitions
+variable (A B C : P₂)
+noncomputable def d_midpoint (B C : P₂) : P₂ := midpoint ℝ B C
+noncomputable def e_midpoint (A B C : P₂) : P₂ := midpoint ℝ A (d_midpoint B C)
+noncomputable def f_midpoint (A B C : P₂) : P₂ := midpoint ℝ C (e_midpoint A B C)
+noncomputable def area (p1 p2 p3 : P₂) : ℝ :=
+  0.5 * abs ((p2 0 - p1 0) * (p3 1 - p1 1) - (p3 0 - p1 0) * (p2 1 - p1 1))
+theorem area_relation_theorem
+    (A B C : P₂)
+    (h_area_ABC_is_4 : area A B C = 4) :
+    area (d_midpoint B C) (e_midpoint A B C) (f_midpoint A B C) = 1 / 2 := by
   sorry
-
-end TriangleMidpointsArea
+end TriangleDefinitions
+end ProblemGeometrySetup

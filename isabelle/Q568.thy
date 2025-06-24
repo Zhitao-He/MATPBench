@@ -1,42 +1,22 @@
-theory BOP_arc_measure
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Geometry_Arc_BOP
+  imports Main
 begin
-
-(* 定义平面中的点 *)
-type_synonym point = "real × real"
-
-(* 定义圆 *)
-record circle =
-  center :: "point"
-  radius :: "real"
-
-(* 检查点是否在圆上 *)
-definition on_circle :: "point ⇒ circle ⇒ bool" where
-  "on_circle p c = (dist p (center c) = radius c)"
-
-(* 定义角度(以度数表示) *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A B C = undefined" (* 实际应用中需要实现角度计算 *)
-
-(* 定义弧度量 *)
-definition arc_measure :: "circle ⇒ point ⇒ point ⇒ real" where
-  "arc_measure c p1 p2 = undefined" (* 实际应用中需要实现弧度量计算 *)
-
-(* 题目场景 *)
-locale BOP_arc_problem =
-  fixes B O P N M :: point
-  fixes circle_B :: circle
-  assumes B_is_center: "center circle_B = B"
-  assumes points_on_circle: "on_circle P circle_B ∧ on_circle O circle_B 
-                            ∧ on_circle N circle_B ∧ on_circle M circle_B"
-  assumes angle_PNO: "angle P N O = 56"
-  assumes angle_BMN: "angle B M N = 70"
-
-(* 定理：弧BOP的度数为112 *)
-theorem (in BOP_arc_problem) arc_BOP_is_112:
-  "arc_measure circle_B B O P = 112"
+typedecl Point
+record Circle =
+  center :: Point
+consts
+  angle :: "Point ⇒ Point ⇒ Point ⇒ real"  ("∠ _ _ _")
+  arc_measure :: "Point ⇒ Point ⇒ Point ⇒ real"  ("⌒_ _ _")
+consts
+  B M N O P :: Point
+axiomatization where
+  circle_B_def: "center (⦃center = B⦄) = B" and
+  angle_PNO: "∠ P N O = 56" and
+  angle_BMN: "∠ B M N = 70"
+definition arc_BOP_measure :: real where
+  "arc_BOP_measure ≡ arc_measure B O P"
+theorem arc_BOP_112:
+  "arc_BOP_measure = 112"
+  unfolding arc_BOP_measure_def
   sorry
-
 end

@@ -8,13 +8,20 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
-Variable R : realType.
+Section TriangleMidline.
 
-Theorem triangle_midline_length
-  (A B C D E : 'e2g(R))
-  (mid_D : between (AB A B) D /\ dist A D = dist D B)
-  (mid_E : between (AC A C) E /\ dist A E = dist E C)
-  (BC_length : dist B C = 6) :
-  dist D E = 3.
+Variable R : realType.
+Variables A B C D E : 'rV[R]_2.
+
+(* Hypotheses *)
+Hypothesis H_D_midpoint : D = (A + B) / 2%:R.
+Hypothesis H_E_midpoint : E = (A + C) / 2%:R.
+Hypothesis H_BC_length : norm (B - C) = 6%:R.
+
+(* Theorem to prove DE = 3 *)
+Theorem midline_length : 
+  norm (D - E) = 3%:R.
 Proof. Admitted.
+
+End TriangleMidline.
 ####

@@ -1,49 +1,33 @@
-theory FDA_Arc_Measure
-  imports Complex_Main "HOL-Analysis.Euclidean_Space"
+theory Circle_Arc_FDA
+  imports Main
 begin
-
-section ‹Circle Properties›
-
-(* 定义点和角度 *)
-locale circle_problem =
-  fixes F :: "real^2"    (* 圆心F *)
-    and D E A :: "real^2" (* 圆上的点 *)
-  assumes 
-    angle_EFA: "angle E F A = 63"
-    and DF_perp_EF: "orthogonal (D - F) (E - F)"
-    and on_circle: "dist D F = dist E F" "dist D F = dist A F"
-
-context circle_problem
-begin
-
-  (* 角度计算辅助引理 *)
-  lemma angle_DFE: "angle D F E = 90"
-    using DF_perp_EF by (simp add: orthogonal_angle)
-
-  (* 角度求和 *)
-  lemma angle_sum: "angle D F A = angle D F E + angle E F A"
-    by (rule angle_addition)
-
-  (* 带入已知值 *)
-  lemma angle_DFA: "angle D F A = 90 + 63"
-    using angle_DFE angle_EFA angle_sum by simp
-
-  (* 计算角DFA *)
-  lemma compute_DFA: "angle D F A = 153"
-    using angle_DFA by simp
-
-  (* 由于F是圆心，角DFA对应的弧FDA的度数是角DFA的2倍 *)
-  lemma arc_FDA: "arc_measure F D A = 2 * angle D F A"
-    by (rule arc_property_center_angle)
-
-  (* 计算弧FDA的度数 *)
-  theorem FDA_arc_value: "arc_measure F D A = 2 * 153"
-    using compute_DFA arc_FDA by simp
-
-  (* 最终结果 *)
-  theorem FDA_arc_answer: "arc_measure F D A = 306"
-    using FDA_arc_value by simp
-
-end
-
+typedecl Point
+record circle =
+  center :: Point
+definition circleF :: circle where
+  "circleF ≡ ⦇ center = F ⦈"
+axiomatization A B C D E F :: Point
+axiomatization
+  "on_circle" :: "Point ⇒ circle ⇒ bool"
+where
+  A_on_circleF: "on_circle A circleF" and
+  B_on_circleF: "on_circle B circleF" and
+  C_on_circleF: "on_circle C circleF" and
+  D_on_circleF: "on_circle D circleF" and
+  E_on_circleF: "on_circle E circleF"
+axiomatization
+  angle :: "Point ⇒ Point ⇒ Point ⇒ real" 
+  and
+  arc_measure :: "Point ⇒ Point ⇒ Point ⇒ real" 
+where
+  angle_nonneg: "0 ≤ angle A B C" and
+  angle_le_360: "angle A B C ≤ 360"
+axiomatization where
+  angle_EFA: "angle E F A = 63"
+axiomatization where
+  DF_perp_EF: "angle D F E = 90"
+axiomatization where
+  arc_center_angle: "on_circle X c ⟹ on_circle Y c ⟹ center c = O ⟹ arc_measure O X Y = angle X O Y"
+definition arc_FDA_value :: bool where
+  "arc_FDA_value ≡ arc_measure F D A = 207"
 end

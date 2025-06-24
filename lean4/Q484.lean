@@ -1,54 +1,32 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open Real EuclideanGeometry
-
-noncomputable section
-
-namespace ProblemDefinition
-
--- The Euclidean plane (2D)
-variable {P : Type*} [EuclideanSpace ℝ P] [Fact (FiniteDimensional.finrank ℝ P = 2)]
-
--- Points in the diagram
-variable (A C E F G H K : P)
-
--- Degrees to radians conversion
-def degToRad (d : ℝ) : ℝ := d * π / 180
-
--- Given angle hypotheses
-axiom h_angle_CFK : C ≠ F → K ≠ F → (∠ C F K = degToRad 28)
-axiom h_angle_GKF : G ≠ K → F ≠ K → (∠ G K F = degToRad 35)
-axiom h_angle_KAC : K ≠ A → C ≠ A → (∠ K A C = degToRad 25)
-axiom h_angle_KHC : K ≠ H → C ≠ H → (∠ K H C = degToRad 51)
-
--- Perpendicularity hypotheses
-axiom h_angle_EGF_perp : E ≠ G → F ≠ G → (∠ E G F = degToRad 90)
-axiom h_angle_KCH_perp : K ≠ C → H ≠ C → (∠ K C H = degToRad 90)
-axiom h_angle_KFE_perp : K ≠ F → E ≠ F → (∠ K F E = degToRad 90)
-
--- Collinearity hypotheses
-axiom h_sameray_KGE : G ≠ K → E ≠ K → (SameRay ℝ (G -ᵥ K) (E -ᵥ K))
-axiom h_collinear_A_H_C : Wbtw ℝ A H C
-axiom h_collinear_H_C_F : Wbtw ℝ H C F
-
--- Distinctness hypotheses
-axiom h_AH_distinct : A ≠ H
-axiom h_HC_distinct : H ≠ C
-axiom h_CF_distinct : C ≠ F
-axiom h_FE_distinct : F ≠ E
-axiom h_KE_distinct : K ≠ E
-
--- Triangle non-collinearity
-axiom h_KFE_noncollinear : K ≠ F → E ≠ F → K ≠ E → ¬ Collinear ℝ {K, F, E}
-
--- The goal: find ∠ F E K
-theorem find_angle_FEK : ∠ F E K = degToRad 55 := by
+import Mathlib.Data.Real.Pi.Bounds 
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+open Real
+open scoped EuclideanGeometry 
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (A H C K G F E : P)
+noncomputable def angleCFK_val_rad : ℝ := (28 : ℝ) / 180 * π
+noncomputable def angleGKF_val_rad : ℝ := (35 : ℝ) / 180 * π
+noncomputable def angleKAC_val_rad : ℝ := (25 : ℝ) / 180 * π
+noncomputable def angleKHC_val_rad : ℝ := (51 : ℝ) / 180 * π
+noncomputable def right_angle_val_rad : ℝ := π / 2
+noncomputable def angleFEK_target_val_rad : ℝ := (55 : ℝ) / 180 * π
+theorem find_angle_FEK
+    (h_C_ne_F : C ≠ F) (h_K_ne_F : K ≠ F)
+    (h_G_ne_K : G ≠ K) (h_F_ne_K : F ≠ K)
+    (h_K_ne_A : K ≠ A) (h_C_ne_A : C ≠ A)
+    (h_K_ne_H : K ≠ H) (h_C_ne_H : C ≠ H)
+    (h_E_ne_G : E ≠ G) (h_F_ne_G : F ≠ G)
+    (h_H_ne_C : H ≠ C) (h_K_ne_C : K ≠ C)
+    (h_E_ne_F : E ≠ F) (h_K_ne_E : K ≠ E)
+    (h_angle_CFK : ∠ C F K = angleCFK_val_rad)
+    (h_angle_GKF : ∠ G K F = angleGKF_val_rad)
+    (h_angle_KAC : ∠ K A C = angleKAC_val_rad)
+    (h_angle_KHC : ∠ K H C = angleKHC_val_rad)
+    (h_EG_perp_FG : ∠ E G F = right_angle_val_rad)
+    (h_HC_perp_KC : ∠ H C K = right_angle_val_rad)
+    (h_KF_perp_EF : ∠ K F E = right_angle_val_rad)
+    : ∠ F E K = angleFEK_target_val_rad := by
   sorry
-
-end ProblemDefinition
-
-end noncomputable section

@@ -1,13 +1,13 @@
-theory Triangle_Area_Theorem
-imports Complex_Main Real
+theory Triangle_Area
+  imports Complex_Main
 begin
-
-theorem triangle_area_vertex_r:
-  fixes r :: real
-  defines "O ≡ (0 :: real, 0 :: real)"
-  defines "A ≡ (0 :: real, 8 :: real)"
-  defines "B ≡ (r, 0 :: real)"
-  defines "area ≡ abs(fst A - fst O) * (snd A - snd O) - (fst O - fst B) * (snd O - snd A) / 2"
-  shows "area = 40 ⟹ r = 10"
-  
+definition A :: "real × real" where "A = (0, 0)"
+definition B :: "real × real" where "B = (0, 8)"
+definition C :: "real × real ⇒ real × real" where "C r = (r, 0)"
+definition triangle_area :: "(real × real) ⇒ (real × real) ⇒ (real × real) ⇒ real" where
+  "triangle_area A B C = 1/2 * abs ((fst B - fst A) * (snd C - snd A) - (fst C - fst A) * (snd B - snd A))"
+definition triangle_problem :: "bool" where
+  "triangle_problem ≡ 
+    let r = 10 in
+      triangle_area A B (C r) = 40"
 end

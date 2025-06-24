@@ -15,10 +15,10 @@ Variable R : realType.
 Theorem semicircle_logo_area :
   exists r : R,
     0 < r /\
-    (* Four small semicircles of radius r, one large semicircle (radius 2r) *)
+    (* Perimeter of four small semicircles and one large semicircle *)
     (4 * PI * r + PI * 2 * r = 14 * PI) /\
     (* After enlargement by a factor of 5, the area of the sticker is (1225 * PI)/2 *)
-    ( (5 ^ 2) * ( (PI * (2 * r)^2) / 2 - 4 * (PI * r^2 / 2) )
+    ( (5 ^ 2) * ( (PI * (2 * r)^2) / 2 + 4 * (PI * r^2 / 2) )
       = 1225 * PI / 2 ).
 Proof. Admitted.
 ####

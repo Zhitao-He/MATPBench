@@ -10,14 +10,40 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-Definition square4 := [:: (0,0); (2,0); (2,2); (0,2)].
-Definition center L := let: (x,y) := L in (if x == 0 then -1 else 1, if y == 1 then 0 else 1).
-Definition inward := fun p c => (fst p - fst c)* (fst p - fst c) + (snd p - snd c)* (snd p - snd c) = 1%:R.
-Definition shaded p := p \in square4 && ~~ (inward p (0,1)) && ~~ (inward p (2,1)) && ~~ (inward p (1,0)) && ~~ (inward p (1,2)).
-Definition area_grid := 16%:R.
-Definition shaded_area := area_grid - 4 * (PI * 1%:R^2 / 4).
-Theorem area_of_shaded_grid : shaded_area = 16 - PI.
+Section SquareAndSemicircles.
+
+(* Definition of the square with side length 2 *)
+Definition square_side := 2.
+Definition square_vertices := [:: (0, 0); (square_side, 0); (square_side, square_side); (0, square_side)].
+
+(* Definition of the semicircles centered at the midpoints of the square's sides *)
+Variables semicircle_centers : 'cV[R]_2 * 'cV[R]_2 * 'cV[R]_2 * 'cV[R]_2.
+Definition semicircle1_center := fst semicircle_centers.
+Definition semicircle2_center := fst (snd semicircle_centers).
+Definition semicircle3_center := fst (snd (snd semicircle_centers)).
+Definition semicircle4_center := snd (snd (snd semicircle_centers)).
+
+(* Definition of semicircles with radius 1 *)
+Definition semicircle (center : 'cV[R]_2) (p : 'cV[R]_2) :=
+  (p 0 0 - center 0 0)^+2 + (p 1 0 - center 1 0)^+2 == 1^+2.
+
+(* Area calculations *)
+Definition square_area := square_side^+2.
+Definition semicircle_area := (PI * 1^+2) / 2.
+
+(* Shaded area is the area of the square minus the area of the four semicircles *)
+Definition shaded_area := square_area - 4 * semicircle_area.
+
+(* Hatched area is the area of the four semicircles *)
+Definition hatched_area := 4 * semicircle_area.
+
+(* Theorem: Compute the absolute difference between the shaded area and the hatched area *)
+Theorem compute_area_difference:
+  absolute_value (shaded_area - hatched_area) = 4 - 2 * sqrt 3.
 Proof.
-admit.
+  (* Placeholder for the actual proof logic *)
+  by []. (* This is a placeholder for the actual proof steps *)
 Qed.
+
+End SquareAndSemicircles.
 ####

@@ -8,18 +8,21 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section AngleBisector.
+
 Variable R : realType.
 
+Variables E F G H : 'point[R].
+
+Hypothesis EFG_equilateral : equilateral E F G.
+Hypothesis EH_bisects_GEF : angle_bisector E H G E F.
+Hypothesis angle_FHE_15x : angle F H E = (15 * x)%:R%:degrees.
+Hypothesis collinear_FHG : colinear F H G.
+Hypothesis between_FHG : between F H G.
+
 Theorem value_x_6 :
-  forall (E F G H : 'point[R]) (x : R),
-    (* EFG is a triangle, EH is perpendicular to FG at H between F and G *)
-    colinear F H G /\
-    E != F /\ E != G /\ EH_perp : perpendicular (E - H) (G - F) /\
-    between F H G /\
-    angle F H E = 15 * x%:R%:degrees /\
-    angle G H E = 15 * x%:R%:degrees /\
-    (E - H) != 0 /\ (F - H) != 0 /\ (G - H) != 0
-    ->
-    x = 6.
+  x = 6.
 Proof. Admitted.
+
+End AngleBisector.
 ####

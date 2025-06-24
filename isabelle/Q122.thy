@@ -1,28 +1,18 @@
-theory TriangularBipyramid
-imports Main "HOL-Library.Code_Numeral"
+theory Octahedron_Vertex_Sum
+  imports Main
 begin
-
-theorem triangular_bipyramid_vertex_sum:
-  fixes v3 v4 v5 :: int
-  defines "S ≡ v3 + v4 + v5 + 6"
-  assumes "1 + v3 + v4 = S"
-    and "1 + v3 + v5 = S"
-    and "1 + v4 + v5 = S"
-    and "5 + v3 + v4 = S"
-    and "5 + v3 + v5 = S"
-    and "5 + v4 + v5 = S"
-  shows "v3 + v4 + v5 = 11"
-proof -
-  from assms(1) have "1 + v3 + v4 = v3 + v4 + v5 + 6" by (simp add: S_def)
-  hence "1 = v5 + 6" by simp
-  hence "v5 = -5" by simp
-
-  from assms(4) have "5 + v3 + v4 = v3 + v4 + v5 + 6" by (simp add: S_def)
-  hence "5 = v5 + 6" by simp
-  hence "v5 = -1" by simp
-
-  with ‹v5 = -5› have False by simp
-  thus ?thesis by contradiction
-qed
-
+datatype vertex = A | B | C | D | E
+locale octahedron_vertex_sum =
+  fixes f :: "vertex ⇒ int"
+  assumes fA: "f A = 1"
+    and fB: "f B = 5"
+    and face_sum:
+      "∃S. 
+        f A + f B + f C = S ∧
+        f A + f B + f D = S ∧
+        f A + f C + f D = S ∧
+        f B + f C + f D = S ∧
+        f B + f D + f E = S ∧
+        f A + f D + f E = S"
+    and sum_CDE: "f C + f D + f E = 11"
 end

@@ -52,10 +52,9 @@ Definition E : 'rV[R]_2 :=
 Hypothesis h_E_exists :
   exists e, on_line e (A, C) /\ is_DE_perp_OD D e O.
 
+(* Theorem: angle EHD = angle A *)
 Theorem circumcenter_orthocenter_angle :
-  let D := (let: Some d := line_intersection (C, H) (A, B) in d) in
-  let E := (let: Some e := pick (fun e => on_line e (A, C) /\ is_DE_perp_OD D e O) in e) in
-  angle E H D = angle A B C.
+  angle E H D = angle B A C.
 Proof. Admitted.
 
 End AngleEHD.

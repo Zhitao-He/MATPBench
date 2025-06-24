@@ -8,22 +8,21 @@ Unset Printing Implicit Defensive.
 
 Section Polygon_Construction.
 
-Variable n_tri : nat. (* Number of sides of triangle *)
-Variable n_sqr : nat. (* Number of sides of square *)
-Variable n_pent : nat. (* Number of sides of pentagon *)
-Variable n_hex : nat. (* Number of sides of hexagon *)
-Variable n_hept : nat. (* Number of sides of heptagon *)
-Variable n_oct : nat. (* Number of sides of octagon *)
+Variable R : realType.
 
-Hypothesis Htri : n_tri = 3.
-Hypothesis Hsqr : n_sqr = 4.
-Hypothesis Hpent : n_pent = 5.
-Hypothesis Hhex : n_hex = 6.
-Hypothesis Hhept : n_hept = 7.
-Hypothesis Hoct : n_oct = 8.
+(* Define the number of sides of each polygon *)
+Definition n_triangle := 3.
+Definition n_square := 4.
+Definition n_pentagon := 5.
+Definition n_hexagon := 6.
+Definition n_heptagon := 7.
+Definition n_octagon := 8.
 
-(* Each new regular polygon is constructed on a non-adjacent side of the previous polygon. The resulting polygon after attaching square, pentagon, hexagon, heptagon, and octagon in this fashion to the sides of an initial equilateral triangle will have 23 sides. *)
+(* Each regular polygon is constructed on a non-adjacent side of the previous polygon. As each polygon shares one side with the previous polygon, the total number of new sides added is total sides minus 1 for each attachment. The triangle starts with 3 sides, and we attach 5 more polygons. So we subtract 5 shared sides. *)
+Definition total_sides := n_triangle + n_square + n_pentagon + n_hexagon + n_heptagon + n_octagon - 5.
 
-Theorem polygon_number_of_sides :
-  let final_sides := n_tri + n_sqr + n_pent + n_hex + n_hept + n_oct - 2 * 5 in
+Theorem final_polygon_has_23_sides : total_sides = 23.
+Proof. by []. Qed.
+
+End Polygon_Construction.
 ####

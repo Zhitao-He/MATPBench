@@ -6,29 +6,28 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section PutnamGeometry.
+Section ParallelogramGeometry.
 
 Variable R : realType.
 
 Variables W X Y Z A : 'R^2.
 
+(* Parallelogram properties: WX || YZ and XY || WZ *)
 Hypothesis WX_parallel_YZ : is_parallel (Line W X) (Line Y Z).
 Hypothesis XY_parallel_WZ : is_parallel (Line X Y) (Line W Z).
 
-Hypothesis collinear_WX : ~ collinear W X Y.
-Hypothesis collinear_WZ : ~ collinear W Z Y.
-
-(* Angles at X: angle WXZ = 82°, angle YXW = 33° *)
-Hypothesis angle_WXZ_82 : MeasureOfAngle W X Z = 82.
+(* Angles at X: angle YXW = 33° and angle AXW = 82° *)
 Hypothesis angle_YXW_33 : MeasureOfAngle Y X W = 33.
+Hypothesis angle_AXW_82 : MeasureOfAngle A X W = 82.
 
-(* Diagonals intersect at A *)
+(* Since XWZY is a parallelogram, the diagonals intersect at A, but this isn't strictly necessary for the angle calculation. *)
 Hypothesis A_on_WY : on_line A (Line W Y).
 Hypothesis A_on_XZ : on_line A (Line X Z).
 
+(* Theorem to prove: angle WZY = 115° *)
 Theorem measure_angle_WZY_115 :
   MeasureOfAngle W Z Y = 115.
 Proof. Admitted.
 
-End PutnamGeometry.
+End ParallelogramGeometry.
 ####

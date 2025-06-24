@@ -1,34 +1,18 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-noncomputable section
-
-variable {P : Type*} [EuclideanPlane P]
-
-namespace GeometryProblem
-
--- Declare the points
-variable (O A B X : P)
-
--- Given: A and B are on the circle of radius 10 centered at O
-variable (hOA : dist O A = 10)
-variable (hOB : dist O B = 10)
-
--- Given: AB = 10
-variable (hAB : dist A B = 10)
-
--- Given: The (unoriented) angle OBA is 60°
-variable (hAngle : ∠ O B A = Real.pi / 3)
-
--- Given: BX ⟂ OX
-variable (hPerp : inner (O -ᵥ X) (B -ᵥ X) = 0)
-
--- Given: X lies between A and B
-variable (hBetween : Wbtw ℝ A X B)
-
--- Conclusion: AX = 5
-theorem length_AX : dist A X = 5 := by
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Data.Real.Basic
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def lengthAB : ℝ := 10
+noncomputable def angleOBA : ℝ := Real.pi / 3
+noncomputable def radiusO : ℝ := 10
+noncomputable def targetLengthAX : ℝ := 5
+theorem findLengthAX
+  (O A B X : P)
+  (hAB : dist A B = lengthAB)
+  (hOBA : EuclideanGeometry.angle O B A = angleOBA)
+  (hOA : dist O A = radiusO)
+  (hOB : dist O B = radiusO)
+  (hBXO : EuclideanGeometry.angle B X O = Real.pi / 2)
+  (hX_between : Sbtw ℝ A X B)
+  : dist A X = targetLengthAX := by
   sorry
-
-end GeometryProblem

@@ -1,38 +1,23 @@
-theory ParallelogramProblem
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Parallelogram_Problem
+imports "HOL-Analysis.Angle" 
 begin
-
-(* 定义点和向量 *)
-type_synonym point = "real × real"
-
-(* 计算两点间距离 *)
-definition distance :: "point ⇒ point ⇒ real" where
-  "distance p1 p2 = sqrt((fst p2 - fst p1)² + (snd p2 - snd p1)²)"
-
-(* 计算向量的长度 *)
-definition vector_length :: "point ⇒ real" where
-  "vector_length v = sqrt((fst v)² + (snd v)²)"
-
-(* 计算两个向量的夹角（弧度） *)
-definition angle :: "point ⇒ point ⇒ real" where
-  "angle v1 v2 = acos((fst v1 * fst v2 + snd v1 * snd v2) / (vector_length v1 * vector_length v2))"
-
-(* 将角度从弧度转换为度 *)
-definition rad_to_deg :: "real ⇒ real" where
-  "rad_to_deg r = r * 180 / pi"
-
-(* 题目规范：四边形WZYX中，YX=24，ZY=28，∠XWZ=105°，WX和ZY是对边 *)
-(* 求解WZ长度 *)
-
-lemma parallelogram_problem:
-  fixes W X Y Z :: point
-  assumes "distance Y X = 24"
-  assumes "distance Z Y = 28"
-  assumes "rad_to_deg (angle (fst X - fst W, snd X - snd W) (fst Z - fst W, snd Z - snd W)) = 105"
-  assumes "is_parallelogram W Z Y X" (* 假设已有平行四边形的定义 *)
-  shows "distance W Z = 24"
-  sorry
-
+type_synonym point = "real^2"
+fixes W :: point
+fixes X :: point
+fixes Y :: point
+fixes Z :: point
+abbreviation length_of_line :: "point ⇒ point ⇒ real" where
+  "length_of_line A B ≡ dist A B"
+definition degrees_to_radians :: "real ⇒ real" where
+  "degrees_to_radians d ≡ d * pi / 180"
+definition is_parallelogram :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
+  "is_parallelogram p1 p2 p3 p4 ≡
+    (p1 ≠ p2 ∧ p2 ≠ p3 ∧ p3 ≠ p4 ∧ p4 ≠ p1 ∧ p1 ≠ p3 ∧ p2 ≠ p4) ∧ 
+    ((p2 - p1) = (p3 - p4)) ∧ 
+    (¬ collinear p1 p2 p3)"   
+axiomatization where
+  YX_length: "length_of_line Y X = 24" and
+  ZY_length: "length_of_line Z Y = 28" and
+  WZYX_is_parallelogram: "is_parallelogram W Z Y X" and
+  angle_XWZ_value: "angle X W Z = degrees_to_radians 105"
 end

@@ -1,33 +1,20 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-
-open Real Angle
-
--- Points in the Euclidean plane
-abbrev EuclideanPlane := EuclideanSpace Real (Fin 2)
-
--- Declare points on the circle centered at A
-variable (A B C D E : EuclideanPlane)
-
--- Let x_val : ℝ denote the degree value of the angle ∠EAC = x°
-variable (x_val : ℝ)
-
--- Degrees to radians conversion
-def degToRad (deg : ℝ) : ℝ := deg * (π / 180)
-
--- Hypotheses: A ≠ B ≠ C ≠ D ≠ E (for oangle to be well-defined at A)
-variable (hA_ne_B : A ≠ B)
-variable (hA_ne_C : A ≠ C)
-variable (hA_ne_D : A ≠ D)
-variable (hA_ne_E : A ≠ E)
-
--- Hypotheses for angles, with counterclockwise orientation at A
-variable (h_oangle_BAD : oangle B A D = Angle.ofReal (degToRad 65))
-variable (h_oangle_DAE : oangle D A E = Angle.ofReal (degToRad 110))
-variable (h_oangle_EAC : oangle E A C = Angle.ofReal (degToRad x_val))
-variable (h_oangle_CAB : oangle C A B = Angle.ofReal (degToRad 90))
-
--- The conclusion: x = 95°
-theorem find_value_of_x : x_val = 95 := by
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def degToRad (d : ℝ) : ℝ := d * (Real.pi / 180)
+theorem find_x_value
+  (A B C D E : P)
+  (x r : ℝ)
+  (hr_pos : r > 0)
+  (h_dist_AB : dist A B = r)
+  (h_dist_AC : dist A C = r)
+  (h_dist_AD : dist A D = r)
+  (h_dist_AE : dist A E = r)
+  (h_x_domain : x > 0 ∧ x ≤ 180)
+  (h_angle_BAD : EuclideanGeometry.angle B A D = degToRad 65)
+  (h_angle_DAE : EuclideanGeometry.angle D A E = degToRad 110)
+  (h_angle_EAC : EuclideanGeometry.angle E A C = degToRad x)
+  (h_angle_CAB : EuclideanGeometry.angle C A B = degToRad 90)
+  : x = 95 := by
   sorry

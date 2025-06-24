@@ -1,44 +1,23 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Basic
-import Mathlib.Geometry.Euclidean.Sphere.Power
 import Mathlib.Data.Real.Basic
-
-namespace ProblemFormalization
-
-open EuclideanGeometry
-open scoped Real
-
--- Let P be the Euclidean plane
-variable (P : Type*) [EuclideanPlane P]
-
--- Declare the points on the circle
-variables (O G L E S : P)
-
--- Declare the circle (Sphere in 2D)
-variable (ω : Sphere P)
-
--- The points are on the circle
-axiom hO_on_circle : O ∈ ω.carrier
-axiom hG_on_circle : G ∈ ω.carrier
-axiom hL_on_circle : L ∈ ω.carrier
-axiom hE_on_circle : E ∈ ω.carrier
-axiom hS_on_circle : S ∈ ω.carrier
-
--- Given distances between points
-axiom hdist_LG : dist L G = 3
-axiom hdist_GE : dist G E = 4
-axiom hdist_ES : dist E S = 9
-
--- x is the length OG to be found
-noncomputable def x : ℝ := dist O G
-
--- Helper function to round to nearest tenth
-noncomputable def round_to_nearest_tenth (r : ℝ) : ℝ := (Real.round (r * 10)) / 10
-
--- The problem statement: find x such that when rounded to nearest tenth, it equals 14.3
-theorem problem_statement :
-  ∃ v : ℝ, x P O G = v ∧ round_to_nearest_tenth v = 14.3 :=
-by
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Geometry.Euclidean.Sphere.Basic 
+open EuclideanGeometry Real InnerProductSpace 
+abbrev P₂ := EuclideanSpace ℝ (Fin 2)
+variable (O_pt G E S_pt L Ω_center : P₂) 
+variable (R x : ℝ)
+def DescribeProblemGeometry (O_pt G E S_pt L Ω_center : P₂) (R x : ℝ) : Prop :=
+  (R > 0 ∧ (dist O_pt Ω_center = R) ∧ (dist G Ω_center = R) ∧ (dist E Ω_center = R) ∧ (dist S_pt Ω_center = R)) ∧
+  (Collinear ℝ ({L, G, E} : Set P₂)) ∧
+  (Sbtw ℝ L G E) ∧
+  (dist L G = 3) ∧
+  (dist L E = 4) ∧
+  (dist O_pt G = x) ∧
+  (dist E S_pt = 9) ∧
+  (x > 0) ∧
+  (O_pt ≠ G ∧ O_pt ≠ E ∧ O_pt ≠ S_pt ∧ G ≠ E ∧ G ≠ S_pt ∧ E ≠ S_pt)
+variable (h_geometry : DescribeProblemGeometry O_pt G E S_pt L Ω_center R x)
+theorem find_x_value : x = sqrt 143 := by
   sorry
-
-end ProblemFormalization

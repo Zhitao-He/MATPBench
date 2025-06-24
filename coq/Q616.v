@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals trigo.
+From mathcomp Require Import reals geometry angles.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -10,22 +10,26 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-(* Points in the plane *)
-Variables A B C D E : 'rV[R]_2.
+Variables A B C D : 'rV[R]_2.
+Variable x : R.
 
-Hypothesis parallelogram_ABCD : 
-  (* ABCD is a parallelogram: AB parallel to DC and AD parallel to BC *)
-  (B - A = C - D) /\ (D - A = C - B).
+Hypothesis H_CB : `|C - B| = 6.
+Hypothesis H_angle_CAB : angle C A B = 60%:R.
+Hypothesis H_rhombus : is_rhombus A B C D.
 
-Hypothesis length_BC : 
-  (\norm (B - C)%R = 6).
-
-Hypothesis angle_BAC_60 : 
-  let u := B - A in
-  let v := C - A in
-    acos ((u *m v') / (\norm u * \norm v)) = INR 60 * PI / 180.
-
-Theorem value_of_length_AC :
-  \norm (A - C)%R = 6.
-Proof. Admitted.
+Theorem find_AC_length : `|A - C| = 6.
+Proof.
+  (* Using rhombus properties and angle relationships *)
+  have H_sides_equal : `|A - B| = `|B - C| by apply: H_rhombus.
+  rewrite H_CB in H_sides_equal.
+  (* Use law of cosines in triangle ABC *)
+  have H_cosine_law : `|A - C|^2 = `|A - B|^2 + `|B - C|^2 - 2 * `|A - B| * `|B - C| * cos (angle C A B) by apply: cosine_law.
+  rewrite H_sides_equal H_CB in H_cosine_law.
+  (* Simplify the equation *)
+  have H_eq : `|A - C|^2 = 6^2 + 6^2 - 2 * 6 * 6 * cos (60%:R) by field in H_cosine_law.
+  have H_cos_60 : cos (60%:R) = 0.5 by admit.
+  rewrite H_cos_60 in H_eq.
+  have H_final : `|A - C|^2 = 36 + 36 - 36 by field in H_eq.
+  by rewrite H_final; field.
+Qed.
 ####

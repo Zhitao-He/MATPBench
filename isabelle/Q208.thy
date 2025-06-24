@@ -1,43 +1,29 @@
-theory CircleDiameterProblem
-imports
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory GeometryProblem
+  imports
+    Main
+    "HOL-Analysis.Euclidean_Space" 
 begin
-
-locale circle_diameter_problem =
-  fixes A B C D P :: "real^2"
-  assumes 
-    "C ≠ D" and
-    "dist C D = 2" and (* 假设CD的长度为2，方便计算 *)
-    "B = C + (1, 2)" and (* 设定B的位置使得AB = 2√13 *)
-    "A = C + (5, 0)" and (* 设定A的位置 *)
-    "P ≠ D" and
-    "P ≠ A" and
-    "dist P ((C + D)/2) = dist C ((C + D)/2)" and (* P在以CD为直径的圆上 *)
-    "∃t. 0 ≤ t ∧ t ≤ 1 ∧ P = (1-t) * A + t * D" (* P在AD上 *)
-
-context circle_diameter_problem
+type_synonym point = "real^2"
+definition angle_at_vertex_is_90 :: "point => point => point => bool" where
+  "angle_at_vertex_is_90 X Y Z ⟷ (X - Z) ⋅ (Y - Z) = 0"
+definition on_circle_diameter :: "point => point => point => bool" where
+  "on_circle_diameter X D1 D2 ⟷ D1 ≠ D2 ∧ (X - D1) ⋅ (X - D2) = 0"
+abbreviation dist :: "point => point => real" where
+  "dist A B ≡ norm (A - B)"
+locale GeoProblem =
+  fixes A B C D P :: point 
+  assumes
+    C_neq_D: "C ≠ D"
+    and A_neq_D: "A ≠ D"
+    and D_on_segment_CB: "D ∈ line_segment C B"
+    and angle_ACB_is_90: "angle_at_vertex_is_90 A B C"
+    and P_on_segment_AD: "P ∈ line_segment A D"
+    and P_on_circle_with_diameter_CD: "on_circle_diameter P C D"
+    and AC_length: "dist A C = 6"
+    and BD_length: "dist B D = 2"
 begin
-
-theorem AB_length: "dist A B = 2 * sqrt 13"
-proof -
-  have "B = C + (1, 2)" by (simp add: assms)
-  moreover have "A = C + (5, 0)" by (simp add: assms)
-  ultimately have "dist A B = dist (C + (5, 0)) (C + (1, 2))"
-    by simp
-  also have "... = dist (5, 0) (1, 2)"
-    by (metis add.commute dist_translation)
-  also have "... = sqrt (16 + 4)"
-    by (simp add: dist_real_def)
-  also have "... = sqrt 20"
-    by simp
-  also have "... = 2 * sqrt 5"
-    by (simp add: real_sqrt_mult)
-  also have "... = 2 * sqrt 13" 
-    using assms
-    sorry (* 在实际情况下应该有完整的证明，这里使用sorry作为占位符 *)
-  finally show ?thesis .
-qed
-
+lemma AB_length_is_2_sqrt_13:
+  "dist A B = 2 * sqrt 13"
+  by sorry 
 end
 end

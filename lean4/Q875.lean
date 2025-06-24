@@ -1,30 +1,18 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-
-open EuclideanGeometry Real
-
--- Standard Euclidean plane over ℝ
-def PPlane : Type := EuclideanPlane ℝ
-
--- Points: O = center, W, Y, Z on the circle
-variable (O W Y Z : PPlane)
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (O Y W Z : P)
+variable (r : ℝ) (hr_pos : 0 < r)
 variable (x : ℝ)
-
--- Given: OY = OW = OZ > 0 (radius > 0, so distinct points)
--- YW = ZY = 18 (equal chords)
--- ∠WOY = 143°, ∠ZOY = 2x - 1°
-
-axiom h_W_on_circle : dist O W = dist O Y
-axiom h_Z_on_circle : dist O Z = dist O Y
-axiom h_radius_pos : 0 < dist O Y
-axiom h_YW_dist : dist Y W = 18
-axiom h_ZY_dist : dist Z Y = 18
-axiom h_O_ne_W : O ≠ W
-axiom h_O_ne_Y : O ≠ Y
-axiom h_O_ne_Z : O ≠ Z
-axiom h_angle_WOY_deg : (Angle.Unoriented.value O W Y) * (180 / Real.pi) = 143
-axiom h_angle_ZOY_deg : (Angle.Unoriented.value O Z Y) * (180 / Real.pi) = 2 * x - 1
-
-theorem find_x_value : x = 72 := by
-  sorry
+variable (hY : dist Y O = r)
+variable (hW : dist W O = r)
+variable (hZ : dist Z O = r)
+variable (hYW : dist Y W = 18)
+variable (hZY : dist Z Y = 18)
+variable (hOYW : EuclideanGeometry.angle O Y W = (143 / 180) * Real.pi)
+variable (hOZY : EuclideanGeometry.angle O Z Y = ((2 * x - 1) / 180) * Real.pi)
+theorem value_of_x : x = 72 := by sorry
+end

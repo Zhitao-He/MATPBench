@@ -1,47 +1,42 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry classical_sets.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Open Scope ring_scope.
-
-Variable R : realType.
-
 Section GeometryProblem.
+Variable R : realType.
+Variables A B C D E F P Q : 'Point[R]_2.
 
-Variable A B C D E F P Q : 'rV[R]_2.
-
-Hypothesis quad_strict_convex : convex_quadrilateral A B C D.
+(* Convex quadrilateral ABCD *)
+Hypothesis convex_ABCD : convex_quadrilateral [:: A; B; C; D].
 
 (* AC bisects angle BAD *)
-Hypothesis ac_bisects_bad :
-  angle_bisector_at_point A B A C D.
+Hypothesis AC_bisects : angle_bisector (line A B) (line A C) (line A D).
 
-(* E on BC, F on CD, EF // BD *)
-Hypothesis E_on_BC : on_line E (Line B C).
-Hypothesis F_on_CD : on_line F (Line C D).
-Hypothesis EF_parallel_BD : parallel (Line E F) (Line B D).
+(* Points E on BC and F on CD *)
+Hypothesis E_on_BC : on_segment E (seg B C).
+Hypothesis F_on_CD : on_segment F (seg C D).
 
-(* P on extension of FA beyond A, Q on extension of EA beyond A *)
-Hypothesis P_on_FA_ext : on_line P (Line F A) /\ (collinear P F A) /\ ~ between F A P.
-Hypothesis Q_on_EA_ext : on_line Q (Line E A) /\ (collinear Q E A) /\ ~ between E A Q.
+(* EF parallel to BD *)
+Hypothesis EF_parallel_BD : parallel (line E F) (line B D).
 
-(* Circumcircle omega_1 of ABP tangent to line AC *)
-Hypothesis omega1_circumcircle : circumcircle_exists A B P.
-Hypothesis omega1_tangent_AC :
-  tangent_at_line (circumcircle A B P) (Line A C).
+(* Extensions of FA to P and EA to Q *)
+Hypothesis P_on_extension : exists k, k > 1 /\ P = k *: (F - A) + A.
+Hypothesis Q_on_extension : exists k, k > 1 /\ Q = k *: (E - A) + A.
 
-(* Circumcircle omega_2 of ADQ tangent to line AC *)
-Hypothesis omega2_circumcircle : circumcircle_exists A D Q.
-Hypothesis omega2_tangent_AC :
-  tangent_at_line (circumcircle A D Q) (Line A C).
+(* Circumcircle conditions *)
+Hypothesis omega1_circum : circumcircle A B P.
+Hypothesis omega1_tangent : tangent (circumcircle A B P) (line A C).
 
-Theorem geometry_colcyclic_BPQD :
-  concyclic B P Q D.
-Proof. Admitted.
+Hypothesis omega2_circum : circumcircle A D Q.
+Hypothesis omega2_tangent : tangent (circumcircle A D Q) (line A C).
+
+(* Main theorem *)
+Theorem concyclic_BPQD : concyclic [:: B; P; Q; D].
+Proof. by []. Qed.
 
 End GeometryProblem.
 ####

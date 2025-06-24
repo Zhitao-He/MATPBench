@@ -1,42 +1,32 @@
-theory SquareInscribedInCircle
-imports 
-  Complex_Main
-  "HOL-Analysis.Euclidean_Space"
+theory Square_Inscribed_Circle
+  imports Complex_Main
 begin
-
-(* 定义二维欧几里得空间上的点 *)
-type_synonym point = "real × real"
-
-(* 定义圆上的点 *)
-definition on_circle :: "point ⇒ point ⇒ real ⇒ bool" where
-  "on_circle center p r ≡ (dist p center)^2 = r^2"
-
-(* 定义正方形 *)
-definition square :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "square A B C D ≡ 
-    dist A B = dist B C ∧ 
-    dist B C = dist C D ∧ 
-    dist C D = dist D A ∧
-    angle A B C = pi/2 ∧
-    angle B C D = pi/2 ∧
-    angle C D A = pi/2 ∧
-    angle D A B = pi/2"
-
-(* 定义角度 *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A O B = arccos(
-    ((fst A - fst O) * (fst B - fst O) + (snd A - snd O) * (snd B - snd O)) /
-    (sqrt((fst A - fst O)^2 + (snd A - snd O)^2) * sqrt((fst B - fst O)^2 + (snd B - snd O)^2))
-  )"
-
-(* 主定理：在一个圆中内接正方形时，圆心对应的中心角为90度 *)
-theorem square_inscribed_central_angle:
-  fixes O r :: real
+type_synonym point = complex
+locale circle =
+  fixes K :: point and r :: real
+  assumes r_pos: "r > 0"
+locale square_inscribed_circle = circle +
   fixes A B C D :: point
-  assumes "∃r. r > 0 ∧ on_circle (O, O) A r ∧ on_circle (O, O) B r ∧ 
-                on_circle (O, O) C r ∧ on_circle (O, O) D r"
-  assumes "square A B C D"
-  shows "angle A (O, O) B = pi/2"
-  sorry
-
+  assumes square: 
+    "dist A B = dist B D"
+    "dist B D = dist D C"
+    "dist D C = dist C A"
+    "dist C A = dist A B"
+    "Arg (B - A) - Arg (D - B) = pi/2"
+    "Arg (D - B) - Arg (C - D) = pi/2"
+    "Arg (C - D) - Arg (A - C) = pi/2"
+    "Arg (A - C) - Arg (B - A) = pi/2"
+    "dist K A = r"
+    "dist K B = r"
+    "dist K C = r"
+    "dist K D = r"
+definition central_angle :: "point ⇒ point ⇒ point ⇒ real" where
+  "central_angle K P Q = abs (Arg ((P - K) / (Q - K)))"
+theorem (in square_inscribed_circle)
+  "central_angle K A B = pi/2"
+  "central_angle K B D = pi/2"
+  "central_angle K D C = pi/2"
+  "central_angle K C A = pi/2"
+  unfolding central_angle_def
+  by (auto simp: square)
 end

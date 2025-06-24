@@ -1,41 +1,24 @@
-theory TriangleCongruence
-imports Main "HOL-Analysis.Euclidean_Space"
+theory Triangle_RSV_TVS
+  imports Complex_Main
 begin
-
-(* 定义平面上的点 *)
-locale triangle_congruence =
-  fixes R S T V :: "real^2"
-  
-  (* 距离和角度的假设 *)
-  assumes distinct_points_R_S: "R ≠ S"
-  and distinct_points_S_V: "S ≠ V"
-  and distinct_points_T_V: "T ≠ V"
-  and distinct_points_V_S: "V ≠ S"
-  
-  (* 定义三角形的边长 *)
-  defines "RS ≡ norm (R - S)"
-  defines "SV ≡ norm (S - V)"
-  defines "RV ≡ norm (R - V)"
-  defines "TV ≡ norm (T - V)"
-  defines "VS ≡ norm (V - S)" (* 等同于SV *)
-  defines "TS ≡ norm (T - S)"
-  
-  (* 假设三角形RSV和TVS全等 *)
-  assumes triangle_congruence: "RS = TV ∧ SV = VS ∧ RV = TS"
-  
-  (* 假设x的值为12 *)
-  defines "x ≡ 12"
-
-(* 证明三角形全等 *)
-lemma triangle_congruent:
-  assumes "triangle_congruence R S T V"
-  shows "triangle_congruence.triangle_congruence R S T V"
-  using assms by simp
-
-(* 证明x的值为12 *)
-lemma x_value:
-  assumes "triangle_congruence R S T V"
-  shows "triangle_congruence.x R S T V = 12"
-  using assms by simp
-
+locale points =
+  fixes R S V T :: "'a::euclidean_space"
+definition triangle :: "'a::euclidean_space ⇒ 'a ⇒ 'a ⇒ bool" where
+  "triangle A B C ≡ ¬ collinear {A, B, C}"
+definition angle_deg :: "'a::euclidean_space ⇒ 'a ⇒ 'a ⇒ real" where
+  "angle_deg A B C ≡ 
+    let u = A - B; v = C - B in
+    arccos ((u • v) / (norm u * norm v)) * 180 / pi"
+locale triangle_problem =
+  fixes R S V T :: "real^2"
+  assumes triangle_RSV: "triangle R S V"
+    and triangle_TVS: "triangle T V S"
+    and angle_RVS_78: "angle_deg R V S = 78"
+    and angle_SVT_90: "angle_deg S V T = 90"
+    and length_RS: "dist R S = 2 * y - 1"
+    and length_ST: "dist S T = 24.5"
+    and length_VT: "dist V T = 24"
+    and triangles_congruent: "∃f. bij_betw f {R,S,V} {T,V,S} ∧ (∀A∈{R,S,V}. ∀B∈{R,S,V}. dist A B = dist (f A) (f B))"
+    and find_x: "angle_deg V T S = x"
+    and x_is_12: "x = 12"
 end

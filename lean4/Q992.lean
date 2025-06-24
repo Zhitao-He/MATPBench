@@ -1,45 +1,33 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
-
-open Real EuclideanSpace
-
-namespace Problem
-
-variable {P : Type*} [EuclideanSpace ℝ P]
-
-variable (A B C D O E F G : P)
+namespace ProblemFormalization
+open EuclideanGeometry
+open Affine
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (A B C D E F G O : P)
 variable (r : ℝ)
-
--- 使用变量声明的正确方式
-variable (hyp_r_pos : 0 < r)
-variable (hyp_A_on_circle : dist A O = r)
-variable (hyp_B_on_circle : dist B O = r)
-variable (hyp_C_on_circle : dist C O = r)
-variable (hyp_D_on_circle : dist D O = r)
-variable (hyp_F_on_circle : dist F O = r)
-variable (hyp_G_on_circle : dist G O = r)
-
-variable (hyp_A_ne_B : A ≠ B)
-variable (hyp_B_ne_C : B ≠ C)
-variable (hyp_C_ne_D : C ≠ D)
-variable (hyp_D_ne_A : D ≠ A)
-variable (hyp_A_ne_C : A ≠ C)
-variable (hyp_B_ne_D : B ≠ D)
-
-variable (hyp_E_ne_A : E ≠ A)
-variable (hyp_E_ne_B : E ≠ B)
-variable (hyp_E_ne_C : E ≠ C)
-variable (hyp_E_ne_D : E ≠ D)
-
-variable (hyp_E_between_F_G : Sbtw ℝ F E G)
-
-variable (hyp_angle1 : ∠ E A B = ∠ E C O)
-variable (hyp_angle2 : ∠ E B A = ∠ E D C)
-
-variable (hyp_bisect_BEC : IsAngleBisector (line[ℝ, F, G]) B E C)
-
-theorem ef_equals_eg : dist E F = dist E G := by sorry
-
-end Problem
+def onCircle (O : P) (r : ℝ) (pt : P) : Prop := dist pt O = r
+def insideCircle (O : P) (r : ℝ) (pt : P) : Prop := dist pt O < r
+theorem inscribed_quadrilateral_EF_eq_EG
+    (hr_pos : 0 < r)
+    (hA_on : onCircle O r A) (hB_on : onCircle O r B)
+    (hC_on : onCircle O r C) (hD_on : onCircle O r D)
+    (hF_on : onCircle O r F) (hG_on : onCircle O r G)
+    (hE_in : insideCircle O r E)
+    (hA_ne_B : A ≠ B) (hB_ne_C : B ≠ C) (hC_ne_D : C ≠ D) (hD_ne_A : D ≠ A)
+    (hA_ne_C : A ≠ C) (hB_ne_D : B ≠ D)
+    (hE_ne_A : E ≠ A) (hE_ne_B : E ≠ B) (hE_ne_C : E ≠ C) (hE_ne_D : E ≠ D)
+    (hC_ne_O : C ≠ O)
+    (hB_ne_E : B ≠ E) (hC_ne_E : C ≠ E)
+    (hF_ne_E : F ≠ E)
+    (h_angle_EAB_ECO : EuclideanGeometry.angle E A B = EuclideanGeometry.angle E C O)
+    (h_angle_EBA_EDC : EuclideanGeometry.angle E B A = EuclideanGeometry.angle E D C)
+    (h_collinear_FEG : True)
+    (h_bisect : EuclideanGeometry.angle B E F = EuclideanGeometry.angle C E F)
+    : dist E F = dist E G := by
+  sorry
+end ProblemFormalization

@@ -1,29 +1,25 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.LinearAlgebra.AffineSpace.Independent
-
-open Real EuclideanGeometry AffineSpace
-
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [MetricSpace P]
-  [Module ℝ P] [FiniteDimensional ℝ P] (hdim : FiniteDimensional.finrank ℝ P = 2)
-
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Triangle
+noncomputable section
+variable {P : Type*} [EuclideanPlane P]
+def degreesToRadians (d : ℝ) : ℝ := d * (Real.pi / 180)
 structure IsSquare (A B C D : P) : Prop where
-  side_eq : dist A B = dist B C ∧ dist B C = dist C D ∧ dist C D = dist D A
-  side_pos : dist A B > 0
-  angles_right : angle D A B = π / 2 ∧ angle A B C = π / 2 ∧ 
-                 angle B C D = π / 2 ∧ angle C D A = π / 2
-  aff_indep : AffineIndependent ℝ ![A, B, C] ∧ AffineIndependent ℝ ![B, C, D] ∧
-              AffineIndependent ℝ ![C, D, A] ∧ AffineIndependent ℝ ![D, A, B]
-
+  h_AB_eq_BC : dist A B = dist B C
+  h_BC_eq_CD : dist B C = dist C D
+  h_CD_eq_DA : dist C D = dist D A
+  h_DA_eq_AB : dist D A = dist A B
+  h_side_AD_gt_zero : dist A D > 0
+  h_angle_DAB : ∠ D A B = Real.pi / 2
+  h_angle_ABC : ∠ A B C = Real.pi / 2
+  h_angle_BCD : ∠ B C D = Real.pi / 2
+  h_angle_CDA : ∠ C D A = Real.pi / 2
 theorem angle_BAE_is_30_degrees
-    {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [MetricSpace P]
-    [Module ℝ P] [FiniteDimensional ℝ P] {hdim : FiniteDimensional.finrank ℝ P = 2}
-    (A B C D E : P)
-    (h_square : IsSquare A B C D)
-    (h_equilateral : dist A E = dist E D ∧ dist A E = dist A D)
-    (h_non_degenerate : AffineIndependent ℝ ![A, D, E])
-    (h_angle_sum : angle D A E + angle E A B = angle D A B)
-    : angle B A E = π / 6 := by sorry
+  (A B C D E : P)
+  (h_square : IsSquare A B C D)
+  (h_equilateral_AED : (Triangle.mk A E D).IsEquilateral)
+  (h_E_inside_BAD : Angle.InsideAngle B A D E)
+  : ∠ B A E = degreesToRadians 30 := by sorry
+end noncomputable section

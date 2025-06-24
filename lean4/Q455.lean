@@ -1,55 +1,37 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Fin.VecNotation
-
-namespace SquareGeometry
-
--- The Euclidean plane ℝ²
-abbrev EucPlane := EuclideanSpace ℝ (Fin 2)
-
--- Rotate a vector by π/2 counterclockwise
-def rotatePiDiv2 (v : Fin 2 → ℝ) : Fin 2 → ℝ := ![-(v 1), v 0]
-
--- A square ABCD in counterclockwise order
-def IsSquareCCW (A B C D : EucPlane) : Prop :=
-  let vAB := B -ᵥ A
-  let vAD := rotatePiDiv2 vAB
-  (D -ᵥ A) = vAD ∧ (C -ᵥ B) = vAD ∧ dist A B > 0
-
--- Structure representing a square
-structure Square where
-  A B C D : EucPlane
-  isSquare : IsSquareCCW A B C D
-
--- Side length of a square
-def Square.sideLength (sq : Square) : ℝ := dist sq.A sq.B
-
--- Center of a square
-def Square.center (sq : Square) : EucPlane :=
-  sq.A +ᵥ ((1/2 : ℝ) • (sq.B -ᵥ sq.A)) +ᵥ ((1/2 : ℝ) • (sq.D -ᵥ sq.A))
-
--- Area of a square
-def Square.area (sq : Square) : ℝ := sq.sideLength ^ 2
-
--- Two squares are congruent if they have equal side lengths
-def SquaresCongruent (sq1 sq2 : Square) : Prop :=
-  sq1.sideLength = sq2.sideLength
-
--- Area of intersection of two squares (placeholder)
-def areaOfIntersection (sq1 sq2 : Square) : ℝ := sorry
-
--- Area of the union of two squares
-def areaOfUnion (sq1 sq2 : Square) : ℝ :=
-  sq1.area + sq2.area - areaOfIntersection sq1 sq2
-
--- Main theorem
-theorem squares_union_area
-    (sq1 : Square) (sq2 : Square)
-    (hCongruent : SquaresCongruent sq1 sq2)
-    (hSideLength : sq1.sideLength = 10)
-    (hGAtCenter : sq2.C = sq1.center) :
-    areaOfUnion sq1 sq2 = 175 := by
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+abbrev P := EuclideanSpace ℝ (Fin 2) 
+open scoped EuclideanGeometry 
+namespace SquareOverlapProblem
+structure IsSquare (p₁ p₂ p₃ p₄ : P) (s : ℝ) : Prop where
+  s_pos : s > 0
+  dist₁₂ : dist p₁ p₂ = s
+  dist₂₃ : dist p₂ p₃ = s
+  dist₃₄ : dist p₃ p₄ = s
+  dist₄₁ : dist p₄ p₁ = s
+  angle₄₁₂ : ∠ p₄ p₁ p₂ = Real.pi / 2
+  angle₁₂₃ : ∠ p₁ p₂ p₃ = Real.pi / 2
+  angle₂₃₄ : ∠ p₂ p₃ p₄ = Real.pi / 2
+  angle₃₄₁ : ∠ p₃ p₄ p₁ = Real.pi / 2
+  diag₁₃ : dist p₁ p₃ = Real.sqrt 2 * s
+variable (A B C D E F G H : P)
+noncomputable def squareCenter (p₁ p₂ p₃ p₄ : P) (_s : ℝ) (_h : IsSquare p₁ p₂ p₃ p₄ _s) : P :=
+  midpoint ℝ p₁ p₃ 
+lemma squareCenter_eq_midpoint₂₄ (p₁ p₂ p₃ p₄ : P) (s : ℝ) (h : IsSquare p₁ p₂ p₃ p₄ s) :
+    squareCenter p₁ p₂ p₃ p₄ s h = midpoint ℝ p₂ p₄ := by
   sorry
-
-end SquareGeometry
+noncomputable def squareArea (s : ℝ) : ℝ := s * s 
+def problem_side_length : ℝ := 10
+variable (hABCD : IsSquare A B C D problem_side_length)
+variable (hEFGH : IsSquare E F G H problem_side_length)
+variable (hG_center : G = squareCenter A B C D problem_side_length hABCD)
+variable (area_inter : ℝ)
+variable (h_total_area :
+  squareArea problem_side_length + squareArea problem_side_length - area_inter = 175)
+lemma intersection_area_25 : area_inter = 25 := by
+  sorry
+end SquareOverlapProblem

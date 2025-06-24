@@ -4,7 +4,6 @@ import Mathlib.Data.Real.Sqrt
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 open EuclideanGeometry
 variable {P : Type*} [MetricSpace P] [NormedAddTorsor ℝ P]
-
 theorem value_of_y
     (A B C : P)
     (y : ℝ)

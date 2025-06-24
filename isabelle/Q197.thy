@@ -1,13 +1,14 @@
-theory AreaCalculation
-imports Complex_Main Real_Vector_Spaces
+theory TangramAreaCalculation
+imports Main
 begin
-
-(* 假设ABCD是边长为12的正方形，内部包含三个圆形图形
-   计算这三个图形的面积总和S (单位为平方厘米) *)
-
-theorem sum_circled_areas:
-  "∃S::real. S = 36 ∧ S = (
-    (* 三个圆形图形的面积总和，根据题目为36平方厘米 *)
-    36)"
-
+definition L :: real where
+  "L = 12"
+definition Total_Area :: real where
+  "Total_Area = L * L"
+definition Area_Small_Triangle :: real where
+  "Area_Small_Triangle = Total_Area / 16"
+definition Area_Square_Piece :: real where
+  "Area_Square_Piece = Total_Area / 8"
+definition Sum_Area_Three_Figures :: real where
+  "Sum_Area_Three_Figures = Area_Small_Triangle + Area_Small_Triangle + Area_Square_Piece"
 end

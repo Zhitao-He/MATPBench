@@ -1,24 +1,19 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Simplex
-import Mathlib.LinearAlgebra.AffineSpace.Independent
-import Mathlib.LinearAlgebra.Independence
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Basic 
 import Mathlib.Data.Real.Basic
-
-namespace EuclideanGeometryProblem
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [Fact (FiniteDimensional.finrank ℝ V = 2)]
-
-theorem putnam_triangle_area_scaling
-    (A B C D E : P)
-    (h_ABC_aff_indep : AffineIndependent ℝ ![A, B, C])
-    (h_CDE_aff_indep : AffineIndependent ℝ ![C, D, E])
-    (h_area_ABC : (Simplex.mk ![A, B, C] h_ABC_aff_indep).volume = 6)
-    (h_parallel : LinearDependent ℝ ![B -ᵥ A, E -ᵥ D])
-    (h_ratio_BD_BC : (D -ᵥ B) = (4 : ℝ) • (C -ᵥ B))
-    : (Simplex.mk ![C, D, E] h_CDE_aff_indep).volume = 54 := by
-  sorry
-
-end EuclideanGeometryProblem
+open EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable instance : MetricSpace P := inferInstance
+noncomputable instance : NormedAddTorsor P P := inferInstance
+noncomputable def areaOfTriangle (p1 p2 p3 : P) : ℝ :=
+  (1/2 : ℝ) * abs ((p2 -ᵥ p1) 0 * (p3 -ᵥ p1) 1 - (p2 -ᵥ p1) 1 * (p3 -ᵥ p1) 0)
+section
+variable (A B C D E : P)
+theorem area_relation_of_triangles
+    (h_area_ABC : areaOfTriangle A B C = 6)
+    (h_AB_parallel_DE : sorry)
+    (h_BD_eq_4BC : dist B D = 4 * dist B C)
+    (h_C_between_B_D : sorry)
+    (h_C_between_A_E : sorry) :
+    areaOfTriangle C D E = 54 := by sorry
+end

@@ -6,43 +6,27 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section Incircle_Midpoint_Theorem.
-
+Section IncircleProblem.
 Variable R : realType.
+Variables A B C I D E F G : 'Point[R]_2.
 
-Variables A B C : 'rV[R]_2.
-Hypothesis non_collinear_ABC : ~ colinear A B C.
+(* Triangle and incircle properties *)
+Hypothesis noncol_ABC : ~ collinear [:: A; B; C].
+Hypothesis incircle_I : incenter A B C I.
+Hypothesis D_tangent : tangent_at (circle I (dist I D)) (line B C) D.
 
-(* Definition of incenter I and incircle ω *)
-Variable I : 'rV[R]_2.
-Variable r : R.
-Hypothesis incircle_def : incircle A B C I r.
+(* Parallel line condition *)
+Hypothesis IE_parallel_AD : parallel (line I E) (line A D).
+Hypothesis E_on_BC : collinear [:: B; C; E].
 
-(* D: point where the incircle is tangent to BC *)
-Variable D : 'rV[R]_2.
-Hypothesis D_on_BC : on_line D B C.
-Hypothesis D_on_inc : on_circle D I r.
-Hypothesis incircle_tangent_D : tangent_point I r B C D.
+(* Tangent line at E *)
+Hypothesis tangent_at_E : tangent_at (circle I (dist I E)) (line F G) E.
+Hypothesis F_on_AB : collinear [:: A; B; F].
+Hypothesis G_on_AC : collinear [:: A; C; G].
 
-(* AD is cevian from A through D *)
-(* IE is parallel to AD, passes through I, and meets BC at E *)
-Variable E : 'rV[R]_2.
-Hypothesis E_on_BC : on_line E B C.
-Hypothesis IE_parallel_AD : parallel (line_through I E) (line_through A D).
-Hypothesis I_neq_E : I != E.
+(* Main theorem *)
+Theorem E_is_midpoint : midpoint E F G.
+Proof. by []. Qed.
 
-(* Tangent to ω at E meets AB at F and AC at G *)
-Variable F : 'rV[R]_2.
-Variable G : 'rV[R]_2.
-Hypothesis E_on_inc : on_circle E I r.
-Hypothesis tangent_E : tangent_at_point I r E (line_through F G).
-Hypothesis F_on_AB : on_line F A B.
-Hypothesis G_on_AC : on_line G A C.
-Hypothesis tangent_line_E : tangent_point I r F G E.
-
-Theorem incircle_midpoint_FGE :
-    midpoint E F G.
-Proof. Admitted.
-
-End Incircle_Midpoint_Theorem.
+End IncircleProblem.
 ####

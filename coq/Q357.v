@@ -18,12 +18,6 @@ Hypothesis HO_center : is_center O (circle O (norm (A - O))).
 Hypothesis HAC_diameter : diameter (circle O (norm (A - O))) A C.
 Hypothesis HBD_diameter : diameter (circle O (norm (A - O))) B D.
 
-Hypothesis A_neq_C : A != C.
-Hypothesis B_neq_D : B != D.
-
-Hypothesis O_on_AC : midpoint O A C.
-Hypothesis O_on_BD : midpoint O B D.
-
 Hypothesis angle_AOD_54 :
   angle_deg A O D = 54.
 

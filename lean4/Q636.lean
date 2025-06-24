@@ -1,33 +1,17 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
+import Mathlib.Data.Real.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Data.Real.Pi.Bounds
 open Real EuclideanGeometry
-
-namespace ProblemFormalization
-
--- Declare points in 2D Euclidean space
-variable {J K L M : EuclideanSpace ℝ (Fin 2)}
-
--- KJ = 11
-axiom hKJ : dist K J = 11
-
--- KL = 11
-axiom hKL : dist K L = 11
-
--- Points J, M, L are collinear
-axiom hCollinearJML : Collinear ℝ ![J, M, L]
-
--- Angle ∠JKL = 60° (π/3 radians)
-axiom hAngleJKL : angle J K L = π / 3
-
--- Perpendicularity: KM ⊥ LJ
-axiom hOrthogonal_KM_LJ : ⟪K -ᵥ M, J -ᵥ L⟫ = 0
-
--- ML = 5.5
-axiom hML : dist M L = 11 / 2
-
--- Theorem: Find the length of line JM.
-theorem length_JM_is_11_over_2 : dist J M = 11 / 2 := by sorry
-
-end ProblemFormalization
+open scoped EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace GeometricProblem
+variable (J K L M : P)
+variable (h_KJ : dist K J = 11)
+variable (h_KL : dist K L = 11)
+variable (h_ML : dist M L = 11 / 2)
+variable (h_angle_KJM : ∠ K J M = Real.pi / 3)
+variable (h_angle_KML_right : ∠ K M L = Real.pi / 2)
+theorem find_length_JM : dist J M = 11 / 2 := by
+  sorry
+end GeometricProblem

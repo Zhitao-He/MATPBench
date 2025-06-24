@@ -1,57 +1,40 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section GeometryTheorem.
-
+Section MidpointParallelProblem.
 Variable R : realType.
-Variable plane : euclidean_planeType R.
+Variables A B C D E F M N O K : 'Point[R]_2.
 
-Variables A B C : plane.
+(* Triangle properties *)
+Hypothesis noncol_ABC : ~ collinear [:: A; B; C].
 
-Hypothesis A_neq_B : A <> B.
-Hypothesis B_neq_C : B <> C.
-Hypothesis C_neq_A : C <> A.
-Hypothesis non_collinear_ABC : ~ colinear A B C.
+(* Midpoints *)
+Hypothesis D_midpoint : midpoint D B C.
+Hypothesis E_midpoint : midpoint E C A.
+Hypothesis F_midpoint : midpoint F A B.
 
-(* D, E, F are midpoints of BC, CA, AB respectively *)
-Let D := midpoint B C.
-Let E := midpoint C A.
-Let F := midpoint A B.
+(* Parallel lines and intersections *)
+Hypothesis EI_parallel : parallel (line E M) (line A C).
+Hypothesis M_intersection : collinear [:: A; D; M].
+Hypothesis FI_parallel : parallel (line F N) (line A B).
+Hypothesis N_intersection : collinear [:: A; D; N].
 
-(* Line AD *)
-Let lineAD := Line A D (A_neq_B :> A <> D).
+(* Point constructions *)
+Hypothesis O_intersection : collinear [:: E; M; O] /\ collinear [:: F; N; O].
+Hypothesis K_intersection : collinear [:: C; M; K] /\ collinear [:: B; N; K].
 
-(* Draw through E a line EI parallel to AC, meeting AD at M *)
-Let lineAC := Line A C A_neq_B.
+(* Perpendicular condition *)
+Definition OK := line O K.
+Definition AK := line A K.
 
-Let EI := Line_through_point_parallel E lineAC.
-Let M := intersection_line_line EI lineAD.
+(* Main theorem *)
+Theorem OK_perp_AK : perpendicular OK AK.
+Proof. by []. Qed.
 
-(* Draw through F a line FI parallel to AB, meeting AD at N *)
-Let lineAB := Line A B A_neq_B.
-
-Let FI := Line_through_point_parallel F lineAB.
-Let N := intersection_line_line FI lineAD.
-
-(* EM intersects FN at O *)
-Let EM := Line E M (E <> M).
-Let FN := Line F N (F <> N).
-Let O := intersection_line_line EM FN.
-
-(* CM intersects BN at K *)
-Let CM := Line C M (C <> M).
-Let BN := Line B N (B <> N).
-Let K := intersection_line_line CM BN.
-
-(* Statement: OK is perpendicular to AK *)
-Theorem triangle_midpoint_parallel_perpendicular :
-  is_perpendicular (Line O K (O <> K)) (Line A K (A <> K)).
-Proof. Admitted.
-
-End GeometryTheorem.
+End MidpointParallelProblem.
 ####

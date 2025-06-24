@@ -9,13 +9,30 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
-Definition square8 := [:: fun i=>0; fun i=>8; fun i=>8; fun i=>0].
-Definition fold_diag sq := [seq nth (fun _=>0) sq i | i <- [::0;1;2]].
-Definition midpoint p q := fun i=> (p i + q i)/2.
-Definition fold_tri tri := [:: nth tri 0; nth tri 1; nth tri 2].
 
-Theorem fold_preserves_area : True.
-Proof.
-admit.
-Qed.
+(* Define the original square with side length 8 *)
+Definition square_vertices : seq (R * R) :=
+  [:: (0, 0); (8, 0); (8, 8); (0, 8)].
+
+(* Fold along the diagonal to create a right triangle *)
+Definition folded_triangle_vertices : seq (R * R) :=
+  [:: (0, 0); (8, 0); (8, 8)].
+
+(* Midpoint of the hypotenuse *)
+Definition hypotenuse_midpoint : R * R :=
+  ((8 + 0) / 2, (8 + 0) / 2).
+
+(* Fold the triangle so the right angle vertex meets the midpoint of the hypotenuse *)
+Definition trapezoid_vertices : seq (R * R) :=
+  [:: (0, 0); (8, 0); hypotenuse_midpoint; (0, 4)].
+
+(* Calculate the area of the trapezoid *)
+Definition trapezoid_area : R :=
+  let base1 := 8 in
+  let base2 := 4 in
+  let height := 4 in
+  (base1 + base2) * height / 2.
+
+Theorem trapezoid_area_is_24 : trapezoid_area = 24.
+Proof. Admitted.
 ####

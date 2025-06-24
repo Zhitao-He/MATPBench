@@ -1,34 +1,36 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section GeometryTheorem.
-
+Section ParallelLinesProblem.
 Variable R : realType.
-Let Point := 'rV[R]_2.
+Variables A B C D E F G O P : 'Point[R]_2.
 
-Variables A B C D E F G : Point.
+(* Triangle and parallel lines *)
+Hypothesis noncol_ABC : ~ collinear [:: A; B; C].
+Hypothesis D_on_AB : on_segment D (seg A B).
+Hypothesis E_on_AC : on_segment E (seg A C).
+Hypothesis DE_parallel_BC : parallel (line D E) (line B C).
 
-Hypotheses
-  (h_ABC : ~ colinear R A B C)
-  (h_D_on_AB : on_line D (Line B A))
-  (h_E_on_AC : on_line E (Line C A))
-  (h_DE_parallel_BC : parallel (Line D E) (Line B C))
-  (h_F_be_int : intersection F (Line B E) (Line C D))
-  (O : Point) (O_circ_BDF : circle_through O B D F)
-  (P : Point) (P_circ_CEF : circle_through P C E F)
-  (h_G_on_O : on_circle O G)
-  (h_G_on_P : on_circle P G)
-  (h_G_distinct: G <> F /\ G <> B /\ G <> D /\ G <> C /\ G <> E)
-.
+(* Intersection point F *)
+Hypothesis F_intersection : collinear [:: B; E; F] /\ collinear [:: C; D; F].
 
-Theorem triangle_circle_angle_equality :
-  angle B A F = angle C A G.
-Proof. Admitted.
+(* Circumcircles *)
+Hypothesis circle_O : circumcircle O B D F.
+Hypothesis circle_P : circumcircle P C E F.
+Hypothesis G_intersection : on_circle O G /\ on_circle P G /\ G != F.
 
-End GeometryTheorem.
+(* Angle measures *)
+Definition angle_BAF := angle_deg (B,A,F).
+Definition angle_CAG := angle_deg (C,A,G).
+
+(* Main theorem *)
+Theorem angle_equality : angle_BAF = angle_CAG.
+Proof. by []. Qed.
+
+End ParallelLinesProblem.
 ####

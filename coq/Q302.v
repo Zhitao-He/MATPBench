@@ -21,12 +21,17 @@ Hypothesis HB_on_circle : circle B r.
 Hypothesis HR_on_circle : circle R r.
 Hypothesis HS_on_circle : circle S r.
 
-Hypothesis H_B_A_T : exists f, T = Point (A.px + r) A.py.
-Hypothesis HS_between_RT : exists λ, 0 < λ < 1 /\ S = Point (λ*R.px + (1-λ)*T.px) (λ*R.py + (1-λ)*T.py).
+Hypothesis H_angle_RAS : angle R A S = 74%:R.
+Hypothesis H_angle_RTB : angle R T B = 28%:R.
 
-Theorem inscribed_angle : angle R S T = angle R A T.
+(* Calculate the measure of minor arc BR *)
+Theorem measure_of_minor_arc_BR :
+  let arc_BR := angle B A R in
+  arc_BR = 81%:R.
 Proof.
-admit.
+  (* The proof would involve calculating the measure of minor arc BR using the given angles. *)
+  (* For the sake of this exercise, we'll admit the theorem. *)
+  admit.
 Qed.
 
 End CircleArcProblem.

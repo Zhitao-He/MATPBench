@@ -12,8 +12,8 @@ Variable R : realType.
 
 Theorem triangle_segment_length_problem :
   forall (x y : R),
-    (1/5 * x + 3) + (2 * y + 1) = 4 * x - 35 + 5 * y - 8 ->
-    (4 * x - 35) = (1/5 * x + 3) + (5 * y - 8) - (2 * y + 1) ->
-    x = 10.
+    (1/5%:R * x + 3%:R) + (2%:R * y + 1%:R) = (4%:R * x - 35%:R) + (5%:R * y - 8%:R) ->
+    (4%:R * x - 35%:R) = (1/5%:R * x + 3%:R) + (5%:R * y - 8%:R) - (2%:R * y + 1%:R) ->
+    x = 10%:R.
 Proof. Admitted.
 ####

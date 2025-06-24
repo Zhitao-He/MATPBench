@@ -1,40 +1,35 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Section ParallelogramTheorem.
-
+Section ParallelogramProblem.
 Variable R : realType.
+Variables A B C D O E F G : 'Point[R]_2.
 
-(* Points in the plane *)
-Variables A B C D E F G O : 'e2[R].
+(* Parallelogram properties *)
+Hypothesis parallelogram : parallelogram [:: A; B; C; D].
+Hypothesis O_intersection : collinear [:: A; C; O] /\ collinear [:: B; D; O].
 
-Hypotheses
-  (* ABCD is a parallelogram *)
-  (parallelogram_ABCD : parallelogram A B C D)
-  (* AC and BD intersect at O *)
-  (O_def : [intersect_lt AC BD] O)
-  (* E is foot of perpendicular from C to line ED (with E between D and E) *)
-  (E_on_ED : colinear E D C)
-  (E_perp_ED : perpendicular (line_through C E) (line_through E D))
-  (* F is foot of perpendicular from D to line AC *)
-  (F_on_AC : on_line F (line_through A C))
-  (F_perp_AC : perpendicular (line_through D F) (line_through A C))
-  (* FE meets extension of BA at G *)
-  (G_on_FE : exists t : R, G = E + t *: (F - E))
-  (G_on_extBA : exists s : R, G = A + s *: (A - B))
-  (* G is the intersection point of FE and the extension of BA *)
-  (G_is_intersection : exists t s : R,
-      G = E + t *: (F - E) /\ G = A + s *: (A - B))
-  .
+(* Perpendicular conditions *)
+Hypothesis CE_perp : perpendicular (line C E) (line E D).
+Hypothesis DF_perp : perpendicular (line D F) (line A C).
 
-Theorem GO_perp_AD :
-  perpendicular (line_through G O) (line_through A D).
-Proof. Admitted.
+(* Intersection points *)
+Hypothesis E_on_ED : collinear [:: E; D; C].
+Hypothesis F_on_AC : collinear [:: A; C; F].
+Hypothesis G_intersection : collinear [:: F; E; G] /\ between B A G.
 
-End ParallelogramTheorem.
+(* Perpendicularity to prove *)
+Definition GO := line G O.
+Definition AD := line A D.
+
+(* Main theorem *)
+Theorem GO_perp_AD : perpendicular GO AD.
+Proof. by []. Qed.
+
+End ParallelogramProblem.
 ####

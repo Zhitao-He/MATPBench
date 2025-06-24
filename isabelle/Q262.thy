@@ -1,45 +1,24 @@
-theory AngleProblem
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Geometry_Problem
+imports Main "HOL-Analysis.Real_Sqrt" 
 begin
-
-(* 定义二维平面上的点 *)
-type_synonym point = "real × real"
-
-(* 定义向量减法 *)
-definition vec_sub :: "point ⇒ point ⇒ real × real" where
-  "vec_sub P Q = (fst P - fst Q, snd P - snd Q)"
-
-(* 定义点积 *)
-definition dot_product :: "real × real ⇒ real × real ⇒ real" where
-  "dot_product u v = fst u * fst v + snd u * snd v"
-
-(* 定义向量长度 *)
-definition norm :: "real × real ⇒ real" where
-  "norm v = sqrt (dot_product v v)"
-
-(* 定义角度计算（弧度） *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A O B = acos (dot_product (vec_sub A O) (vec_sub B O) / 
-                       (norm (vec_sub A O) * norm (vec_sub B O)))"
-
-(* 弧度转角度 *)
-definition rad_to_deg :: "real ⇒ real" where
-  "rad_to_deg r = r * (180 / pi)"
-
-(* 定义问题中的点 *)
-definition B :: point where "B = (0, 0)"  (* 假设点坐标 *)
-definition X :: point where "X = (1, 0)"  (* 假设点坐标 *)
-definition C :: point where "C = (1, 1)"  (* 假设点坐标 *)
-
-(* 定义角度BXC *)
-definition angle_BXC :: real where
-  "angle_BXC = rad_to_deg (angle B X C)"
-
-(* 定理：角BXC的大小约为10.74度（精确到小数点后两位） *)
-theorem angle_BXC_value:
-  "∃z. abs (z - 10.74) < 0.01 ∧ abs (z - angle_BXC) < 0.01"
-  sorry
-
+type_synonym point3D = "real \<times> real \<times> real"
+definition C :: point3D where "C = (0, 0, 0)"
+definition B :: point3D where "B = (0, 0, 3)"
+definition D :: point3D where "D = (10, 0, 0)"
+definition A :: point3D where "A = (10, 0, 3)"
+definition X :: point3D where "X = (5, 15, 0)"
+definition E :: point3D where "E = (5 - 15/2, 15, 0)" 
+definition F :: point3D where "F = (5 + 15/2, 15, 0)" 
+definition vec_minus :: "point3D \<Rightarrow> point3D \<Rightarrow> point3D" where
+  "vec_minus (x1, y1, z1) (x2, y2, z2) = (x1 - x2, y1 - y2, z1 - z2)"
+definition dot_product :: "point3D \<Rightarrow> point3D \<Rightarrow> real" where
+  "dot_product (x1, y1, z1) (x2, y2, z2) = x1*x2 + y1*y2 + z1*z2"
+definition magnitude_sq :: "point3D \<Rightarrow> real" where
+  "magnitude_sq p = dot_product p p"
+definition magnitude :: "point3D \<Rightarrow> real" where
+  "magnitude p = sqrt (magnitude_sq p)" 
+definition vec_XC :: point3D where "vec_XC = vec_minus C X"
+definition vec_XB :: point3D where "vec_XB = vec_minus B X"
+definition cos_angle_BXC :: real where
+  "cos_angle_BXC = (dot_product vec_XC vec_XB) / (magnitude vec_XC * magnitude vec_XB)"
 end

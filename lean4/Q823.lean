@@ -1,32 +1,19 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
-import Mathlib.Data.Real.Sqrt
-
-open EuclideanGeometry Angle Real
-
-namespace Problem
-
--- Points in Euclidean space
-variable {P : Type*} [MetricSpace P] [NormedAddCommGroup P] [InnerProductSpace ℝ P] [NormedAddTorsor ℝ P]
-
--- Given points and distances
-variable (A B C D : P)
-variable (x y : ℝ)
-
--- The geometric conditions
-structure GeometricConditions where
-  dist_CD : dist C D = 2 * sqrt 3
-  dist_DA : dist D A = 2
-  dist_BD : dist B D = x
-  dist_BC : dist B C = y
-  angle_ACB_right : ∠ A C B = π / 2
-  angle_CDB_right : ∠ C D B = π / 2
-  D_between_B_A : Wbtw ℝ D B A
-  x_pos : 0 < x
-  y_pos : 0 < y
-
--- Theorem: Under these conditions, x = 6
-theorem x_value_is_6 (cond : GeometricConditions A B C D x y) : x = 6 := by
-  sorry
-
-end Problem
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemSolution
+theorem target_value (
+  A B C D : P) (x y : ℝ)
+  (h_BC : dist B C = y)
+  (h_BD : dist B D = x)
+  (h_CD : dist C D = 2 * Real.sqrt 3)
+  (h_DA : dist D A = 2)
+  (hx_pos : 0 < x)
+  (hy_pos : 0 < y)
+  (h_AC_perp_BC : EuclideanGeometry.angle A C B = Real.pi / 2)
+  (h_BD_perp_CD : EuclideanGeometry.angle B D C = Real.pi / 2)
+  : x = 6 := by sorry
+end ProblemSolution

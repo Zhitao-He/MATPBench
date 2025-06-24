@@ -1,38 +1,26 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open Real
-
-variable {Ω : Type} [EuclideanPlane Ω]
-
--- Declare the center O and radius r of the circle, with 0 < r
-variable (O : Ω) (r : ℝ) (hr : 0 < r)
-
--- Declare the points: intersection P, and A, B, C, D, E, F lying on the circle
-variable (P A B C D E F : Ω)
-
--- Each of A, B, C, D, E, F lies on the circle centered at O with radius r
-variable
-  (hA : dist A O = r)
-  (hB : dist B O = r)
-  (hC : dist C O = r)
-  (hD : dist D O = r)
-  (hE : dist E O = r)
-  (hF : dist F O = r)
-
--- P is strictly between the endpoints of each chord
-variable
-  (hPAB : P ∈ openSegment ℝ A B)
-  (hPCD : P ∈ openSegment ℝ C D)
-  (hPEF : P ∈ openSegment ℝ E F)
-
--- The (acute, unoriented) angle between the lines through P and each pair of chord endpoints is π / 3
-variable
-  (hAngleAB_CD : angleBetweenLines (lineThrough P A) (lineThrough P C) = π / 3)
-  (hAngleCD_EF : angleBetweenLines (lineThrough P C) (lineThrough P E) = π / 3)
-  (hAngleEF_AB : angleBetweenLines (lineThrough P E) (lineThrough P A) = π / 3)
-
-theorem chordSumAtSixtyAngle :
-    dist A P + dist E P + dist D P = dist C P + dist B P + dist F P := by
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+theorem three_chords_intersect_at_60_degrees
+  (O P A B C D E F : Point)
+  (r : ℝ)
+  (h_r_pos : 0 < r)
+  (hA : A ∈ EuclideanGeometry.Sphere.mk O r)
+  (hB : B ∈ EuclideanGeometry.Sphere.mk O r)
+  (hC : C ∈ EuclideanGeometry.Sphere.mk O r)
+  (hD : D ∈ EuclideanGeometry.Sphere.mk O r)
+  (hE : E ∈ EuclideanGeometry.Sphere.mk O r)
+  (hF : F ∈ EuclideanGeometry.Sphere.mk O r)
+  (hP_AB : Sbtw ℝ A P B)
+  (hP_CD : Sbtw ℝ C P D)
+  (hP_EF : Sbtw ℝ E P F)
+  (h_angle_AB_CD : EuclideanGeometry.angle A P C = Real.pi / 3)
+  (h_angle_CD_EF : EuclideanGeometry.angle C P E = Real.pi / 3)
+  (h_angle_EF_AB : EuclideanGeometry.angle E P A = Real.pi / 3)
+  : dist A P + dist E P + dist D P = dist C P + dist B P + dist F P := by
   sorry

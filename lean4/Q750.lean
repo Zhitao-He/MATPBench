@@ -1,13 +1,17 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-
-open EuclideanGeometry
-open scoped RealInnerProductSpace
-
-theorem length_AB_sqrt34 :
-  ∃ (A B C : EuclideanSpace ℝ (Fin 2)),
-    dist A C = 5 ∧
-    dist B C = 3 ∧
-    ⟪A - C, B - C⟫_ℝ = 0 ∧
-    dist A B = Real.sqrt 34 := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+open Real
+namespace RightTriangleProblem
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
+variable (A B C : P)
+variable (hAC : dist A C = 5)
+variable (hBC : dist B C = 3)
+variable (hRight : EuclideanGeometry.angle A C B = π / 2)
+theorem length_AB_is_sqrt_34 (A B C : P)
+  (hAC : dist A C = 5) (hBC : dist B C = 3) (hRight : EuclideanGeometry.angle A C B = π / 2) :
+  dist A B = sqrt 34 := by
   sorry
+end RightTriangleProblem

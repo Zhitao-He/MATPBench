@@ -9,14 +9,17 @@ Unset Printing Implicit Defensive.
 Local Open Scope ring_scope.
 
 Variable R : realType.
+Variables A B C O : 'rV[R]_2.
 
-Theorem angle_OBC_in_acute_triangle
-  (A B C O : 'rV[R]_2)
-  (h_neq : A <> B /\ B <> C /\ C <> A)
-  (h_circum : circum_center A B C = Some O)
-  (h_acute : 0 < angle B A C < pi/2 /\ 0 < angle C B A < pi/2 /\ 0 < angle A C B < pi/2)
-  (h_angle_A : angle B A C = (68%:R *~: (pi / 180)))
-  :
-  angle O B C = (22%:R *~: (pi / 180)).
+Hypotheses
+  (h_acute : 0 < angle_deg A B C < 90 /
+              0 < angle_deg B C A < 90 /
+              0 < angle_deg C A B < 90)
+  (h_angle_A : angle_deg A B C = 68)
+  (h_circumcenter : circumcenter A B C = O).
+
+Definition angle_OBC := angle_deg O B C.
+
+Theorem find_angle_OBC : angle_OBC = 22.
 Proof. Admitted.
 ####

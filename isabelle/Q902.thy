@@ -1,43 +1,36 @@
-theory CirclesProblem
-imports Complex_Main "HOL-Analysis.Analysis"
+theory GeometryProblem
+  imports "HOL-Analysis.Real" "HOL-Analysis.Transcendental"
 begin
-
-(* 定义点和距离函数 *)
-type_synonym point = "real × real"
-
-definition dist :: "point ⇒ point ⇒ real" where
-  "dist p q = sqrt((fst p - fst q)^2 + (snd p - snd q)^2)"
-
-(* 定义圆的周长 *)
-definition circle_perimeter :: "real ⇒ real" where
-  "circle_perimeter r = 2 * π * r"
-
-(* 问题中的变量和关系 *)
-lemma circle_problem:
-  fixes A J H K C x :: real
-  assumes "circle_perimeter A + circle_perimeter J + circle_perimeter H = 42 * π"
-    and "CJ = 2 * x"
-    and "HA = x"
-    and "HC = x"
-    and "KA = 4 * x"
-    and "x > 0"
-  shows "dist K J = 24"
-proof -
-  (* 从题目描述，我们知道H是⊙H的中心，J是⊙J的中心，K是⊙K的中心 *)
-  (* 这里的A, J, H分别表示三个圆的半径 *)
-  
-  (* 从三个圆的周长总和可以得到三个圆的半径和 *)
-  have "2 * π * A + 2 * π * J + 2 * π * H = 42 * π" 
-    using assms(1) unfolding circle_perimeter_def by simp
-  
-  (* 简化后得到三个圆的半径和 *)
-  hence "A + J + H = 21" by (simp add: field_simps)
-  
-  (* 根据题目中的提示和几何关系，可以推导出KJ的长度 *)
-  (* 具体计算步骤可能涉及到三角形的性质和距离公式 *)
-  
-  (* 最终结果 *)
-  thus "dist K J = 24" sorry
-qed
-
+typedecl point
+consts
+  A :: point 
+  B :: point 
+  C :: point 
+  H :: point 
+  J :: point 
+  K :: point 
+  x :: real  
+  length_of_line :: "point => point => real" 
+axiomatization where
+  x_is_positive: "x > 0" and
+  radius_H_HC: "length_of_line H C = x" and
+  radius_H_HA: "length_of_line H A = x" and 
+  radius_J_JC: "length_of_line C J = 2 * x" and
+  radius_K_KA: "length_of_line K A = 4 * x"
+definition circumference :: "real => real" where
+  "circumference r = 2 * pi * r"
+axiomatization where
+  sum_of_circumferences_condition:
+    "circumference (length_of_line K A) +    
+     circumference (length_of_line C J) +    
+     circumference (length_of_line H C)      
+     = 42 * pi" and
+  KB_is_radius_of_Circle_K: "length_of_line K B = length_of_line K A" and
+  JB_is_radius_of_Circle_J: "length_of_line J B = length_of_line C J" and
+  KBJ_collinear_tangency_KJ_length:
+    "length_of_line K J = length_of_line K B + length_of_line J B" and
+  KAH_collinear_tangency_KH_length:
+    "length_of_line K H = length_of_line K A + length_of_line H A" and
+  HCJ_collinear_tangency_HJ_length:
+    "length_of_line H J = length_of_line H C + length_of_line C J"
 end

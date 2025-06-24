@@ -1,40 +1,35 @@
-theory AnglePNM
-imports
-  Complex_Main
-  "HOL-Analysis.Analysis"
+theory Geometry_Problem_PNM
+  imports
+    "HOL-Analysis.Product_Vector_Spaces"
+    "HOL-Analysis.Euclidean_Space"
+    "HOL-Analysis.Angle"
 begin
-
-(* 定义欧几里得平面中的点 *)
-type_synonym point = "real × real"
-
-(* 计算两点之间的距离 *)
-definition distance :: "point ⇒ point ⇒ real" where
-  "distance p q = sqrt((fst q - fst p)^2 + (snd q - snd p)^2)"
-
-(* 计算两个向量之间的角度（弧度） *)
-definition angle_between_vectors :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle_between_vectors P N M = 
-    (let v1 = (fst P - fst N, snd P - snd N);
-         v2 = (fst M - fst N, snd M - snd N);
-         dot_product = fst v1 * fst v2 + snd v1 * snd v2;
-         len_v1 = sqrt((fst v1)^2 + (snd v1)^2);
-         len_v2 = sqrt((fst v2)^2 + (snd v2)^2)
-     in arccos(dot_product / (len_v1 * len_v2)))"
-
-(* 弧度转换为度数 *)
-definition rad_to_deg :: "real ⇒ real" where
-  "rad_to_deg r = r * 180 / pi"
-
-(* 定义具体的点坐标 *)
-definition P :: point where "P = (0, 0)"
-definition N :: point where "N = (4, 0)"
-definition M :: point where "M = (8, 12)"
-
-(* 计算角PNM并转换为度数 *)
-value "rad_to_deg (angle_between_vectors P N M)"
-
-(* 计算结果应约等于69.30度 *)
-lemma "rad_to_deg (angle_between_vectors P N M) ≈ 69.30"
-  sorry
-
+type_synonym point3d = "real × real × real"
+locale GeoProblem_Context =
+  fixes A B C D M N P :: point3d 
+  assumes
+    ad_length: "dist A D = 8"
+  and
+    pc_length: "dist P C = 12"
+  and
+    ad_eq_bc: "dist A D = dist B C"
+  and
+    ab_eq_cd: "dist A B = dist C D"
+  and
+    n_is_midpoint_cd: "N = (1/2 :: real) *⇩<sub>R</sub> (C + D)"
+  and
+    pm_perp_bd: "(P - M) \<cdot> (D - B) = 0"
+  and
+    m_on_segment_bd: "∃t::real. t ≥ 0 ∧ t ≤ 1 ∧ M = B + t *⇩<sub>R</sub> (D - B)"
+begin
+definition Y_radians :: real where
+  "Y_radians = vector_angle (P - N) (M - N)"
+definition Y :: real where
+  "Y = Y_radians * (180 / pi)"
+end
+definition Y_stated_value :: real where
+  "Y_stated_value = 69.30"
+    shows "abs ( (GeoProblem_Context.Y problem_instance) - Y_stated_value ) < 0.005"
+    sorry 
+*)
 end

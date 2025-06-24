@@ -1,31 +1,24 @@
-import Mathlib.Data.Real.Basic
-
+import Mathlib.Data.Real.Basic 
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+namespace SphereFigureProblem
 
-
-namespace SphereVolumeProblem
-
-
-def radius : ℝ := 3
-
-
-noncomputable def sphereVolume (r : ℝ) : ℝ := (4 / 3) * Real.pi * (r ^ 3)
-
-
-noncomputable def calculatedVolume : ℝ := sphereVolume radius
-
-
-noncomputable def roundTo2Decimal (x : ℝ) : ℝ :=
-  let factor := (10 : ℝ) ^ 2
-  round (x * factor) / factor
-
-
-noncomputable def roundedVolume : ℝ := roundTo2Decimal calculatedVolume
-
-
-def assertedVolume : ℝ := 113.10
-
-
-theorem volumeAssertion : roundedVolume = assertedVolume := by sorry
-
-end SphereVolumeProblem
+structure Sphere where
+  radius : ℝ
+def sphereFromImage : Sphere :=
+  { radius := 3 }
+noncomputable def volumeOfSphere (s : Sphere) : ℝ :=
+  (4 / 3) * Real.pi * (s.radius ^ 3)
+noncomputable def calculatedExactVolume : ℝ :=
+  volumeOfSphere sphereFromImage
+def expectedRoundedVolume : ℝ := 113.10
+noncomputable def roundToTwoDecimalPlaces (x : ℝ) : ℝ :=
+  sorry
+theorem volumeMatchesExpectedRoundedValue :
+  roundToTwoDecimalPlaces calculatedExactVolume = expectedRoundedVolume := by
+  sorry
+noncomputable def exactSymbolicVolume : ℝ :=
+  36 * Real.pi
+theorem calculatedVolumeIs36Pi :
+  calculatedExactVolume = exactSymbolicVolume := by
+  sorry
+end SphereFigureProblem

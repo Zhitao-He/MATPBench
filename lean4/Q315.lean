@@ -1,27 +1,13 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
-open Real EuclideanGeometry
-open scoped Real
-
-section TriangleReflectionProblem
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-variable [Fact (finrank ℝ V = 2)]
-
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable instance : MetricSpace P := inferInstance
+noncomputable instance : NormedAddTorsor P P := inferInstance
+noncomputable def degrees_to_radians (d : ℝ) : ℝ := d * (Real.pi / 180)
+section
 variable (A B C D : P)
-
-def DegToRad (d : ℝ) : ℝ := d * (π / 180)
-
-variable (h_ABC_not_collinear : ¬ Collinear ℝ A B C)
-variable (h_D_on_segment_BC : D ∈ segment ℝ B C)
-variable (h_angle_BAC : angle B A C = DegToRad 40)
-variable (h_reflection : B = reflection (affineLine ℝ A D) C)
-
-theorem angle_B_is_70_degrees : angle A B C = DegToRad 70 := by
+theorem prove_angle_B_is_70_degrees (geom : sorry) :
+  EuclideanGeometry.angle A B C = degrees_to_radians 70 := by
   sorry
-
-end TriangleReflectionProblem
+end

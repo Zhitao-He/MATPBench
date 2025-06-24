@@ -15,9 +15,10 @@ Variable R : realType.
    The theorem states that the sum of their areas is 9 square feet. *)
 
 Theorem hexagonal_prism_lateral_area :
-  let h := 3%:R in  (* height in feet *)
-  let s := 0.5%:R in  (* base edge in feet *)
-  let lateral_area := 6%:R * s * h in
-  lateral_area = 9%:R.
+  forall (h : R) (s : R),
+    h = 3%:R ->
+    s = 0.5%:R ->
+    let lateral_area := 6%:R * s * h in
+    lateral_area = 9%:R.
 Proof. Admitted.
 ####

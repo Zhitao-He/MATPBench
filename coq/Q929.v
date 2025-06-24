@@ -1,26 +1,26 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals euclidean_geometry.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
-Unset Strict Implicit Defensive.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
-
-Section length_AB_rectangle.
-
+Section KiteProblem.
 Variable R : realType.
-Record point := mkPoint { px : R; py : R }.
-Definition dist (P Q : point) := sqrt ((px P - px Q)^2 + (py P - py Q)^2).
+Variables A B C D E : 'Point[R]_2.
 
-Theorem length_AB_5 :
-  exists A B C D E : point,
-    A = mkPoint 0 4 /\ B = mkPoint 3 0 /\ C = mkPoint 0 (-4) /\ D = mkPoint (-3) 0 /\ E = mkPoint 0 0 /\
-    dist D E = 3 /\ dist E B = 3 /\ dist A E = 4 /\ dist E C = 4 /\
-    dist A B = 5.
-Proof.
-  (* proof omitted *)
-Admitted.
+Hypotheses
+  AE_length : dist A E = 4;
+  BE_length : dist B E = 3;
+  kite_BADC : (dist B A = dist B C) /\ (dist D A = dist D C) /\ perpendicular (line B D) (line A C);
+  collinear_BED : collinear [:: B; E; D];
+  collinear_AEC : collinear [:: A; E; C].
 
-End length_AB_rectangle.
+Definition AB_length := dist A B.
+
+Theorem AB_length_5 : AB_length = 5.
+Proof. by []. Qed.
+
+End KiteProblem.
 ####

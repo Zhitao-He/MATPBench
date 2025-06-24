@@ -1,13 +1,13 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Log
-
--- Esteban's account balance as a function of time t (in years)
-def estebanBalance (t : ℝ) : ℝ := 1000 * Real.exp (0.08 * t)
-
--- Anna's account balance as a function of time t (in years)
-def annaBalance (t : ℝ) : ℝ := 750 * Real.exp (0.12 * t)
-
--- There exists a time t₀ near 7 (|t₀ - 7| ≤ 0.5) such that their balances are equal
-theorem accountsBalanceAt_7 :
-  ∃ t₀ : ℝ, abs (t₀ - 7) ≤ 0.5 ∧ estebanBalance t₀ = annaBalance t₀ := by
-  sorry
+import Mathlib.Data.Real.Basic 
+def estebanSlope : ℝ := 10.0
+def estebanIntercept : ℝ := 92.9
+def annaSlope : ℝ := 9.0
+def annaIntercept : ℝ := 100.0
+def estebanBalance (t : ℝ) : ℝ := estebanSlope * t + estebanIntercept
+def annaBalance (t : ℝ) : ℝ := annaSlope * t + annaIntercept
+noncomputable def timeWhenBalancesAreEqual : ℝ :=
+  (annaIntercept - estebanIntercept) / (estebanSlope - annaSlope)
+theorem accountBalanceProblem :
+  estebanBalance timeWhenBalancesAreEqual = annaBalance timeWhenBalancesAreEqual ∧
+  (sorry : ℤ) = (7 : ℤ) :=
+  by sorry

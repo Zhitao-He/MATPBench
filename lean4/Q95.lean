@@ -1,71 +1,49 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Data.Real.Basic
-
+import Mathlib.Data.Real.Pi.Bounds
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+noncomputable section
+abbrev P := EuclideanSpace ℝ (Fin 2)
+open Real EuclideanGeometry
 namespace LightReflectionProblem
-
-open EuclideanGeometry
-
--- Let P be the Euclidean plane (2D, real inner product space), V its vector space
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [FiniteDimensional ℝ P]
-variable [MetricSpace P] [NormedAddTorsor (EuclideanSpace ℝ (Fin 2)) P]
-
--- Fixed triangle vertices
-variables (A B C : P)
-
--- Hypotheses: triangle is non-degenerate, isosceles at A, explicit angles
-variable (h_distinct : A ≠ B ∧ B ≠ C ∧ C ≠ A)
-variable (h_nondegen : ¬ Collinear ℝ ({A, B, C} : Set P))
-variable (h_isosceles : dist A B = dist A C)
-
--- α is the angle of incidence at C (in radians), β the base angle
-variable (α β : ℝ)
-variable (h_alpha_val : α = 19.94 * Real.pi / 180)
-variable (h_beta_def : β = α / 10)
-variable (h_beta_val : β = 1.994 * Real.pi / 180)
-
--- Triangle angles: base angles at B and C are β, angle at A is π-2β
-variable (h_angle_at_B : ∠ A B C = β)
-variable (h_angle_at_C : ∠ B C A = β)
-
--- Segments involved
-def segment_AB : Segment ℝ P := segment ℝ A B
-def segment_BC : Segment ℝ P := segment ℝ B C
-
--- Law of reflection and trajectory
--- (The following are "framework" code: the detailed geometry would require more Mathlib machinery)
--- Abstract outgoing direction after reflection from C, with correct angle to CB and "into" triangle
-variable (v₀ : P → (EuclideanSpace ℝ (Fin 2))) -- initial outgoing direction at C
-variable (h_v₀_angle : Angle.Unoriented.mk_vector_vector (C -ᵥ B) (v₀ C) = α)
-
--- The states of the beam after each bounce (position, outgoing direction)
-partial def reflection_state : Nat → P × (EuclideanSpace ℝ (Fin 2))
-| 0   => (C, v₀ C)
-| k+1 =>
-  let (prev_pt, prev_dir) := reflection_state k
-  -- If k even: reflect off AB;  if k odd: reflect off BC
-  let (seg, p1, p2) :=
-    if k % 2 = 0 then (segment_AB, A, B) else (segment_BC, B, C)
-  -- Find first intersection of prev ray (from prev_pt, prev_dir) with line p1p2 (not implemented here)
-  -- Then reflect prev_dir across the normal to p1p2 at reflected point (not implemented here)
-  -- This step requires full geometric computations
-  (sorry, sorry)
-
--- The sequence of bounce points (P₀ = C, P₁ = 1st reflection pt, ...)
-def bounce_point (k : Nat) : P := (reflection_state k).1
-
--- Stops when the ray hits a vertex
-def hits_vertex (p : P) : Bool := (p = A) ∨ (p = B) ∨ (p = C)
-
-/-- Number of bounces before the beam hits a vertex. -/
-def number_of_bounces : Nat := by
-  -- One should implement this as: minimal n so that bounce_point n is a vertex.
+noncomputable def alpha_val_deg : ℝ := 19.94
+noncomputable def alpha_rad : ℝ := (alpha_val_deg / 180) * Real.pi
+noncomputable def beta_val_deg : ℝ := alpha_val_deg / 10
+noncomputable def beta_rad : ℝ := (beta_val_deg / 180) * Real.pi
+lemma beta_rad_eq_alpha_rad_div_10 : beta_rad = alpha_rad / 10 := by
   sorry
-
-/-- The answer: the beam bounces 71 times before landing on a vertex. -/
-theorem beam_bounces_seventyone :
-  number_of_bounces A B C h_distinct h_nondegen h_isosceles α β h_alpha_val h_beta_def h_beta_val
-    h_angle_at_B h_angle_at_C v₀ h_v₀_angle = 71 := by sorry
-
+def num_bounces : Nat := 71
+theorem light_path_description_and_count
+  (A B C : P)
+  (h_vertices_distinct : A ≠ B ∧ A ≠ C ∧ B ≠ C)
+  (h_non_collinear : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (h_isosceles : dist A B = dist A C)
+  (h_angle_ABC_eq_beta : EuclideanGeometry.angle A B C = beta_rad)
+  :
+  ∃ (p : Nat → P),
+    (p 0 = C) ∧
+    (p 1 ∈ interior (segment ℝ A B)) ∧
+    (EuclideanGeometry.angle (p 1) (p 0) B = alpha_rad) ∧
+    (∀ k : Nat, k < num_bounces →
+      let curr_reflection_pt := p k
+      let prev_pt := if h : k > 0 then p (k-1) else C
+      let next_pt := p (k+1)
+      (Even k →
+        (curr_reflection_pt ∈ segment ℝ B C) ∧
+        (k > 0 → curr_reflection_pt ∈ interior (segment ℝ B C)) ∧
+        (next_pt ∈ segment ℝ A B) ∧
+        (k + 1 < num_bounces → next_pt ∈ interior (segment ℝ A B)) ∧
+        (k > 0 → EuclideanGeometry.angle C curr_reflection_pt prev_pt = EuclideanGeometry.angle B curr_reflection_pt next_pt)
+      ) ∧
+      (Odd k →
+        (curr_reflection_pt ∈ interior (segment ℝ A B)) ∧
+        (next_pt ∈ segment ℝ B C) ∧
+        (k + 1 < num_bounces → next_pt ∈ interior (segment ℝ B C)) ∧
+        (EuclideanGeometry.angle A curr_reflection_pt prev_pt = EuclideanGeometry.angle B curr_reflection_pt next_pt)
+      )
+    )
+  := by sorry
 end LightReflectionProblem
+end noncomputable section

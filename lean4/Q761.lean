@@ -1,31 +1,25 @@
-import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
-import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Data.Real.Basic
-
-namespace Problem
-
--- Define the Euclidean plane
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+import Mathlib.Algebra.AddTorsor.Basic
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+open Real InnerProductSpace EuclideanGeometry Affine FiniteDimensional AddTorsor
+open Affine
+open AffineSubspace
+abbrev V := EuclideanSpace ℝ (Fin 2)
 abbrev P := EuclideanSpace ℝ (Fin 2)
-
--- Declare points in the plane
-variable (A B C E F : P)
-
--- Declare the unknown length x
-variable (x : ℝ)
-
--- Given conditions:
-
--- Distances between points
-axiom h_BE : dist B E = 15
-axiom h_CB : dist C B = 12
-axiom h_CE : dist C E = x
-axiom h_x_pos : 0 < x
-
--- BC is tangent to circle centered at E at point C: EC ⊥ BC at C
-axiom h_right : EuclideanGeometry.Angle.IsRight (EuclideanGeometry.angle B C E)
-
--- Goal: Find the value of x
-theorem value_of_x_is_9 : x = 9 := by sorry
-
-end Problem
+noncomputable def circleE (E : P) (x : ℝ) : EuclideanGeometry.Sphere P := EuclideanGeometry.Sphere.mk E x
+theorem value_of_x_is_9
+  (A B C E : P) (x : ℝ)
+  (h_BE : dist B E = 15)
+  (h_CB : dist C B = 12)
+  (h_CE : dist C E = x)
+  (h_BC_tangent_at_C :
+    (C ∈ EuclideanGeometry.Sphere.mk E x) ∧ (B ≠ C) ∧
+    (∀ p : P, p ∈ (affineSpan ℝ ({B, C} : Set P) : AffineSubspace ℝ P) →
+      ∃ t : ℝ, p = B +ᵥ (t • (C -ᵥ B))) ∧
+    (∀ v : V, v = (C -ᵥ E) → inner ℝ v (C -ᵥ B) = 0))
+  : x = 9 := by
+  sorry

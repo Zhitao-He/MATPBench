@@ -1,18 +1,12 @@
-theory AreaCalculation
-imports Complex_Main
+theory Quarter_Circle_Area
+  imports Complex_Main
 begin
-
-theorem area_quarter_circle:
-  "let r = 7 :: real in
-   let area = (1/4) * pi * r^2 in
-   area = (147 * pi) / 4"
-proof -
-  let ?r = "7 :: real"
-  let ?area = "(1/4) * pi * ?r^2"
-  have "?area = (1/4) * pi * 49" by simp
-  also have "... = (49 * pi) / 4" by (simp add: field_simps)
-  also have "... = (147 * pi) / 4" by simp
-  finally show ?thesis by simp
-qed
-
+definition radius :: real where
+  "radius = 7"
+definition quarter_circle_area :: real where
+  "quarter_circle_area = (1/4) * pi * radius^2"
+lemma quarter_circle_area_exact:
+  "quarter_circle_area = (147 * pi) / 4"
+  unfolding quarter_circle_area_def radius_def
+  by simp
 end

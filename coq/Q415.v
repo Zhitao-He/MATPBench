@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals geometry classical_sets trigo.
+From mathcomp Require Import reals geometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -8,38 +8,48 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section ShadedRegionArea.
+
 Variable R : realType.
 
-Definition A : R * R := (0, 0).
-Definition B : R * R := (8, 0).
-Definition C : R * R := (8, 8).
-Definition D : R * R := (0, 8).
+(* Define square ABCD with side length 8 *)
+Let A := (0, 0)%R.
+Let B := (8, 0)%R.
+Let C := (8, 8)%R.
+Let D := (0, 8)%R.
 
-(* Semicircle with diameter BC, center (8,4), radius 4 *)
-Definition semicircle_BC p :=
-  let center := (8,4) in let r := 4 in
-    (fst p - fst center)^2 + (snd p - snd center)^2 = r^2 /
-    snd p >= 0 /\snd p <= 8.
+(* Define semicircles with diameters BC and CD *)
+Definition semicircle_BC (P : 'rV[R]_2) :=
+  let center := (8, 4)%R in
+  let radius := 4%:R in
+  norm (P - center) <= radius.
 
-(* Semicircle with diameter CD, center (4,8), radius 4 *)
-Definition semicircle_CD p :=
-  let center := (4,8) in let r := 4 in
-    (fst p - fst center)^2 + (snd p - snd center)^2 = r^2 /
-    fst p >= 0 /\fst p <= 8.
+Definition semicircle_CD (P : 'rV[R]_2) :=
+  let center := (4, 8)%R in
+  let radius := 4%:R in
+  norm (P - center) <= radius /\ P.1 >= 0.
 
-Definition square_region p :=
-  0 <= fst p <= 8 /\0 <= snd p <= 8.
+(* Define shaded region as intersection of square and semicircles *)
+Definition shaded_region (P : 'rV[R]_2) :=
+  let in_square := (P.1 >= 0%:R) /
+                   (P.1 <= 8%:R) /
+                   (P.2 >= 0%:R) /
+                   (P.2 <= 8%:R) in
+  let in_semicircle_BC := semicircle_BC P in
+  let in_semicircle_CD := semicircle_CD P in
+  in_square /
+  (in_semicircle_BC / in_semicircle_CD).
 
-Definition shaded p :=
-  square_region p /\(semicircle_BC p / semicircle_CD p).
+(* Calculate areas *)
+Definition square_area := 8%:R * 8%:R.
+Definition semicircle_BC_area := (PI * 4%:R^+2) / 2.
+Definition semicircle_CD_area := (PI * 4%:R^+2) / 2.
+Definition shaded_area := semicircle_BC_area + semicircle_CD_area - (4%:R * 4%:R). (* Overlapping area *)
 
-Definition square_area := 8%:R^+2.
-Definition quarter_area := (PI * 4^+2) / 4.
+(* Theorem to prove shaded area is 8π - 16 *)
+Theorem shaded_area_is_8pi_minus_16 : 
+  shaded_area = (8 * PI - 16)%:R.
+Proof. Admitted.
 
-Theorem shaded_region_area :
-  let S := square_area - 2 * quarter_area in
-  exists S', S' = S.
-Proof.
-admit.
-Qed.
+End ShadedRegionArea.
 ####

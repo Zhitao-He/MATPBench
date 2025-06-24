@@ -1,42 +1,51 @@
+import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Affine
+import Mathlib.Geometry.Euclidean.Angle.Oriented.Rotation
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
-import Mathlib.Analysis.SpecificLimits.Normed
-import Mathlib.Data.Nat.Gcd
-
-open Complex BigOperators
-
--- Problem Parameters
-def rVal : ℝ := 11 / 60
-
-lemma rVal_lt_one : rVal < 1 := by sorry
-lemma rVal_nonneg : 0 ≤ rVal := by sorry
-
-/-- The k-th displacement in the geometric sequence of centers, cast to ℂ -/
-def displacement (k : ℕ) : ℂ :=
-  ((1 : ℝ) - rVal : ℂ) * ((rVal : ℂ) * I)^k
-
-/-- The sequence of centers O₀,O₁,... where O₀ = 0, Oₙ = ∑_{j=0}^{n-1} displacement j -/
-def center_seq (n : ℕ) : ℂ :=
-  ∑ j in Finset.range n, displacement j
-
-/-- The point B is the limit of the centers Oₙ as n → ∞. -/
-def pointB : ℂ := ∑' k, displacement k
-
-instance displacement_summable : Summable displacement := by
-  -- This follows because |(rVal : ℂ) * I| = |rVal| < 1, so this is a convergent geometric series.
-  apply Summable.mul_left
-  apply Summable.geometric_of_norm_lt_one
-  simp [norm_mul, norm_I, abs_of_real]
-  exact rVal_lt_one
-
-/-- The distance from the origin to B -/
-def dist_origin_to_B : ℝ := abs pointB
-
-/-- Final theorem: existence and uniqueness of reduced m/n with m+n=110, as in the problem. -/
-theorem amc10b_2024_p24 :
-  ∃ m n : ℕ,
-    m > 0 ∧ n > 0 ∧
-    Nat.gcd m n = 1 ∧
-    dist_origin_to_B = (m : ℝ) / (n : ℝ) ∧
-    m + n = 110 :=
-  by sorry
+import Mathlib.Tactic.NormNum
+open Real InnerProductSpace
+open scoped EuclideanSpace
+namespace InternallyTangentCircles
+abbrev V := EuclideanSpace ℝ (Fin 2)
+abbrev P := EuclideanSpace ℝ (Fin 2) 
+noncomputable def stdOrientation : Orientation ℝ V (Fin 2) := sorry 
+def r₀ : ℝ := 1
+variable (r : ℝ) (hr : 0 < r ∧ r < 1)
+noncomputable def R (n : ℕ) : ℝ := r ^ n * r₀
+variable (O : P) (A₀ : P) (hA₀ : dist A₀ O = r₀)
+structure CirclePoint where
+  center : P
+  point : P
+noncomputable def circlePointSeq (r : ℝ) (O : P) (A₀ : P) : ℕ → CirclePoint
+  | 0 => { center := O, point := A₀ }
+  | n+1 =>
+    let prev := circlePointSeq r O A₀ n
+    let Cn := prev.center
+    let An := prev.point
+    let Cnp1 := An -ᵥ (r • (An -ᵥ Cn))
+    let v := An -ᵥ Cnp1
+    let v' := sorry 
+    let Anp1 := Cnp1 +ᵥ v'
+    { center := Cnp1, point := Anp1 }
+noncomputable def C (r : ℝ) (O : P) (A₀ : P) (n : ℕ) : P := (circlePointSeq r O A₀ n).center
+noncomputable def A (r : ℝ) (O : P) (A₀ : P) (n : ℕ) : P := (circlePointSeq r O A₀ n).point
+lemma A_on_C (r : ℝ) (hr : 0 < r ∧ r < 1) (O : P) (A₀ : P) (hA₀ : dist A₀ O = r₀) (n : ℕ) :
+    dist (A r O A₀ n) (C r O A₀ n) = R r n := by sorry
+lemma A_on_next_C (r : ℝ) (hr : 0 < r ∧ r < 1) (O : P) (A₀ : P) (hA₀ : dist A₀ O = r₀) (n : ℕ) :
+    dist (A r O A₀ n) (C r O A₀ (n+1)) = R r (n+1) := by sorry
+lemma centers_dist (r : ℝ) (hr : 0 < r ∧ r < 1) (O : P) (A₀ : P) (hA₀ : dist A₀ O = r₀) (n : ℕ) :
+    dist (C r O A₀ n) (C r O A₀ (n+1)) = R r n - R r (n+1) := by sorry
+lemma angle_90 (r : ℝ) (hr : 0 < r ∧ r < 1) (O : P) (A₀ : P) (hA₀ : dist A₀ O = r₀) (n : ℕ) :
+    (sorry : ℝ) = Real.pi/2 := by sorry 
+noncomputable def r_val : ℝ := 11/60
+lemma r_val_lt_one : r_val < 1 := by sorry 
+lemma r_val_gt_zero : 0 < r_val := by sorry 
+noncomputable def C' (O : P) (A₀ : P) (n : ℕ) : P := C r_val O A₀ n
+noncomputable def A' (O : P) (A₀ : P) (n : ℕ) : P := A r_val O A₀ n
+noncomputable def R' (n : ℕ) : ℝ := R r_val n
+variable (B : P) (hB : ∀ n, dist B (C' O A₀ n) ≤ R' n)
+variable (m n : ℕ) (hmn_pos : 0 < m ∧ 0 < n) (h_coprime : True := trivial) 
+variable (h_dist : dist B O = (m : ℝ) / (n : ℝ))
+theorem answer : m + n = 110 := by sorry 
+end InternallyTangentCircles

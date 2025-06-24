@@ -1,71 +1,31 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Data.Real.Pi.Bounds
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable [FiniteDimensional ℝ V] [Fact (FiniteDimensional.finrank ℝ V = 2)]
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
-open EuclideanGeometry
-open scoped Real
-
-namespace TriangleMidpointConstruction
-
-variable (A B C : P)
-variable (h_ABC : ¬ Collinear ℝ ({A, B, C} : Set P))
-
-/-- Midpoints of sides BC, CA, AB respectively -/
-def D : P := midpoint ℝ B C
-def E : P := midpoint ℝ C A
-def F : P := midpoint ℝ A B
-
-/-- Line through two points -/
-def lineThrough (p₁ p₂ : P) : AffineSubspace ℝ P := AffineSubspace.lineThrough p₁ p₂
-
-/-- Line through a point parallel to a direction vector -/
-def lineThroughParallel (p : P) (dir : V) : AffineSubspace ℝ P :=
-  AffineSubspace.parallel (AffineSubspace.spanPoints ℝ [p] (by simp)) 
-    (Submodule.span ℝ {dir})
-
-/-- Line through E parallel to AC -/
-def lineEI : AffineSubspace ℝ P := lineThroughParallel (E A B C) (C -ᵥ A)
-
-/-- Line through F parallel to AB -/
-def lineFI : AffineSubspace ℝ P := lineThroughParallel (F A B C) (B -ᵥ A)
-
-/-- Line AD -/
-def lineAD : AffineSubspace ℝ P := lineThrough A (D A B C)
-
-/-- Intersection point M of AD and EI -/
-noncomputable def M : P :=
-  (lineAD A B C ⊓ lineEI A B C).carrier.nonempty.some
-
-/-- Intersection point N of AD and FI -/
-noncomputable def N : P :=
-  (lineAD A B C ⊓ lineFI A B C).carrier.nonempty.some
-
-/-- Line EM -/
-def lineEM : AffineSubspace ℝ P := lineThrough (E A B C) (M A B C)
-
-/-- Line FN -/
-def lineFN : AffineSubspace ℝ P := lineThrough (F A B C) (N A B C)
-
-/-- Intersection point O of EM and FN -/
-noncomputable def O : P :=
-  (lineEM A B C ⊓ lineFN A B C).carrier.nonempty.some
-
-/-- Line CM -/
-def lineCM : AffineSubspace ℝ P := lineThrough C (M A B C)
-
-/-- Line BN -/
-def lineBN : AffineSubspace ℝ P := lineThrough B (N A B C)
-
-/-- Intersection point K of CM and BN -/
-noncomputable def K : P :=
-  (lineCM A B C ⊓ lineBN A B C).carrier.nonempty.some
-
-/-- Main theorem: OK is perpendicular to AK -/
-theorem OK_perpendicular_to_AK :
-    angle (O A B C) (K A B C) A = Real.pi / 2 := by sorry
-
-end TriangleMidpointConstruction
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.RightAngle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.Convex.Segment
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry Real
+abbrev P := EuclideanSpace ℝ (Fin 2)
+noncomputable def mkLine (p : P) (v : P) : AffineSubspace ℝ P := sorry
+noncomputable def direction (l : AffineSubspace ℝ P) : P := sorry
+noncomputable def intersection (l₁ l₂ : AffineSubspace ℝ P) : P := sorry
+noncomputable def Perpendicular (l₁ l₂ : AffineSubspace ℝ P) : Prop := sorry
+noncomputable def lineThrough (A B : P) : AffineSubspace ℝ P := sorry
+noncomputable def D (_ B C : P) : P := midpoint ℝ B C
+noncomputable def E (A _ C : P) : P := midpoint ℝ C A
+noncomputable def F (A B _ : P) : P := midpoint ℝ A B
+noncomputable def lineAD (A B C : P) : AffineSubspace ℝ P := lineThrough A (D A B C)
+noncomputable def lineAC (A C : P) : AffineSubspace ℝ P := lineThrough A C
+noncomputable def EI (A B C : P) : AffineSubspace ℝ P := mkLine (E A B C) (direction (lineAC A C))
+noncomputable def M (A B C : P) : P := intersection (EI A B C) (lineAD A B C)
+noncomputable def lineAB (A B : P) : AffineSubspace ℝ P := lineThrough A B
+noncomputable def FI (A B C : P) : AffineSubspace ℝ P := mkLine (F A B C) (direction (lineAB A B))
+noncomputable def N (A B C : P) : P := intersection (FI A B C) (lineAD A B C)
+noncomputable def EM (A B C : P) : AffineSubspace ℝ P := lineThrough (E A B C) (M A B C)
+noncomputable def FN (A B C : P) : AffineSubspace ℝ P := lineThrough (F A B C) (N A B C)
+noncomputable def O (A B C : P) : P := intersection (EM A B C) (FN A B C)
+noncomputable def CM (A B C : P) : AffineSubspace ℝ P := lineThrough C (M A B C)
+noncomputable def BN (A B C : P) : AffineSubspace ℝ P := lineThrough B (N A B C)
+noncomputable def K (A B C : P) : P := intersection (CM A B C) (BN A B C)
+theorem OK_perp_AK (A B C : P) (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set P)) :
+  Perpendicular (lineThrough (O A B C) (K A B C))
+                (lineThrough A (K A B C)) := by sorry

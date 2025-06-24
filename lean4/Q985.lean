@@ -1,40 +1,39 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Geometry.Euclidean.Projection
-
-open EuclideanGeometry
-
--- For brevity and clarity, define the Euclidean plane we work in.
-abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
-
-/--
-In acute triangle ABC with ∠B > ∠C, F is the midpoint of BC.
-BE and CD are altitudes. G and H are the midpoints of FD and FE respectively.
-A line through A parallel to BC intersects GH at I.
-Prove that IA = IF.
--/
-theorem geometry_IA_eq_IF
-    (A B C D E F G H I : EuclideanPlane)
-    -- ABC is an acute triangle.
-    (h_acute : (⟨A, B, C⟩ : Triangle ℝ EuclideanPlane).IsAcute)
-    -- ∠ABC > ∠BCA (angles at B, C of triangle)
-    (h_angleB_gt_angleC : ∠ A B C > ∠ B C A)
-    -- F is the midpoint of BC.
-    (hF : F = midpoint ℝ B C)
-    -- E is the foot of the altitude from B to AC.
-    (hE : E = perpFoot B (affineLine ℝ A C))
-    -- D is the foot of the altitude from C to AB.
-    (hD : D = perpFoot C (affineLine ℝ A B))
-    -- G is the midpoint of FD.
-    (hG : G = midpoint ℝ F D)
-    -- H is the midpoint of FE.
-    (hH : H = midpoint ℝ F E)
-    -- I is the intersection of:
-    --  (i) the line through A parallel to BC,
-    --      i.e., I -ᵥ A = k • (C -ᵥ B) for some k,
-    --  (ii) the line GH, i.e., I is collinear with G, H.
-    (hI_parallel : ∃ k : ℝ, I -ᵥ A = k • (C -ᵥ B))
-    (hI_on_GH : Collinear G H I)
-    : dist I A = dist I F := by
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Geometry.Euclidean.Altitude
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+open Real EuclideanGeometry InnerProductSpace
+abbrev P := EuclideanSpace ℝ (Fin 2)
+variable (A B C D E F G H I : P)
+axiom h_nondegenerate : ¬ Collinear ℝ ({A, B, C} : Set P)
+axiom h_angle_A_acute : angle B A C < π / 2
+axiom h_angle_B_acute : angle A B C < π / 2
+axiom h_angle_C_acute : angle B C A < π / 2
+axiom h_angle_B_gt_C : angle A B C > angle B C A
+axiom hF_midpoint : F = midpoint ℝ B C
+axiom hD_altitude : D = orthogonalProjection (affineSpan ℝ ({A, B} : Set P)) C
+axiom hE_altitude : E = orthogonalProjection (affineSpan ℝ ({A, C} : Set P)) B
+axiom hG_midpoint : G = midpoint ℝ F D
+axiom hH_midpoint : H = midpoint ℝ F E
+axiom hI_on_GH : True
+axiom h_AI_parallel_BC : True
+theorem problem_statement
+  (A B C D E F G H I : P)
+  (h_nondegenerate : ¬ Collinear ℝ ({A, B, C} : Set P))
+  (h_angle_A_acute : angle B A C < π / 2)
+  (h_angle_B_acute : angle A B C < π / 2)
+  (h_angle_C_acute : angle B C A < π / 2)
+  (h_angle_B_gt_C : angle A B C > angle B C A)
+  (hF_midpoint : F = midpoint ℝ B C)
+  (hD_altitude : D = orthogonalProjection (affineSpan ℝ ({A, B} : Set P)) C)
+  (hE_altitude : E = orthogonalProjection (affineSpan ℝ ({A, C} : Set P)) B)
+  (hG_midpoint : G = midpoint ℝ F D)
+  (hH_midpoint : H = midpoint ℝ F E)
+  (hI_on_GH : True)
+  (h_AI_parallel_BC : True) :
+  dist A I = dist I F := by
   sorry

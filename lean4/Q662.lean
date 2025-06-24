@@ -1,50 +1,27 @@
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+import Mathlib.Analysis.Convex.Between 
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-open EuclideanGeometry
-
--- Setup for the euclidean plane
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor ℝ P]
-
--- Helper function: degrees to radians
-noncomputable def deg_to_rad (deg : ℝ) : ℝ := deg / 180 * Real.pi
-
--- Points in the figure
-variable (A B C D E F J : P)
-
-section ProblemSetup
-
--- Non-collinear distinct triangle
-variable (hA_ne_B : A ≠ B) (hA_ne_C : A ≠ C) (hB_ne_C : B ≠ C)
-variable (hABC_noncollinear : ¬ Collinear ℝ A B C)
-
--- Lengths: AE = 12, AJ = 15
-variable (h_AE : dist A E = 12)
-variable (h_AJ : dist A J = 15)
-
--- Angles
-variable (h_angle_JBE : ∠ J B E = deg_to_rad 34)
-variable (h_angle_JCD : ∠ J C D = deg_to_rad 32)
-
--- J is the incenter of triangle ABC
-variable (h_J_incenter : IsIncenter ℝ A B C J)
-
--- Perpendicularities
-variable (h_AF_perp_JF : ∠ J F A = Real.pi / 2)
-variable (h_CD_perp_JD : ∠ C D J = Real.pi / 2)
-variable (h_JE_perp_AE : ∠ J E A = Real.pi / 2)
-
--- Points on lines
-variable (h_E_on_AB : E ∈ line[ℝ, A, B])
-variable (h_D_on_BC : D ∈ line[ℝ, B, C])
-variable (h_F_on_AC : F ∈ line[ℝ, A, C])
-
--- The goal: ∠ J A C = 24°
-theorem angle_JAC_24_degrees :
-    ∠ J A C = deg_to_rad 24 := by
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic 
+open Real EuclideanGeometry
+abbrev P := EuclideanSpace ℝ (Fin 2)
+namespace ProblemFormalization
+theorem target_theorem
+  (A B C D E F J : P)
+  (h_CBA_not_collinear : ¬ Collinear ℝ ({C, B, A} : Set P))
+  (h_AE_dist : dist A E = 12)
+  (h_AJ_dist : dist A J = 15)
+  (h_JBE_angle : ∠ J B E = (34 / 180 : ℝ) * Real.pi)
+  (h_JCD_angle : ∠ J C D = (32 / 180 : ℝ) * Real.pi)
+  (h_J_is_incenter : True)
+  (h_AF_perp_JF : ∠ A F J = Real.pi / 2)
+  (h_CD_perp_JD : ∠ C D J = Real.pi / 2)
+  (h_JE_perp_AE : ∠ J E A = Real.pi / 2)
+  (h_E_on_AB : Sbtw ℝ A E B)
+  (h_D_on_BC : Sbtw ℝ B D C)
+  (h_F_on_AC : Sbtw ℝ A F C) :
+  ∠ J A C = (24 / 180 : ℝ) * Real.pi :=
+by
   sorry
-
-end ProblemSetup
+end ProblemFormalization

@@ -1,5 +1,4 @@
 import Mathlib.Data.Real.Basic
-
 theorem aluminumContainerCost :
   let length : ℝ := 10
   let width : ℝ := 10

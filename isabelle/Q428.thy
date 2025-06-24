@@ -1,50 +1,59 @@
-theory FourTangentCirclesProblem
-  imports Complex_Main "HOL-Analysis.Topology_Euclidean_Space"
+theory Four_Tangent_Circles
+  imports Complex_Main
 begin
-
-(* 定义几何问题：四个半径为1的圆与三角形和彼此相切 *)
-locale four_tangent_circles =
-  fixes A B C P Q R S :: "real^2"
-  fixes rP rQ rR rS :: real
-  assumes initial_radii: "rP = 1" "rQ = 1" "rR = 1" "rS = 1"
-  (* 圆P, Q, R, S彼此相切的条件 *)
-  assumes tangent_circles_initial: 
-    "dist P Q = rP + rQ" 
-    "dist P R = rP + rR"
-    "dist P S = rP + rS"
-    "dist Q R = rQ + rR"
-    "dist Q S = rQ + rS"
-    "dist R S = rR + rS"
-  (* 圆与三角形边相切的条件(这里简化表示) *)
-  assumes tangent_to_triangle:
-    "dist_point_line P B C = rP"
-    "dist_point_line Q A C = rQ"
-    "dist_point_line R A B = rR"
-    "dist_point_line S A B = rS"
-
-(* 新的配置：R的半径变为r *)
-locale modified_configuration = four_tangent_circles +
-  fixes r :: real
-  assumes r_formula: "∃a b c. r = (a + sqrt b)/c ∧ a + b + c = 6"
-  (* R圆仍与BC边相切 *)
-  assumes R_tangent_BC: "dist_point_line R B C = r"
-  (* R圆与其他三个圆相切 *)
-  assumes R_tangent_others: 
-    "dist P R = rP + r"
-    "dist Q R = rQ + r"
-    "dist S R = rS + r"
-  (* P圆与其他三个圆相切 *)
-  assumes P_tangent_all:
-    "dist P Q = rP + rQ"
-    "dist P R = rP + r"
-    "dist P S = rP + rS"
-
-(* 求解新的半径r *)
-theorem find_radius_r:
-  assumes "four_tangent_circles A B C P Q R S rP rQ rR rS"
-  assumes "modified_configuration A B C P Q R S rP rQ rR rS r"
-  shows "∃a b c. r = (a + sqrt b)/c ∧ a + b + c = 6 ∧ a + b + c = 6"
-  (* 这里的最后重复"a + b + c = 6"是为了强调结论 *)
-  oops
-
+type_synonym point = "real × real"
+record circle =
+  center :: point
+  radius :: real
+locale triangle =
+  fixes A B C :: point
+  assumes non_collinear: "¬ collinear {A, B, C}"
+begin
+definition P :: circle where "P ≡ ⦇center = P_c, radius = 1⦈"
+definition Q :: circle where "Q ≡ ⦇center = Q_c, radius = 1⦈"
+definition R :: circle where "R ≡ ⦇center = R_c, radius = 1⦈"
+definition S :: circle where "S ≡ ⦇center = S_c, radius = 1⦈"
+definition externally_tangent :: "circle ⇒ circle ⇒ bool" where
+  "externally_tangent c1 c2 ≡
+    dist (center c1) (center c2) = radius c1 + radius c2"
+definition tangent_to_line :: "circle ⇒ point ⇒ point ⇒ bool" where
+  "tangent_to_line c X Y ≡
+    let (x0, y0) = center c; r = radius c;
+        (x1, y1) = X; (x2, y2) = Y
+    in
+      abs ((y2 - y1) * x0 - (x2 - x1) * y0 + x2*y1 - y2*x1) /
+      sqrt ((y2 - y1)^2 + (x2 - x1)^2) = r"
+axiomatization
+  P_c Q_c R_c S_c :: point
+where
+  PQ_tangent: "externally_tangent P Q"
+and QR_tangent: "externally_tangent Q R"
+and RS_tangent: "externally_tangent R S"
+and SP_tangent: "externally_tangent S P"
+and PR_tangent: "externally_tangent P R"
+and QS_tangent: "externally_tangent Q S"
+and P_tangent_AB: "tangent_to_line P A B"
+and Q_tangent_AB: "tangent_to_line Q A B"
+and Q_tangent_BC: "tangent_to_line Q B C"
+and R_tangent_BC: "tangent_to_line R B C"
+and R_tangent_CA: "tangent_to_line R C A"
+and S_tangent_CA: "tangent_to_line S C A"
+and S_tangent_AB: "tangent_to_line S A B"
+and P_tangent_CA: "tangent_to_line P C A"
+fixes r :: real
+assumes r_pos: "r > 0"
+definition R' :: circle where "R' ≡ ⦇center = R'_c, radius = r⦈"
+axiomatization
+  R'_c :: point
+where
+  RQ_tangent: "externally_tangent R' Q"
+and RS_tangent': "externally_tangent R' S"
+and RP_tangent: "externally_tangent R' P"
+and R'_tangent_BC: "tangent_to_line R' B C"
+axiomatization
+where
+  PQ_tangent': "externally_tangent P Q"
+and PS_tangent': "externally_tangent P S"
+and PR'_tangent: "externally_tangent P R'"
+end
 end

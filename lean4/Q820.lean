@@ -1,9 +1,6 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-
-
-
 theorem find_x_value (x y : ℝ)
   (hx_pos : 0 < x) 
   (hy_pos : 0 < y) 

@@ -1,12 +1,9 @@
 import Mathlib.Geometry.Euclidean.Basic
 import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
 import Mathlib.Geometry.Euclidean.Triangle
-
 open EuclideanGeometry
-
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
 theorem triangle_perimeter_eq_angle_side
     (A B C : P)
     (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set P))

@@ -1,4 +1,3 @@
-####
 From mathcomp Require Import all_algebra all_ssreflect.
 From mathcomp Require Import reals geometry.
 
@@ -10,7 +9,7 @@ Section TriangleMidpointsArea.
 
 Variable R : realType.
 
-(* Points in the plane *)
+(* Points A, B, C are the vertices of the triangle ABC *)
 Variables A B C : 'rV[R]_2.
 
 (* D is the midpoint of BC *)
@@ -26,11 +25,17 @@ Let F : 'rV[R]_2 := ((C + E) / 2%:R)%R.
 Definition area3 (P Q R : 'rV[R]_2) : R :=
   `| ((Q - P) \inprod (R - P)^\perp) | / 2.
 
+(* Hypothesis: The area of triangle ABC is 4 cm² *)
 Hypothesis areaABC : area3 A B C = 4.
 
+(* Theorem to prove: The area of triangle DEF is 0.5 cm² *)
 Theorem triangle_midpoints_area :
   area3 D E F = 0.5.
-Proof. Admitted.
+Proof.
+  (* Here, we would insert the actual proof, which would involve using properties of midpoints and areas 
+     to derive the area of triangle DEF. *)
+  (* For the sake of this example, the proof is omitted. *)
+  Admitted.
 
 End TriangleMidpointsArea.
 ####

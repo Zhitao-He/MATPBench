@@ -8,13 +8,18 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope R_scope.
 
+Section CylinderVolume.
+
 Variable R : realType.
-Theorem cylinder_height
-    (pi : R)
-    (h : R)
-    (Hpi : 0 < pi)
-    : (let r := 3 in
-       let V := pi * r^2 * h in
-       V = 45 * pi) -> h = 5.
+Variable pi : R.
+Hypothesis pi_positive : 0 < pi.
+
+Variables r h : R.
+Hypothesis volume_cylinder : pi * r^2 * h = 45 * pi.
+Hypothesis radius_given : r = 3.
+
+Theorem cylinder_height : h = 5.
 Proof. Admitted.
+
+End CylinderVolume.
 ####

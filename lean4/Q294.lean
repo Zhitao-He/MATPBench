@@ -1,42 +1,27 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Triangle
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-
-open scoped EuclideanGeometry Real
-
-namespace RightTriangleAreaProblem
-
--- We work in the Euclidean plane. For convenience, we use the notation P2 for Point ℝ (Fin 2).
-local notation "P2" => Point ℝ (Fin 2)
-
--- Define points A, B, C.
-def A : P2 := ![0, 6]
-def B : P2 := ![0, 0]
-def C : P2 := ![8, 0]
-
--- Lemmas expressing the side lengths and right angle at B.
-lemma length_AB : dist A B = 6 := by sorry
-lemma length_BC : dist B C = 8 := by sorry
-lemma angle_ABC_is_right : ∠ A B C = π / 2 := by sorry
-
--- Midpoints M of AB and N of BC.
-def M : P2 := midpoint ℝ A B
-def N : P2 := midpoint ℝ B C
-
-lemma M_coordinates : M = ![0, 3] := by simp [M, midpoint, A, B, Fin.sum_univ_succ, Fin.sum_univ_zero, Matrix.cons_val', Matrix.head, Matrix.cons_val_succ, Matrix.tail]
-lemma N_coordinates : N = ![4, 0] := by simp [N, midpoint, B, C, Fin.sum_univ_succ, Fin.sum_univ_zero, Matrix.cons_val', Matrix.head, Matrix.cons_val_succ, Matrix.tail]
-
--- The intersection point P of segments AN and CM is calculated to be (8/3, 2).
-def P : P2 := ![8 / 3, 2]
-
-lemma P_on_segment_AN : Wbtw ℝ A P N := by sorry
-lemma P_on_segment_CM : Wbtw ℝ C P M := by sorry
-
--- Area of triangle APC.
-def area_APC : ℝ := Triangle.area A P C
-
--- The answer: the area is 8.
-theorem area_APC_is_8 : area_APC = 8 := by sorry
-
-end RightTriangleAreaProblem
+import Mathlib.Analysis.InnerProductSpace.PiL2 
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine 
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+open Real EuclideanGeometry Affine AffineSubspace 
+open scoped EuclideanGeometry 
+abbrev Point := EuclideanSpace ℝ (Fin 2) 
+noncomputable def triangleArea (p1 p2 p3 : Point) : ℝ :=
+  (1/2 : ℝ) * abs ( ((p2 -ᵥ p1) 0 * (p3 -ᵥ p1) 1) - ((p2 -ᵥ p1) 1 * (p3 -ᵥ p1) 0) )
+theorem right_triangle_area_apc
+    (A B C M N P : Point)
+    (h_right_angle_at_B : ∠ A B C = Real.pi / 2) 
+    (h_M_is_midpoint_AB : M = midpoint ℝ A B)
+    (h_N_is_midpoint_BC : N = midpoint ℝ B C)
+    (h_len_AB : dist A B = 6)
+    (h_len_BC : dist B C = 8)
+    (h_P_on_line_AN : P ∈ affineSpan ℝ ({A, N} : Set Point))
+    (h_P_on_line_CM : P ∈ affineSpan ℝ ({C, M} : Set Point))
+    (h_A_ne_N : A ≠ N)
+    (h_C_ne_M : C ≠ M)
+    (h_lines_not_parallel : ¬ (affineSpan ℝ ({A, N} : Set Point) ∥ affineSpan ℝ ({C, M} : Set Point)))
+    : triangleArea A P C = 8 := by 
+  sorry

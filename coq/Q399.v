@@ -1,6 +1,6 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals normedtype trigo.
+From mathcomp Require Import reals geometry trigonometry.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -8,21 +8,27 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope ring_scope.
 
+Section TriangleRST.
+
 Variable R : realType.
 
-Theorem triangle_RST_sin_T :
-  (* Points R, S, T form a right triangle with right angle at S, hypotenuse RT = 5 *)
-  let R := (0,5) in
-  let S := (4,0) in
-  let T := (0,0) in
-  let side_RS := sqrt ((4 - 0)^+2 + (0 - 5)^+2) in
-  let side_ST := sqrt ((0 - 4)^+2 + (0 - 0)^+2) in
-  let side_TR := sqrt ((0 - 0)^+2 + (5 - 0)^+2) in
-  let angle_R := atan2 (4 - 0) (5 - 0) in
-  let angle_T := atan2 (4 - 0) (5 - 0) in
-  (* Given: sin(angle_R) = 2/5 *)
-  (side_TR = 5) ->
-  (sin (angle_R) = 2/5) ->
-  (sin (angle_T) = sqrt 21 / 5).
+(* Define the sides of the triangle relative to angle R *)
+Variable a : R. (* opposite side to angle R *)
+Variable c : R. (* hypotenuse *)
+Hypothesis sin_R : sin (angle R) = 2 / 5%:R.
+Hypothesis c_value : c = 5%:R.
+
+(* Calculate the adjacent side using Pythagorean identity *)
+Let b := sqrt (c^+2 - a^+2).
+Let sin_T := a / c. (* This is incorrect, should be b / c *)
+
+(* Correct calculation of sin(T) *)
+Let sin_T_correct := b / c.
+
+(* Theorem to prove sin(T) = sqrt(21)/5 *)
+Theorem sin_T_value : 
+  sin_T_correct = sqrt 21 / 5%:R.
 Proof. Admitted.
+
+End TriangleRST.
 ####

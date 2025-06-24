@@ -1,32 +1,24 @@
-import Mathlib.Geometry.Euclidean.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
+import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
-
-namespace ProblemDescription
-
--- Points in the plane
-variable (a c e g j : EuclideanSpace ℝ (Fin 2))
--- Variables x, y ∈ ℝ
-variable (x y : ℝ)
-
--- Given geometric conditions:
-variable (h_ag : dist a g = (1/5 : ℝ) * x + 3)
-variable (h_cj : dist c j = 2 * y + 1)
-variable (h_cj_eq_je : dist c j = dist j e)
-variable (h_eg : dist e g = 4 * x - 35)
-variable (h_je : dist j e = 5 * y - 8)
-variable (h_parallel : Line.parallel (lineThrough a c) (lineThrough g j))
-
--- Geometric configuration assumptions:
-variable (h_g_on_ae : g ∈ affineSegment ℝ a e)
-variable (h_j_on_ce : j ∈ affineSegment ℝ c e)
-
--- Non-degenerate conditions
-variable (h_a_ne_c : a ≠ c)
-variable (h_g_ne_j : g ≠ j)
-variable (h_not_collinear : ¬ Collinear ℝ a c e)
-
--- The goal: find the value of x
-theorem target_value_of_x : x = 10 := by
+open Real EuclideanGeometry Affine AffineSubspace
+abbrev PPoint := EuclideanSpace ℝ (Fin 2)
+theorem value_of_x
+  (A C E G J : PPoint)
+  (x y : ℝ)
+  (h_AG : dist A G = (1/5 : ℝ) * x + 3)
+  (h_CJ : dist C J = 2 * y + 1)
+  (h_JE : dist J E = 5 * y - 8)
+  (h_EG : dist E G = 4 * x - 35)
+  (h_J_mid : J = midpoint ℝ C E)
+  (h_CJ_eq_JE : dist C J = dist J E)
+  (h_AC_parallel_GJ : line[ℝ, A, C] ∥ line[ℝ, G, J])
+  (h_G_collinear_AE : Collinear ℝ ({A, G, E} : Set PPoint))
+  (h_A_ne_C : A ≠ C)
+  (h_C_ne_E : C ≠ E)
+  (h_E_ne_A : E ≠ A)
+  : x = 10 := by
   sorry
-
-end ProblemDescription

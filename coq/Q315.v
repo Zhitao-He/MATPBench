@@ -15,11 +15,9 @@ Hypothesis neq : A != B.
 Hypothesis D_on_BC : exists t, 0 < t < 1 /\ D = (1 - t)*:B + t *:C.
 Hypothesis triangle : ~~ colinear A B C.
 Hypothesis angle_A : angle B A C = 40%:R * PI / 180.
+Hypothesis reflection_AD : forall P, exists Q, (Q = P /\ (angle A D P = angle A D Q)) /\ (angle A P D = angle A Q D).
 
-Definition reflect_AD P := (* reflection of P across line A-D *) P.
-Hypothesis reflect_map : forall P, reflect_AD P = P.
-
-Theorem reflection_symmetry_area : area_triangle A B D = area_triangle A C D.
+Theorem angle_B_measure : angle A B D = 70%:R * PI / 180.
 Proof.
 admit.
 Qed.

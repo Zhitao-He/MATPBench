@@ -1,82 +1,60 @@
-import Mathlib.Data.Real.Basic
 import Mathlib.Geometry.Euclidean.Basic
-import Mathlib.Geometry.Euclidean.Circumcenter
-import Mathlib.Geometry.Euclidean.Projection
+import Mathlib.Geometry.Euclidean.Triangle
 import Mathlib.Geometry.Euclidean.Sphere.Basic
-
-noncomputable section
-
-open Real EuclideanGeometry
-
--- Work in the Euclidean plane (2D)
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-variable [FiniteDimensional ℝ V] (fin_dim_V_eq_two : FiniteDimensional.finrank ℝ V = 2)
-variable {P : Type*} [MetricSpace P] [NormedAddTorsor V P]
-
--- Triangle vertices
-variable (A B C : P)
--- A, B, C are not collinear
-variable (h_noncollinear : ¬ Collinear ℝ A B C)
-
--- Circumcircle of △ABC: center O, radius rO
-variable (O : P) (rO : ℝ)
-variable (hO_circum : O = circumcenter ℝ A B C)
-variable (hrO_circum : rO = circumradius ℝ A B C)
-
--- Incircle of △ABC: center I, radius rI
-variable (I : P) (rI : ℝ) (hrI_pos : rI > 0)
-
--- D, E, F are the points of tangency of the incircle with BC, CA, AB respectively
-variable (D E F : P)
-
--- Lines for sides
-def lineBC (B C : P) : AffineSubspace ℝ P := affineSpan ℝ ({B, C} : Set P)
-def lineCA (C A : P) : AffineSubspace ℝ P := affineSpan ℝ ({C, A} : Set P)
-def lineAB (A B : P) : AffineSubspace ℝ P := affineSpan ℝ ({A, B} : Set P)
-
--- D lies on segment BC, on the incircle, and is the point of tangency
-variable (hD_on_BC : D ∈ segment ℝ B C)
-variable (hD_on_incircle : D ∈ Sphere I rI)
-variable (hD_tangent : D = orthogonalProjection (lineBC B C) I)
-
--- E lies on segment CA, on the incircle, and is the point of tangency
-variable (hE_on_CA : E ∈ segment ℝ C A)
-variable (hE_on_incircle : E ∈ Sphere I rI)
-variable (hE_tangent : E = orthogonalProjection (lineCA C A) I)
-
--- F lies on segment AB, on the incircle, and is the point of tangency
-variable (hF_on_AB : F ∈ segment ℝ A B)
-variable (hF_on_incircle : F ∈ Sphere I rI)
-variable (hF_tangent : F = orthogonalProjection (lineAB A B) I)
-
--- Circle ⊙P: center P₀, radius rP
-variable (P₀ : P) (rP : ℝ) (hrP_pos : rP > 0)
--- Points J (external tangency with ⊙O), G (tangent to AB), H (tangent to AC), K (intersection with AD)
-variable (J G H K : P)
-
--- ⊙P externally tangent to ⊙O at J
-variable (hJ_on_O : J ∈ Sphere O rO)
-variable (hJ_on_P : J ∈ Sphere P₀ rP)
-variable (hO_P_tangent : dist O P₀ = rO + rP)
-
--- G on AB, on ⊙P, tangency point
-variable (hG_on_AB : G ∈ lineAB A B)
-variable (hG_on_P : G ∈ Sphere P₀ rP)
-variable (hG_tangent : G = orthogonalProjection (lineAB A B) P₀)
-
--- H on AC, on ⊙P, tangency point
-variable (hH_on_AC : H ∈ lineCA C A)
-variable (hH_on_P : H ∈ Sphere P₀ rP)
-variable (hH_tangent : H = orthogonalProjection (lineCA C A) P₀)
-
--- AD meets ⊙P again at K (K ≠ A)
-def lineAD (A D : P) : AffineSubspace ℝ P := affineSpan ℝ ({A, D} : Set P)
-variable (hK_on_AD : K ∈ lineAD A D)
-variable (hK_on_P : K ∈ Sphere P₀ rP)
-variable (hK_ne_A : K ≠ A)
-variable (hK_unique : ∀ (M : P), M ∈ lineAD A D → M ∈ Sphere P₀ rP → M ≠ A → M = K)
-
--- Theorem: AJ = AK
-theorem AJ_eq_AK : dist A J = dist A K := by sorry
-
-end
+import Mathlib.Analysis.InnerProductSpace.EuclideanDist
+import Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine
+import Mathlib.Analysis.InnerProductSpace.PiL2
+open scoped EuclideanGeometry
+abbrev Point := EuclideanSpace ℝ (Fin 2)
+noncomputable def circumcenter (A B C : Point) : Point := sorry
+noncomputable def circumradius (A B C : Point) : ℝ := sorry
+def target_theorem
+  (A B C I_pt D_pt E_pt F_pt P_center J_pt G_pt H_pt K_pt : Point)
+  (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set Point))
+  (r_I : ℝ) (h_r_I_pos : r_I > 0)
+  (h_D_pt_on_BC : D_pt ∈ line[ℝ, B, C])
+  (h_E_pt_on_CA : E_pt ∈ line[ℝ, C, A])
+  (h_F_pt_on_AB : F_pt ∈ line[ℝ, A, B])
+  (r_P : ℝ) (hr_P_pos : r_P > 0)
+  (h_J_pt_on_circumcircle : dist J_pt (circumcenter A B C) = circumradius A B C)
+  (h_J_pt_on_circle_P : dist J_pt P_center = r_P)
+  (h_O_P_tangent_ext : dist (circumcenter A B C) P_center = circumradius A B C + r_P)
+  (h_G_pt_on_line_AB : G_pt ∈ line[ℝ, A, B])
+  (h_G_pt_on_circle_P : dist G_pt P_center = r_P)
+  (h_P_center_G_pt_perp_AB : inner ℝ (P_center -ᵥ G_pt) (B -ᵥ A) = 0)
+  (h_H_pt_on_line_AC : H_pt ∈ line[ℝ, A, C])
+  (h_H_pt_on_circle_P : dist H_pt P_center = r_P)
+  (h_P_center_H_pt_perp_AC : inner ℝ (P_center -ᵥ H_pt) (C -ᵥ A) = 0)
+  (h_K_pt_collinear_A_D : Collinear ℝ ({A, D_pt, K_pt} : Set Point))
+  (h_K_pt_on_circle_P : dist K_pt P_center = r_P)
+  (h_D_pt_between_A_K_pt : Wbtw ℝ A D_pt K_pt)
+  (h_K_pt_ne_A : K_pt ≠ A)
+  : Prop := dist A J_pt = dist A K_pt
+theorem prove_AJ_eq_AK
+  (A B C I_pt D_pt E_pt F_pt P_center J_pt G_pt H_pt K_pt : Point)
+  (h_noncollinear : ¬ Collinear ℝ ({A, B, C} : Set Point))
+  (r_I : ℝ) (h_r_I_pos : r_I > 0)
+  (h_D_pt_on_BC : D_pt ∈ line[ℝ, B, C])
+  (h_E_pt_on_CA : E_pt ∈ line[ℝ, C, A])
+  (h_F_pt_on_AB : F_pt ∈ line[ℝ, A, B])
+  (r_P : ℝ) (hr_P_pos : r_P > 0)
+  (h_J_pt_on_circumcircle : dist J_pt (circumcenter A B C) = circumradius A B C)
+  (h_J_pt_on_circle_P : dist J_pt P_center = r_P)
+  (h_O_P_tangent_ext : dist (circumcenter A B C) P_center = circumradius A B C + r_P)
+  (h_G_pt_on_line_AB : G_pt ∈ line[ℝ, A, B])
+  (h_G_pt_on_circle_P : dist G_pt P_center = r_P)
+  (h_P_center_G_pt_perp_AB : inner ℝ (P_center -ᵥ G_pt) (B -ᵥ A) = 0)
+  (h_H_pt_on_line_AC : H_pt ∈ line[ℝ, A, C])
+  (h_H_pt_on_circle_P : dist H_pt P_center = r_P)
+  (h_P_center_H_pt_perp_AC : inner ℝ (P_center -ᵥ H_pt) (C -ᵥ A) = 0)
+  (h_K_pt_collinear_A_D : Collinear ℝ ({A, D_pt, K_pt} : Set Point))
+  (h_K_pt_on_circle_P : dist K_pt P_center = r_P)
+  (h_D_pt_between_A_K_pt : Wbtw ℝ A D_pt K_pt)
+  (h_K_pt_ne_A : K_pt ≠ A)
+  : target_theorem A B C I_pt D_pt E_pt F_pt P_center J_pt G_pt H_pt K_pt
+      h_noncollinear r_I h_r_I_pos h_D_pt_on_BC h_E_pt_on_CA h_F_pt_on_AB
+      r_P hr_P_pos h_J_pt_on_circumcircle h_J_pt_on_circle_P h_O_P_tangent_ext
+      h_G_pt_on_line_AB h_G_pt_on_circle_P h_P_center_G_pt_perp_AB
+      h_H_pt_on_line_AC h_H_pt_on_circle_P h_P_center_H_pt_perp_AC
+      h_K_pt_collinear_A_D h_K_pt_on_circle_P h_D_pt_between_A_K_pt h_K_pt_ne_A := by
+  sorry

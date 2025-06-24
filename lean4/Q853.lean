@@ -1,11 +1,14 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Geometry.Euclidean.Basic
-
--- Define points as vectors in EuclideanSpace ℝ (Fin 2)
-def A : EuclideanSpace ℝ (Fin 2) := ![0, 10]
-def C : EuclideanSpace ℝ (Fin 2) := ![8, 0]
-def B : EuclideanSpace ℝ (Fin 2) := ![24, 0]
-
--- The area of triangle ACB is 80
-theorem area_triangle_ACB_eq_80 :
-    EuclideanGeometry.area (by rw [FiniteDimensional.finrank_fin_fun, Fintype.card_fin]; norm_num) A C B = 80 := by
-  sorry
+import Mathlib.Geometry.Euclidean.Triangle
+import Mathlib.Data.Real.Basic
+abbrev P := EuclideanSpace ℝ (Fin 2)
+section
+variable (A B C D : P)
+variable (hAB : dist A B = 26)
+variable (hAD : dist A D = 10)
+variable (hCB : dist C B = 16)
+variable (hDC : dist D C = 8)
+theorem area_ACB_eq_80 :
+  (1 / 2 : ℝ) * dist C B * dist A D = 80 := by sorry
+end

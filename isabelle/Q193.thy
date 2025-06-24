@@ -1,45 +1,26 @@
-theory DiamondAngle
-imports
-  Main
-  "HOL-Analysis.Euclidean_Space"
+theory Diamond_Problem_Definition
+  imports Main
 begin
-
-(* 定义二维欧几里得空间 *)
-type_synonym point = "real^2"
-
-(* 定义向量相关操作 *)
-definition vec :: "point ⇒ point ⇒ real^2" where
-  "vec A B = B - A"
-
-(* 定义两个向量的夹角（弧度） *)
-definition angle_between :: "real^2 ⇒ real^2 ⇒ real" where
-  "angle_between v w = arccos (inner v w / (norm v * norm w))"
-
-(* 定义三点形成的角（弧度） *)
-definition angle :: "point ⇒ point ⇒ point ⇒ real" where
-  "angle A B C = angle_between (vec B A) (vec B C)"
-
-(* 弧度转换为角度 *)
-definition rad_to_deg :: "real ⇒ real" where
-  "rad_to_deg r = r * 180 / pi"
-
-(* 角度转换为弧度 *)
-definition deg_to_rad :: "real ⇒ real" where
-  "deg_to_rad d = d * pi / 180"
-
-(* 定义菱形特性：四个边相等 *)
-definition is_rhombus :: "point ⇒ point ⇒ point ⇒ point ⇒ bool" where
-  "is_rhombus A B C D ⟷ 
-   norm (vec A B) = norm (vec B C) ∧
-   norm (vec B C) = norm (vec C D) ∧
-   norm (vec C D) = norm (vec D A)"
-
-(* 定理：在菱形ABCD中，角OBC等于62度 *)
-theorem diamond_angle_OBC:
-  fixes A B C D O :: point
-  assumes "is_rhombus A B C D"
-  shows "rad_to_deg(angle O B C) = 62"
-  (* 证明部分略 *)
-  sorry
-
+typedecl Point
+consts
+  A :: Point
+  B :: Point
+  C_Geom :: Point 
+  D :: Point
+  O :: Point   
+consts angle_at :: "Point ⇒ Point ⇒ Point ⇒ real"
+consts Is_Rhombus :: "Point ⇒ Point ⇒ Point ⇒ Point ⇒ bool"
+consts Is_Diagonal_Intersection :: "Point ⇒ Point ⇒ Point ⇒ Point ⇒ Point ⇒ bool"
+locale diamond_problem_context =
+  fixes pA :: Point and pB :: Point and pC_Geom :: Point and pD :: Point and pO :: Point
+  assumes
+    abcd_is_rhombus: "Is_Rhombus pA pB pC_Geom pD" and
+    o_is_intersection: "Is_Diagonal_Intersection pA pB pC_Geom pD pO" and
+    angle_DAO_is_28: "angle_at pD pA pO = 28.0" and
+    angle_OBC_is_62: "angle_at pO pB pC_Geom = 62.0" and
+    distinct_vertices: "pA ≠ pB ∧ pB ≠ pC_Geom ∧ pC_Geom ≠ pD ∧ pD ≠ pA"
+begin
+definition Target_Angle_BCD :: real where
+  "Target_Angle_BCD = angle_at pB pC_Geom pD"
+end
 end

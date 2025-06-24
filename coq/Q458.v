@@ -11,23 +11,36 @@ Local Open Scope ring_scope.
 
 Variable R : realType.
 
-(* Let the parallelepiped have vertices as follows: 
-   X = (a,b,c), 
-   Y = (a,b,0), 
-   Z = (0,b,c), 
-   A = (a,0,0).
-   The triangle XYZ has side lengths:
-   |XZ| = sqrt(55), |XY| = 8, |YZ| = 9.
-   The goal is to compute |XA| = 10.
-*)
+(* Define a 3D point as a record *)
+Record point3D := mkPoint3D { x : R; y : R; z : R }.
 
-Theorem parallelepiped_diagonal_length :
-  exists (a b c : R),
-    0 < a /\ 0 < b /\ 0 < c /\
-    ((let X := (a, b, c) in
-      let Y := (a, b, 0) in
-      let Z := (0, b, c) in
-      let A := (a, 0, 0) in
-      let dist3 u v := Num.sqrt ((u.1 - v.1)^+2 + (u.2 - v.2)^+2 + (u.3 - v.3)^+2) in
-      dist3 X Z = Num.sqrt 
+(* Distance between two 3D points *)
+Definition dist3 (p1 p2 : point3D) : R :=
+  Num.sqrt ((x p1 - x p2)^+2 + (y p1 - y p2)^+2 + (z p1 - z p2)^+2).
+
+(* Define the parallelepiped vertices based on parameters a, b, c *)
+Definition X (a b c : R) := mkPoint3D a b c.
+Definition Y (a b : R) := mkPoint3D a b 0.
+Definition Z (b c : R) := mkPoint3D 0 b c.
+Definition A (a : R) := mkPoint3D a 0 0.
+
+(* Theorem to find the diagonal XA length *)
+Theorem parallelepiped_diagonal_length : 
+  exists (a b c : R), 
+    let x := X a b c in
+    let y := Y a b in
+    let z := Z b c in
+    let a_point := A a in
+    let xz := dist3 x z in
+    let xy := dist3 x y in
+    let yz := dist3 y z in
+    let xa := dist3 x a_point in
+    xz = Num.sqrt 55 /
+    xy = 8 /
+    yz = 9 /
+    xa = 10.
+
+(* Note: The actual proof would involve solving the system of equations
+   derived from the distance formulas to find suitable a, b, c values. *)
+
 ####

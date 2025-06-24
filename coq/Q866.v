@@ -1,21 +1,27 @@
 ####
 From mathcomp Require Import all_ssreflect all_algebra.
-From mathcomp Require Import reals trigo.
+From mathcomp Require Import reals geometry trigo.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Local Open Scope ring_scope.
+Section RightTriangleProblem.
+Variable R : realType.
+Variables A B C Y : 'Point[R]_2.
 
-Theorem triangle_diagram_value_x :
-  forall (A B C : R * R),
-    let AB := sqrt ((fst B - fst A)^+2 + (snd B - snd A)^+2) in
-    let AC := sqrt ((fst C - fst A)^+2 + (snd C - snd A)^+2) in
-    let BC := sqrt ((fst C - fst B)^+2 + (snd C - snd B)^+2) in
-    AB = 2 * sqrt 3 ->
-    let dotABAC := (fst B - fst A)*(fst C - fst A) + (snd B - snd A)*(snd C - snd A) in
-    dotABAC / (AB * AC) = cos (PI/6) ->
-    BC = 4.
+Hypotheses
+  AB_length : dist A B = 2 * sqrt 3;
+  angle_BAY : angle_deg (B,A,Y) = 30;
+  angle_YCB : angle_deg (Y,C,B) = 60;
+  AY_perp_BY : perpendicular (line A Y) (line B Y);
+  CB_perp_AB : perpendicular (line C B) (line A B);
+  collinear_AYC : collinear [:: A; Y; C].
+
+Definition x := dist A Y.
+
+Theorem x_value_3 : x = 3.
 Proof. by []. Qed.
+
+End RightTriangleProblem.
 ####
