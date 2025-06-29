@@ -59,7 +59,7 @@ The problems in MATP-BENCH span three distinct educational stages—high school,
 
 
 ## Citation
-Please consider including the following citation if you find PutnamBench useful.
+Please consider including the following citation if you find our benchmark useful.
 
 ```bibtex
 @misc{he2025matpbenchmllmgoodautomated,
